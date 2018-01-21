@@ -35,8 +35,8 @@
 void delayMS(int ms) {
     // Get the frequency of the system clock
     // Divide by 1000 to get ms
-
-    SysCtlDelay( (SysCtlClockGet()/(1000))*ms ) ;
+    // Each SysCtlDelay is 3 clocks
+    SysCtlDelay( (SysCtlClockGet()/(1000*3))*ms ) ;
 }
 
 int
@@ -66,12 +66,12 @@ main(void)
     GPIOPinConfigure(GPIO_PF1_M1PWM5); 
     GPIOPinConfigure(GPIO_PF2_M1PWM6); 
     GPIOPinConfigure(GPIO_PF3_M1PWM7); 
-    GPIOPinTypePWM(GPIO_PORTF_BASE, GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3); // yep
+    GPIOPinTypePWM(GPIO_PORTF_BASE, GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3); 
 
     //Configure PWM Options
     //PWM_GEN_2 Covers M1PWM4 and M1PWM5
     //PWM_GEN_3 Covers M1PWM6 and M1PWM7 See page 207 4/11/13 DriverLib doc
-    PWMGenConfigure(PWM1_BASE, PWM_GEN_2, PWM_GEN_MODE_DOWN | PWM_GEN_MODE_NO_SYNC); //AH! different!
+    PWMGenConfigure(PWM1_BASE, PWM_GEN_2, PWM_GEN_MODE_DOWN | PWM_GEN_MODE_NO_SYNC); \
     PWMGenConfigure(PWM1_BASE, PWM_GEN_3, PWM_GEN_MODE_DOWN | PWM_GEN_MODE_NO_SYNC);
 
     // Set the Period (expressed in clock ticks)
