@@ -9,4 +9,5 @@ The examples include short code snippets to quickly get use out of the board
 * I2C (todo)
 * UART (todo)
 * SPI (todo)
-* Debug Output (todo)
+* Debug Output via UART
+* CAN (todo)
