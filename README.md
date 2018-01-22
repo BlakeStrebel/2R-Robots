@@ -6,7 +6,10 @@ Repo for the 2R Educational Robot of ME 495 Robot Design Studio
 The examples include short code snippets to quickly get use out of the board
 * Blink
 * PWM
+* SD Card (todo)
+* Quadrature Encoder Interface (todo)
 * I2C (todo)
 * UART (todo)
 * SPI (todo)
-* Debug Output (todo)
+* Debug Output via UART
+* CAN (todo)
