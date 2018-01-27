@@ -26,7 +26,7 @@
 #include "driverlib/gpio.h"
 #include "driverlib/qei.h"
 
-volatile int qeiPosition;
+
 
 
 int main(void) {
@@ -64,6 +64,8 @@ int main(void) {
     QEIPositionSet(QEI0_BASE, 500);
 
     //Add qeiPosition as a watch expression to see the value inc/dec
+    volatile int qeiPosition; // declare it in the loop so that we can see the value in the debugger
+
     while (1) //This is the main loop of the program
     {
         qeiPosition = QEIPositionGet(QEI0_BASE); 
