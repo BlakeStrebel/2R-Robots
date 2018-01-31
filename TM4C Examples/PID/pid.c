@@ -6,7 +6,7 @@
 //
 // Combined PWM and QEI Example
 //
-// PWM pins PF1, and PF2 
+// PWM pins PF1, and PF2
 // QEI pins PD6, and PD7 (note PD7 has to be unlocked from NMI)
 // Period set to 320 clock cycles
 // Clock set to 50Mhz
@@ -39,12 +39,13 @@ int main(void) {
 
     // Begin
 
-    volatile int currPosition;
+    volatile int currPosition=0;
+    volatile int tempposition = 0; //Added on 1/31
     int refposition = 0;
     int dir = 100;
     int pwmout = 0;
-    float Kp = 0.1;
-    float Kd = 0;
+    float Kp = 10;
+    float Kd = 10;
     float Ki = 0;
     int error = 0;
     int eprev = 0;
@@ -56,33 +57,43 @@ int main(void) {
     while (1)
     {
 
-        currPosition = QEIPositionGet(QEI0_BASE);
+        //currPosition = QEIPositionGet(QEI0_BASE);
+
+
+            currPosition = currPosition + (QEIPositionGet(QEI0_BASE)-500);
+            QEIPositionSet(QEI0_BASE, 500);
+
+
         error = (refposition - currPosition); // get current error
         eint = eint + error; // integrate up the error
         ediv = error-eprev; // no need to divide by time since you are multiplying by a constant.
         controlsig = Kp*error+Kd*ediv+Ki*eint;
-        if (controlsig>100) {
-            pwmout = 100;
-            dir = 100; // forward full speed
+        if (controlsig>320) {
+            pwmout = 320;
+            dir = 320; // forward full speed
         }
-        else if(controlsig<-100) {
-            dir = 0;
-            pwmout = -100; // backwards full speed
+        else if(controlsig<-320) {
+            dir = 1;
+            pwmout = 320; // backwards full speed
         }
-        else if((controlsig<0) && (controlsig>-100)){
-            pwmout = -1*controlsig; // backwards at controlsig
-            dir = -100;
+        else if((controlsig<0) && (controlsig>-320)){
+            pwmout = -controlsig; // backwards at controlsig
+            dir = 320;
         }
-        else if ((controlsig>=0)&&(controlsig<100)){
+        else if ((controlsig>=0)&&(controlsig<320)){
             pwmout = controlsig; // forwards at controlsig
-            dir = 100;
+            dir = 1;
         }
 
         PWMPulseWidthSet(PWM1_BASE, PWM_OUT_5,dir);
         PWMPulseWidthSet(PWM1_BASE, PWM_OUT_6,pwmout);
+
+        //PWMPulseWidthSet(PWM1_BASE, PWM_OUT_5,1);
+        //PWMPulseWidthSet(PWM1_BASE, PWM_OUT_6,100);
+
         eprev = error; // update previous error
 
-        SysCtlDelay (1000);
+        SysCtlDelay (100);
     }
 }
 
@@ -127,7 +138,7 @@ void PWMconfig(int period){
     GPIOPinConfigure(GPIO_PF2_M1PWM6); //PF2
 
     // Set pin types
-    GPIOPinTypePWM(GPIO_PORTF_BASE, GPIO_PIN_1 | GPIO_PIN_2); 
+    GPIOPinTypePWM(GPIO_PORTF_BASE, GPIO_PIN_1 | GPIO_PIN_2);
     // PWM configuration
     PWMGenConfigure(PWM1_BASE, PWM_GEN_2, PWM_GEN_MODE_DOWN | PWM_GEN_MODE_NO_SYNC);
     PWMGenConfigure(PWM1_BASE, PWM_GEN_3, PWM_GEN_MODE_DOWN | PWM_GEN_MODE_NO_SYNC);
