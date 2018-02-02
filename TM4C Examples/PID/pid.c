@@ -25,16 +25,19 @@
 #include "driverlib/qei.h"
 #include "driverlib/pwm.h"
 
+
+#define PERIOD 320
+
 // Prototypes
 void PWMconfig(int period);
-void QEIconfig();
+void QEIconfig(void);
 
 int main(void) {
 
     // Set the clock to 50Mhz
     SysCtlClockSet(SYSCTL_SYSDIV_4|SYSCTL_USE_PLL|SYSCTL_XTAL_16MHZ|SYSCTL_OSC_MAIN);
 
-    PWMconfig(320);
+    PWMconfig(PERIOD);
     QEIconfig();
 
     // Begin
@@ -42,7 +45,7 @@ int main(void) {
     volatile int currPosition=0;
     volatile int tempposition = 0; //Added on 1/31
     int refposition = 0;
-    int dir = 100;
+    int dir = 0;
     int pwmout = 0;
     float Kp = 10;
     float Kd = 10;
@@ -57,30 +60,32 @@ int main(void) {
     while (1)
     {
 
-        //currPosition = QEIPositionGet(QEI0_BASE);
+        //update position
+        currPosition = currPosition + (QEIPositionGet(QEI0_BASE)-500);
+
+        QEIPositionSet(QEI0_BASE, 500);
 
 
-            currPosition = currPosition + (QEIPositionGet(QEI0_BASE)-500);
-            QEIPositionSet(QEI0_BASE, 500);
-
-
+        // Compute position error
         error = (refposition - currPosition); // get current error
         eint = eint + error; // integrate up the error
         ediv = error-eprev; // no need to divide by time since you are multiplying by a constant.
         controlsig = Kp*error+Kd*ediv+Ki*eint;
-        if (controlsig>320) {
-            pwmout = 320;
-            dir = 320; // forward full speed
+
+        // Send control signal
+        if (controlsig>PERIOD) {
+            pwmout = PERIOD;
+            dir = PERIOD; // forward full speed
         }
-        else if(controlsig<-320) {
+        else if(controlsig<-PERIOD) {
             dir = 1;
-            pwmout = 320; // backwards full speed
+            pwmout = PERIOD; // backwards full speed
         }
-        else if((controlsig<0) && (controlsig>-320)){
+        else if((controlsig<0) && (controlsig>-PERIOD)){
             pwmout = -controlsig; // backwards at controlsig
-            dir = 320;
+            dir = PERIOD;
         }
-        else if ((controlsig>=0)&&(controlsig<320)){
+        else if ((controlsig>=0)&&(controlsig<PERIOD)){
             pwmout = controlsig; // forwards at controlsig
             dir = 1;
         }
@@ -93,7 +98,6 @@ int main(void) {
 
         eprev = error; // update previous error
 
-        SysCtlDelay (100);
     }
 }
 
