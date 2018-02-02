@@ -6,7 +6,7 @@
 //
 // Combined PWM and QEI Example
 //
-// PWM pins PF1, and PF2
+// PWM pins PF1 -> dir, and PF2 -> pwm
 // QEI pins PD6, and PD7 (note PD7 has to be unlocked from NMI)
 // Period set to 320 clock cycles
 // Clock set to 50Mhz
@@ -85,8 +85,8 @@ int main(void) {
             dir = 1;
         }
 
-        PWMPulseWidthSet(PWM1_BASE, PWM_OUT_5,dir);
-        PWMPulseWidthSet(PWM1_BASE, PWM_OUT_6,pwmout);
+        PWMPulseWidthSet(PWM1_BASE, PWM_OUT_5,dir); // PWM value is the total period
+        PWMPulseWidthSet(PWM1_BASE, PWM_OUT_6,pwmout); 
 
         //PWMPulseWidthSet(PWM1_BASE, PWM_OUT_5,1);
         //PWMPulseWidthSet(PWM1_BASE, PWM_OUT_6,100);
