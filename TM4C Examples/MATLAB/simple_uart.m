@@ -16,18 +16,19 @@
 % 
 
 clear;clc;
-s = serial('COM3','BAUD',115200);
+s = serial('COM10','BAUD',115200);
 s.Terminator = 'CR'; 
 fopen(s);
 fwrite(s, 'b\n'); % Test by sending a char to the connected microcontroller
-reply = fscan(s)
+reply = fscanf(s)
 fclose(s);
 command = 1;
-while true 
-    clear
-    x = input('Do not enter k: ');
-    if x == 'k'
-        break;
-    end
-    print(x);
-end
+
+% while true 
+%     clear
+%     x = input('Do not enter k: ');
+%     if x == 'k'
+%         break;
+%     end
+%     print(x);
+% end
