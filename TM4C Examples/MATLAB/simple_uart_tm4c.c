@@ -29,6 +29,12 @@
 #include "driverlib/sysctl.h"
 #include "driverlib/uart.h"
 
+//Test 2/4/2018
+int f = 2;
+float data[2][2] = {{1.1,2.2},{3.3,4.4}};
+char s1[15];
+uint8_t *array;
+
 
 //*****************************************************************************
 //
@@ -59,7 +65,7 @@ UARTSend(const uint8_t *pui8Buffer, uint32_t ui32Count)
         //
         // Write the next character to the UART.
         //
-        ROM_UARTCharPutNonBlocking(UART0_BASE, *pui8Buffer++);
+        ROM_UARTCharPut(UART0_BASE, *pui8Buffer++);
     }
 }
 
@@ -104,7 +110,11 @@ UARTIntHandler(void)
         //char replyString[25]={};
         //sprintf(replyString,"Hello! You sent: %c\r\n",newchar);
 
-        UARTSend((uint8_t *) "R2R Welcome\r\n",15);
+        UARTSend((uint8_t *) "R2R WelcomeHAHAHAHAHAHAHHHAHAHHHAHAHAHHAHAHAHAHAHAHAHAHAHHA\r\n",200);
+        //Test 2/4/2018
+        //UARTSend(array,15);
+
+
 
         // Another option that is blocking is:
         // UARTCharPut(UART0_BASE, 'r');
@@ -135,6 +145,13 @@ UARTIntHandler(void)
 int
 main(void)
 {
+
+
+    //Test 2/4/2018
+    //array = (uint8_t *)(&f);
+    //sprintf(s1, "%f", f);
+
+
     //
     // Enable lazy stacking for interrupt handlers.  This allows floating-point
     // instructions to be used within interrupt handlers, but at the expense of
