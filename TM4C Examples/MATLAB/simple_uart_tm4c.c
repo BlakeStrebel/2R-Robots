@@ -14,6 +14,7 @@
 //
 //*****************************************************************************
 
+#define TARGET_IS_TM4C123_RB2
 #include <stdint.h>
 #include <stdbool.h>
 #include <stdio.h>
