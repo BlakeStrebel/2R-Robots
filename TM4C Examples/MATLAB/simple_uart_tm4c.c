@@ -30,10 +30,15 @@
 #include "driverlib/uart.h"
 
 //Test 2/4/2018
-int f = 2;
+float f = 2.343434;
 float data[2][2] = {{1.1,2.2},{3.3,4.4}};
 char s1[15];
 uint8_t *array;
+uint8_t x;
+#define RED_LED   GPIO_PIN_1
+#define BLUE_LED  GPIO_PIN_2
+#define GREEN_LED GPIO_PIN_3
+
 
 
 //*****************************************************************************
@@ -110,7 +115,10 @@ UARTIntHandler(void)
         //char replyString[25]={};
         //sprintf(replyString,"Hello! You sent: %c\r\n",newchar);
 
-        UARTSend((uint8_t *) "R2R WelcomeHAHAHAHAHAHAHHHAHAHHHAHAHAHHAHAHAHAHAHAHAHAHAHHA\r\n",200);
+        //array = &f;
+        array = data;
+        UARTSend(array,16);
+        //UARTSend((uint8_t *) "R2R WelcomeHAHAHAHAHAHAHHHAHAHHHAHAHAHHAHAHAHAHAHAHAHAHAHHA \r\n",200);
         //Test 2/4/2018
         //UARTSend(array,15);
 
@@ -146,6 +154,13 @@ int
 main(void)
 {
 
+
+
+
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOF);
+    GPIOPinTypeGPIOOutput(GPIO_PORTF_BASE, RED_LED|BLUE_LED|GREEN_LED);
+    if (sizeof(f) == 4 * sizeof(x))
+        GPIOPinWrite(GPIO_PORTF_BASE, RED_LED|BLUE_LED|GREEN_LED, GREEN_LED);
 
     //Test 2/4/2018
     //array = (uint8_t *)(&f);
@@ -199,7 +214,7 @@ main(void)
     //
     // Configure the UART for 115,200, 8-N-1 operation.
     //
-    ROM_UARTConfigSetExpClk(UART0_BASE, ROM_SysCtlClockGet(), 115200,
+    ROM_UARTConfigSetExpClk(UART0_BASE, ROM_SysCtlClockGet(), 128000,
                             (UART_CONFIG_WLEN_8 | UART_CONFIG_STOP_ONE |
                              UART_CONFIG_PAR_NONE));
 

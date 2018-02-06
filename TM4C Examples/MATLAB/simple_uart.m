@@ -16,12 +16,15 @@
 % 
 
 clear;clc;
-s = serial('COM10','BAUD',115200);
-s.Terminator = 'CR'; 
+s = serial('COM5', 'BaudRate', 128000, 'DataBits', 8, 'StopBits', 1, 'Parity', 'none');
+%s.Terminator = 'CR'; 
 fopen(s);
 fwrite(s, 'b\n'); % Test by sending a char to the connected microcontroller
-reply = fscanf(s)
+%reply = fscanf(s)
+%reply = fread(s,4,'uchar')
+reply = fread(s, 4, 'float32')
 fclose(s);
+%Afloat = typecast(reply , 'single') % I added it
 command = 1;
 
 % while true 
