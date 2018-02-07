@@ -11,7 +11,7 @@
 % connect to it, close and reopen MATLAB
 %
 % R2R
-% Written By: Benjamen Lim
+% Written By: Benjamen Lim & Huan
 % Date: 1 Feb 2018
 % 
 
@@ -19,16 +19,21 @@ clear;clc;
 s = serial('COM10','BAUD',115200);
 s.Terminator = 'CR'; 
 fopen(s);
-fwrite(s, 'b\n'); % Test by sending a char to the connected microcontroller
+%fwrite(s, 'b\n'); % Test by sending a char to the connected microcontroller
 reply = fscanf(s)
 fclose(s);
-command = 1;
+
 
 % while true 
-%     clear
-%     x = input('Do not enter k: ');
+%     clc
+%     disp('R2R Arm Interface')
+%     disp('-----------------')
+%     disp('System online.')
+%     disp('You last entered: ')
+%     disp(x);
+%     x = input('Do not enter k: ','s');
 %     if x == 'k'
 %         break;
 %     end
-%     print(x);
+%     
 % end
