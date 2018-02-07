@@ -80,7 +80,7 @@ while true
             %reply = fscanf(s)
             %reply = fread(s,4,'uchar')
             reply = fread(s, 1, 'float32') %read 4 bytes and convert to float
-            test(c) = reply;
+            test(c)
             %pause(0.1); %wait for 0.1 sec but this is wher we do the computations
         end
         close(h)
