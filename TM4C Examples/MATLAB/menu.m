@@ -25,7 +25,7 @@ fopen(s);
 
 %Afloat = typecast(reply , 'single') % I added it
 command = 1;
-lengthOfArray = 4;
+lengthOfArray = 4000;
 
 testarray(4000) = 0;
 x = NaN;
@@ -73,14 +73,38 @@ while true
         continue;
     end
     if x == 'r'
-        h = waitbar(0,'Running model...');
+        % Just to receive data
+        % h = waitbar(0,'Running model...');
+        % For live plotting
+        x = 0 ;
+        startSpot = 0;
+        step = 1 ; % lowering step has a number of cycles and then acquire more data
+        storedArray = zeros(lengthOfArray);
+        % Send your variables here. 
         fwrite(s, 'b\n'); % Test by sending a char to the connected microcontroller
-        for c = 1:lengthOfArray
-            waitbar(c/lengthOfArray);
+        
+        for t = 1:lengthOfArray
+            % For data receiving.
+            %waitbar(t/lengthOfArray);
             %reply = fscanf(s)
             %reply = fread(s,4,'uchar')
-            reply = fread(s, 1, 'float32') %read 4 bytes and convert to float
-            test(c) = reply;
+            reply = fread(s, 1, 'float32'); %read 4 bytes and convert to float
+            
+            % For live plotting
+            storedArray(t) = reply;
+            x = [ x, reply ];
+            plot(x) ;
+            if ((t/step)-500 < 0)
+                startSpot = 0;
+            else
+                startSpot = (t/step)-500;
+            end
+
+            axis([startSpot, (t/step+50), 0 , 10 ]);
+              grid
+              
+              drawnow;
+            
             %pause(0.1); %wait for 0.1 sec but this is wher we do the computations
         end
         close(h)
