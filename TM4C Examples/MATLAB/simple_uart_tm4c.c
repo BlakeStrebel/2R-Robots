@@ -39,7 +39,9 @@ uint8_t x;
 #define BLUE_LED  GPIO_PIN_2
 #define GREEN_LED GPIO_PIN_3
 
-
+//Test 2/7/2018
+float bigdata[4000];
+int i;
 
 //*****************************************************************************
 //
@@ -115,9 +117,16 @@ UARTIntHandler(void)
         //char replyString[25]={};
         //sprintf(replyString,"Hello! You sent: %c\r\n",newchar);
 
+
+
+        //Test 2/7/2018
+        array = &bigdata;
+        UARTSend(array,(i) * 4);
+
+        //Test 2/4/2018
         //array = &f;
-        array = data;
-        UARTSend(array,16);
+        //array = data;
+        //UARTSend(array,16);
         //UARTSend((uint8_t *) "R2R WelcomeHAHAHAHAHAHAHHHAHAHHHAHAHAHHAHAHAHAHAHAHAHAHAHHA \r\n",200);
         //Test 2/4/2018
         //UARTSend(array,15);
@@ -154,15 +163,20 @@ int
 main(void)
 {
 
+    //Test 2/7/2018
+    for (i = 0; i < 4000; i++)
+        bigdata[i] = 1.23456;
 
 
+
+    //Test 2/4/2018
 
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOF);
     GPIOPinTypeGPIOOutput(GPIO_PORTF_BASE, RED_LED|BLUE_LED|GREEN_LED);
     if (sizeof(f) == 4 * sizeof(x))
         GPIOPinWrite(GPIO_PORTF_BASE, RED_LED|BLUE_LED|GREEN_LED, GREEN_LED);
 
-    //Test 2/4/2018
+
     //array = (uint8_t *)(&f);
     //sprintf(s1, "%f", f);
 
