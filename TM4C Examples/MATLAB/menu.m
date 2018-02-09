@@ -88,8 +88,8 @@ while true
             %waitbar(t/lengthOfArray);
             %reply = fscanf(s)
             %reply = fread(s,4,'uchar')
-            reply = fread(s, 1, 'float32'); %read 4 bytes and convert to float
             
+            reply = fread(s, 1, 'float32'); %read 4 bytes and convert to float
             % For live plotting
             storedArray(t) = reply;
             x = [ x, reply ];
@@ -99,11 +99,9 @@ while true
             else
                 startSpot = (t/step)-500;
             end
-
             axis([startSpot, (t/step+50), 0 , 10 ]);
-              grid
-              
-              drawnow;
+            grid
+            drawnow;
             
             %pause(0.1); %wait for 0.1 sec but this is wher we do the computations
         end
