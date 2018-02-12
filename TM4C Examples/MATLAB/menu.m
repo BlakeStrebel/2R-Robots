@@ -18,7 +18,7 @@
 
 
 clear;clc;
-s = serial('COM11', 'BaudRate', 128000, 'DataBits', 8, 'StopBits', 1, 'Parity', 'none');
+s = serial('COM10', 'BaudRate', 128000, 'DataBits', 8, 'StopBits', 1, 'Parity', 'none');
 %s.Terminator = 'CR'; 
 fopen(s);
 
@@ -99,7 +99,7 @@ while true
             else
                 startSpot = (t/step)-500;
             end
-            axis([startSpot, (t/step+50), 0 , 10 ]);
+            axis([startSpot, (t/step+50), 0 , 300 ]);
             grid
             drawnow;
             
