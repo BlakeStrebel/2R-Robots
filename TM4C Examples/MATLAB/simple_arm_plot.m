@@ -4,7 +4,7 @@ function simple_arm_plot(fig, jointangles)
 %handle and a array of joint angles.
 
 %***Choose the figure.
-figure(fig)
+%figure(fig)
 %figure
 hold on
 axis equal
