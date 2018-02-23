@@ -10,9 +10,16 @@ The examples include short code snippets to quickly get use out of the TM4C123GX
 * Quadrature Encoder Interface (QEI)
 * Debug Output via UART
 * SPI
-* SD Card (todo)
+* SPI RAM (todo)
 * UART (todo)
 * CAN (todo)
+
+# Roadmap
+This roadmap lists the tasks to do as the software architecture develops
+* Implement control law interface
+* Implement modifiable control law interface
+* Implement sensor SPI interface
+
 
 
 # Quickstart
@@ -24,3 +31,6 @@ We found that when starting a project, these libraries have to be manually added
 *[Left click on Project] -> Show Build Settings -> CSS Build, ARM Linker, Include lib -> add "C:\ti\TivaWare_C_Series-2.1.3.156\driverlib\ccs\Debug\driverlib.lib"*
 
 *[Right click on Project] -> Import, Import -> General, Import from File System -> "C:\ti\ivaWare_C_Series-2.1.3.156\utils", Select the ones you want*
+
+# Including the R2R header and source files
+*[Right click on Project]* -> New, Header file -> name file "r2r.h" -> copy and paste .r and .c code from repo
