@@ -21,6 +21,8 @@
 #include "inc/hw_types.h"
 #include "inc/hw_gpio.h"
 #include "driverlib/fpu.h"
+#include "driverlib/adc.h"
+#include "driverlib/ssi.h"
 #include "driverlib/pwm.h"
 #include "driverlib/gpio.h"
 #include "driverlib/pin_map.h"
@@ -36,6 +38,7 @@
 
 #include "r2r.h"
 
+uint32_t adcArray[4]={0};
 /*
  * The system init function initiazes the system clock and the processor interrupts (can we?)
  * Clock: 50Mhz
@@ -47,10 +50,18 @@ void sysInit(void){
 }
 
 /*
+ * This function updates all the sensors that we are using. Ideally it should be run once every loop
+ * TODO: Add sensor functions
+ */
+void sensorUpdate(void){
+    adcRead();
+}
+
+
+/*
  * This function sets up the UART on UART0, PA0(RX) and PA1 (TX)
  * It is set up for 128000 baud 8N1
  */
-
 void uartInit(void){
     SysCtlPeripheralEnable(SYSCTL_PERIPH_UART0);
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOA);
@@ -109,10 +120,50 @@ void i2cInit(tI2CMInstance g_sI2CMSimpleInst){
     I2CMInit(&g_sI2CMSimpleInst, I2C0_BASE, INT_I2C0, 0xff, 0xff, SysCtlClockGet());
 }
 
+/*
+ * This function initilizes the SPI on SSI0, using PA2 (CLK), PA3(SS), PA4(RX), PA5(TX)
+ */
+
+void spiInit(void){
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOA);
+
+        //
+        // Configure the pin muxing for SSI0 functions on port A2, A3, A4, and A5.
+        // This step is not necessary if your part does not support pin muxing.
+        // TODO: change this to select the port/pin you are using.
+        //
+        GPIOPinConfigure(GPIO_PA2_SSI0CLK);
+        GPIOPinConfigure(GPIO_PA3_SSI0FSS);
+        GPIOPinConfigure(GPIO_PA4_SSI0RX);
+        GPIOPinConfigure(GPIO_PA5_SSI0TX);
+
+        //
+        // Configure the GPIO settings for the SSI pins.  This function also gives
+        // control of these pins to the SSI hardware.  Consult the data sheet to
+        // see which functions are allocated per pin.
+        // The pins are assigned as follows:
+        //      PA5 - SSI0Tx
+        //      PA4 - SSI0Rx
+        //      PA3 - SSI0Fss
+        //      PA2 - SSI0CLK
+        // TODO: change this to select the port/pin you are using.
+        //
+        GPIOPinTypeSSI(GPIO_PORTA_BASE, GPIO_PIN_5 | GPIO_PIN_4 | GPIO_PIN_3 |
+                       GPIO_PIN_2);
+        SSIConfigSetExpClk(SSI0_BASE, SysCtlClockGet(), SSI_FRF_MOTO_MODE_0,
+                               SSI_MODE_MASTER, 1000000, 8);
+        SSIEnable(SSI0_BASE);
+
+}
+
+/*
+ * This function sets up the pwm on pins PF1,PF2,PF3 which are avaliable on the TM4C123 Launchpad as RGB outputs.
+ * TODO: Change PWM output pins
+ */
 
 void pwmInit(void){
-   SysCtlPWMClockSet(SYSCTL_PWMDIV_1);
-   // Enable the peripherals used by this program.
+    SysCtlPWMClockSet(SYSCTL_PWMDIV_1);
+    // Enable the peripherals used by this program.
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOF);
     SysCtlPeripheralEnable(SYSCTL_PERIPH_PWM1);  //The Tiva Launchpad has two modules (0 and 1). Module 1 covers the LED pins
     //Configure PF1,PF2,PF3 Pins as PWM
@@ -143,4 +194,168 @@ void pwmInit(void){
     PWMGenEnable(PWM1_BASE, PWM_GEN_3);
     // Turn on the Output pins
     PWMOutputState(PWM1_BASE, PWM_OUT_5_BIT | PWM_OUT_6_BIT | PWM_OUT_7_BIT, true);
+}
+
+/*
+ * This function enables the ADC unit on the TM4C
+ */
+void adcInit(){
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_ADC0);
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOE);
+
+    //
+    // Select the analog ADC function for these pins.
+    // Consult the data sheet to see which functions are allocated per pin.
+    // TODO: change this to select the port/pin you are using.
+    //
+    GPIOPinTypeADC(GPIO_PORTE_BASE, GPIO_PIN_0); // Current Sense 2
+    GPIOPinTypeADC(GPIO_PORTE_BASE, GPIO_PIN_1); // Current Sense 1
+    GPIOPinTypeADC(GPIO_PORTE_BASE, GPIO_PIN_2); // Temp Sense 2
+    GPIOPinTypeADC(GPIO_PORTE_BASE, GPIO_PIN_3); // Temp Sense 1
+    //
+    // Enable sample sequence 3 with a processor signal trigger.  Sequence 3
+    // will do a single sample when the processor sends a singal to start the
+    // conversion.  Each ADC module has 4 programmable sequences, sequence 0
+    // to sequence 3.  This example is arbitrarily using sequence 3.
+    //
+    ADCSequenceConfigure(ADC0_BASE, 3, ADC_TRIGGER_PROCESSOR, 0);
+    ADCSequenceStepConfigure(ADC0_BASE, 3, 0, ADC_CTL_TS | ADC_CTL_IE |
+                                 ADC_CTL_END);
+    //
+    // Since sample sequence 3 is now configured, it must be enabled.
+    //
+    ADCSequenceEnable(ADC0_BASE, 3);
+    //
+    // Clear the interrupt status flag.  This is done to make sure the
+    // interrupt flag is cleared before we sample.
+    //
+    ADCIntClear(ADC0_BASE, 3);
+}
+/*
+ * Reads the ADC, accepts a pointer to a uin32_t array and reads into it
+ */
+void adcRead(void){
+    ADCProcessorTrigger(ADC0_BASE, 3);
+    //
+    // Wait for conversion to be completed.
+    //
+    while(!ADCIntStatus(ADC0_BASE, 3, false))
+    {
+    }
+    //
+    // Clear the ADC interrupt flag.
+    //
+    ADCIntClear(ADC0_BASE, 3);
+
+    //
+    // Read ADC Value.
+    // You will get current 2, current 1, temp 2, temp 1 in that order
+    ADCSequenceDataGet(ADC0_BASE, 3, adcArray);
+
+}
+
+/*
+ * Wrapper functions for current and temperature readings
+ */
+
+uint32_t currentRead1(void){
+    return adcArray[1];
+}
+uint32_t  currentRead2(void){
+    return adcArray[0];
+}
+uint32_t  tempRead1(void){
+    return adcArray[3];
+}
+uint32_t  tempRead2(void){
+    return adcArray[2];
+}
+
+/*
+ * Reads the temperature
+ */
+uint32_t tempRead(void){
+    uint32_t pui32ADC0Value[4];
+    // uint32_t ui32TempValueC;
+    //
+    // Trigger the ADC conversion.
+    //
+    ADCProcessorTrigger(ADC0_BASE, 3);
+
+    //
+    // Wait for conversion to be completed.
+    //
+    while(!ADCIntStatus(ADC0_BASE, 3, false))
+    {
+    }
+    //
+    // Clear the ADC interrupt flag.
+    //
+    ADCIntClear(ADC0_BASE, 3);
+
+    //
+    // Read ADC Value.
+    //
+    ADCSequenceDataGet(ADC0_BASE, 3, pui32ADC0Value);
+    //
+    // Use non-calibrated conversion provided in the data sheet.  Make
+    // sure you divide last to avoid dropout.
+    //
+    // Read internal processor temperature
+    //ui32TempValueC = ((1475 * 1023) - (2250 * pui32ADC0Value[0])) / 10230;
+
+    return 1;
+}
+uint32_t currRead(void){
+   uint32_t pui32ADC0Value[4];
+   //
+   // Trigger the ADC conversion.
+   //
+   ADCProcessorTrigger(ADC0_BASE, 3);
+
+   //
+   // Wait for conversion to be completed.
+   //
+   while(!ADCIntStatus(ADC0_BASE, 3, false))
+   {
+   }
+
+   //
+   // Clear the ADC interrupt flag.
+   //
+   ADCIntClear(ADC0_BASE, 3);
+
+   //
+   // Read ADC Value.
+   //
+   ADCSequenceDataGet(ADC0_BASE, 3, pui32ADC0Value);
+   return 1;
+}
+
+void MCP9600init(){
+    // See https://ncd.io/k-type-thermocouple-mcp9600-with-arduino/
+    // Operations:
+    // Set thermo config
+    // write 0x05
+    // write 0x00
+    // Set device config
+    // write 0x06
+    // write 0x00
+    //I2CMwrite(i2cints,0x64,0x00,1,data,count,callback,write)
+}
+
+void MCP9600ready(){
+    // Write 0x04
+    // wait
+    // check if slave busy, if not read
+    // return int
+}
+
+void MCP9600read(){
+    // write 0x00
+    // read to long int = 1
+    // read to long int = 2
+    // if 1 &0x80 == 0x80
+    // 1 = 1& 0x7F
+    //temp  = 1024 - (1 *16/ + 2/16)
 }

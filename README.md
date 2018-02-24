@@ -19,6 +19,8 @@ This roadmap lists the tasks to do as the software architecture develops
 * Implement control law interface
 * Implement modifiable control law interface
 * Implement sensor SPI interface
+* ~~Current sense code~~
+* ~~Temperature sense code~~
 
 
 
