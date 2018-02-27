@@ -332,6 +332,12 @@ uint32_t currRead(void){
    return 1;
 }
 
+
+#define SLAVE_ADDRESS 			0x18   //Huan: It should be 0xC? A2,A1,A0,0
+#define DEVICE_ID_REGISTER  		0x06   
+#define MANUFACTURE_ID_REGISTER		0x05   
+#define HOT_JUNCTION_REGISTER		0x00   //Huan: Not sure
+
 void MCP9600init(){
     // See https://ncd.io/k-type-thermocouple-mcp9600-with-arduino/
     // Operations:
@@ -341,21 +347,54 @@ void MCP9600init(){
     // Set device config
     // write 0x06
     // write 0x00
-    //I2CMwrite(i2cints,0x64,0x00,1,data,count,callback,write)
+    //I2CMwrite(i2cints,0x64,0x00,1,data,count,callback,write)   //Huan: What do you mean by that?
+
+    I2CMasterSlaveAddrSet(I2C0_BASE, SLAVE_ADDRESS, false);  
+    I2CMasterDataPut(I2C0_BASE, MANUFACTURE_ID_REGISTER); 
+    I2CMasterControl(I2C0_BASE, I2C_MASTER_CMD_SINGLE_SEND);
+    while(I2CMasterBusy(I2C0_BASE));
+    I2CMasterSlaveAddrSet(I2C0_BASE, SLAVE_ADDRESS, false);  //Can they emerge?
+    I2CMasterDataPut(I2C0_BASE, MANUFACTURE_ID_REGISTER); 
+    I2CMasterControl(I2C0_BASE, I2C_MASTER_CMD_SINGLE_SEND);
+    while(I2CMasterBusy(I2C0_BASE));
+    SysCtlDelay(50000000);      //Huan: Not sure how long we need.
 }
 
-void MCP9600ready(){
+void MCP9600ready(){  //Huan: This can be replaced by while(I2CMasterBusy(I2C0_BASE)) {}, which detects from master
     // Write 0x04
     // wait
     // check if slave busy, if not read
     // return int
 }
 
-void MCP9600read(){
+uint16_t MCP9600read(){
     // write 0x00
     // read to long int = 1
     // read to long int = 2
     // if 1 &0x80 == 0x80
     // 1 = 1& 0x7F
     //temp  = 1024 - (1 *16/ + 2/16)
+    
+    I2CMasterSlaveAddrSet(I2C0_BASE, SLAVE_ADDRESS, false);  
+    I2CMasterDataPut(I2C0_BASE, HOT_JUNCTION_REGISTER); 
+    I2CMasterControl(I2C0_BASE, I2C_MASTER_CMD_SINGLE_SEND);
+    while(I2CMasterBusy(I2C0_BASE));
+    uint8_t UpperByte = 0;
+    uint8_t LowerByte = 0;
+    I2CMasterSlaveAddrSet(I2C0_BASE, SLAVE_ADDRESS, true);
+    // Get first byte from slave and ack for more
+    I2CMasterControl(I2C0_BASE, I2C_MASTER_CMD_BURST_RECEIVE_START); 
+    while(I2CMasterBusy(I2C0_BASE));
+    UpperByte = I2CMasterDataGet(I2C0_BASE); 
+    //Get second byte from slave and nack for complete
+    I2CMasterControl(I2C0_BASE, I2C_MASTER_CMD_BURST_RECEIVE_CONT);
+    while(I2CMasterBusy(I2C0_BASE)); 
+    LowerByte = I2CMasterDataGet(I2C0_BASE);
+    UpperByte = UpperByte & 0x1F;
+    if((UpperByte & 0x10) == 0x10){    //Huan: the statement is different with that in your link. Nor sure.
+        UpperByte = UpperByte & 0x0F;					// Clear sign
+	return (256 - (UpperByte * 16 + LowerByte / 16));	// 
+    }
+    else
+        return ((UpperByte * 16 + LowerByte / 16));   
 }
