@@ -108,17 +108,17 @@ UARTIntHandler(void)
         //
         // Blink the LED to show a character transfer is occuring.
         //
-        GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_2, GPIO_PIN_2);
+        //GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_2, GPIO_PIN_2);
 
         //
         // Delay for 1 millisecond.  Each SysCtlDelay is about 3 clocks.
         //
-        SysCtlDelay(SysCtlClockGet() / (1000 * 3));
+        //SysCtlDelay(SysCtlClockGet() / (1000 * 3));
 
         //
         // Turn off the LED
         //
-        GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_2, 0);
+        //GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_2, 0);
 
     }
 }
