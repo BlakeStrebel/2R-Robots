@@ -39,10 +39,15 @@
 #include "r2r.h"
 
 uint32_t adcArray[4]={0};
+extern int run_program = 1; // this will be declared in the main loop
 /*
  * The system init function initiazes the system clock and the processor interrupts (can we?)
  * Clock: 50Mhz
  */
+void delayMS(int ms) {
+    SysCtlDelay( (SysCtlClockGet()/(3*1000))*ms ) ;
+}
+
 void sysInit(void){
     SysCtlClockSet(SYSCTL_SYSDIV_4 | SYSCTL_USE_PLL | SYSCTL_OSC_MAIN |
                            SYSCTL_XTAL_16MHZ);
@@ -50,12 +55,99 @@ void sysInit(void){
 }
 
 /*
- * This function updates all the sensors that we are using. Ideally it should be run once every loop
+ * This function explicitly checks for safety conditions, and it uses a global variable run_program to turn off the motor
+ * TODO: save last state to a permanent storage device and check it upon starting. If last state was some error state, user must clear the flag
+ */
+void safetyCheck(void){
+    int errmsg;
+    errmsg = motorError();
+}
+
+/*
+ * This function updates all the sensors that we are using. Usually runs once every loop
  * TODO: Add sensor functions
  */
 void sensorUpdate(void){
     adcRead();
 }
+
+
+/*
+ *  This function sets up all the GPIO pins for unused and other pins that are used in other functions. .
+ */
+void gpioInit(void){
+
+    // Unused pins, enable and set to inputs
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOP);
+    GPIOPinTypeGPIOInput(GPIO_PORTP_BASE, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3);
+
+
+}
+
+/*
+ * This function sets up all the PWM pins and the gpio pins for the motor, may also optionally call SPI pins
+ */
+
+void motorInit(void){
+    // Setting up motor driver pins, directions PK0:1, PK2:2
+       // Motor enable pins, PK1: 1, PK3: 2
+       // Motor brake pins, PK4: 1, PK5: 2
+       SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOK);
+       SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOJ);
+       GPIOPinTypeGPIOOutput(GPIO_PORTK_BASE, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3 | GPIO_PIN_4 | GPIO_PIN_5);
+       // GPIOPinWrite(GPIO_PORTF_BASE, RED_LED|BLUE_LED|GREEN_LED, ledTable[i]);
+       // Pulled low on motor fault PK6:1, PK7: 2
+       GPIOPinTypeGPIOInput(GPIO_PORTK_BASE, GPIO_PIN_6 | GPIO_PIN_7);
+       // TODO: Cal, short all amplifier inputs together (why?)
+       GPIOPinTypeGPIOOutput(GPIO_PORTJ_BASE, GPIO_PIN_0 | GPIO_PIN_1 );
+       pwmInit(); // PWM OUT 4 and PWM OUT 6, PF0 and PF2
+       //set directions
+       GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_0 |  GPIO_PIN_2 , GPIO_PIN_0+ GPIO_PIN_2);
+       // turn on
+       GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_1 |  GPIO_PIN_3 , GPIO_PIN_1+ GPIO_PIN_3);
+
+}
+
+void motorPWM1(int pwmValue){
+    // assuming PWM has been initialized.
+    PWMPulseWidthSet(PWM0_BASE, PWM_OUT_4,pwmValue);
+
+}
+
+void motorPWM2(int pwmValue){
+    // assuming PWM has been initialized.
+    PWMPulseWidthSet(PWM0_BASE, PWM_OUT_6,pwmValue);
+}
+
+int motorError(void){
+   int motor1error = GPIOPinRead(GPIO_PORTK_BASE, GPIO_PIN_6);
+   int motor2error = GPIOPinRead(GPIO_PORTK_BASE, GPIO_PIN_7);
+   if (motor1error==0){
+       // brake motor 1
+       GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_4,GPIO_PIN_4);
+       return 51;
+   }
+   else if (motor2error==0){
+       // brake motor 2
+       GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_5,GPIO_PIN_5);
+       return 52;
+   }
+   else{
+       return 50;
+   }
+}
+
+/*
+ * Control functions
+ */
+void PIDUpdate(void){
+    ; // only update as control changes
+}
+
+void PIDCurrUpdate(void){
+    ; // update the commanded current as fast as possible
+}
+
 
 
 /*
@@ -125,17 +217,20 @@ void i2cInit(tI2CMInstance g_sI2CMSimpleInst){
  */
 
 void spiInit(void){
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOA);
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOD);
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOL);
 
         //
         // Configure the pin muxing for SSI0 functions on port A2, A3, A4, and A5.
         // This step is not necessary if your part does not support pin muxing.
         // TODO: change this to select the port/pin you are using.
         //
-        GPIOPinConfigure(GPIO_PA2_SSI0CLK);
-        GPIOPinConfigure(GPIO_PA3_SSI0FSS);
-        GPIOPinConfigure(GPIO_PA4_SSI0RX);
-        GPIOPinConfigure(GPIO_PA5_SSI0TX);
+        GPIOPinConfigure(GPIO_PD3_SSI2CLK);
+        GPIOPinConfigure(GPIO_PD2_SSI2FSS); // NC
+        GPIOPinConfigure(GPIO_PL2_C0O); //motor 1
+        GPIOPinConfigure(GPIO_PL3_C1O); // motor 2
+        GPIOPinConfigure(GPIO_PD0_SSI2XDAT1);
+        GPIOPinConfigure(GPIO_PD1_SSI2XDAT0);
 
         //
         // Configure the GPIO settings for the SSI pins.  This function also gives
@@ -148,11 +243,11 @@ void spiInit(void){
         //      PA2 - SSI0CLK
         // TODO: change this to select the port/pin you are using.
         //
-        GPIOPinTypeSSI(GPIO_PORTA_BASE, GPIO_PIN_5 | GPIO_PIN_4 | GPIO_PIN_3 |
-                       GPIO_PIN_2);
-        SSIConfigSetExpClk(SSI0_BASE, SysCtlClockGet(), SSI_FRF_MOTO_MODE_0,
+        GPIOPinTypeSSI(GPIO_PORTD_BASE, GPIO_PIN_1 | GPIO_PIN_0 | GPIO_PIN_2 |
+                       GPIO_PIN_3);
+        SSIConfigSetExpClk(SSI2_BASE, SysCtlClockGet(), SSI_FRF_MOTO_MODE_0,
                                SSI_MODE_MASTER, 1000000, 8);
-        SSIEnable(SSI0_BASE);
+        SSIEnable(SSI2_BASE);
 
 }
 
@@ -165,17 +260,23 @@ void pwmInit(void){
     SysCtlPWMClockSet(SYSCTL_PWMDIV_1);
     // Enable the peripherals used by this program.
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOF);
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_PWM1);  //The Tiva Launchpad has two modules (0 and 1). Module 1 covers the LED pins
-    //Configure PF1,PF2,PF3 Pins as PWM
-    GPIOPinConfigure(GPIO_PF1_M1PWM5);
-    GPIOPinConfigure(GPIO_PF2_M1PWM6);
-    GPIOPinConfigure(GPIO_PF3_M1PWM7);
-    GPIOPinTypePWM(GPIO_PORTF_BASE, GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3);
+    // SysCtlPeripheralEnable(SYSCTL_PERIPH_PWM1);  //The Tiva Launchpad 123 has two modules (0 and 1). Module 1 covers the LED pins
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_PWM0);  //The Tiva Launchpad 129 has one modules (0). Module 0 covers the motor pins
+    //Configure PF0,PF2 Pins as PWM, note 129 M0, but 123 M1
+    GPIOPinConfigure(GPIO_PF0_M0PWM0);
+    GPIOPinConfigure(GPIO_PF2_M0PWM2);
+    //GPIOPinConfigure(GPIO_PF0_M1PWM4);
+    //GPIOPinConfigure(GPIO_PF1_M1PWM6);
+    //GPIOPinConfigure(GPIO_PF3_M1PWM7);
+    GPIOPinTypePWM(GPIO_PORTF_BASE, GPIO_PIN_0 | GPIO_PIN_2);
+    // GPIOPinTypePWM(GPIO_PORTF_BASE, GPIO_PIN_0 | GPIO_PIN_2 | GPIO_PIN_3);
     //Configure PWM Options
     //PWM_GEN_2 Covers M1PWM4 and M1PWM5
     //PWM_GEN_3 Covers M1PWM6 and M1PWM7 See page 207 4/11/13 DriverLib doc
-    PWMGenConfigure(PWM1_BASE, PWM_GEN_2, PWM_GEN_MODE_DOWN | PWM_GEN_MODE_NO_SYNC); \
-    PWMGenConfigure(PWM1_BASE, PWM_GEN_3, PWM_GEN_MODE_DOWN | PWM_GEN_MODE_NO_SYNC);
+    PWMGenConfigure(PWM0_BASE, PWM_GEN_0, PWM_GEN_MODE_DOWN | PWM_GEN_MODE_NO_SYNC);
+    PWMGenConfigure(PWM0_BASE, PWM_GEN_1, PWM_GEN_MODE_DOWN | PWM_GEN_MODE_NO_SYNC);
+    // PWMGenConfigure(PWM1_BASE, PWM_GEN_2, PWM_GEN_MODE_DOWN | PWM_GEN_MODE_NO_SYNC);
+    // PWMGenConfigure(PWM1_BASE, PWM_GEN_3, PWM_GEN_MODE_DOWN | PWM_GEN_MODE_NO_SYNC);
     // Set the Period (expressed in clock ticks)
     // To calculate the appropriate parameter
     // use the following equation: N = (1 / f) * SysClk.  Where N is the
@@ -183,23 +284,31 @@ void pwmInit(void){
     // system clock frequency.
     // In this case you get: (1 / 12500  Hz) * 4MHz = 320 cycles.  Note that
     // the maximum period you can set is 2^16 - 1.
-    PWMGenPeriodSet(PWM1_BASE, PWM_GEN_2, 320);
-    PWMGenPeriodSet(PWM1_BASE, PWM_GEN_3, 320);
+    PWMGenPeriodSet(PWM0_BASE, PWM_GEN_0, 320); // PF0
+    PWMGenPeriodSet(PWM0_BASE, PWM_GEN_1, 320); // PF2
     //Set PWM duty-50% (Period /2)
-    PWMPulseWidthSet(PWM1_BASE, PWM_OUT_5,0);
-    PWMPulseWidthSet(PWM1_BASE, PWM_OUT_6,0);
-    PWMPulseWidthSet(PWM1_BASE, PWM_OUT_7,0);
+    PWMPulseWidthSet(PWM0_BASE, PWM_OUT_0,0);
+    PWMPulseWidthSet(PWM0_BASE, PWM_OUT_2,0);
+    // PWMPulseWidthSet(PWM1_BASE, PWM_OUT_7,0);
     // Enable the PWM generator
-    PWMGenEnable(PWM1_BASE, PWM_GEN_2);
-    PWMGenEnable(PWM1_BASE, PWM_GEN_3);
+    PWMGenEnable(PWM0_BASE, PWM_GEN_0);
+    PWMGenEnable(PWM0_BASE, PWM_GEN_1);
     // Turn on the Output pins
-    PWMOutputState(PWM1_BASE, PWM_OUT_5_BIT | PWM_OUT_6_BIT | PWM_OUT_7_BIT, true);
+    PWMOutputState(PWM0_BASE, PWM_OUT_0_BIT | PWM_OUT_2_BIT , true);
+    // PWMOutputState(PWM1_BASE, PWM_OUT_5_BIT | PWM_OUT_6_BIT | PWM_OUT_7_BIT, true);
 }
 
 /*
  * This function enables the ADC unit on the TM4C
  */
 void adcInit(){
+    // ADC MUX,
+    // M1 ADC: M0 MSB, M1 LSB
+    // M2 ADC: M2 MSP, M3 LSB
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOM);
+    GPIOPinTypeGPIOOutput(GPIO_PORTM_BASE, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3);
+
+
     SysCtlPeripheralEnable(SYSCTL_PERIPH_ADC0);
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOE);
 
@@ -332,12 +441,6 @@ uint32_t currRead(void){
    return 1;
 }
 
-
-#define SLAVE_ADDRESS 			0x18   //Huan: It should be 0xC? A2,A1,A0,0
-#define DEVICE_ID_REGISTER  		0x06   
-#define MANUFACTURE_ID_REGISTER		0x05   
-#define HOT_JUNCTION_REGISTER		0x00   //Huan: Not sure
-
 void MCP9600init(){
     // See https://ncd.io/k-type-thermocouple-mcp9600-with-arduino/
     // Operations:
@@ -347,54 +450,21 @@ void MCP9600init(){
     // Set device config
     // write 0x06
     // write 0x00
-    //I2CMwrite(i2cints,0x64,0x00,1,data,count,callback,write)   //Huan: What do you mean by that?
-
-    I2CMasterSlaveAddrSet(I2C0_BASE, SLAVE_ADDRESS, false);  
-    I2CMasterDataPut(I2C0_BASE, MANUFACTURE_ID_REGISTER); 
-    I2CMasterControl(I2C0_BASE, I2C_MASTER_CMD_SINGLE_SEND);
-    while(I2CMasterBusy(I2C0_BASE));
-    I2CMasterSlaveAddrSet(I2C0_BASE, SLAVE_ADDRESS, false);  //Can they emerge?
-    I2CMasterDataPut(I2C0_BASE, MANUFACTURE_ID_REGISTER); 
-    I2CMasterControl(I2C0_BASE, I2C_MASTER_CMD_SINGLE_SEND);
-    while(I2CMasterBusy(I2C0_BASE));
-    SysCtlDelay(50000000);      //Huan: Not sure how long we need.
+    //I2CMwrite(i2cints,0x64,0x00,1,data,count,callback,write)
 }
 
-void MCP9600ready(){  //Huan: This can be replaced by while(I2CMasterBusy(I2C0_BASE)) {}, which detects from master
+void MCP9600ready(){
     // Write 0x04
     // wait
     // check if slave busy, if not read
     // return int
 }
 
-uint16_t MCP9600read(){
+void MCP9600read(){
     // write 0x00
     // read to long int = 1
     // read to long int = 2
     // if 1 &0x80 == 0x80
     // 1 = 1& 0x7F
     //temp  = 1024 - (1 *16/ + 2/16)
-    
-    I2CMasterSlaveAddrSet(I2C0_BASE, SLAVE_ADDRESS, false);  
-    I2CMasterDataPut(I2C0_BASE, HOT_JUNCTION_REGISTER); 
-    I2CMasterControl(I2C0_BASE, I2C_MASTER_CMD_SINGLE_SEND);
-    while(I2CMasterBusy(I2C0_BASE));
-    uint8_t UpperByte = 0;
-    uint8_t LowerByte = 0;
-    I2CMasterSlaveAddrSet(I2C0_BASE, SLAVE_ADDRESS, true);
-    // Get first byte from slave and ack for more
-    I2CMasterControl(I2C0_BASE, I2C_MASTER_CMD_BURST_RECEIVE_START); 
-    while(I2CMasterBusy(I2C0_BASE));
-    UpperByte = I2CMasterDataGet(I2C0_BASE); 
-    //Get second byte from slave and nack for complete
-    I2CMasterControl(I2C0_BASE, I2C_MASTER_CMD_BURST_RECEIVE_CONT);
-    while(I2CMasterBusy(I2C0_BASE)); 
-    LowerByte = I2CMasterDataGet(I2C0_BASE);
-    UpperByte = UpperByte & 0x1F;
-    if((UpperByte & 0x10) == 0x10){    //Huan: the statement is different with that in your link. Nor sure.
-        UpperByte = UpperByte & 0x0F;					// Clear sign
-	return (256 - (UpperByte * 16 + LowerByte / 16));	// 
-    }
-    else
-        return ((UpperByte * 16 + LowerByte / 16));   
 }

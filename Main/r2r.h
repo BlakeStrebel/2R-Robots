@@ -20,9 +20,27 @@
  */
 extern void sysInit(void);
 extern void pwmInit(void);
-
+extern void gpioInit(void); // inits all unused GPIO
+extern void safetyCheck(void); //explicit function to test for end conditions
+extern void delayMS(int ms); // stops processor for a given amount of time in ms, this is approximate.
 // Always call sensor update at beginning of loop!
 extern void sensorUpdate(void);
+
+/*
+ * Motor functions
+ * This section contains all the functions written to get the motor to work.
+ * TODO: write function to set various PWM values
+ */
+extern void motorInit(void);
+extern void motorPWM1(int pwmValue); //sets the motor PWM values
+extern void motorPWM2(int pwmValue);
+extern int motorError(void); // returns 50 on no error, 51 on motor 1 error, 52 on motor 2 error
+
+/*
+ * Control functions
+ */
+extern void PIDUpdate(void);
+extern void PIDCurrUpdate(void);
 
 
 /*
