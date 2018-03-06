@@ -21,7 +21,7 @@ clear;clc;
 s = serial('COM10', 'BaudRate', 128000, 'DataBits', 8, 'StopBits', 1, 'Parity', 'none');
 %s.Terminator = 'CR'; 
 fopen(s);
-
+c = onCleanup(@()fclose(s));
 
 %Afloat = typecast(reply , 'single') % I added it
 command = 1;
@@ -42,14 +42,17 @@ while true
             case 'a'
                 disp('Array loaded.')
             case 'b'
+                
                 disp('Gains loaded.')
+            case 'c'
+                disp('Custom controller setup complete')
             case 'r'
                 disp('Run Complete.')
             otherwise
                 disp('System online.')
         end
         disp('a: Load Array           b: PID Control')
-        disp('c: Other Control 1      d: Other Control 2')
+        disp('c: Custom Control       d: Other Control 2')
         disp('e: Other Control 3      r: Run')
         disp('k: End the program')
         disp('You last entered: ')
@@ -61,6 +64,21 @@ while true
         disp('Array input selected');
         Y = input('Please specify array variable: ');
         lastx = 'a';
+        x = NaN;
+        continue;
+    end
+    if x =='c'
+        disp('Custom control selected');
+        fwrite(s,'c'); 
+        Y = 'a';
+        reply = fscanf(s);
+        while reply ~= 'z'
+            disp(reply);
+            Y = input(': ','s');
+            fwrite(s,Y);
+            reply = fscanf(s);
+        end
+        lastx = 'c';
         x = NaN;
         continue;
         
