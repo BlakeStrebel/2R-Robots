@@ -33,14 +33,22 @@
 #include "driverlib/i2c.h"
 #include "driverlib/uart.h"
 #include "driverlib/sysctl.h"
-#include "utils/uartstdio.c"
+#include "utils/uartstdio.h"
+
 
 
 #include "r2r.h"
 
 uint32_t adcArray[4]={0};
+char user_select = 'a';
 extern int run_program = 1; // this will be declared in the main loop
+uint8_t last_input = 'm';
+extern volatile uint8_t more_input;
+extern volatile uint8_t charBuf[100];
+
+
 /*
+ *
  * The system init function initiazes the system clock and the processor interrupts (can we?)
  * Clock: 50Mhz
  */
@@ -71,6 +79,209 @@ void sensorUpdate(void){
     adcRead();
 }
 
+/*
+ * This function sets up the menu
+ * It assumes that the uart is already open
+ */
+
+void menuHeader(uint8_t input){
+    UARTprintf("\033[2J"); // Clear the screen
+    UARTprintf("\033[0;0H"); // Send cursor to top of screen
+    UARTprintf("R2R Arm debugging \r\n");
+    UARTprintf("_________________ \r\n");
+    UARTprintf("____  o------o __ \r\n");
+    UARTprintf("_____         \\  \r\n");
+    UARTprintf("__________     \\  \r\n");
+    UARTprintf("___________     \\ \r\n");
+    UARTprintf("Press 'm' to return to main menu \r\n");
+    UARTprintf("Command: %c \r\n", input);
+}
+
+/*
+ * This function is used to handle the interface from MATLAB
+ *
+ * It gets values specified by the user in MATLAB and processes them for use when the user presses run
+ *
+ * To use a custom function with MATLAB, case 'c' is provided.
+ * Each get command must be preceded by a printf statement
+ * It must end with the char 'z' to let MATLAB know that all the varibles have been sent
+ */
+
+void matlabMenu(char menuchar){
+    //char menuchar = UARTCharGet(UART0_BASE);
+    int count = 0;
+    float* floatArray;
+    char charArray[100];
+    switch(menuchar){
+    case 'a':
+        count  = 0;
+        while (count<4){
+            char newchar = UARTCharGet(UART0_BASE);
+            //char newchar = UARTCharGetNonBlocking(UART0_BASE);
+            charBuf[count] = newchar;
+            count++;
+        }
+        break;
+    case 'b': // PID gains control
+        count = 0;
+        int i = 0;
+        while(!UARTCharsAvail(UART0_BASE)){ // wait until chars are available
+           ;
+        }
+        while (UARTCharsAvail(UART0_BASE)){ // read
+           // process code here
+           char newchar = UARTCharGet(UART0_BASE);
+           //char newchar = UARTCharGetNonBlocking(UART0_BASE);
+           charArray[count] = newchar;
+           count++;
+       }
+        uint8_t *array;
+        array = &charArray;
+        for (i=0;i<count;i++){
+            UARTCharPut(UART0_BASE,*array++);
+        }
+        UARTCharPut(UART0_BASE,'\r\n');
+        /*
+        floatArray = (float *)&charArray;
+
+        float data[3];
+        //float kp = floatArray[0];
+        //float ki = floatArray[1];
+        //float kd = floatArray[2];
+        int i;
+        for (i = 0;i<count;i++){
+            data[i] = 0.1+*floatArray++;
+        }
+        uint8_t *array;
+        array = &charArray;
+        for (i = 0;i<3*4;i++){
+            UARTCharPut(UART0_BASE,*array++);
+        }*/
+
+        // TODO: Add some confirmation, save to global variable?
+        break;
+
+    case 'c': // custom code
+        UARTprintf("Please set gains for non linear system (kp ki kd):\r\n"); // send string
+        //delayMS(1);
+        UARTprintf("num\r\n"); // send string
+
+        count  = 0;
+
+        char newchar;
+        while(!UARTCharsAvail(UART0_BASE)){
+            ;
+        }
+        while (UARTCharsAvail(UART0_BASE)){
+            // process code here
+            char newchar = UARTCharGet(UART0_BASE);
+            //char newchar = UARTCharGetNonBlocking(UART0_BASE);
+            charArray[count] = newchar;
+            count++;
+        }
+        floatArray = &charArray;
+        //kp = floatArray[0];
+        //ki = floatArray[1];
+        //kd = floatArray[2];
+        UARTprintf("Please set some other value for non linear system (abcd):\r\n");
+        UARTprintf("s\r\n");
+        count  = 0;
+        while (count<4){
+            newchar = UARTCharGet(UART0_BASE);
+            //char newchar = UARTCharGetNonBlocking(UART0_BASE);
+            charBuf[count] = newchar;
+            count++;
+        }
+        UARTprintf("z\r\n");
+        UARTprintf("z\r\n");
+        // UARTCharPut(UART0_BASE, 'z');
+        break;
+
+    }
+
+
+}
+
+
+void menuInit(void){
+    uint8_t buffer[100]={};
+    sprintf(buffer,"\033[2J\r\nR2R Arm debugging \r\n");
+    uartSend((uint8_t *)buffer,100);
+    sprintf(buffer,"This is a test for the ADC\r\n");
+    uartSend((uint8_t *)buffer,100);
+    UARTprintf("R2R UART Menu interface\r\n");
+}
+
+/*
+ * This function contains all the menu interactions with the user
+ */
+
+void menuOptions(uint8_t input){
+    // Generate menu here
+    menuHeader(input);
+
+    /*uint8_t next_input;
+    if (last_input == 'c'){
+        next_input = input;
+        input = 'c';
+    }
+    */
+    switch(input){
+    case 'm':
+        UARTprintf("a: Check set values \r\n");
+        UARTprintf("b: Set new values \r\n");
+        UARTprintf("c: More options \r\n");
+        UARTprintf("\r\nr: Start Arm \r\n");
+        break;
+    case 'a':
+        UARTprintf("Values for control: \r\n");
+        UARTprintf("%c %c %c %c",charBuf[0],charBuf[1],charBuf[2],charBuf[3]);
+        break;
+    case 'b':
+        UARTprintf("Please type in your input: \r\n");
+        int count = 0;
+        while (count<4){
+            char newchar = UARTCharGet(UART0_BASE);
+            //char newchar = UARTCharGetNonBlocking(UART0_BASE);
+            charBuf[count] = newchar;
+            count++;
+        }
+        UARTprintf("\r\nOkay. Values set \r\n");
+
+        //UARTprintf("You typed in %c",newchar);
+        //more_input = 1;
+        break;
+    case 'c':
+        UARTprintf("Type in more options: \r\n");
+        //switch(next_input){
+        //case 'a':
+          //  UARTprintf("Nested menu option \r\n");
+          //  input = 'a';
+          //  break;
+        //}
+        break;
+    default:
+        UARTprintf("Command not recognized!\r\n");
+        break;
+    }
+    last_input = input;
+
+}
+
+void processUserInput(void){
+    switch (user_select) {
+    case 'a': // do option 1
+        UARTprintf("Beginning loaded options:");
+        break;
+    case 'b': // do option 2
+        UARTprintf("Setting up constants kp, ki, kd:");
+        // process everything that is in the buffer
+        // error checking
+        break;
+    }
+
+
+}
 
 /*
  *  This function sets up all the GPIO pins for unused and other pins that are used in other functions. .
@@ -102,7 +313,7 @@ void motorInit(void){
        GPIOPinTypeGPIOOutput(GPIO_PORTJ_BASE, GPIO_PIN_0 | GPIO_PIN_1 );
        pwmInit(); // PWM OUT 4 and PWM OUT 6, PF0 and PF2
        //set directions
-       GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_0 |  GPIO_PIN_2 , GPIO_PIN_0+ GPIO_PIN_2);
+       GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_0 | GPIO_PIN_2 , GPIO_PIN_0+GPIO_PIN_2);
        // turn on
        GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_1 |  GPIO_PIN_3 , GPIO_PIN_1+ GPIO_PIN_3);
 
@@ -171,9 +382,65 @@ void uartInit(void){
     //
     // Enable the UART interrupt.
     //
-    IntEnable(INT_UART0);
-    UARTIntEnable(UART0_BASE, UART_INT_RX | UART_INT_RT);
+    //IntEnable(INT_UART0);
+    //UARTIntEnable(UART0_BASE, UART_INT_RX | UART_INT_RT);
 
+}
+
+
+void
+initConsole(void)
+{
+    //
+    // Enable GPIO port A which is used for UART0 pins.
+    // TODO: change this to whichever GPIO port you are using.
+    //
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOA);
+
+    //
+    // Configure the pin muxing for UART0 functions on port A0 and A1.
+    // This step is not necessary if your part does not support pin muxing.
+    // TODO: change this to select the port/pin you are using.
+    //
+    GPIOPinConfigure(GPIO_PA0_U0RX);
+    GPIOPinConfigure(GPIO_PA1_U0TX);
+
+    //
+    // Enable UART0 so that we can configure the clock.
+    //
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_UART0);
+
+    //
+    // Use the internal 16MHz oscillator as the UART clock source.
+    //
+    UARTClockSourceSet(UART0_BASE, UART_CLOCK_PIOSC);
+
+    //
+    // Select the alternate (UART) function for these pins.
+    // TODO: change this to select the port/pin you are using.
+    //
+    GPIOPinTypeUART(GPIO_PORTA_BASE, GPIO_PIN_0 | GPIO_PIN_1);
+
+    //
+    // Initialize the UART for console I/O.
+    //
+    UARTStdioConfig(0, 128000, 16000000);
+}
+
+
+
+void uartSend(const uint8_t *pui8Buffer, uint32_t ui32Count)
+{
+    //
+    // Loop while there are more characters to send.
+    //
+    while(ui32Count--)
+    {
+        //
+        // Write the next character to the UART.
+        //
+        UARTCharPut(UART0_BASE, *pui8Buffer++);
+    }
 }
 
 
@@ -217,6 +484,11 @@ void i2cInit(tI2CMInstance g_sI2CMSimpleInst){
  */
 
 void spiInit(void){
+    ;
+}
+
+/*
+void spiInit(void){
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOD);
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOL);
 
@@ -225,12 +497,14 @@ void spiInit(void){
         // This step is not necessary if your part does not support pin muxing.
         // TODO: change this to select the port/pin you are using.
         //
+
         GPIOPinConfigure(GPIO_PD3_SSI2CLK);
         GPIOPinConfigure(GPIO_PD2_SSI2FSS); // NC
         GPIOPinConfigure(GPIO_PL2_C0O); //motor 1
         GPIOPinConfigure(GPIO_PL3_C1O); // motor 2
         GPIOPinConfigure(GPIO_PD0_SSI2XDAT1);
         GPIOPinConfigure(GPIO_PD1_SSI2XDAT0);
+
 
         //
         // Configure the GPIO settings for the SSI pins.  This function also gives
@@ -249,13 +523,19 @@ void spiInit(void){
                                SSI_MODE_MASTER, 1000000, 8);
         SSIEnable(SSI2_BASE);
 
-}
+}*/
+
 
 /*
  * This function sets up the pwm on pins PF1,PF2,PF3 which are avaliable on the TM4C123 Launchpad as RGB outputs.
  * TODO: Change PWM output pins
  */
 
+void pwmInit(void){
+    ;
+}
+
+/*
 void pwmInit(void){
     SysCtlPWMClockSet(SYSCTL_PWMDIV_1);
     // Enable the peripherals used by this program.
@@ -297,6 +577,7 @@ void pwmInit(void){
     PWMOutputState(PWM0_BASE, PWM_OUT_0_BIT | PWM_OUT_2_BIT , true);
     // PWMOutputState(PWM1_BASE, PWM_OUT_5_BIT | PWM_OUT_6_BIT | PWM_OUT_7_BIT, true);
 }
+*/
 
 /*
  * This function enables the ADC unit on the TM4C
@@ -305,8 +586,8 @@ void adcInit(){
     // ADC MUX,
     // M1 ADC: M0 MSB, M1 LSB
     // M2 ADC: M2 MSP, M3 LSB
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOM);
-    GPIOPinTypeGPIOOutput(GPIO_PORTM_BASE, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3);
+    //SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOM);
+    //GPIOPinTypeGPIOOutput(GPIO_PORTM_BASE, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3);
 
 
     SysCtlPeripheralEnable(SYSCTL_PERIPH_ADC0);
@@ -327,39 +608,44 @@ void adcInit(){
     // conversion.  Each ADC module has 4 programmable sequences, sequence 0
     // to sequence 3.  This example is arbitrarily using sequence 3.
     //
-    ADCSequenceConfigure(ADC0_BASE, 3, ADC_TRIGGER_PROCESSOR, 0);
-    ADCSequenceStepConfigure(ADC0_BASE, 3, 0, ADC_CTL_TS | ADC_CTL_IE |
+    ADCSequenceConfigure(ADC0_BASE, 0, ADC_TRIGGER_PROCESSOR, 0);
+    ADCSequenceStepConfigure(ADC0_BASE,0,0, ADC_CTL_CH0);
+    ADCSequenceStepConfigure(ADC0_BASE,0,1, ADC_CTL_CH1);
+    ADCSequenceStepConfigure(ADC0_BASE,0,2, ADC_CTL_CH2);
+    ADCSequenceStepConfigure(ADC0_BASE, 0, 3, ADC_CTL_CH3 | ADC_CTL_IE |
                                  ADC_CTL_END);
     //
     // Since sample sequence 3 is now configured, it must be enabled.
     //
-    ADCSequenceEnable(ADC0_BASE, 3);
+    ADCSequenceEnable(ADC0_BASE, 0);
     //
     // Clear the interrupt status flag.  This is done to make sure the
     // interrupt flag is cleared before we sample.
     //
-    ADCIntClear(ADC0_BASE, 3);
+    ADCIntClear(ADC0_BASE, 0);
 }
+
 /*
  * Reads the ADC, accepts a pointer to a uin32_t array and reads into it
  */
 void adcRead(void){
-    ADCProcessorTrigger(ADC0_BASE, 3);
+    int someint = 0;
+    ADCProcessorTrigger(ADC0_BASE, 0);
     //
     // Wait for conversion to be completed.
     //
-    while(!ADCIntStatus(ADC0_BASE, 3, false))
-    {
-    }
+    //while(!ADCIntStatus(ADC0_BASE, 3, false))
+    //{
+    //}
     //
     // Clear the ADC interrupt flag.
     //
-    ADCIntClear(ADC0_BASE, 3);
+    ADCIntClear(ADC0_BASE, 0);
 
     //
     // Read ADC Value.
     // You will get current 2, current 1, temp 2, temp 1 in that order
-    ADCSequenceDataGet(ADC0_BASE, 3, adcArray);
+    someint = ADCSequenceDataGet(ADC0_BASE, 0, adcArray);
 
 }
 

@@ -22,50 +22,17 @@
 #include "driverlib/i2c.h"
 #include "driverlib/sysctl.h"
 #include "driverlib/pwm.h"
+#include "driverlib/uart.h"
+#include "utils/uartstdio.h"
 #include "r2r.h"
 
 
+volatile uint8_t user_input_flag = 0;
+volatile uint8_t get_user_char ='m';
+volatile uint8_t more_input = 0;
 
-//
-// A boolean that is set when a MPU6050 command has completed.
-//
-volatile bool g_bMPU6050Done;
+uint8_t charBuf[100]={}; //global char array to store variables from the MATLAB user
 
-//
-// I2C master instance
-//
-tI2CMInstance g_sI2CMSimpleInst;
-
-// The function that is provided by this example as a callback when MPU6050
-// transactions have completed.
-//
-void MPU6050Callback(void *pvCallbackData, uint_fast8_t ui8Status)
-{
-    //
-    // See if an error occurred.
-    //
-    if (ui8Status != I2CM_STATUS_SUCCESS)
-    {
-        //
-        // An error occurred, so handle it here if required.
-        //
-    }
-    //
-    // Indicate that the MPU6050 transaction has completed.
-    //
-    g_bMPU6050Done = true;
-}
-
-//
-// The interrupt handler for the I2C module.
-//
-void I2CMSimpleIntHandler(void)
-{
-    //
-    // Call the I2C master driver interrupt handler.
-    //
-    I2CMIntHandler(&g_sI2CMSimpleInst);
-}
 
 // Sensor test code
 // Reads 2 encoders
@@ -74,111 +41,119 @@ void EncodersExampleTest (void){
     ;
 }
 
-// Sensor test code
-// This is an I2C sensor for temperature
-void MCP9600ExampleTest(void){
-    // Adapted from https://ncd.io/k-type-thermocouple-mcp9600-with-arduino/
-    //
-    // Initialize the MCP9600. This code assumes that the I2C master instance
-    // has already been initialized.
-    //
-    //MCP9600Init(&g_sI2CMSimpleInst,0x64);
 
-    ;
-
-}
-
-// Sensor test code
-// This is an analog sensor for current
-void ACS825ExampleTest(void){
-    ;
-}
-
-
-
-
-// Sensor test code
-// This is an I2C sensor for acceleration
-void MPU6050Example(void)
+void
+UARTIntHandler(void)
 {
-    float fAccel[3], fGyro[3];
-    tMPU6050 sMPU6050;
+    user_input_flag = 1;
+
+    uint32_t ui32Status;
+
+    ui32Status = UARTIntStatus(UART0_BASE, true);
+
     //
-    // Initialize the MPU6050. This code assumes that the I2C master instance
-    // has already been initialized.
+    // Clear the asserted interrupts.
+    // We need to clear the flag otherwise it will not interrupt again
+
+
     //
-    g_bMPU6050Done = false;
-    MPU6050Init(&sMPU6050, &g_sI2CMSimpleInst, 0x68, MPU6050Callback, &sMPU6050);
-    while (!g_bMPU6050Done)
+    // Loop while there are characters in the receive FIFO.
+    //
+    int count = 0;
+    while(UARTCharsAvail(UART0_BASE))
     {
-        PWMPulseWidthSet(PWM1_BASE, PWM_OUT_5,0);
-        PWMPulseWidthSet(PWM1_BASE, PWM_OUT_6,100);
-        PWMPulseWidthSet(PWM1_BASE, PWM_OUT_7,0);
-    }
-    //
-    // Configure the MPU6050 for +/- 4 g accelerometer range.
-    //
-    g_bMPU6050Done = false;
-    MPU6050ReadModifyWrite(&sMPU6050, MPU6050_O_ACCEL_CONFIG,
-        ~MPU6050_ACCEL_CONFIG_AFS_SEL_M,
-        MPU6050_ACCEL_CONFIG_AFS_SEL_4G, MPU6050Callback, &sMPU6050);
-    while (!g_bMPU6050Done)
-    {
-        PWMPulseWidthSet(PWM1_BASE, PWM_OUT_5,160);
-    }
-    //
-    // Loop forever reading data from the MPU6050. Typically, this process
-    // would be done in the background, but for the purposes of this example,
-    // it is shown in an infinite loop.
-    //
-    while (1)
-    {
-        //
-        // Request another reading from the MPU6050.
-        //
-        g_bMPU6050Done = false;
-        MPU6050DataRead(&sMPU6050, MPU6050Callback, &sMPU6050);
-        while (!g_bMPU6050Done)
-        {
+        if (more_input == 0){
+            // We are in command mode
+            get_user_char = UARTCharGetNonBlocking(UART0_BASE);
         }
-        //
-        // Get the new accelerometer and gyroscope readings.
-        //
-        MPU6050DataAccelGetFloat(&sMPU6050, &fAccel[0], &fAccel[1],
-            &fAccel[2]);
-        MPU6050DataGyroGetFloat(&sMPU6050, &fGyro[0], &fGyro[1], &fGyro[2]);
-        //
-        // Do something with the new accelerometer and gyroscope readings.
-        //
+        else {
+            // We are getting some input from user.
+            while (count<4){
+                char newchar = UARTCharGetNonBlocking(UART0_BASE);
+                charBuf[count] = newchar;
+                count++;
+            }
+        }
+        /* while (count<4){
+            char newchar = UARTCharGetNonBlocking(UART0_BASE);
+            charBuf[count] = newchar;
+            count++;
+        }
+        */
     }
+    more_input = 0;
+    UARTIntClear(UART0_BASE, ui32Status);
+
+    /*
+    float x = *(float *)&charBuf;
+    x = x*2;
+
+    recv = *(float *)&charBuf; // convert a char array to a float
+    recv = recv+2000;
+    valRecv = &recv; // do some operation on the float
+    UARTSend(valRecv, 4); // send it back.
+*/
 }
+
 
 int main()
-{
+    {
+    user_input_flag = 1;
     //uint32_t myarray[4];
     int run_program =1 ; // flag to check if code should be running
-    int kp = 0;
-    int kd = 0;
-    int ki = 0;
+    int arm_in_motion = 0; //flag to check if we are moving the arm
+    uint32_t optionArray[4];
+
     // Init code
     sysInit();
-    uartInit();
+    //uartInit();
+    initConsole();
+    // Enable interrupts of UART
+    IntEnable(INT_UART0);
+    UARTIntEnable(UART0_BASE, UART_INT_RX | UART_INT_RT);
     adcInit();
+    //menuInit();
     //spiInit();
-    motorInit();
+    //motorInit();
     //i2cInit(g_sI2CMSimpleInst);
 
-    UARTprintf("Simple Motor test with PID control\r\n");
+
+
+    // UARTprintf("Setting up...");
+
+    int curr1;
+    int curr2;
+    int temp1;
+    int temp2;
+    sensorUpdate();
 
     while(run_program == 1){
-        sensorUpdate();
-        PIDUpdate();
-        currentRead1();
-        currentRead2();
-        tempRead1();
-        tempRead2();
 
-        safetyCheck();
+        // Set global variable arm_in_motion when the arm is in motion to 1
+        // If user ends the program, set run_program==0
+        if (user_input_flag==1){
+            //menuOptions(get_user_char);
+            matlabMenu(get_user_char);
+            user_input_flag = 1; // unset user input flag once all menu processing is complete
+        }
+
+        // Loop to run while the arm is in motion
+        // When trajectory is complete, set arm_in_motion to 0
+        while(arm_in_motion==1){
+
+            sensorUpdate();
+            //PIDUpdate();
+            curr1 = currentRead1();
+            curr2 = currentRead2();
+            temp1 = tempRead1();
+            temp2 = tempRead2();
+            UARTprintf("The sensor readings for current are: %d %d temp: %d %d\r\n",curr1,curr2,temp1,temp2);
+
+            UARTprintf("Printout");
+            //delayMS(10);
+
+            //safetyCheck();
+        }
 
     }
     //shutdownAll();

@@ -22,9 +22,19 @@ extern void sysInit(void);
 extern void pwmInit(void);
 extern void gpioInit(void); // inits all unused GPIO
 extern void safetyCheck(void); //explicit function to test for end conditions
-extern void delayMS(int ms); // stops processor for a given amount of time in ms, this is approximate.
-// Always call sensor update at beginning of loop!
-extern void sensorUpdate(void);
+extern void delayMS(int ms); // stops processor for a given amount of time in ms, this is approximate
+extern void sensorUpdate(void); // Updates sensor data. Always call sensor update at beginning of loop!
+
+/*
+ * Menu functions
+ * This code writes menu options to the matlab script
+ */
+extern void matlabMenu(char menuchar);
+extern void menuHeader(uint8_t input);
+extern void menuInit(void);
+extern void menuOptions(uint8_t input);
+extern void processUserInput(void);
+
 
 /*
  * Motor functions
@@ -61,6 +71,8 @@ extern uint32_t  tempRead2(void);
 
 
 extern void uartInit(void);
+extern void uartSend(const uint8_t *pui8Buffer, uint32_t ui32Count);
+extern void initConsole(void);
 //extern void uartIntHandler(void);
 /*
  * Other external useful functions for UART
