@@ -16,12 +16,13 @@
 % Date: 1 Feb 2018
 % 
 
-
-clear;clc;
+% 
+clear s j;
+clc;
 s = serial('COM10', 'BaudRate', 128000, 'DataBits', 8, 'StopBits', 1, 'Parity', 'none');
-%s.Terminator = 'CR'; 
+s.Terminator = 'CR'; 
 fopen(s);
-c = onCleanup(@()fclose(s));
+j = onCleanup(@()fclose(s)); %closes serial on termination!
 
 %Afloat = typecast(reply , 'single') % I added it
 command = 1;
@@ -42,10 +43,11 @@ while true
             case 'a'
                 disp('Array loaded.')
             case 'b'
-                
                 disp('Gains loaded.')
+                disp('Current Algorithm to run: PID')
             case 'c'
-                disp('Custom controller setup complete')
+                disp('Custom controller setup complete.')
+                disp('Current Algorithm to run: Custom')
             case 'r'
                 disp('Run Complete.')
             otherwise
@@ -62,6 +64,8 @@ while true
     end
     if x == 'a'
         disp('Array input selected');
+        disp('Protected inputs: s, x, j');
+        disp('Array must already be specified in the MATLAB workspace')
         Y = input('Please specify array variable: ');
         lastx = 'a';
         x = NaN;
@@ -71,12 +75,51 @@ while true
         disp('Custom control selected');
         fwrite(s,'c'); 
         Y = 'a';
+        % Code to read reply 
+        % FIX: 
         reply = fscanf(s);
+        fscanf(s); % discard
+        reply2 = fscanf(s);
+        fscanf(s); % discard
         while reply ~= 'z'
             disp(reply);
-            Y = input(': ','s');
-            fwrite(s,Y);
+            %disp(reply2);
+            %disp('Here');
+            %disp('here');
+            switch strtrim(reply2)
+                case 'num'
+                    Y = input('Num: ','s');
+                    Y = str2num(Y);
+                    fwrite(s,Y,'float32');
+                    
+                case 's'
+                    Y = input('Str:','s');
+                    fwrite(s,Y);
+                    
+                case 'z'
+                    break;
+                otherwise
+                    disp('No match found');
+            end
+            %  disp('debug2');
+            %disp(reply);
             reply = fscanf(s);
+            fscanf(s);
+            reply2 = fscanf(s);
+            fscanf(s);
+%             disp(reply);
+%             strtrim(reply)
+%             if strtrim(reply)=='z'
+%                 pause(10);
+%                 break;
+%             else
+%                 fscanf(s)
+%                 reply2 = fscanf(s)
+%                 fscanf(s)
+%             end
+%             
+            %reply = fscanf(s)
+            
         end
         lastx = 'c';
         x = NaN;
@@ -85,7 +128,16 @@ while true
     end
     if x == 'b'
         disp('PID control')
-        Y = input('Enter gains [Kp Ki Kd]: ');
+        Y = input('Enter gains Kp Ki Kd: ','s');
+        Y = str2num(Y) % convert to array
+        fwrite(s,'b'); % tell the micro we are using option b (PID)
+        fwrite(s,Y,'float32'); %write to micro our PID array
+        
+        fread(s,4,'float32')
+        pause(10);
+      
+        
+        % Do something to the gains
         lastx = 'b';
         x = NaN;
         continue;
