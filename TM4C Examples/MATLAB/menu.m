@@ -131,10 +131,10 @@ while true
         Y = input('Enter gains Kp Ki Kd: ','s');
         Y = str2num(Y) % convert to array
         fwrite(s,'b'); % tell the micro we are using option b (PID)
-        fwrite(s,Y,'float32'); %write to micro our PID array
+        fwrite(s,Y,'float32') %write to micro our PID array
         
-        fread(s,4,'float32')
-        pause(10);
+        % fread(s,3,'float32');
+        % pause(10);
       
         
         % Do something to the gains

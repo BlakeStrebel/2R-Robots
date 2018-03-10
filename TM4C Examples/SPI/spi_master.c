@@ -85,7 +85,7 @@
 // Number of bytes to send and receive.
 //
 //*****************************************************************************
-#define NUM_SSI_DATA            3
+#define NUM_SSI_DATA            2
 
 //*****************************************************************************
 //
@@ -227,14 +227,16 @@ main(void)
     // capture data on.  Please reference the datasheet for more information on
     // the different SPI modes.
     //
+
+    // Ben: Configure for 16 bit mode
 #if defined(TARGET_IS_TM4C129_RA0) ||                                         \
     defined(TARGET_IS_TM4C129_RA1) ||                                         \
     defined(TARGET_IS_TM4C129_RA2)
     SSIConfigSetExpClk(SSI0_BASE, ui32SysClock, SSI_FRF_MOTO_MODE_0,
-                       SSI_MODE_MASTER, 1000000, 8);
+                       SSI_MODE_MASTER, 1000000, 16);
 #else
     SSIConfigSetExpClk(SSI0_BASE, SysCtlClockGet(), SSI_FRF_MOTO_MODE_0,
-                       SSI_MODE_MASTER, 1000000, 8);
+                       SSI_MODE_MASTER, 1000000, 16);
 #endif
 
     //
@@ -258,7 +260,7 @@ main(void)
     //
     // Initialize the data to send.
     //
-    pui32DataTx[0] = 's';
+    pui32DataTx[0] = 0b;
     pui32DataTx[1] = 'p';
     pui32DataTx[2] = 'i';
 
