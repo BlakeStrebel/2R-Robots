@@ -34,12 +34,12 @@ We found that when starting a project, these libraries have to be manually added
 
 *[Right click on Project] -> Import, Import -> General, Import from File System -> "C:\ti\ivaWare_C_Series-2.1.3.156\utils", Select the ones you want*
 
-# Making the stack size bigger
-*[Right click on Project]* -> Arm Linker, Basic Options -> set stack size to 1024
+## Making the stack size bigger
+*[Right click on Project] -> Arm Linker, Basic Options -> set stack size to 1024*
 
 
-# Including the R2R header and source files
-*[Right click on Project]* -> New, Header file -> name file "r2r.h" -> copy and paste .r and .c code from repo
+## Including the R2R header and source files
+*[Right click on Project] -> New, Header file -> name file "r2r.h" -> copy and paste .r and .c code from repo*
 
 
 # Useful References
