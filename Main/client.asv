@@ -27,7 +27,7 @@ j = onCleanup(@()fclose(s)); %closes serial on termination!
 %Afloat = typecast(reply , 'single') % I added it
 command = 1;
 lengthOfArray = 4000;
-
+Y = 0;
 testarray(4000) = 0;
 x = NaN;
 level = 1;
@@ -48,20 +48,26 @@ while true
             case 'c'
                 disp('Custom controller setup complete.')
                 disp('Current Algorithm to run: Custom')
+            case 'i'
+                disp('Current gains loaded.')
             case 'r'
                 disp('Run Complete.')
             otherwise
                 disp('System online.')
         end
-        disp('a: Load Array           b: PID Control')
+        disp('a: Load Array           b: PID Control gains')
         disp('c: Custom Control       d: Other Control 2')
-        disp('e: Other Control 3      r: Run')
+        disp('e: Other Control 3      g: Show gains')
+        disp('i: Current gains        p: Go to position (angle)')
+        disp('m: Get mode             r: Run')
         disp('k: End the program')
         disp('You last entered: ')
         disp(lastx);
         x = input('Enter option: ','s');
         continue;
     end
+    % write the option to the MCU
+    fwrite(s,x);
     if x == 'a'
         disp('Array input selected');
         disp('Protected inputs: s, x, j');
@@ -124,16 +130,17 @@ while true
         lastx = 'c';
         x = NaN;
         continue;
-        
+
     end
+    % Position gains
     if x == 'b'
         disp('PID control')
         Y = input('Enter gains Kp Ki Kd: ','s');
         Y = str2num(Y) % convert to array
         %fwrite(s,'b'); % tell the micro we are using option b (PID)
-        %fwrite(s,Y,'float32') %write to micro our PID array
-        
-        % fread(s,3,'float32');
+        fwrite(s,Y,'float32') %write to micro our PID array
+        disp('Written to microcontroller: ')
+        fread(s,3,'float32')
         pause(3);
       
         
@@ -142,6 +149,51 @@ while true
         x = NaN;
         continue;
     end
+    % Show PID gains
+    if x == 'g'
+        disp('Current set gains are: ');
+        fread(s,3,'float32')
+        lastx = 'g';
+        x = NaN;
+        pause(3);
+        continue;
+    end
+    % Current gains
+    if x == 'i'
+        disp('PID control')
+        Y = input('Enter gains Kp Ki Kd: ','s');
+        Y = str2num(Y) % convert to array
+        %fwrite(s,'b'); % tell the micro we are using option b (PID)
+        fwrite(s,Y,'float32') %write to micro our PID array
+        fread(s,1,'float32')
+        pause(3);
+        % Do something to the gains
+        lastx = 'i';
+        x = NaN;
+        continue;
+    end
+    
+    % Go to position
+    if  x == 'p'
+        fwrite(s,Y,'p');
+        disp('Position to go to')
+        Y = input('Position (angle): ');
+        fwrite(s,Y,'float32') %write to micro our PID array
+        lastx = 'p';
+        x = NaN;
+        continue;
+    end
+    
+    % Get mode (are we in tracking/idle/custom? - when you hit 
+    if x == 'm'
+        disp('Current mode is:')
+        fread(s,Y);
+        lastx = 'm';
+        x = NaN;
+        continue;
+    end
+        
+
     if x == 'r'
         % Just to receive data
         % h = waitbar(0,'Running model...');
@@ -180,6 +232,8 @@ while true
         x = NaN;
         continue
     end
+    % Set current gains
+
     if x == 'k'
         fclose(s);
         disp('Goodbye.')

@@ -19,8 +19,9 @@
 % 
 clear s j;
 clc;
-s = serial('COM16', 'BaudRate', 128000, 'DataBits', 8, 'StopBits', 1, 'Parity', 'none');
+s = serial('COM19', 'BaudRate', 128000, 'DataBits', 8, 'StopBits', 1, 'Parity', 'none');
 s.Terminator = 'CR'; 
+set(s,'timeout',1);
 fopen(s);
 j = onCleanup(@()fclose(s)); %closes serial on termination!
 
@@ -32,6 +33,7 @@ testarray(4000) = 0;
 x = NaN;
 level = 1;
 lastx = NaN
+currMode = 'Idle';
 
 
 while true 
@@ -39,6 +41,8 @@ while true
     disp('R2R Arm Interface')
     disp('-----------------')
     if isnan(x)
+        dispLine = ['Current Mode: ', currMode];
+        disp(dispLine)
         switch(lastx)
             case 'a'
                 disp('Array loaded.')
@@ -48,21 +52,26 @@ while true
             case 'c'
                 disp('Custom controller setup complete.')
                 disp('Current Algorithm to run: Custom')
+            case 'i'
+                disp('Current gains loaded.')
             case 'r'
                 disp('Run Complete.')
             otherwise
                 disp('System online.')
         end
-        disp('a: Load Array           b: PID Control')
+        disp('a: Load Array           b: PID Control gains')
         disp('c: Custom Control       d: Other Control 2')
         disp('e: Other Control 3      g: Show gains')
-        disp('r: Run')
+        disp('i: Current gains        p: Go to position (angle)')
+        disp('m: Get mode             r: Run')
         disp('k: End the program')
         disp('You last entered: ')
         disp(lastx);
         x = input('Enter option: ','s');
         continue;
     end
+    % write the option to the MCU
+    fwrite(s,x);
     if x == 'a'
         disp('Array input selected');
         disp('Protected inputs: s, x, j');
@@ -125,23 +134,17 @@ while true
         lastx = 'c';
         x = NaN;
         continue;
-        
+
     end
-    if x == 'g'
-        disp('Current set gains are: ');
-        Y
-        lastx = 'g';
-        x = NaN;
-        pause(3);
-    end
+    % Position gains
     if x == 'b'
         disp('PID control')
         Y = input('Enter gains Kp Ki Kd: ','s');
         Y = str2num(Y) % convert to array
         %fwrite(s,'b'); % tell the micro we are using option b (PID)
         fwrite(s,Y,'float32') %write to micro our PID array
-        
-        fread(s,1,'float32')
+        disp('Written to microcontroller: ')
+        fread(s,3,'float32')
         pause(3);
       
         
@@ -150,6 +153,59 @@ while true
         x = NaN;
         continue;
     end
+    % Show PID gains
+    if x == 'g'
+        disp('Current set gains are: ');
+        fread(s,3,'float32')
+        lastx = 'g';
+        x = NaN;
+        pause(3);
+        continue;
+    end
+    % Current gains
+    if x == 'i'
+        disp('PID control')
+        Y = input('Enter gains Kp Ki Kd: ','s');
+        Y = str2num(Y) % convert to array
+        %fwrite(s,'b'); % tell the micro we are using option b (PID)
+        fwrite(s,Y,'float32') %write to micro our PID array
+        disp('Written to microcontroller: ')
+        fread(s,3,'float32') 
+        pause(3);
+        % Do something to the gains
+        lastx = 'i';
+        x = NaN;
+        continue;
+    end
+    
+    % Go to position
+    if  x == 'p'
+        disp('Setting Hold position')
+        Y = input('Position (angle): ');
+        fwrite(s,Y,'float32') %write to micro our PID array
+        currMode = ['Hold ','(',num2str(Y),')'];
+        lastx = 'p';
+        x = NaN;
+        continue;
+    end
+    
+    % Get mode (are we in tracking (PID)/idle/custom? - when you hit 'r', it
+    % will run this mode)
+    if x == 'm'
+        disp('Current mode is:')
+        tryRead=fread(s)
+        if (isstring(tryRead))
+            currMode = tryRead;
+        else
+            currMode = 'Error!';
+        end
+        pause(2);
+        lastx = 'm';
+        x = NaN;
+        continue;
+    end
+        
+
     if x == 'r'
         % Just to receive data
         % h = waitbar(0,'Running model...');
@@ -188,6 +244,8 @@ while true
         x = NaN;
         continue
     end
+    % Set current gains
+
     if x == 'k'
         fclose(s);
         disp('Goodbye.')
