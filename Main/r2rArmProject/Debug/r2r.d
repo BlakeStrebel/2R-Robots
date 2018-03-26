@@ -1,15 +1,22 @@
 # FIXED
 
 r2r.obj: ../r2r.c
-r2r.obj: C:/ti/ccsv7/tools/compiler/ti-cgt-arm_17.9.0.STS/include/stdbool.h
-r2r.obj: C:/ti/ccsv7/tools/compiler/ti-cgt-arm_17.9.0.STS/include/stdint.h
-r2r.obj: C:/ti/ccsv7/tools/compiler/ti-cgt-arm_17.9.0.STS/include/stdlib.h
-r2r.obj: C:/ti/ccsv7/tools/compiler/ti-cgt-arm_17.9.0.STS/include/linkage.h
-r2r.obj: C:/ti/ccsv7/tools/compiler/ti-cgt-arm_17.9.0.STS/include/stdio.h
-r2r.obj: C:/ti/ccsv7/tools/compiler/ti-cgt-arm_17.9.0.STS/include/stdarg.h
-r2r.obj: C:/ti/ccsv7/tools/compiler/ti-cgt-arm_17.9.0.STS/include/stdarg.h
-r2r.obj: C:/ti/ccsv7/tools/compiler/ti-cgt-arm_17.9.0.STS/include/math.h
-r2r.obj: C:/ti/ccsv7/tools/compiler/ti-cgt-arm_17.9.0.STS/include/_defs.h
+r2r.obj: C:/ti/ccsv7/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/stdbool.h
+r2r.obj: C:/ti/ccsv7/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/stdint.h
+r2r.obj: C:/ti/ccsv7/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/sys/stdint.h
+r2r.obj: C:/ti/ccsv7/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/sys/cdefs.h
+r2r.obj: C:/ti/ccsv7/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/sys/_types.h
+r2r.obj: C:/ti/ccsv7/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/machine/_types.h
+r2r.obj: C:/ti/ccsv7/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/machine/_stdint.h
+r2r.obj: C:/ti/ccsv7/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/sys/_stdint.h
+r2r.obj: C:/ti/ccsv7/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/stdlib.h
+r2r.obj: C:/ti/ccsv7/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/_ti_config.h
+r2r.obj: C:/ti/ccsv7/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/linkage.h
+r2r.obj: C:/ti/ccsv7/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/stdio.h
+r2r.obj: C:/ti/ccsv7/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/stdarg.h
+r2r.obj: C:/ti/ccsv7/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/math.h
+r2r.obj: C:/ti/ccsv7/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/_defs.h
+r2r.obj: C:/ti/ccsv7/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/machine/_limits.h
 r2r.obj: C:/ti/TivaWare_C_Series-2.1.3.156/sensorlib/i2cm_drv.h
 r2r.obj: C:/ti/TivaWare_C_Series-2.1.3.156/sensorlib/hw_mpu6050.h
 r2r.obj: C:/ti/TivaWare_C_Series-2.1.3.156/sensorlib/mpu6050.h
@@ -33,19 +40,25 @@ r2r.obj: C:/ti/TivaWare_C_Series-2.1.3.156/driverlib/i2c.h
 r2r.obj: C:/ti/TivaWare_C_Series-2.1.3.156/driverlib/uart.h
 r2r.obj: C:/ti/TivaWare_C_Series-2.1.3.156/driverlib/sysctl.h
 r2r.obj: C:/ti/TivaWare_C_Series-2.1.3.156/utils/uartstdio.h
-r2r.obj: C:/ti/ccsv7/tools/compiler/ti-cgt-arm_17.9.0.STS/include/stdarg.h
 r2r.obj: ../r2r.h
 
 ../r2r.c: 
-C:/ti/ccsv7/tools/compiler/ti-cgt-arm_17.9.0.STS/include/stdbool.h: 
-C:/ti/ccsv7/tools/compiler/ti-cgt-arm_17.9.0.STS/include/stdint.h: 
-C:/ti/ccsv7/tools/compiler/ti-cgt-arm_17.9.0.STS/include/stdlib.h: 
-C:/ti/ccsv7/tools/compiler/ti-cgt-arm_17.9.0.STS/include/linkage.h: 
-C:/ti/ccsv7/tools/compiler/ti-cgt-arm_17.9.0.STS/include/stdio.h: 
-C:/ti/ccsv7/tools/compiler/ti-cgt-arm_17.9.0.STS/include/stdarg.h: 
-C:/ti/ccsv7/tools/compiler/ti-cgt-arm_17.9.0.STS/include/stdarg.h: 
-C:/ti/ccsv7/tools/compiler/ti-cgt-arm_17.9.0.STS/include/math.h: 
-C:/ti/ccsv7/tools/compiler/ti-cgt-arm_17.9.0.STS/include/_defs.h: 
+C:/ti/ccsv7/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/stdbool.h: 
+C:/ti/ccsv7/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/stdint.h: 
+C:/ti/ccsv7/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/sys/stdint.h: 
+C:/ti/ccsv7/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/sys/cdefs.h: 
+C:/ti/ccsv7/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/sys/_types.h: 
+C:/ti/ccsv7/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/machine/_types.h: 
+C:/ti/ccsv7/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/machine/_stdint.h: 
+C:/ti/ccsv7/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/sys/_stdint.h: 
+C:/ti/ccsv7/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/stdlib.h: 
+C:/ti/ccsv7/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/_ti_config.h: 
+C:/ti/ccsv7/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/linkage.h: 
+C:/ti/ccsv7/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/stdio.h: 
+C:/ti/ccsv7/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/stdarg.h: 
+C:/ti/ccsv7/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/math.h: 
+C:/ti/ccsv7/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/_defs.h: 
+C:/ti/ccsv7/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/machine/_limits.h: 
 C:/ti/TivaWare_C_Series-2.1.3.156/sensorlib/i2cm_drv.h: 
 C:/ti/TivaWare_C_Series-2.1.3.156/sensorlib/hw_mpu6050.h: 
 C:/ti/TivaWare_C_Series-2.1.3.156/sensorlib/mpu6050.h: 
@@ -69,5 +82,4 @@ C:/ti/TivaWare_C_Series-2.1.3.156/driverlib/i2c.h:
 C:/ti/TivaWare_C_Series-2.1.3.156/driverlib/uart.h: 
 C:/ti/TivaWare_C_Series-2.1.3.156/driverlib/sysctl.h: 
 C:/ti/TivaWare_C_Series-2.1.3.156/utils/uartstdio.h: 
-C:/ti/ccsv7/tools/compiler/ti-cgt-arm_17.9.0.STS/include/stdarg.h: 
 ../r2r.h: 

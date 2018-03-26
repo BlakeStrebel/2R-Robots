@@ -37,6 +37,12 @@ volatile float Kitest = 0;
 
 uint8_t charBuf[100]={}; //global char array to store variables from the MATLAB user
 
+// New variables for interrupt. Are they good to be global?
+char recev[80];
+float data[20];
+uint8_t *array;
+float *getfloat;
+int i;
 
 // Sensor test code
 // Reads 2 encoders
@@ -58,21 +64,43 @@ UARTIntHandler(void)
     //
     // Clear the asserted interrupts.
     // We need to clear the flag otherwise it will not interrupt again
-
+    UARTIntClear(UART0_BASE, ui32Status);
 
     //
     // Loop while there are characters in the receive FIFO.
     //
     int count = 0;
-    get_user_char = UARTCharGet(UART0_BASE);
+
 
     while(UARTCharsAvail(UART0_BASE))
     {
-        char newchar = UARTCharGetNonBlocking(UART0_BASE);
-        charBuf[count] = newchar;
-        count++;
+        UARTCharGet(UART0_BASE);
+        //char newchar = UARTCharGetNonBlocking(UART0_BASE);
+        //charBuf[count] = newchar;
+        //count++;
+        //
+        // Read the next character from the UART and write it back to the UART.
+        //
+        for (i = 0; i < 4 * 3; i++) {
+            recev[i] = UARTCharGet(UART0_BASE);
+        }
+        getfloat = &recev;
+        //Change something.
+        for (i = 0; i < 20; i++) {
+            data[i] = *getfloat++;
+        }
+        //Convert the variable types.
+        array = &data;
+        for (i = 0; i < 3 * 4; i++) {
+            UARTCharPut(UART0_BASE, *array++);
+        }
+
+
+
+
+
     }
-    sscanf(charBuf,"%f %f %f",&Kptest,&Kdtest,&Kitest);
+    //sscanf(charBuf,"%f %f %f",&Kptest,&Kdtest,&Kitest);
     /*
         if (more_input == 0){
             // We are in command mode
@@ -94,11 +122,11 @@ UARTIntHandler(void)
         /*
     }
 */
-    const uint8_t* sendBackArray;
-    sendBackArray = (const uint8_t *) &Kdtest; // do some operation on the float
-    uartSend(sendBackArray, 4); // send it back.
-    more_input = 0;
-    UARTIntClear(UART0_BASE, ui32Status);
+    //const uint8_t* sendBackArray;
+    //sendBackArray = (const uint8_t *) &Kdtest; // do some operation on the float
+    //uartSend(sendBackArray, 4); // send it back.
+    //more_input = 0;
+    //UARTIntClear(UART0_BASE, ui32Status);
 
     /*
     float x = *(float *)&charBuf;
@@ -123,7 +151,7 @@ int main()
     // Init code
     sysInit();
     uartInit();
-    //initConsole();
+    initConsole();
     // Enable interrupts of UART
     IntEnable(INT_UART0);
     UARTIntEnable(UART0_BASE, UART_INT_RX | UART_INT_RT);
@@ -141,7 +169,7 @@ int main()
     int curr2;
     int temp1;
     int temp2;
-    sensorUpdate();
+    //sensorUpdate();
 
     while(run_program == 1){
 
