@@ -1,6 +1,8 @@
 # R2 Robotics
 Repo for the 2R Educational Robot of ME 495 Robot Design Studio
 
+# System capabilities
+* Timers: 6 16/32-bit blocks, each block has 2 16-bit counters (timer A and timer B) that can be combined to 32-bit, and 6 wide 32/64-bit blocks, each wide block has 2 32-bit counters that can be combined to 64 bits. Note that some timers are used for PWM.
 
 # Examples
 The examples include short code snippets to quickly get use out of the TM4C123GXL Launchpad
@@ -35,11 +37,19 @@ We found that when starting a project, these libraries have to be manually added
 *[Right click on Project] -> Import, Import -> General, Import from File System -> "C:\ti\ivaWare_C_Series-2.1.3.156\utils", Select the ones you want*
 
 ## Making the stack size bigger
+If you want to use string processing/more breakpoints
+
 *[Right click on Project] -> Arm Linker, Basic Options -> set stack size to 1024*
 
 
 ## Including the R2R header and source files
 *[Right click on Project] -> New, Header file -> name file "r2r.h" -> copy and paste .r and .c code from repo*
+
+## Adding interrupts
+1. Enable interrupts
+2. Write interrupt code
+3. Define interrupt in the startup.ccs file
+4. Define interrupt in the interrupt vector
 
 
 # Useful References
