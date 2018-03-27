@@ -559,8 +559,8 @@ void uartInit(void){
     //
     // Enable the UART interrupt.
     //
-    //IntEnable(INT_UART0);
-    //UARTIntEnable(UART0_BASE, UART_INT_RX | UART_INT_RT);
+    IntEnable(INT_UART0);
+    UARTIntEnable(UART0_BASE, UART_INT_RX | UART_INT_RT);
 
 }
 

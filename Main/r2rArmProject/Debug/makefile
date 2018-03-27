@@ -4,7 +4,7 @@
 
 SHELL = cmd.exe
 
-CG_TOOL_ROOT := C:/ti/ccsv7/tools/compiler/ti-cgt-arm_17.9.0.STS
+CG_TOOL_ROOT := C:/ti/ccsv7/tools/compiler/ti-cgt-arm_18.1.1.LTS
 
 GEN_OPTS__FLAG := 
 GEN_CMDS__FLAG := 
@@ -145,14 +145,14 @@ all: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
 r2rArmProject.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
 	@echo 'Building target: "$@"'
 	@echo 'Invoking: ARM Linker'
-	"C:/ti/ccsv7/tools/compiler/ti-cgt-arm_17.9.0.STS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --define=ccs="ccs" --define=PART_TM4C1292NCPDT -g --gcc --diag_warning=225 --diag_wrap=off --display_error_number --abi=eabi -z -m"r2rArmProject.map" --heap_size=0 --stack_size=512 -i"C:/ti/ccsv7/tools/compiler/ti-cgt-arm_17.9.0.STS/lib" -i"C:/ti/TivaWare_C_Series-2.1.3.156/utils" -i"C:/Users/Ben/Documents/GitHub/2R-Robots/Main" -i"C:/ti/TivaWare_C_Series-2.1.3.156/sensorlib" -i"C:/ti/TivaWare_C_Series-2.1.3.156" -i"C:/ti/ccsv7/tools/compiler/ti-cgt-arm_17.9.0.STS/include" --reread_libs --diag_wrap=off --display_error_number --warn_sections --xml_link_info="r2rArmProject_linkInfo.xml" --rom_model -o "r2rArmProject.out" $(ORDERED_OBJS)
+	"C:/ti/ccsv7/tools/compiler/ti-cgt-arm_18.1.1.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --define=ccs="ccs" --define=PART_TM4C1292NCPDT -g --gcc --diag_warning=225 --diag_wrap=off --display_error_number --abi=eabi -z -m"r2rArmProject.map" --heap_size=0 --stack_size=512 -i"C:/ti/ccsv7/tools/compiler/ti-cgt-arm_18.1.1.LTS/lib" -i"C:/ti/TivaWare_C_Series-2.1.3.156/utils" -i"C:/Users/Ben/Documents/GitHub/2R-Robots/Main" -i"C:/ti/TivaWare_C_Series-2.1.3.156/sensorlib" -i"C:/ti/TivaWare_C_Series-2.1.3.156" -i"C:/ti/ccsv7/tools/compiler/ti-cgt-arm_18.1.1.LTS/include" --reread_libs --diag_wrap=off --display_error_number --warn_sections --xml_link_info="r2rArmProject_linkInfo.xml" --rom_model -o "r2rArmProject.out" $(ORDERED_OBJS)
 	@echo 'Finished building target: "$@"'
 	@echo ' '
 
 r2rArmProject.hex: $(EXE_OUTPUTS)
 	@echo 'Building files: $(strip $(EXE_OUTPUTS__QUOTED))'
 	@echo 'Invoking: ARM Hex Utility'
-	"C:/ti/ccsv7/tools/compiler/ti-cgt-arm_17.9.0.STS/bin/armhex"  -o "r2rArmProject.hex" $(EXE_OUTPUTS__QUOTED)
+	"C:/ti/ccsv7/tools/compiler/ti-cgt-arm_18.1.1.LTS/bin/armhex"  -o "r2rArmProject.hex" $(EXE_OUTPUTS__QUOTED)
 	@echo 'Finished building: $(strip $(EXE_OUTPUTS__QUOTED))'
 	@echo ' '
 
