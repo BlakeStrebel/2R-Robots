@@ -10,6 +10,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdarg.h>
+#include <math.h>
 #include "sensorlib/i2cm_drv.h"
 #include "sensorlib/hw_mpu6050.h"
 #include "sensorlib/mpu6050.h"
@@ -45,20 +46,66 @@ extern int run_program = 1; // this will be declared in the main loop
 uint8_t last_input = 'm';
 extern volatile uint8_t more_input;
 extern volatile uint8_t charBuf[100];
+uint32_t ui32SysClock;
+
+#define NUM_SSI_DATA            3
+#define NUM_SSI_DATA2           5
+
+// Data from motor driver 2
+uint32_t pui32DataTx[NUM_SSI_DATA];
+uint32_t pui32DataRx[NUM_SSI_DATA];
+uint32_t ui32Index;
+
+// TODO: motor driver 2 cs pin is actually motor driver 1's CS pin
+
+// Data from encoder 2
+uint32_t pui32DataTx2[NUM_SSI_DATA2];
+uint32_t pui32DataRx2[NUM_SSI_DATA2];
+uint32_t ui32Index2;
+
+// Array to store encoder data
+uint32_t encoderVal[2];
+
 
 
 /*
- *
- * The system init function initiazes the system clock and the processor interrupts (can we?)
- * Clock: 50Mhz
+ * This function does initialisation for all the default connections
  */
-void delayMS(int ms) {
-    SysCtlDelay( (SysCtlClockGet()/(3*1000))*ms ) ;
+void r2rDefaultInit(void){
+    sysInit();
+    gpioInit();
+    spiInit();
+    adcInit();
+    motorDriverInit();
+    uartInit();
 }
 
+/*
+ * This function stops the clock for a given amount of ms
+ *
+ * Comes after:
+ * sysInit()
+ */
+
+
+void delayMS(int ms) {
+    //SysCtlDelay( (SysCtlClockGet()/(3*1000))*ms ) ;
+    SysCtlDelay( (ui32SysClock/(3*1000))*ms ) ;
+
+}
+/*
+ * The system init function initiazes the system clock and the processor interrupts (can we?)
+ * Clock: 25Mhz
+ *
+ * Comes after:
+ * -
+ */
 void sysInit(void){
-    SysCtlClockSet(SYSCTL_SYSDIV_4 | SYSCTL_USE_PLL | SYSCTL_OSC_MAIN |
-                           SYSCTL_XTAL_16MHZ);
+    //SysCtlClockSet(SYSCTL_SYSDIV_4 | SYSCTL_USE_PLL | SYSCTL_OSC_MAIN |
+    //                       SYSCTL_XTAL_16MHZ);
+    ui32SysClock = SysCtlClockFreqSet((SYSCTL_XTAL_25MHZ |
+                                              SYSCTL_OSC_MAIN |
+                                              SYSCTL_USE_OSC), 25000000);
     IntMasterEnable();
 }
 
@@ -77,226 +124,106 @@ void safetyCheck(void){
  */
 void sensorUpdate(void){
     adcRead();
+    encoderRead();
 }
 
-/*
- * This function sets up the menu
- * It assumes that the uart is already open
- */
 
-void menuHeader(uint8_t input){
-    UARTprintf("\033[2J"); // Clear the screen
-    UARTprintf("\033[0;0H"); // Send cursor to top of screen
-    UARTprintf("R2R Arm debugging \r\n");
-    UARTprintf("_________________ \r\n");
-    UARTprintf("____  o------o __ \r\n");
-    UARTprintf("_____         \\  \r\n");
-    UARTprintf("__________     \\  \r\n");
-    UARTprintf("___________     \\ \r\n");
-    UARTprintf("Press 'm' to return to main menu \r\n");
-    UARTprintf("Command: %c \r\n", input);
-}
 
 /*
- * This function is used to handle the interface from MATLAB
+ *  This function sets up all the GPIO pins for unused and other pins that are used in other functions.
  *
- * It gets values specified by the user in MATLAB and processes them for use when the user presses run
- *
- * To use a custom function with MATLAB, case 'c' is provided.
- * Each get command must be preceded by a printf statement
- * It must end with the char 'z' to let MATLAB know that all the varibles have been sent
- */
-
-void matlabMenu(char menuchar){
-    //char menuchar = UARTCharGet(UART0_BASE);
-    int count = 0;
-    float* floatArray;
-    char charArray[100];
-    switch(menuchar){
-    case 'a':
-        count  = 0;
-        while (count<4){
-            char newchar = UARTCharGet(UART0_BASE);
-            //char newchar = UARTCharGetNonBlocking(UART0_BASE);
-            charBuf[count] = newchar;
-            count++;
-        }
-        break;
-    case 'b': // PID gains control
-        count = 0;
-        int i = 0;
-        while(!UARTCharsAvail(UART0_BASE)){ // wait until chars are available
-           ;
-        }
-        while (UARTCharsAvail(UART0_BASE)){ // read
-           // process code here
-           char newchar = UARTCharGet(UART0_BASE);
-           //char newchar = UARTCharGetNonBlocking(UART0_BASE);
-           charArray[count] = newchar;
-           count++;
-       }
-        uint8_t *array;
-        array = &charArray;
-        for (i=0;i<count;i++){
-            UARTCharPut(UART0_BASE,*array++);
-        }
-        UARTCharPut(UART0_BASE,'\r\n');
-        /*
-        floatArray = (float *)&charArray;
-
-        float data[3];
-        //float kp = floatArray[0];
-        //float ki = floatArray[1];
-        //float kd = floatArray[2];
-        int i;
-        for (i = 0;i<count;i++){
-            data[i] = 0.1+*floatArray++;
-        }
-        uint8_t *array;
-        array = &charArray;
-        for (i = 0;i<3*4;i++){
-            UARTCharPut(UART0_BASE,*array++);
-        }*/
-
-        // TODO: Add some confirmation, save to global variable?
-        break;
-
-    case 'c': // custom code
-        UARTprintf("Please set gains for non linear system (kp ki kd):\r\n"); // send string
-        //delayMS(1);
-        UARTprintf("num\r\n"); // send string
-
-        count  = 0;
-
-        char newchar;
-        while(!UARTCharsAvail(UART0_BASE)){
-            ;
-        }
-        while (UARTCharsAvail(UART0_BASE)){
-            // process code here
-            char newchar = UARTCharGet(UART0_BASE);
-            //char newchar = UARTCharGetNonBlocking(UART0_BASE);
-            charArray[count] = newchar;
-            count++;
-        }
-        floatArray = &charArray;
-        //kp = floatArray[0];
-        //ki = floatArray[1];
-        //kd = floatArray[2];
-        UARTprintf("Please set some other value for non linear system (abcd):\r\n");
-        UARTprintf("s\r\n");
-        count  = 0;
-        while (count<4){
-            newchar = UARTCharGet(UART0_BASE);
-            //char newchar = UARTCharGetNonBlocking(UART0_BASE);
-            charBuf[count] = newchar;
-            count++;
-        }
-        UARTprintf("z\r\n");
-        UARTprintf("z\r\n");
-        // UARTCharPut(UART0_BASE, 'z');
-        break;
-
-    }
-
-
-}
-
-
-void menuInit(void){
-    uint8_t buffer[100]={};
-    sprintf(buffer,"\033[2J\r\nR2R Arm debugging \r\n");
-    uartSend((uint8_t *)buffer,100);
-    sprintf(buffer,"This is a test for the ADC\r\n");
-    uartSend((uint8_t *)buffer,100);
-    UARTprintf("R2R UART Menu interface\r\n");
-}
-
-/*
- * This function contains all the menu interactions with the user
- */
-
-void menuOptions(uint8_t input){
-    // Generate menu here
-    menuHeader(input);
-
-    /*uint8_t next_input;
-    if (last_input == 'c'){
-        next_input = input;
-        input = 'c';
-    }
-    */
-    switch(input){
-    case 'm':
-        UARTprintf("a: Check set values \r\n");
-        UARTprintf("b: Set new values \r\n");
-        UARTprintf("c: More options \r\n");
-        UARTprintf("\r\nr: Start Arm \r\n");
-        break;
-    case 'a':
-        UARTprintf("Values for control: \r\n");
-        UARTprintf("%c %c %c %c",charBuf[0],charBuf[1],charBuf[2],charBuf[3]);
-        break;
-    case 'b':
-        UARTprintf("Please type in your input: \r\n");
-        int count = 0;
-        while (count<4){
-            char newchar = UARTCharGet(UART0_BASE);
-            //char newchar = UARTCharGetNonBlocking(UART0_BASE);
-            charBuf[count] = newchar;
-            count++;
-        }
-        UARTprintf("\r\nOkay. Values set \r\n");
-
-        //UARTprintf("You typed in %c",newchar);
-        //more_input = 1;
-        break;
-    case 'c':
-        UARTprintf("Type in more options: \r\n");
-        //switch(next_input){
-        //case 'a':
-          //  UARTprintf("Nested menu option \r\n");
-          //  input = 'a';
-          //  break;
-        //}
-        break;
-    default:
-        UARTprintf("Command not recognized!\r\n");
-        break;
-    }
-    last_input = input;
-
-}
-
-void processUserInput(void){
-    switch (user_select) {
-    case 'a': // do option 1
-        UARTprintf("Beginning loaded options:");
-        break;
-    case 'b': // do option 2
-        UARTprintf("Setting up constants kp, ki, kd:");
-        // process everything that is in the buffer
-        // error checking
-        break;
-    }
-
-
-}
-
-/*
- *  This function sets up all the GPIO pins for unused and other pins that are used in other functions. .
+ *  Comes after:
+ *  -
  */
 void gpioInit(void){
-
     // Unused pins, enable and set to inputs
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOP);
     GPIOPinTypeGPIOInput(GPIO_PORTP_BASE, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3);
 
-
 }
 
 /*
+ * This function reads both encoder counts and stores them in an array
+ *
+ * Comes after:
+ * spiInit();
+ *
+ * Writes to:
+ * encoderVal array
+ *
+ * TODO: check the delay
+ */
+void encoderRead(void){
+    pui32DataTx2[0] = 0x74; // "t" return readhead temperature
+    pui32DataTx2[1] = 0x00; // Sends empty data so that the encoder will complete sending data. (40 bits in total)
+    pui32DataTx2[2] = 0x00;
+    pui32DataTx2[3] = 0x00;
+    pui32DataTx2[4] = 0x00;
+    while(SSIDataGetNonBlocking(SSI0_BASE, &pui32DataRx2[0])){
+    }
+
+    GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_3,0x00);
+    SysCtlDelay(10);
+
+    for(ui32Index2 = 0; ui32Index2 < NUM_SSI_DATA2; ui32Index2++)
+    {
+       SSIDataPut(SSI0_BASE, pui32DataTx2[ui32Index2]);
+    }
+    while(SSIBusy(SSI0_BASE))
+    {
+    }
+
+    GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_3,GPIO_PIN_3);
+    SysCtlDelay(1000);
+
+    for(ui32Index2 = 0; ui32Index2 < NUM_SSI_DATA2; ui32Index2++)
+    {
+      pui32DataRx2[ui32Index2] &= 0x00FF;
+      SSIDataGet(SSI0_BASE, &pui32DataRx2[ui32Index2]);
+    }
+
+    // The angle is the first 14 bits of the response.
+    // TODO: check that the data RX2 is overwritten
+    int num = pui32DataRx2[0]<<6;
+    num = num | (pui32DataRx2[1]>>2);
+    encoderVal[0] = num;
+
+    // Read the other encoder
+    while(SSIDataGetNonBlocking(SSI1_BASE, &pui32DataRx2[0]))
+    {
+    }
+    GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_1,0x00);
+    SysCtlDelay(10);
+
+    for(ui32Index2 = 0; ui32Index2 < NUM_SSI_DATA2; ui32Index2++)
+    {
+       SSIDataPut(SSI1_BASE, pui32DataTx2[ui32Index2]);
+    }
+    while(SSIBusy(SSI1_BASE){
+    }
+
+    GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_1,GPIO_PIN_1);
+    SysCtlDelay(1000);
+
+    for(ui32Index2 = 0; ui32Index2 < NUM_SSI_DATA2; ui32Index2++)
+    {
+      pui32DataRx2[ui32Index2] &= 0x00FF;
+      SSIDataGet(SSI1_BASE, &pui32DataRx2[ui32Index2]);
+    }
+    // The angle is the first 14 bits of the response.
+    int num = pui32DataRx2[0]<<6;
+    num = num | (pui32DataRx2[1]>>2);
+    encoderVal[1] = num;
+}
+
+
+/*
  * This function sets up all the PWM pins and the gpio pins for the motor, may also optionally call SPI pins
+ *
+ * Comes after:
+ * pwmInit()
+ * sysInit()
+ *
  */
 
 void motorInit(void){
@@ -317,18 +244,91 @@ void motorInit(void){
        // turn on
        GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_1 |  GPIO_PIN_3 , GPIO_PIN_1+ GPIO_PIN_3);
 
+
+       GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_0,GPIO_PIN_0); // dir for motor 2, set to forward
+       GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_4,GPIO_PIN_4); // brake for motor 2, set HIGH so no braking
+
+}
+
+/*
+ * This function sends SPI data over to the motor driver to setup the driver for 1x PWM mode
+ * Comes after:
+ * Motor power is supplied
+ * motorInit()
+ * spiInit()
+ *
+ * Note that the driver will NOT be set if motor power is not supplied because the driver will not be able to read the registers over SPI, even though it responds
+ */
+
+void motorDriverInit(void){
+    while(SSIDataGetNonBlocking(SSI2_BASE, &pui32DataRx[0])){
+   }
+   pui32DataTx[0] = 0b1001000000000000; // read register 3
+   pui32DataTx[1] = 0b0001000001000000; // set register 3, bit 6 and 5 to 10, option 3, 1x PWM mode
+   pui32DataTx[2]=  0b1001000000000000; // read register 3
+   //
+   // Send 3 bytes of data.
+   //
+   GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_2,0x00);
+   SysCtlDelay(1);
+   for(ui32Index = 0; ui32Index < NUM_SSI_DATA; ui32Index++){
+       GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_2,0x00); // Pull CS pin low
+       SysCtlDelay(1);
+       SSIDataPut(SSI2_BASE, pui32DataTx[ui32Index]); // Send data
+       SysCtlDelay(1000); // wait (at least 50ns)
+       GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_2,GPIO_PIN_2); // Being the CS pin high
+       SSIDataGet(SSI2_BASE, &pui32DataRx[ui32Index]); // Get the data
+   }
+   while(SSIBusy(SSI2_BASE)){
+   }
+
+   GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_2,GPIO_PIN_2); // Make sure the pin is high
+   //SysCtlDelay(1000);
+   SysCtlDelay(1000);
+   // Done
 }
 
 void motorPWM1(int pwmValue){
     // assuming PWM has been initialized.
-    PWMPulseWidthSet(PWM0_BASE, PWM_OUT_4,pwmValue);
+    PWMPulseWidthSet(PWM0_BASE, PWM_OUT_0,pwmValue);
 
 }
 
 void motorPWM2(int pwmValue){
     // assuming PWM has been initialized.
-    PWMPulseWidthSet(PWM0_BASE, PWM_OUT_6,pwmValue);
+    PWMPulseWidthSet(PWM0_BASE, PWM_OUT_2,pwmValue);
 }
+
+/*
+ * Wrapper function to read the encoder's raw data (int), angle data (float) or optionally angle in radians (float)
+ *
+ * Comes after:
+ * sensorUpdate()
+ */
+int motor2Raw(void){
+    return encoderVal[1];
+}
+int motor1Raw(void){
+    return encoderVal[0];
+}
+
+float motor1Angle(void){
+    return motor1Raw()/16383*360;
+}
+float motor2Angle(void){
+    return motor2Raw()/16383*360;
+}
+// TODO: include M_PI here
+float motor1Rad(void){
+    return motor1Raw()/16383*2*3.14;
+}
+float motor2Rad(void){
+    return motor2Raw()/16383*2*3.14;
+}
+
+/*
+ * Not being implemented
+ */
 
 int motorError(void){
    int motor1error = GPIOPinRead(GPIO_PORTK_BASE, GPIO_PIN_6);
@@ -388,46 +388,10 @@ void uartInit(void){
 }
 
 
-void
-initConsole(void)
-{
-    //
-    // Enable GPIO port A which is used for UART0 pins.
-    // TODO: change this to whichever GPIO port you are using.
-    //
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOA);
 
-    //
-    // Configure the pin muxing for UART0 functions on port A0 and A1.
-    // This step is not necessary if your part does not support pin muxing.
-    // TODO: change this to select the port/pin you are using.
-    //
-    GPIOPinConfigure(GPIO_PA0_U0RX);
-    GPIOPinConfigure(GPIO_PA1_U0TX);
-
-    //
-    // Enable UART0 so that we can configure the clock.
-    //
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_UART0);
-
-    //
-    // Use the internal 16MHz oscillator as the UART clock source.
-    //
-    UARTClockSourceSet(UART0_BASE, UART_CLOCK_PIOSC);
-
-    //
-    // Select the alternate (UART) function for these pins.
-    // TODO: change this to select the port/pin you are using.
-    //
-    GPIOPinTypeUART(GPIO_PORTA_BASE, GPIO_PIN_0 | GPIO_PIN_1);
-
-    //
-    // Initialize the UART for console I/O.
-    //
-    UARTStdioConfig(0, 128000, 16000000);
-}
-
-
+/*
+ * Sends values over UART using a char buffer
+ */
 
 void uartSend(const uint8_t *pui8Buffer, uint32_t ui32Count)
 {
@@ -484,7 +448,71 @@ void i2cInit(tI2CMInstance g_sI2CMSimpleInst){
  */
 
 void spiInit(void){
-    ;
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_SSI2); // SSI2
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_SSI1); // SSI1
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_SSI0); // SSI1
+    //
+    // For this example SSI0 is used with PortA[5:2].  The actual port and pins
+    // used may be different on your part, consult the data sheet for more
+    // information.  GPIO port A needs to be enabled so these pins can be used.
+    // TODO: change this to whichever GPIO port you are using.
+    //
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOA);
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOD);
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOK);
+
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOL);
+
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOE);
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOB);
+
+    // Motor
+    GPIOPinConfigure(GPIO_PD3_SSI2CLK);
+    GPIOPinConfigure(GPIO_PD1_SSI2XDAT0);
+    GPIOPinConfigure(GPIO_PD0_SSI2XDAT1);
+
+    // Encoder 1
+    GPIOPinConfigure(GPIO_PA4_SSI0XDAT0);
+    GPIOPinConfigure(GPIO_PA5_SSI0XDAT1);
+    GPIOPinConfigure(GPIO_PA2_SSI0CLK);
+
+    // Encoder 2
+    GPIOPinConfigure(GPIO_PE5_SSI1XDAT1);
+    GPIOPinConfigure(GPIO_PE4_SSI1XDAT0);
+    GPIOPinConfigure(GPIO_PB5_SSI1CLK);
+
+
+
+    // Motor 1
+    GPIOPinTypeSSI(GPIO_PORTD_BASE, GPIO_PIN_0 | GPIO_PIN_1 |  GPIO_PIN_3); // SCK/MOSI/MISO (shared)
+    GPIOPinTypeGPIOOutput(GPIO_PORTL_BASE,GPIO_PIN_2); // CS
+    GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_2,GPIO_PIN_2); //Set CS to HIGH
+
+    // Motor 2
+    GPIOPinTypeGPIOOutput(GPIO_PORTL_BASE,GPIO_PIN_3); // CS
+    GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_3,GPIO_PIN_3); //Set CS to HIGH
+
+    // encoder 1
+    GPIOPinTypeSSI(GPIO_PORTA_BASE, GPIO_PIN_4 | GPIO_PIN_5); // MOSI/MISO
+    GPIOPinTypeSSI(GPIO_PORTA_BASE, GPIO_PIN_2); // SCK
+    GPIOPinTypeGPIOOutput(GPIO_PORTL_BASE,GPIO_PIN_0); //CS
+
+    // encoder 2
+    GPIOPinTypeSSI(GPIO_PORTE_BASE, GPIO_PIN_5 | GPIO_PIN_4); // MOSI/MISO
+    GPIOPinTypeSSI(GPIO_PORTB_BASE, GPIO_PIN_5); // SCK
+    GPIOPinTypeGPIOOutput(GPIO_PORTL_BASE,GPIO_PIN_1); //CS
+    GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_1,GPIO_PIN_1); // Set CS to HIGH
+
+    SSIConfigSetExpClk(SSI2_BASE, ui32SysClock, SSI_FRF_MOTO_MODE_1,
+                           SSI_MODE_MASTER, 1000000, 16); // 16 bits for motor
+    SSIConfigSetExpClk(SSI1_BASE, ui32SysClock, SSI_FRF_MOTO_MODE_1,
+                            SSI_MODE_MASTER, 1000000, 8); // 8 bits for encoder, note that we can't go above 16 bits using SPI Freescale mode
+    SSIConfigSetExpClk(SSI0_BASE, ui32SysClock, SSI_FRF_MOTO_MODE_1,
+                                SSI_MODE_MASTER, 1000000, 8); // 8 bits for encoder, note that we can't go above 16 bits using SPI Freescale mode
+    SSIEnable(SSI2_BASE);
+    SSIEnable(SSI1_BASE);
+    SSIEnable(SSI0_BASE);
+
 }
 
 /*
@@ -589,7 +617,6 @@ void adcInit(){
     //SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOM);
     //GPIOPinTypeGPIOOutput(GPIO_PORTM_BASE, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3);
 
-
     SysCtlPeripheralEnable(SYSCTL_PERIPH_ADC0);
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOE);
 
@@ -666,6 +693,257 @@ uint32_t  tempRead2(void){
     return adcArray[2];
 }
 
+
+void MCP9600init(){
+    // See https://ncd.io/k-type-thermocouple-mcp9600-with-arduino/
+    // Operations:
+    // Set thermo config
+    // write 0x05
+    // write 0x00
+    // Set device config
+    // write 0x06
+    // write 0x00
+    //I2CMwrite(i2cints,0x64,0x00,1,data,count,callback,write)
+}
+
+void MCP9600ready(){
+    // Write 0x04
+    // wait
+    // check if slave busy, if not read
+    // return int
+}
+
+void MCP9600read(){
+    // write 0x00
+    // read to long int = 1
+    // read to long int = 2
+    // if 1 &0x80 == 0x80
+    // 1 = 1& 0x7F
+    //temp  = 1024 - (1 *16/ + 2/16)
+}
+/*********************************************** CURRENTLY NOT BEING IMPLEMENTED ********************************************/
+
+/*
+ * This function sets up the menu
+ * It assumes that the uart is already open
+ * Currently menu is not being implemented
+ */
+
+void menuHeader(uint8_t input){
+    UARTprintf("\033[2J"); // Clear the screen
+    UARTprintf("\033[0;0H"); // Send cursor to top of screen
+    UARTprintf("R2R Arm debugging \r\n");
+    UARTprintf("_________________ \r\n");
+    UARTprintf("____  o------o __ \r\n");
+    UARTprintf("_____         \\  \r\n");
+    UARTprintf("__________     \\  \r\n");
+    UARTprintf("___________     \\ \r\n");
+    UARTprintf("Press 'm' to return to main menu \r\n");
+    UARTprintf("Command: %c \r\n", input);
+}
+
+/*
+ * This function is used to handle the interface from MATLAB
+ *
+ * It gets values specified by the user in MATLAB and processes them for use when the user presses run
+ *
+ * To use a custom function with MATLAB, case 'c' is provided.
+ * Each get command must be preceded by a printf statement
+ * It must end with the char 'z' to let MATLAB know that all the varibles have been sent
+ *
+ * Currently matlabMenu is not being implemented.
+ */
+
+void matlabMenu(char menuchar){
+    //char menuchar = UARTCharGet(UART0_BASE);
+    int count = 0;
+    float* floatArray;
+    uint8_t charArray[100] ={};
+    switch(menuchar){
+    case 'a':
+        count  = 0;
+        while (count<4){
+            char newchar = UARTCharGet(UART0_BASE);
+            //char newchar = UARTCharGetNonBlocking(UART0_BASE);
+            charBuf[count] = newchar;
+            count++;
+        }
+        break;
+    case 'b': // PID gains control
+        count = 0;
+        int i = 0;
+        //while(!UARTCharsAvail(UART0_BASE)){ // wait until chars are available
+        //   ;
+        //}
+        /*
+        while (UARTCharsAvail(UART0_BASE)){ // read
+           // process code here
+            charArray[count]  = UARTCharGet(UART0_BASE);
+           //char newchar = UARTCharGetNonBlocking(UART0_BASE);
+           count++;
+       }
+       */
+        //uint8_t *array;
+        //array = &charArray;
+        /*
+        for (i=0;i<count;i++){
+            UARTCharPut(UART0_BASE,charArray[i]);
+        }
+        UARTprintf("\r\n");
+        */
+        /*
+        floatArray = (float *)&charArray;
+
+        float data[3];
+        //float kp = floatArray[0];
+        //float ki = floatArray[1];
+        //float kd = floatArray[2];
+        int i;
+        for (i = 0;i<count;i++){
+            data[i] = 0.1+*floatArray++;
+        }
+        uint8_t *array;
+        array = &charArray;
+        for (i = 0;i<3*4;i++){
+            UARTCharPut(UART0_BASE,*array++);
+        }*/
+
+        // TODO: Add some confirmation, save to global variable?
+        break;
+
+    case 'c': // custom code
+        UARTprintf("Please set gains for non linear system (kp ki kd):\r\n"); // send string
+        //delayMS(1);
+        UARTprintf("num\r\n"); // send string
+
+        count  = 0;
+
+        char newchar;
+        /*
+        while(!UARTCharsAvail(UART0_BASE)){
+            ;
+        }
+        */
+        while (UARTCharsAvail(UART0_BASE)){
+            // process code here
+            char newchar = UARTCharGet(UART0_BASE);
+            //char newchar = UARTCharGetNonBlocking(UART0_BASE);
+            charArray[count] = newchar;
+            count++;
+        }
+        floatArray = &charArray;
+        //kp = floatArray[0];
+        //ki = floatArray[1];
+        //kd = floatArray[2];
+        UARTprintf("Please set some other value for non linear system (abcd):\r\n");
+        UARTprintf("s\r\n");
+        count  = 0;
+        while (count<4){
+            newchar = UARTCharGet(UART0_BASE);
+            //char newchar = UARTCharGetNonBlocking(UART0_BASE);
+            charBuf[count] = newchar;
+            count++;
+        }
+        UARTprintf("z\r\n");
+        UARTprintf("z\r\n");
+        // UARTCharPut(UART0_BASE, 'z');
+        break;
+    }
+
+}
+
+/*
+ * Sets up menu
+ *
+ * Currently not being implemented
+ */
+
+void menuInit(void){
+    uint8_t buffer[100]={};
+    sprintf(buffer,"\033[2J\r\nR2R Arm debugging \r\n");
+    uartSend((uint8_t *)buffer,100);
+    sprintf(buffer,"This is a test for the ADC\r\n");
+    uartSend((uint8_t *)buffer,100);
+    UARTprintf("R2R UART Menu interface\r\n");
+}
+
+/*
+ * This function contains all the menu interactions with the user\
+ *
+ * Currently not being implemented
+ */
+
+void menuOptions(uint8_t input){
+    // Generate menu here
+    menuHeader(input);
+
+    /*uint8_t next_input;
+    if (last_input == 'c'){
+        next_input = input;
+        input = 'c';
+    }
+    */
+    switch(input){
+    case 'm':
+        UARTprintf("a: Check set values \r\n");
+        UARTprintf("b: Set new values \r\n");
+        UARTprintf("c: More options \r\n");
+        UARTprintf("\r\nr: Start Arm \r\n");
+        break;
+    case 'a':
+        UARTprintf("Values for control: \r\n");
+        UARTprintf("%c %c %c %c",charBuf[0],charBuf[1],charBuf[2],charBuf[3]);
+        break;
+    case 'b':
+        UARTprintf("Please type in your input: \r\n");
+        int count = 0;
+        while (count<4){
+            char newchar = UARTCharGet(UART0_BASE);
+            //char newchar = UARTCharGetNonBlocking(UART0_BASE);
+            charBuf[count] = newchar;
+            count++;
+        }
+        UARTprintf("\r\nOkay. Values set \r\n");
+
+        //UARTprintf("You typed in %c",newchar);
+        //more_input = 1;
+        break;
+    case 'c':
+        UARTprintf("Type in more options: \r\n");
+        //switch(next_input){
+        //case 'a':
+          //  UARTprintf("Nested menu option \r\n");
+          //  input = 'a';
+          //  break;
+        //}
+        break;
+    default:
+        UARTprintf("Command not recognized!\r\n");
+        break;
+    }
+    last_input = input;
+
+}
+
+/*
+ * Currently not being implemented
+ */
+
+void processUserInput(void){
+    switch (user_select) {
+    case 'a': // do option 1
+        UARTprintf("Beginning loaded options:");
+        break;
+    case 'b': // do option 2
+        UARTprintf("Setting up constants kp, ki, kd:");
+        // process everything that is in the buffer
+        // error checking
+        break;
+    }
+
+
+}
+
 /*
  * Reads the temperature
  */
@@ -701,6 +979,9 @@ uint32_t tempRead(void){
 
     return 1;
 }
+
+
+
 uint32_t currRead(void){
    uint32_t pui32ADC0Value[4];
    //
@@ -727,30 +1008,46 @@ uint32_t currRead(void){
    return 1;
 }
 
-void MCP9600init(){
-    // See https://ncd.io/k-type-thermocouple-mcp9600-with-arduino/
-    // Operations:
-    // Set thermo config
-    // write 0x05
-    // write 0x00
-    // Set device config
-    // write 0x06
-    // write 0x00
-    //I2CMwrite(i2cints,0x64,0x00,1,data,count,callback,write)
-}
+/*
+ * Initialize console
+ *
+ * Currently not being implemented
+ */
+void
+initConsole(void)
+{
+    //
+    // Enable GPIO port A which is used for UART0 pins.
+    // TODO: change this to whichever GPIO port you are using.
+    //
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOA);
 
-void MCP9600ready(){
-    // Write 0x04
-    // wait
-    // check if slave busy, if not read
-    // return int
-}
+    //
+    // Configure the pin muxing for UART0 functions on port A0 and A1.
+    // This step is not necessary if your part does not support pin muxing.
+    // TODO: change this to select the port/pin you are using.
+    //
+    GPIOPinConfigure(GPIO_PA0_U0RX);
+    GPIOPinConfigure(GPIO_PA1_U0TX);
 
-void MCP9600read(){
-    // write 0x00
-    // read to long int = 1
-    // read to long int = 2
-    // if 1 &0x80 == 0x80
-    // 1 = 1& 0x7F
-    //temp  = 1024 - (1 *16/ + 2/16)
+    //
+    // Enable UART0 so that we can configure the clock.
+    //
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_UART0);
+
+    //
+    // Use the internal 16MHz oscillator as the UART clock source.
+    //
+    UARTClockSourceSet(UART0_BASE, UART_CLOCK_PIOSC);
+
+    //
+    // Select the alternate (UART) function for these pins.
+    // TODO: change this to select the port/pin you are using.
+    //
+    GPIOPinTypeUART(GPIO_PORTA_BASE, GPIO_PIN_0 | GPIO_PIN_1);
+
+    //
+    // Initialize the UART for console I/O.
+    //
+    UARTStdioConfig(0, 128000, 16000000);
 }
