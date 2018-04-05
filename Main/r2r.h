@@ -18,8 +18,9 @@
 /*
  * General functions
  */
-extern void sysInit(void);
-extern void pwmInit(void);
+extern void r2rDefaultInit(void); // starts all inits
+extern void sysInit(void); // system clock and interrupt
+extern void pwmInit(void); // pwm inits
 extern void gpioInit(void); // inits all unused GPIO
 extern void safetyCheck(void); //explicit function to test for end conditions
 extern void delayMS(int ms); // stops processor for a given amount of time in ms, this is approximate
@@ -39,11 +40,12 @@ extern void processUserInput(void);
 /*
  * Motor functions
  * This section contains all the functions written to get the motor to work.
- * TODO: write function to set various PWM values
+ * TODO: write readDriverStatus for both controllers
  */
 extern void motorInit(void);
 extern void motorPWM1(int pwmValue); //sets the motor PWM values
 extern void motorPWM2(int pwmValue);
+extern void readDriverStatus(void);
 extern int motorError(void); // returns 50 on no error, 51 on motor 1 error, 52 on motor 2 error
 
 /*

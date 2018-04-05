@@ -164,19 +164,16 @@ void encoderRead(void){
     GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_3,0x00);
     SysCtlDelay(10);
 
-    for(ui32Index2 = 0; ui32Index2 < NUM_SSI_DATA2; ui32Index2++)
-    {
+    for(ui32Index2 = 0; ui32Index2 < NUM_SSI_DATA2; ui32Index2++){
        SSIDataPut(SSI0_BASE, pui32DataTx2[ui32Index2]);
     }
-    while(SSIBusy(SSI0_BASE))
-    {
+    while(SSIBusy(SSI0_BASE)){
     }
 
     GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_3,GPIO_PIN_3);
     SysCtlDelay(1000);
 
-    for(ui32Index2 = 0; ui32Index2 < NUM_SSI_DATA2; ui32Index2++)
-    {
+    for(ui32Index2 = 0; ui32Index2 < NUM_SSI_DATA2; ui32Index2++){
       pui32DataRx2[ui32Index2] &= 0x00FF;
       SSIDataGet(SSI0_BASE, &pui32DataRx2[ui32Index2]);
     }
@@ -188,24 +185,22 @@ void encoderRead(void){
     encoderVal[0] = num;
 
     // Read the other encoder
-    while(SSIDataGetNonBlocking(SSI1_BASE, &pui32DataRx2[0]))
-    {
+    while(SSIDataGetNonBlocking(SSI1_BASE, &pui32DataRx2[0])){
     }
     GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_1,0x00);
     SysCtlDelay(10);
 
-    for(ui32Index2 = 0; ui32Index2 < NUM_SSI_DATA2; ui32Index2++)
-    {
+    for(ui32Index2 = 0; ui32Index2 < NUM_SSI_DATA2; ui32Index2++){
        SSIDataPut(SSI1_BASE, pui32DataTx2[ui32Index2]);
     }
-    while(SSIBusy(SSI1_BASE){
+
+    while(SSIBusy(SSI1_BASE)){
     }
 
     GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_1,GPIO_PIN_1);
     SysCtlDelay(1000);
 
-    for(ui32Index2 = 0; ui32Index2 < NUM_SSI_DATA2; ui32Index2++)
-    {
+    for(ui32Index2 = 0; ui32Index2 < NUM_SSI_DATA2; ui32Index2++){
       pui32DataRx2[ui32Index2] &= 0x00FF;
       SSIDataGet(SSI1_BASE, &pui32DataRx2[ui32Index2]);
     }
