@@ -51,6 +51,8 @@ If you want to use string processing/more breakpoints
 3. Define interrupt in the startup.ccs file
 4. Define interrupt in the interrupt vector
 
+## Declarations
+Using '=' outside of the main loop will generate an error because CCS will think it is a declaration and be confused because you previously already declared the variable.
 
 # Useful References
 1. [Tivaware Driver Peripheral Library Reference](http://www.ti.com/lit/ug/spmu298d/spmu298d.pdf)
