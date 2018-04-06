@@ -28,23 +28,6 @@
 #include "r2r.h"
 
 
-volatile uint8_t user_input_flag = 0;
-volatile uint8_t get_user_char ='m';
-volatile uint8_t more_input = 0;
-
-volatile float Kptest = 0;
-volatile float Kdtest = 0;
-volatile float Kitest = 0;
-
-char charBuf[100]={}; //global char array to store variables from the MATLAB user
-
-
-// Sensor test code
-// Reads 2 encoders
-// This is a SSI sensor
-
-
-
 
 int main()
 {
@@ -54,19 +37,6 @@ int main()
     r2rDefaultInit();
 
 
-    // Enable interrupts of UART
-    //IntEnable(INT_UART0);
-    //UARTIntEnable(UART0_BASE, UART_INT_RX | UART_INT_RT);
-
-
-
-
-
-
-
-
-
-    // UARTprintf("Setting up...");
 
 
 
