@@ -682,8 +682,12 @@ void uartSend(const uint8_t *pui8Buffer, uint32_t ui32Count)
  * uartInit()
  */
 
-void uartSendArray(){
-
+void uartSendArray(const float *array, int n){
+    uint8_t *message;
+    int i;
+    message = &array;
+    for (i = 0; i < n * 4; i++)
+        UARTCharPut(UART0_BASE, *message++);
 }
 
 /*
@@ -694,10 +698,13 @@ void uartSendArray(){
  * uartInit()
  */
 
-void uartRecvArray(){
-
+float *uartRecvArray(int n){
+    int i;
+    char *recev;
+    for (i = 0; i < 4 * n; i++)
+        *recev++ = UARTCharGet(UART0_BASE);
+    return &recev;
 }
-
 
 /*
  * This function sets up an I2C bus on I2C0, PB2 and PB3
