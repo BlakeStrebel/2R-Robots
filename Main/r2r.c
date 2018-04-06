@@ -70,14 +70,20 @@ uint32_t encoderVal[2];
 
 /*
  * This function does initialisation for all the default connections
+ *
+ * Comes after:
+ * -
  */
 void r2rDefaultInit(void){
-    sysInit();
-    gpioInit();
-    spiInit();
-    adcInit();
-    motorDriverInit();
-    uartInit();
+    sysInit(); // Init system clock and Master interrupt
+    uartInit(); // Init UART communication
+    //spiInit(); // Init SPI communication for motor driver 1 and 2, and encoder 1, and encoder 2
+    //motorDriverInit(); // Send values to set up the motor for 1x PWM mode
+    //pwmInit();
+    //adcInit(); // Init for current and temperture
+    //gpioInit(); // Init for general GPIO - set to input for safety
+    //timerIntInit();
+
 }
 
 /*
@@ -95,17 +101,19 @@ void delayMS(int ms) {
 
 /*
  * The system init function initiazes the system clock and the processor interrupts
- * Clock: 25Mhz
+ * Clock: 120Mhz
  *
  * Comes after:
  * -
  */
 void sysInit(void){
-    //SysCtlClockSet(SYSCTL_SYSDIV_4 | SYSCTL_USE_PLL | SYSCTL_OSC_MAIN |
-    //                       SYSCTL_XTAL_16MHZ);
+    //
+    // Set the clock to run directly from the crystal at 120MHz.
+    //
     ui32SysClock = SysCtlClockFreqSet((SYSCTL_XTAL_25MHZ |
-                                              SYSCTL_OSC_MAIN |
-                                              SYSCTL_USE_OSC), 25000000);
+                                             SYSCTL_OSC_MAIN |
+                                             SYSCTL_USE_PLL |
+                                             SYSCTL_CFG_VCO_480), 120000000); // Use 25Mhz crystal and use PLL to accelerate to 120MHz
     IntMasterEnable();
 }
 
@@ -164,16 +172,19 @@ void encoderRead(void){
     GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_3,0x00);
     SysCtlDelay(10);
 
-    for(ui32Index2 = 0; ui32Index2 < NUM_SSI_DATA2; ui32Index2++){
+    for(ui32Index2 = 0; ui32Index2 < NUM_SSI_DATA2; ui32Index2++)
+    {
        SSIDataPut(SSI0_BASE, pui32DataTx2[ui32Index2]);
     }
-    while(SSIBusy(SSI0_BASE)){
+    while(SSIBusy(SSI0_BASE))
+    {
     }
 
     GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_3,GPIO_PIN_3);
     SysCtlDelay(1000);
 
-    for(ui32Index2 = 0; ui32Index2 < NUM_SSI_DATA2; ui32Index2++){
+    for(ui32Index2 = 0; ui32Index2 < NUM_SSI_DATA2; ui32Index2++)
+    {
       pui32DataRx2[ui32Index2] &= 0x00FF;
       SSIDataGet(SSI0_BASE, &pui32DataRx2[ui32Index2]);
     }
@@ -185,27 +196,29 @@ void encoderRead(void){
     encoderVal[0] = num;
 
     // Read the other encoder
-    while(SSIDataGetNonBlocking(SSI1_BASE, &pui32DataRx2[0])){
+    while(SSIDataGetNonBlocking(SSI1_BASE, &pui32DataRx2[0]))
+    {
     }
     GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_1,0x00);
     SysCtlDelay(10);
 
-    for(ui32Index2 = 0; ui32Index2 < NUM_SSI_DATA2; ui32Index2++){
+    for(ui32Index2 = 0; ui32Index2 < NUM_SSI_DATA2; ui32Index2++)
+    {
        SSIDataPut(SSI1_BASE, pui32DataTx2[ui32Index2]);
     }
-
     while(SSIBusy(SSI1_BASE)){
     }
 
     GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_1,GPIO_PIN_1);
     SysCtlDelay(1000);
 
-    for(ui32Index2 = 0; ui32Index2 < NUM_SSI_DATA2; ui32Index2++){
+    for(ui32Index2 = 0; ui32Index2 < NUM_SSI_DATA2; ui32Index2++)
+    {
       pui32DataRx2[ui32Index2] &= 0x00FF;
       SSIDataGet(SSI1_BASE, &pui32DataRx2[ui32Index2]);
     }
     // The angle is the first 14 bits of the response.
-    int num = pui32DataRx2[0]<<6;
+    num = pui32DataRx2[0]<<6;
     num = num | (pui32DataRx2[1]>>2);
     encoderVal[1] = num;
 }
@@ -604,30 +617,43 @@ void PIDCurrUpdate(void){
 
 /*
  * This function sets up the UART on UART0, PA0(RX) and PA1 (TX)
- * It is set up for 128000 baud 8N1
+ * It is set up for 115200 baud 8N1. To send numbers and characters use
+ * UARTprintf.
  */
 void uartInit(void){
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_UART0);
+    //
+    // Enable GPIO port A which is used for UART0 pins.
+    //
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOA);
+
+    //
+    // Configure the pin muxing for UART0 functions on port A0 and A1.
+    // This step is not necessary if your part does not support pin muxing.
+    //
     GPIOPinConfigure(GPIO_PA0_U0RX);
     GPIOPinConfigure(GPIO_PA1_U0TX);
+
+    //
+    // Enable UART0 so that we can configure the clock.
+    //
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_UART0);
+
+    //
+    // Use the internal 16MHz oscillator as the UART clock source.
+    //
+    UARTClockSourceSet(UART0_BASE, UART_CLOCK_PIOSC);
+
+    //
+    // Select the alternate (UART) function for these pins.
+    //
     GPIOPinTypeUART(GPIO_PORTA_BASE, GPIO_PIN_0 | GPIO_PIN_1);
 
     //
-    // Configure the UART for 128,000, 8-N-1 operation.
+    // Initialize the UART for console I/O.
     //
-    UARTConfigSetExpClk(UART0_BASE, SysCtlClockGet(), 128000,
-                            (UART_CONFIG_WLEN_8 | UART_CONFIG_STOP_ONE |
-                             UART_CONFIG_PAR_NONE));
-
-    //
-    // Enable the UART interrupt.
-    //
-    //IntEnable(INT_UART0);
-    //UARTIntEnable(UART0_BASE, UART_INT_RX | UART_INT_RT);
+    UARTStdioConfig(0, 115200, 16000000);
 
 }
-
 
 
 /*
@@ -646,6 +672,30 @@ void uartSend(const uint8_t *pui8Buffer, uint32_t ui32Count)
         //
         UARTCharPut(UART0_BASE, *pui8Buffer++);
     }
+}
+
+/*
+ * Sends an array over UART
+ *
+ * Comes after:
+ * sysInit()
+ * uartInit()
+ */
+
+void uartSendArray(){
+
+}
+
+/*
+ * Receives an array over UART
+ *
+ * Comes after:
+ * sysInit()
+ * uartInit()
+ */
+
+void uartRecvArray(){
+
 }
 
 
@@ -1249,46 +1299,4 @@ uint32_t currRead(void){
    return 1;
 }
 
-/*
- * Initialize console
- *
- * Currently not being implemented
- */
-void
-initConsole(void)
-{
-    //
-    // Enable GPIO port A which is used for UART0 pins.
-    // TODO: change this to whichever GPIO port you are using.
-    //
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOA);
 
-    //
-    // Configure the pin muxing for UART0 functions on port A0 and A1.
-    // This step is not necessary if your part does not support pin muxing.
-    // TODO: change this to select the port/pin you are using.
-    //
-    GPIOPinConfigure(GPIO_PA0_U0RX);
-    GPIOPinConfigure(GPIO_PA1_U0TX);
-
-    //
-    // Enable UART0 so that we can configure the clock.
-    //
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_UART0);
-
-    //
-    // Use the internal 16MHz oscillator as the UART clock source.
-    //
-    UARTClockSourceSet(UART0_BASE, UART_CLOCK_PIOSC);
-
-    //
-    // Select the alternate (UART) function for these pins.
-    // TODO: change this to select the port/pin you are using.
-    //
-    GPIOPinTypeUART(GPIO_PORTA_BASE, GPIO_PIN_0 | GPIO_PIN_1);
-
-    //
-    // Initialize the UART for console I/O.
-    //
-    UARTStdioConfig(0, 128000, 16000000);
-}

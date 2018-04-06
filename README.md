@@ -14,10 +14,17 @@ The examples include short code snippets to quickly get use out of the TM4C123GX
 * SPI
 * SPI RAM (todo)
 * UART
-* CAN (todo)
+
 
 # Roadmap
 This roadmap lists the tasks to do as the software architecture develops
+* PID control for 1 motor
+* PID control for 2 motors
+* MATLAB interface for PID for 1 motor
+* MATLAB interface for PID for 2 motor
+* Lead-Lag control law
+* GUI interface for PID control
+* Velocity PID control
 * Implement control law interface
 * ~~Implement modifiable control law interface~~
 * ~~Implement sensor SPI interface~~
@@ -52,7 +59,7 @@ If you want to use string processing/more breakpoints
 4. Define interrupt in the interrupt vector
 
 ## Declarations
-Using '=' outside of the main loop will generate an error because CCS will think it is a declaration and be confused because you previously already declared the variable.
+Using '=' outside of the main loop will generate an error because CCS will think it is a declaration and be confused if you previously declared the variable.
 
 # Useful References
 1. [Tivaware Driver Peripheral Library Reference](http://www.ti.com/lit/ug/spmu298d/spmu298d.pdf)
