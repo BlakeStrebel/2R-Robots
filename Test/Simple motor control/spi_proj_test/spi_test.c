@@ -41,6 +41,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <stdint.h>
+#include <stdio.h>
 #include "inc/hw_memmap.h"
 #include "driverlib/gpio.h"
 #include "driverlib/pin_map.h"
@@ -94,7 +95,8 @@
 //******
 // Global variables.
 //******
-volatile int desire_angle;
+volatile int desire_angle=0;
+int set_angle = 90;
 
 //*****************************************************************************
 //
@@ -117,80 +119,44 @@ void
 UARTIntHandler(void)
 {
     uint32_t ui32Status;
-    char charBuf[4];
-    int count = 0;
-    //
-    // Get the interrrupt status.
-    //
-    ui32Status = UARTIntStatus(UART0_BASE, true);
+        char charBuf[15];
 
-    //
-    // Clear the asserted interrupts.
-    // We need to clear the flag otherwise it will not interrupt again
-    UARTIntClear(UART0_BASE, ui32Status);
-
-    //
-    // Loop while there are characters in the receive FIFO.
-    //
-
-    while(UARTCharsAvail(UART0_BASE))
-    {
         //
-        // Read the next character from the UART and write it back to the UART.
+        // Get the interrrupt status.
         //
+        ui32Status = UARTIntStatus(UART0_BASE, true);
 
-        while (count<1){
-            char newchar = UARTCharGetNonBlocking(UART0_BASE);
+        //
+        // Clear the asserted interrupts.
+        // We need to clear the flag otherwise it will not interrupt again
+        UARTIntClear(UART0_BASE, ui32Status);
+
+        //
+        // Loop while there are characters in the receive FIFO.
+        //
+        int count = 0;
+        while(UARTCharsAvail(UART0_BASE))
+        {
+            //
+            // Read the next character from the UART and write it back to the UART.
+            //
+
+
+            char newchar = UARTCharGet(UART0_BASE);
             charBuf[count] = newchar;
             count++;
 
         }
-        desire_angle = atoi (charBuf);
-        // adding one changes the letter, so you know that the value is incremented.
-        //ROM_UARTCharPutNonBlocking(UART0_BASE,newchar+1);
-        //char replyString[25]={};
-        //sprintf(replyString,"Hello! You sent: %c\r\n",newchar);
 
-        // Speed test 2/18/2018
-
-
-        // Test 2/7/2018
-        //array = &f;
-        //UARTSend(array, 4);
-
-        //Test 2/4/2018
-        //array = &f;
-        //array = data;
-        //UARTSend(array,16);
-        //UARTSend((uint8_t *) "R2R WelcomeHAHAHAHAHAHAHHHAHAHHHAHAHAHHAHAHAHAHAHAHAHAHAHHA \r\n",200);
-        //Test 2/4/2018
-        //UARTSend(array,15);
+        sscanf(charBuf,"%d", &desire_angle);
 
 
 
-        // Another option that is blocking is:
-        // UARTCharPut(UART0_BASE, 'r');
-
-
-        //
-        // Blink the LED to show a character transfer is occuring.
-        //
-        // GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_2, GPIO_PIN_2);
-
-        //
-        // Delay for 1 millisecond.  Each SysCtlDelay is about 3 clocks.
-        //
-        // SysCtlDelay(SysCtlClockGet() / (1000 * 3));
-
-        //
-        // Turn off the LED
-        //
-        // GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_2, 0);
 
     }
 
 
-}
+
 
 
 void
@@ -241,6 +207,7 @@ InitConsole(void)
 //*****************************************************************************
 int
 main(void)
+
 {
     // References
     //https://e2e.ti.com/support/microcontrollers/tiva_arm/f/908/t/432569
@@ -252,9 +219,13 @@ main(void)
     uint32_t pui32DataRx[NUM_SSI_DATA];
     uint32_t ui32Index;
 
-    volatile uint32_t pui32DataTx2[NUM_SSI_DATA2];
-        uint32_t pui32DataRx2[NUM_SSI_DATA2];
-        uint32_t ui32Index2;
+    volatile uint32_t pui32DataTx2[NUM_SSI_DATA2]; // set it volatile so we can examine the data
+    uint32_t pui32DataRx2[NUM_SSI_DATA2];
+    uint32_t ui32Index2;
+
+    float prev_angle = 0;
+    float int_angle = 0;
+
 
     //
     // Set the clocking to run directly from the external crystal/oscillator.
@@ -278,8 +249,8 @@ main(void)
     // just for this example program and is not needed for SSI operation.
     //
     InitConsole();
-    PWMconfig(700);
-    motorPWM2(0);
+    PWMconfig(700); // configure it to have a period of 700us
+    motorPWM2(0); // turns off motor.
 
     //
     // Display the setup on the console.
@@ -292,8 +263,8 @@ main(void)
     // The SSI0 peripheral must be enabled for use.
     //
     //SysCtlPeripheralEnable(SYSCTL_PERIPH_SSI0);
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_SSI2);
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_SSI1);
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_SSI2); // SSI2
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_SSI1); // SSI1
 
     //
     // For this example SSI0 is used with PortA[5:2].  The actual port and pins
@@ -304,6 +275,7 @@ main(void)
     // SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOA);
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOD);
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOK);
+
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOL);
 
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOE);
@@ -575,10 +547,24 @@ main(void)
           float angle = (float)num/(16383)*360; // our current angle
 
           // let our desired angle be 0
+
+          int_angle = int_angle+angle;
+          if (int_angle>100){
+              int_angle=100;
+          }
+          else if(int_angle<-100){
+              int_angle=-100;
+          }
+
           float kp = 1;
+          float kd = 0;
           float ki = 0;
-          float e = 90 - angle;
-          int control = e*kp;
+
+
+
+          int control = kp*(desire_angle - angle)+kd*prev_angle+ki*int_angle;
+          prev_angle = angle;
+
           if (control > 20){
               motorPWM2(20);
               GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_0,GPIO_PIN_0);
@@ -591,10 +577,12 @@ main(void)
               motorPWM2(control);
               GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_0,GPIO_PIN_0);
           }
-          else {
+          else if((control>-20)&(control<0)){
               GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_0|GPIO_PIN_4,GPIO_PIN_4);
-              motorPWM2(-control);
-
+              motorPWM2(-1*control);
+          }
+          else {
+              motorPWM2(0);
           }
 
           //num = num/16383*360;
