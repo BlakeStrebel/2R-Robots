@@ -36,6 +36,51 @@ int main()
     // Init code
     r2rDefaultInit();
 
+    // Interrupts
+
+
+    // Infinite loop
+
+
+    // Variables
+    float eint = 0;
+    float eprev = 0;
+
+    while(1){
+        sensorUpdate(); // updates encoders
+
+        // PID control loop
+        float kp = 0;
+        float kd = 0;
+        float ki = 0;
+
+        float desired_angle = 0;
+        float current_angle = readMotor2Angle();
+        float error = desired_angle - current_angle;
+
+        eint = eint+error;
+        // Integration clamp
+        if(eint>100){
+            eint=100;
+        }
+        else if(eint<-100){
+            eint=-100;
+        }
+        float control = kp*error+kd*eprev+ki*eint;
+        // Control signal clamp
+        if (control>100){
+            control = 100;
+        }
+        else if (control<-100){
+            control = -100;
+        }
+        motor2ControlPWM(control);
+        eprev=error;
+
+
+
+    }
+
 
 
 

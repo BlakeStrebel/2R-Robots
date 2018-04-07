@@ -41,6 +41,7 @@ extern void processUserInput(void);
 extern void motorInit(void);
 extern void motorPWM1(int pwmValue); //sets the motor PWM values
 extern void motorPWM2(int pwmValue);
+extern void motor2ControlPWM(int control);
 extern int motorError(void); // returns 50 on no error, 51 on motor 1 error, 52 on motor 2 error
 extern void encoderRead(void);
 

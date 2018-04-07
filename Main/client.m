@@ -19,7 +19,7 @@
 % 
 clear s j;
 clc;
-s = serial('COM7', 'BaudRate', 128000, 'DataBits', 8, 'StopBits', 1, 'Parity', 'none');
+s = serial('COM16', 'BaudRate', 115200, 'DataBits', 8, 'StopBits', 1, 'Parity', 'none');
 s.Terminator = 'CR'; 
 set(s,'timeout',1);
 fopen(s);

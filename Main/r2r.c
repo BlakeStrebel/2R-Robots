@@ -41,11 +41,8 @@
 #include "r2r.h"
 
 uint32_t adcArray[4]={0};
-char user_select = 'a';
-extern int run_program = 1; // this will be declared in the main loop
-uint8_t last_input = 'm';
-extern volatile uint8_t more_input;
-extern volatile uint8_t charBuf[100];
+
+
 uint32_t ui32SysClock;
 
 #define NUM_SSI_DATA            8
@@ -122,12 +119,11 @@ void sysInit(void){
  * TODO: save last state to a permanent storage device and check it upon starting. If last state was some error state, user must clear the flag
  */
 void safetyCheck(void){
-    int errmsg;
-    errmsg = motorError();
+    ;
 }
 
 /*
- * This function updates all the sensors that we are using. Usually runs once every loop
+ * This function updates all the sensors that we are using. Usually runs once every loop.
  * TODO: Add sensor functions, add interrupts
  */
 void sensorUpdate(void){
@@ -294,6 +290,31 @@ void motorDriverInit(void){
    SysCtlDelay(1000);
    // Done
 }
+
+/*
+ * Wrapper function that takes in a control signal for the 1xPWM mode
+ * if control is zero = brake!
+ */
+void motor2ControlPWM(int control){
+    if (control>0){
+        // Positive direction
+        GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_0,GPIO_PIN_0); // Set to HIGH  - forward
+        GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_4,GPIO_PIN_4); // Set to HIGH - no braking
+        motorPWM2(control);
+    }
+    else if (control<0) {
+        // Negative direction
+        GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_0,0);
+        GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_4,GPIO_PIN_4);
+        motorPWM2(-control);
+    }
+    else {
+        GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_0,0);
+        GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_4,0); // Set brake pin to low, brake!
+    }
+}
+
+
 /*
  * Wrapper function to write a PWM value to the motor
  *
@@ -320,25 +341,25 @@ void motorPWM2(int pwmValue){
  * Comes after:
  * sensorUpdate()
  */
-int motor2Raw(void){
+int readMotor2Raw(void){
     return encoderVal[1];
 }
-int motor1Raw(void){
+int readMotor1Raw(void){
     return encoderVal[0];
 }
 
-float motor1Angle(void){
-    return motor1Raw()/16383*360;
+float readMotor1Angle(void){
+    return readMotor1Raw()/16383*360;
 }
-float motor2Angle(void){
-    return motor2Raw()/16383*360;
+float readMotor2Angle(void){
+    return readMotor2Raw()/16383*360;
 }
 // TODO: include M_PI here
-float motor1Rad(void){
-    return motor1Raw()/16383*2*3.14;
+float readMotor1Rad(void){
+    return readMotor1Raw()/16383*2*3.14;
 }
-float motor2Rad(void){
-    return motor2Raw()/16383*2*3.14;
+float readMotor2Rad(void){
+    return readMotor2Raw()/16383*2*3.14;
 }
 /*
  * Reads the motor driver status over SPI
@@ -682,12 +703,8 @@ void uartSend(const uint8_t *pui8Buffer, uint32_t ui32Count)
  * uartInit()
  */
 
-void uartSendArray(const float *array, int n){
-    uint8_t *message;
-    int i;
-    message = &array;
-    for (i = 0; i < n * 4; i++)
-        UARTCharPut(UART0_BASE, *message++);
+void uartSendArray(){
+
 }
 
 /*
@@ -698,13 +715,10 @@ void uartSendArray(const float *array, int n){
  * uartInit()
  */
 
-float *uartRecvArray(int n){
-    int i;
-    char *recev;
-    for (i = 0; i < 4 * n; i++)
-        *recev++ = UARTCharGet(UART0_BASE);
-    return &recev;
+void uartRecvArray(){
+
 }
+
 
 /*
  * This function sets up an I2C bus on I2C0, PB2 and PB3
@@ -1021,226 +1035,9 @@ void MCP9600read(){
 }
 /*********************************************** CURRENTLY NOT BEING IMPLEMENTED ********************************************/
 
-/*
- * This function sets up the menu
- * It assumes that the uart is already open
- * Currently menu is not being implemented
- */
-
-void menuHeader(uint8_t input){
-    UARTprintf("\033[2J"); // Clear the screen
-    UARTprintf("\033[0;0H"); // Send cursor to top of screen
-    UARTprintf("R2R Arm debugging \r\n");
-    UARTprintf("_________________ \r\n");
-    UARTprintf("____  o------o __ \r\n");
-    UARTprintf("_____         \\  \r\n");
-    UARTprintf("__________     \\  \r\n");
-    UARTprintf("___________     \\ \r\n");
-    UARTprintf("Press 'm' to return to main menu \r\n");
-    UARTprintf("Command: %c \r\n", input);
-}
-
-/*
- * This function is used to handle the interface from MATLAB
- *
- * It gets values specified by the user in MATLAB and processes them for use when the user presses run
- *
- * To use a custom function with MATLAB, case 'c' is provided.
- * Each get command must be preceded by a printf statement
- * It must end with the char 'z' to let MATLAB know that all the varibles have been sent
- *
- * Currently matlabMenu is not being implemented.
- */
-
-void matlabMenu(char menuchar){
-    //char menuchar = UARTCharGet(UART0_BASE);
-    int count = 0;
-    float* floatArray;
-    uint8_t charArray[100] ={};
-    switch(menuchar){
-    case 'a':
-        count  = 0;
-        while (count<4){
-            char newchar = UARTCharGet(UART0_BASE);
-            //char newchar = UARTCharGetNonBlocking(UART0_BASE);
-            charBuf[count] = newchar;
-            count++;
-        }
-        break;
-    case 'b': // PID gains control
-        count = 0;
-        int i = 0;
-        //while(!UARTCharsAvail(UART0_BASE)){ // wait until chars are available
-        //   ;
-        //}
-        /*
-        while (UARTCharsAvail(UART0_BASE)){ // read
-           // process code here
-            charArray[count]  = UARTCharGet(UART0_BASE);
-           //char newchar = UARTCharGetNonBlocking(UART0_BASE);
-           count++;
-       }
-       */
-        //uint8_t *array;
-        //array = &charArray;
-        /*
-        for (i=0;i<count;i++){
-            UARTCharPut(UART0_BASE,charArray[i]);
-        }
-        UARTprintf("\r\n");
-        */
-        /*
-        floatArray = (float *)&charArray;
-
-        float data[3];
-        //float kp = floatArray[0];
-        //float ki = floatArray[1];
-        //float kd = floatArray[2];
-        int i;
-        for (i = 0;i<count;i++){
-            data[i] = 0.1+*floatArray++;
-        }
-        uint8_t *array;
-        array = &charArray;
-        for (i = 0;i<3*4;i++){
-            UARTCharPut(UART0_BASE,*array++);
-        }*/
-
-        // TODO: Add some confirmation, save to global variable?
-        break;
-
-    case 'c': // custom code
-        UARTprintf("Please set gains for non linear system (kp ki kd):\r\n"); // send string
-        //delayMS(1);
-        UARTprintf("num\r\n"); // send string
-
-        count  = 0;
-
-        char newchar;
-        /*
-        while(!UARTCharsAvail(UART0_BASE)){
-            ;
-        }
-        */
-        while (UARTCharsAvail(UART0_BASE)){
-            // process code here
-            char newchar = UARTCharGet(UART0_BASE);
-            //char newchar = UARTCharGetNonBlocking(UART0_BASE);
-            charArray[count] = newchar;
-            count++;
-        }
-        floatArray = &charArray;
-        //kp = floatArray[0];
-        //ki = floatArray[1];
-        //kd = floatArray[2];
-        UARTprintf("Please set some other value for non linear system (abcd):\r\n");
-        UARTprintf("s\r\n");
-        count  = 0;
-        while (count<4){
-            newchar = UARTCharGet(UART0_BASE);
-            //char newchar = UARTCharGetNonBlocking(UART0_BASE);
-            charBuf[count] = newchar;
-            count++;
-        }
-        UARTprintf("z\r\n");
-        UARTprintf("z\r\n");
-        // UARTCharPut(UART0_BASE, 'z');
-        break;
-    }
-
-}
-
-/*
- * Sets up menu
- *
- * Currently not being implemented
- */
-
-void menuInit(void){
-    uint8_t buffer[100]={};
-    sprintf(buffer,"\033[2J\r\nR2R Arm debugging \r\n");
-    uartSend((uint8_t *)buffer,100);
-    sprintf(buffer,"This is a test for the ADC\r\n");
-    uartSend((uint8_t *)buffer,100);
-    UARTprintf("R2R UART Menu interface\r\n");
-}
-
-/*
- * This function contains all the menu interactions with the user\
- *
- * Currently not being implemented
- */
-
-void menuOptions(uint8_t input){
-    // Generate menu here
-    menuHeader(input);
-
-    /*uint8_t next_input;
-    if (last_input == 'c'){
-        next_input = input;
-        input = 'c';
-    }
-    */
-    switch(input){
-    case 'm':
-        UARTprintf("a: Check set values \r\n");
-        UARTprintf("b: Set new values \r\n");
-        UARTprintf("c: More options \r\n");
-        UARTprintf("\r\nr: Start Arm \r\n");
-        break;
-    case 'a':
-        UARTprintf("Values for control: \r\n");
-        UARTprintf("%c %c %c %c",charBuf[0],charBuf[1],charBuf[2],charBuf[3]);
-        break;
-    case 'b':
-        UARTprintf("Please type in your input: \r\n");
-        int count = 0;
-        while (count<4){
-            char newchar = UARTCharGet(UART0_BASE);
-            //char newchar = UARTCharGetNonBlocking(UART0_BASE);
-            charBuf[count] = newchar;
-            count++;
-        }
-        UARTprintf("\r\nOkay. Values set \r\n");
-
-        //UARTprintf("You typed in %c",newchar);
-        //more_input = 1;
-        break;
-    case 'c':
-        UARTprintf("Type in more options: \r\n");
-        //switch(next_input){
-        //case 'a':
-          //  UARTprintf("Nested menu option \r\n");
-          //  input = 'a';
-          //  break;
-        //}
-        break;
-    default:
-        UARTprintf("Command not recognized!\r\n");
-        break;
-    }
-    last_input = input;
-
-}
-
-/*
- * Currently not being implemented
- */
-
-void processUserInput(void){
-    switch (user_select) {
-    case 'a': // do option 1
-        UARTprintf("Beginning loaded options:");
-        break;
-    case 'b': // do option 2
-        UARTprintf("Setting up constants kp, ki, kd:");
-        // process everything that is in the buffer
-        // error checking
-        break;
-    }
 
 
-}
+
 
 /*
  * Reads the temperature
