@@ -35,46 +35,50 @@ int main()
 
     // Init code
     r2rDefaultInit();
+    UARTprintf("Init complete.");
 
     // Interrupts
 
 
     // Infinite loop
 
-
     // Variables
     float eint = 0;
     float eprev = 0;
+
 
     while(1){
         sensorUpdate(); // updates encoders
 
         // PID control loop
-        float kp = 0;
-        float kd = 0;
-        float ki = 0;
+        float kp = 0.01;
+        float kd = 0.1;
+        float ki = 0.1;
 
-        float desired_angle = 0;
+        float desired_angle = 180;
         float current_angle = readMotor2Angle();
         float error = desired_angle - current_angle;
 
+        //UARTprintf("Desired_angle: %d \t Current Angle: %d\n",desired_angle,(int)current_angle);
+
         eint = eint+error;
         // Integration clamp
-        if(eint>100){
-            eint=100;
+        if(eint>300){
+            eint=300;
         }
-        else if(eint<-100){
-            eint=-100;
+        else if(eint<-300){
+            eint=-300;
         }
         float control = kp*error+kd*eprev+ki*eint;
         // Control signal clamp
-        if (control>100){
-            control = 100;
+        if (control>30){
+            control = 30;
         }
-        else if (control<-100){
-            control = -100;
+        else if (control<-30){
+            control = -30;
         }
-        motor2ControlPWM(control);
+        UARTprintf("Motor 2: %d \t Motor 2 angle: %d \t Motor 2 control: %d\n",readMotor2Raw(),(int)readMotor2Angle(),(int)control);
+        motor2ControlPWM((int)control);
         eprev=error;
 
 

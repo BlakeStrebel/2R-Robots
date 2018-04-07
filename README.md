@@ -26,6 +26,7 @@ This roadmap lists the tasks to do as the software architecture develops
 * GUI interface for PID control
 * Velocity PID control
 * Implement control law interface
+* Stopping code - motor spins very fast when loading new code at the moment
 * ~~Implement modifiable control law interface~~
 * ~~Implement sensor SPI interface~~
 * ~~Current sense code~~

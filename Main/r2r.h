@@ -16,6 +16,8 @@
  */
 extern void r2rDefaultInit(void);
 extern void sysInit(void);
+extern void motorInit(void);
+extern void motorDriverInit(void);
 extern void pwmInit(void);
 extern void gpioInit(void); // inits all unused GPIO
 extern void safetyCheck(void); //explicit function to test for end conditions
@@ -38,12 +40,16 @@ extern void processUserInput(void);
  * This section contains all the functions written to get the motor to work.
  * TODO: write function to set various PWM values
  */
-extern void motorInit(void);
-extern void motorPWM1(int pwmValue); //sets the motor PWM values
-extern void motorPWM2(int pwmValue);
+
+extern void motor1PWM(int pwmValue); //sets the motor PWM values
+extern void motor2PWM(int pwmValue);
 extern void motor2ControlPWM(int control);
 extern int motorError(void); // returns 50 on no error, 51 on motor 1 error, 52 on motor 2 error
 extern void encoderRead(void);
+extern float readMotor2Angle(void);
+extern float readMotor1Angle(void);
+extern int readMotor1Raw(void);
+extern int readMotor2Raw(void);
 
 /*
  * Control functions

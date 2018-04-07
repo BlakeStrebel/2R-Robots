@@ -74,11 +74,12 @@ uint32_t encoderVal[2];
 void r2rDefaultInit(void){
     sysInit(); // Init system clock and Master interrupt
     uartInit(); // Init UART communication
-    //spiInit(); // Init SPI communication for motor driver 1 and 2, and encoder 1, and encoder 2
-    //motorDriverInit(); // Send values to set up the motor for 1x PWM mode
+    spiInit(); // Init SPI communication for motor driver 1 and 2, and encoder 1, and encoder 2
+    motorInit(); // Set up PWM pins for motor driver, already includes pwmInit()
+    motorDriverInit(); // Send values to set up the motor for 1x PWM mode
     //pwmInit();
-    //adcInit(); // Init for current and temperture
-    //gpioInit(); // Init for general GPIO - set to input for safety
+    adcInit(); // Init for current and temperture
+    gpioInit(); // Init for general GPIO - set to input for safety
     //timerIntInit();
 
 }
@@ -300,13 +301,13 @@ void motor2ControlPWM(int control){
         // Positive direction
         GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_0,GPIO_PIN_0); // Set to HIGH  - forward
         GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_4,GPIO_PIN_4); // Set to HIGH - no braking
-        motorPWM2(control);
+        motor2PWM(control);
     }
     else if (control<0) {
         // Negative direction
         GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_0,0);
         GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_4,GPIO_PIN_4);
-        motorPWM2(-control);
+        motor2PWM(-1*control);
     }
     else {
         GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_0,0);
@@ -324,13 +325,13 @@ void motor2ControlPWM(int control){
  * motorDriverInit()
  */
 
-void motorPWM1(int pwmValue){
+void motor1PWM(int pwmValue){
     // assuming PWM has been initialized.
     PWMPulseWidthSet(PWM0_BASE, PWM_OUT_0,pwmValue);
 
 }
 
-void motorPWM2(int pwmValue){
+void motor2PWM(int pwmValue){
     // assuming PWM has been initialized.
     PWMPulseWidthSet(PWM0_BASE, PWM_OUT_2,pwmValue);
 }
@@ -349,10 +350,10 @@ int readMotor1Raw(void){
 }
 
 float readMotor1Angle(void){
-    return readMotor1Raw()/16383*360;
+    return ((float)readMotor1Raw()/16383.0)*360.0;
 }
 float readMotor2Angle(void){
-    return readMotor2Raw()/16383*360;
+    return ((float)readMotor2Raw()/16383.0)*360.0;
 }
 // TODO: include M_PI here
 float readMotor1Rad(void){
@@ -871,11 +872,7 @@ void spiInit(void){
  * TODO: Change PWM output pins
  */
 
-void pwmInit(void){
-    ;
-}
 
-/*
 void pwmInit(void){
     SysCtlPWMClockSet(SYSCTL_PWMDIV_1);
     // Enable the peripherals used by this program.
@@ -917,7 +914,7 @@ void pwmInit(void){
     PWMOutputState(PWM0_BASE, PWM_OUT_0_BIT | PWM_OUT_2_BIT , true);
     // PWMOutputState(PWM1_BASE, PWM_OUT_5_BIT | PWM_OUT_6_BIT | PWM_OUT_7_BIT, true);
 }
-*/
+
 
 /*
  * This function enables the ADC unit on the TM4C
