@@ -1,0 +1,159 @@
+\documentclass[letterpaper,12pt]{nuthesis}	% The nuthesis class is based on 
+				% amsbook.cls.
+				
+% List desired packages here. The following are example packages but not necesarilly needed. 
+\usepackage{graphicx} % for pdf, bitmapped graphics files
+\usepackage{enumerate}
+\usepackage{algorithm}
+\usepackage{amssymb}
+\usepackage{amsmath} % assumes amsmath package installed
+\usepackage{amsthm}
+\usepackage{color}
+\usepackage{blindtext}
+
+% Macros
+% Define macros here to be used in the documents
+\newcommand{\sgn}{\operatorname{sgn}} % defining the sgn function. 
+\newcommand{\trans}{^{\sf T}} % Transpose shortcut
+\newcommand{\real}{\mathbb{R}} % Real number shortcut
+
+% Location of figure files
+\graphicspath{ {figures/} }
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% DATA OF AUTHOR AND DISSERTATION %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\author{FirstName LastName}
+\title{Thesis Template Title}
+\graduationmonth{July}
+\graduationyear{2017}
+%\degree{DOCTOR OF PHILOSOPHY}  % Default: DOCTOR OF PHILOSOPHY
+%\field{Mathematics}            % Default: Mathematics
+%\graduationmonth{June}         % The default is June or December
+%\graduationyear{2003}          % Default: current year.
+%\includeonly{chap1,chap2,...}
+%\includeonly{chapters/sliding-chapter,chapters/experiment-chapter}
+\begin{document}
+%	
+%	THE BODY OF YOUR THESIS STARTS HERE
+%
+
+%%%%%%%%%%%%%%%%%%%%%%
+% Some initial stuff %
+%%%%%%%%%%%%%%%%%%%%%%
+
+\frontmatter		% Preliminary pages start here.
+\maketitle		% Produces the title page.
+%\copyrightpage		% Creates the copyright page.
+%\acknowledgements	% Acknowledgements (optional).
+
+%%%%%%%%%%%%%%%%%%%%%%
+% Preface (optional).
+%%%%%%%%%%%%%%%%%%%%%%
+\preface		
+
+	This is a template for an NU masters thesis. You can include references to chapters such a Chapter~\ref{chapter-1} and Chapter~\ref{chapter-2}.
+	
+	You can also reference sections such as Section~\ref{ch1-sec:background} and cite articles such as this one by LastName \cite{LastName2017}.
+	
+	The main text is written in shorter LaTeX documents for clarity. There are some sections such as abstract, table of contents, list of tables, and list of figures sections that can be included as well by uncommenting them. 
+	
+
+%%%%%%%%%%%%%%%%%%%%%%
+% Abstract%
+%%%%%%%%%%%%%%%%%%%%%%
+%\abstract		% Abstract.
+%This is the abstract.
+
+%%%%%%%%%%%%%%%%%%%%%%
+% Table of contents%
+%%%%%%%%%%%%%%%%%%%%%%
+\clearpage\phantomsection % needed for the hyperlinks to work correctly
+\tableofcontents	% Table of Contents will be automatically generated and placed here.
+
+%%%%%%%%%%%%%%%%%%%%%%
+% List of tables%
+%%%%%%%%%%%%%%%%%%%%%%
+%\clearpage\phantomsection % needed for the hyperlinks to work correctly
+%\listoftables		% List of Tables and List of Figures will be placed
+
+%%%%%%%%%%%%%%%%%%%%%%
+% List of figures%
+%%%%%%%%%%%%%%%%%%%%%%
+%\clearpage\phantomsection % needed for the hyperlinks to work correctly
+%\listoffigures		% here, if applicable (optional).
+
+\mainmatter             % Actual text starts here.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Actual text starts here %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\singlespacing 
+
+This manual serves to document the features in the R2R Arm. This document also covers the Code Composer Studio (CCS) library that is specifically written for the arm.
+
+% You can write the chapters in separate latex documents for clarity
+\include{chapters/chapter-1}
+\include{chapters/chapter-2}
+
+To get started quickly using the default values, use the function:
+
+\begin{lstlisting}[language=C]
+r2rDefaultInit();
+\end{lstlisting}
+
+This function will set up the motor and encoders using SPI as well as the appropriate output for each pin. It then configures UART to talk to MATLAB using 8-N-1 and baud rate of 115200. In the case that the default values need to be changed, under `r2rDefaultInit()`, the initilization code is further broken down to initializations of each peripheral:
+
+\begin{itemize}
+	\item `sysInit()`
+	`sysInit()` initializes the system clock and the Master interrupt flag.
+
+	\item `uartInit()`
+	`uartInit()` initializes the UART for 8-N-1 mode with a baud rate of 115200. It also configures for UART functions like `UARTprintf`.
+
+	\item `spiInit()`
+	`spiInit()` initializes the SPI on SSI0, SSI1, and SSI2 for the motor and two encoders.
+
+	\item `motorInit()`
+	`motorInit()` initializes the DIRECTION, ENABLE, and BRAKE pins.
+
+	\item `motorDriverInit()`
+	`motorDriverInit()` configures the motor drivers for 1xPWM operation.
+
+	\item `pwmInit()`
+	`pwmInit()` configures the pins for PWM control of the motor driver.
+
+	\item `adcInit()`
+	`adcInit()` configures the pins for ADC capture for current and temperature sensors
+
+	\item `gpioInit()`
+	`gpioInit()` sets up all other pins that are unused in high-Z (input) mode.
+
+	\item `timerIntInit()`
+	`timerIntInit()` sets up Timer B0 for timer interrupts.
+\end{itemize}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Bibliography%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ \renewcommand\refname{\begin{centering}References\end{centering}}
+ \bibliography{bibtex-example} % name of bibtex file
+ \bibliographystyle{acm} %or another suitable style.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Appendix%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\appendix		% Appendix begins here (optional).
+\include{appendix/appendix}
+%\appendices	        % If more than one appendix chapters,
+				% use appendices instead of appendix
+				
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Vita%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\begin{vita}                    % Vita (optional).
+%\end{vita}
+\end{document}
+
