@@ -22,10 +22,38 @@
 #include "driverlib/i2c.h"
 #include "driverlib/sysctl.h"
 #include "driverlib/pwm.h"
+#include "driverlib/timer.h"
 #include "driverlib/uart.h"
 #include "utils/uartstdio.h"
 #include "utils/uartstdio.c"
 #include "r2r.h"
+
+// Variables
+uint32_t ledFlag = 1;
+
+// Interrupts
+// Update the STARTUP_CCS.C file when adding new interrupts!
+
+void
+Timer0IntHandler(void)
+{
+    //
+    // Clear the timer interrupt.
+    //
+    TimerIntClear(TIMER0_BASE, TIMER_TIMB_TIMEOUT);
+
+    //
+    // Toggle the flag for the first timer.
+    //
+    ledFlag ^= 1;
+
+    //
+    // Use the flags to Toggle the LED for this timer
+    //
+    GPIOPinWrite(GPIO_PORTN_BASE, GPIO_PIN_0, ledFlag);
+
+}
+
 
 
 

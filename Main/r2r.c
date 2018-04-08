@@ -30,6 +30,7 @@
 #include "driverlib/rom.h"
 #include "driverlib/rom_map.h"
 #include "driverlib/debug.h"
+#include "driverlib/timer.h"
 #include "driverlib/interrupt.h"
 #include "driverlib/i2c.h"
 #include "driverlib/uart.h"
@@ -80,7 +81,7 @@ void r2rDefaultInit(void){
     //pwmInit();
     adcInit(); // Init for current and temperture
     gpioInit(); // Init for general GPIO - set to input for safety
-    //timerIntInit();
+    timerIntInit();
 
 }
 
@@ -132,6 +133,26 @@ void sensorUpdate(void){
     encoderRead();
 }
 
+
+
+/*
+ * This function sets up the timer interrupt
+ *
+ * Comes after:
+ * - sysInit()
+ */
+void timerIntInit(void){
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_TIMER0); // Use timer 0
+    TimerConfigure(TIMER0_BASE, TIMER_CFG_PERIODIC);
+    TimerLoadSet(TIMER0_BASE, TIMER_B, ui32SysClock/4); // Use timer B // activate every 1/2 of a second 120/120/2 = 0.5s
+    IntEnable(INT_TIMER0B);
+    TimerIntEnable(TIMER0_BASE, TIMER_TIMB_TIMEOUT);
+    TimerEnable(TIMER0_BASE, TIMER_B);
+    // TODO: GPIO is just for blinking purposes on the EK-TM4C129
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPION);
+    GPIOPinTypeGPIOOutput(GPIO_PORTN_BASE, GPIO_PIN_0); // LED PN0
+    GPIOPinWrite(GPIO_PORTN_BASE,GPIO_PIN_0,GPIO_PIN_0); // Turn on the damn thing
+}
 
 /*
  *  This function sets up all the GPIO pins for unused and other pins that are used in other functions.

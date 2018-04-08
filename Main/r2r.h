@@ -19,6 +19,7 @@ extern void sysInit(void);
 extern void motorInit(void);
 extern void motorDriverInit(void);
 extern void pwmInit(void);
+extern void timerIntInit(void);
 extern void gpioInit(void); // inits all unused GPIO
 extern void safetyCheck(void); //explicit function to test for end conditions
 extern void delayMS(int ms); // stops processor for a given amount of time in ms, this is approximate
