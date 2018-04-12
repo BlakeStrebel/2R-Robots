@@ -1,4 +1,4 @@
-function writefloats(s, array)
+function writeArray(s, array)
 % This is a function writting a float array into the serial.
 % Input:
 % s: a serial port.
