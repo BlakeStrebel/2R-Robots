@@ -155,7 +155,7 @@ int main()
     //UARTprintf("Init complete.");
 
     // Interrupts
-<<<<<<< HEAD
+
     int numcount = 0;
     while(numcount<1000000){
         motor2ControlPWM(50);
@@ -165,12 +165,11 @@ int main()
         motor2PWM(1);
     }
 
-=======
 
    for (i = 0; i < 2000; i++){
        recev[i] = 0;
    }
->>>>>>> 6190cf45c1e3f5f3642c9de660cfffedaf1b0917
+
     // Infinite loop
 
    i = 0;
