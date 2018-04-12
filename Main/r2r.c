@@ -81,7 +81,7 @@ void r2rDefaultInit(void){
     //pwmInit();
     adcInit(); // Init for current and temperture
     gpioInit(); // Init for general GPIO - set to input for safety
-    timerIntInit();
+    //timerIntInit();
 
 }
 
@@ -142,12 +142,12 @@ void sensorUpdate(void){
  * - sysInit()
  */
 void timerIntInit(void){
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_TIMER0); // Use timer 0
-    TimerConfigure(TIMER0_BASE, TIMER_CFG_PERIODIC);
-    TimerLoadSet(TIMER0_BASE, TIMER_B, ui32SysClock/4); // Use timer B // activate every 1/2 of a second 120/120/2 = 0.5s
-    IntEnable(INT_TIMER0B);
-    TimerIntEnable(TIMER0_BASE, TIMER_TIMB_TIMEOUT);
-    TimerEnable(TIMER0_BASE, TIMER_B);
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_TIMER1); // Use timer 1
+    TimerConfigure(TIMER1_BASE, TIMER_CFG_PERIODIC);
+    TimerLoadSet(TIMER1_BASE, TIMER_A, ui32SysClock/4); // Use timer B // activate every 1/2 of a second 120/120/2 = 0.5s
+    IntEnable(INT_TIMER1A);
+    TimerIntEnable(TIMER1_BASE, TIMER_TIMA_TIMEOUT);
+    TimerEnable(TIMER1_BASE, TIMER_A);
     // TODO: GPIO is just for blinking purposes on the EK-TM4C129
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPION);
     GPIOPinTypeGPIOOutput(GPIO_PORTN_BASE, GPIO_PIN_0); // LED PN0
@@ -163,7 +163,9 @@ void timerIntInit(void){
 void gpioInit(void){
     // Unused pins, enable and set to inputs
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOP);
-    GPIOPinTypeGPIOInput(GPIO_PORTP_BASE, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3);
+    GPIOPinTypeGPIOInput(GPIO_PORTP_BASE, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2);
+    GPIOPinTypeGPIOOutput(GPIO_PORTP_BASE,GPIO_PIN_3);
+    GPIOPinWrite(GPIO_PORTP_BASE,GPIO_PIN_3,GPIO_PIN_3);
 
 }
 
@@ -258,6 +260,7 @@ void motorInit(void){
        SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOK);
        SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOJ);
        GPIOPinTypeGPIOOutput(GPIO_PORTK_BASE, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3 | GPIO_PIN_4 | GPIO_PIN_5);
+
        // GPIOPinWrite(GPIO_PORTF_BASE, RED_LED|BLUE_LED|GREEN_LED, ledTable[i]);
        // Pulled low on motor fault PK6:1, PK7: 2
        GPIOPinTypeGPIOInput(GPIO_PORTK_BASE, GPIO_PIN_6 | GPIO_PIN_7);
@@ -267,7 +270,8 @@ void motorInit(void){
        //set directions
        GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_0 | GPIO_PIN_2 , GPIO_PIN_0+GPIO_PIN_2);
        // turn on
-       GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_1 |  GPIO_PIN_3 , GPIO_PIN_1+ GPIO_PIN_3);
+       GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_1 |  GPIO_PIN_3 , GPIO_PIN_3+GPIO_PIN_1);
+
 
 
        GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_0,GPIO_PIN_0); // dir for motor 2, set to forward

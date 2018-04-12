@@ -40,17 +40,26 @@ Timer0IntHandler(void)
     //
     // Clear the timer interrupt.
     //
-    TimerIntClear(TIMER0_BASE, TIMER_TIMB_TIMEOUT);
+    TimerIntClear(TIMER1_BASE, TIMER_TIMA_TIMEOUT);
 
     //
     // Toggle the flag for the first timer.
     //
-    ledFlag ^= 1;
+    //ledFlag ^= 1;
+    if (ledFlag==1){
+        GPIOPinWrite(GPIO_PORTN_BASE, GPIO_PIN_0,0);
+        ledFlag=0;
+    }
+    else {
+        GPIOPinWrite(GPIO_PORTN_BASE, GPIO_PIN_0,  GPIO_PIN_0);
+        ledFlag=1;
+    }
+
 
     //
     // Use the flags to Toggle the LED for this timer
     //
-    GPIOPinWrite(GPIO_PORTN_BASE, GPIO_PIN_0, ledFlag);
+
 
 }
 
@@ -66,7 +75,14 @@ int main()
     UARTprintf("Init complete.");
 
     // Interrupts
-
+    int numcount = 0;
+    while(numcount<1000000){
+        motor2ControlPWM(50);
+        numcount++;
+    }
+    while(1){
+        motor2PWM(1);
+    }
 
     // Infinite loop
 
