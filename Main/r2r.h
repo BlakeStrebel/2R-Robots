@@ -51,6 +51,7 @@ extern float readMotor2Angle(void);
 extern float readMotor1Angle(void);
 extern int readMotor1Raw(void);
 extern int readMotor2Raw(void);
+extern uint32_t readMotor2RawRelative(void);
 
 /*
  * Control functions

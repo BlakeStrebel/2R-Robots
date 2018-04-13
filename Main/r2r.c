@@ -41,6 +41,10 @@
 
 #include "r2r.h"
 
+// DEBUG flag
+// 1 = DEBUG mode, 0 = not DEBUGGING
+int r2rdebug = 0;
+
 uint32_t adcArray[4]={0};
 
 
@@ -66,7 +70,8 @@ uint32_t encoderVal[2];
 
 // Global angle
 uint32_t globalAngle1;
-
+uint32_t modifier=0;
+uint32_t last_motor_2_angle = 0;
 
 
 /*
@@ -395,6 +400,33 @@ int readMotor1Update(void){
         globalAngle1 = globalAngle1;
     }
 }
+/*
+ * This function converts the absolute encoder into a relative encoder
+ *
+ * Comes after:
+ * sensorUpdate();
+ *
+ * Uses globals:
+ * modifier
+ * last_motor_2_angle
+ *
+ * TODO: CHANGE RANDOM 4000 value
+ */
+
+uint32_t readMotor2RawRelative(void){
+    int angle_gap = readMotor2Raw() - last_motor_2_angle;
+    if (angle_gap>4000){
+        modifier = modifier - 16383;
+    }
+    else if (angle_gap<-4000){
+        modifier = modifier + 16383;
+    }
+    int relative_angle = readMotor2Raw()+modifier;
+    last_motor_2_angle = readMotor2Raw();
+    return relative_angle;
+
+
+}
 
 int readMotor2Raw(void){
     return encoderVal[1];
@@ -714,23 +746,33 @@ void uartInit(void){
     //
     SysCtlPeripheralEnable(SYSCTL_PERIPH_UART0);
 
-    //
-    // Use the internal 16MHz oscillator as the UART clock source.
-    //
-    //UARTClockSourceSet(UART0_BASE, UART_CLOCK_PIOSC);
 
-    //
-    // Select the alternate (UART) function for these pins.
-    //
-    GPIOPinTypeUART(GPIO_PORTA_BASE, GPIO_PIN_0 | GPIO_PIN_1);
+    if(r2rdebug==1){
+        //
+        // Use the internal 16MHz oscillator as the UART clock source.
+        //
 
-    //
-    // Initialize the UART for console I/O.
-    //
-    //UARTStdioConfig(0, 115200, 16000000);
-    UARTConfigSetExpClk(UART0_BASE, ui32SysClock, 115200,
-                            (UART_CONFIG_WLEN_8 | UART_CONFIG_STOP_ONE |
-                             UART_CONFIG_PAR_NONE));
+        UARTClockSourceSet(UART0_BASE, UART_CLOCK_PIOSC);
+
+        //
+        // Select the alternate (UART) function for these pins.
+        //
+        GPIOPinTypeUART(GPIO_PORTA_BASE, GPIO_PIN_0 | GPIO_PIN_1);
+
+        //
+        // Initialize the UART for console I/O.
+        //
+        UARTStdioConfig(0, 115200, 16000000);
+    }
+    else{
+
+        GPIOPinTypeUART(GPIO_PORTA_BASE, GPIO_PIN_0 | GPIO_PIN_1);
+
+        UARTConfigSetExpClk(UART0_BASE, ui32SysClock, 115200,
+                                (UART_CONFIG_WLEN_8 | UART_CONFIG_STOP_ONE |
+                                 UART_CONFIG_PAR_NONE));
+    }
+
 
 }
 
