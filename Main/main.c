@@ -161,9 +161,8 @@ int main()
         motor2ControlPWM(50);
         numcount++;
     }
-    while(1){
-        motor2PWM(1);
-    }
+    motor2PWM(1);
+
 
 
    for (i = 0; i < 2000; i++){
@@ -194,12 +193,14 @@ int main()
 
         }
         if (i == 500){
+            motor2PWM(1);
             GPIOPinWrite(GPIO_PORTP_BASE, GPIO_PIN_0, 1);
             array = &data;
             for (i = 0; i < 500 * 4; i++){
-                ROM_UARTCharPut(UART0_BASE, *array++);
+                UARTCharPut(UART0_BASE, *array++);
             }
         }
+
 
 
 

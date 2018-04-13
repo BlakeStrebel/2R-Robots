@@ -64,6 +64,9 @@ uint32_t ui32Index2;
 // Array to store encoder data
 uint32_t encoderVal[2];
 
+// Global angle
+uint32_t globalAngle1;
+
 
 
 /*
@@ -81,7 +84,7 @@ void r2rDefaultInit(void){
     //pwmInit();
     adcInit(); // Init for current and temperture
     gpioInit(); // Init for general GPIO - set to input for safety
-    //timerIntInit();
+    timerIntInit();
 
 }
 
@@ -129,7 +132,7 @@ void safetyCheck(void){
  * TODO: Add sensor functions, add interrupts
  */
 void sensorUpdate(void){
-    //adcRead();
+    adcRead();
     encoderRead();
 }
 
@@ -140,11 +143,11 @@ void sensorUpdate(void){
  *
  * Comes after:
  * - sysInit()
-
+ */
 void timerIntInit(void){
     SysCtlPeripheralEnable(SYSCTL_PERIPH_TIMER1); // Use timer 1
     TimerConfigure(TIMER1_BASE, TIMER_CFG_PERIODIC);
-    TimerLoadSet(TIMER1_BASE, TIMER_A, ui32SysClock/4); // Use timer B // activate every 1/2 of a second 120/120/2 = 0.5s
+    TimerLoadSet(TIMER1_BASE, TIMER_A, ui32SysClock/100); // Use timer B // activate every 1/2 of a second 120/120/2 = 0.5s
     IntEnable(INT_TIMER1A);
     TimerIntEnable(TIMER1_BASE, TIMER_TIMA_TIMEOUT);
     TimerEnable(TIMER1_BASE, TIMER_A);
@@ -152,57 +155,8 @@ void timerIntInit(void){
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPION);
     GPIOPinTypeGPIOOutput(GPIO_PORTN_BASE, GPIO_PIN_0); // LED PN0
     GPIOPinWrite(GPIO_PORTN_BASE,GPIO_PIN_0,GPIO_PIN_0); // Turn on the damn thing
-}
- */
-void timerIntInit(void){               // Set the clocking to run directly from the crystal at 120MHz.  So we need to decide the sysclock, maybe the largest
-    //
-    // Enable processor interrupts.
-    //
-    IntMasterEnable();
-
-    //
-    // Enable the peripherals used by this example.
-    //
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_TIMER1);              //Not sure if we can use timer0 or timer1
-
-    //
-    // Configure the 32-bit periodic timer.
-    //
-    TimerConfigure(TIMER1_BASE, TIMER_CFG_PERIODIC);
-    TimerLoadSet(TIMER1_BASE, TIMER_A, ui32SysClock/100);    //should be one second /100
-
-    //
-    // Setup the interrupts for the timer timeouts.
-    //
-    IntEnable(INT_TIMER1A);
-    TimerIntEnable(TIMER1_BASE, TIMER_TIMA_TIMEOUT);
-
-    //
-    // Enable the timers.
-    //
-    TimerEnable(TIMER1_BASE, TIMER_A);
-
-
-    //test
-    //
-    // Enable the GPIO port that is used for the on-board LEDs.
-    //
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOP);
-
-    //
-    // Enable the GPIO pins for the LEDs (PN0 & PN1).
-    //
-    GPIOPinTypeGPIOOutput(GPIO_PORTP_BASE, GPIO_PIN_0);
-
-    //
-    // Disable processor interrupts.
-    //
     IntMasterDisable();
 }
-
-
-
-
 
 /*
  *  This function sets up all the GPIO pins for unused and other pins that are used in other functions.
@@ -385,7 +339,6 @@ void motor2ControlPWM(int control){
         motor2PWM(-1*control);
     }
     else {
-        motor2PWM(1);
         GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_0,0);
         GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_4,0); // Set brake pin to low, brake!
     }
@@ -418,6 +371,31 @@ void motor2PWM(int pwmValue){
  * Comes after:
  * sensorUpdate()
  */
+
+int angleFix(int curr_angle){
+    int output_angle = 0;
+    if ((curr_angle<90) || (curr_angle>270)){
+        output_angle = curr_angle - 180;
+
+    }
+    else {
+        output_angle = curr_angle;
+    }
+    return output_angle;
+
+}
+
+int readMotor1Update(void){
+    int region_2_flag =0;
+    int last_angle;
+    int curr_angle = readMotor1Angle();
+    int angle_change = curr_angle - last_angle;
+    if (curr_angle>90){
+        region_2_flag = 1;
+        globalAngle1 = globalAngle1;
+    }
+}
+
 int readMotor2Raw(void){
     return encoderVal[1];
 }
@@ -718,37 +696,42 @@ void PIDCurrUpdate(void){
  * It is set up for 115200 baud 8N1. To send numbers and characters use
  * UARTprintf.
  */
-void uartInit(void){   //There will be only UART0 and not interrupt
-     //
-     // Enable the GPIO Peripheral used by the UART.
-     //
-     ROM_SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOA);
+void uartInit(void){
+    //
+    // Enable GPIO port A which is used for UART0 pins.
+    //
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOA);
 
-     //
-     // Enable UART0.
-     //
-     ROM_SysCtlPeripheralEnable(SYSCTL_PERIPH_UART0);
+    //
+    // Configure the pin muxing for UART0 functions on port A0 and A1.
+    // This step is not necessary if your part does not support pin muxing.
+    //
+    GPIOPinConfigure(GPIO_PA0_U0RX);
+    GPIOPinConfigure(GPIO_PA1_U0TX);
 
-     //
-     // Configure the GPIO pin muxing for the UART function.
-     //
-     GPIOPinConfigure(GPIO_PA0_U0RX);
-     GPIOPinConfigure(GPIO_PA1_U0TX);
+    //
+    // Enable UART0 so that we can configure the clock.
+    //
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_UART0);
 
-     //
-     // Since GPIO A0 and A1 are used for the UART function, they must be
-     // configured for use as a peripheral function (instead of GPIO).
-     //
-     GPIOPinTypeUART(GPIO_PORTA_BASE, GPIO_PIN_0 | GPIO_PIN_1);
-     //
-     // Configure the UART for 115,200, 8-N-1 operation.
-     // This function uses ui32SysClock to get the system clock
-     // frequency.  This could be also be a variable or hard coded value
-     // instead of a function call.                                              What does that mean?
-     //
-     UARTConfigSetExpClk(UART0_BASE, ui32SysClock, 115200,
-                         (UART_CONFIG_WLEN_8 | UART_CONFIG_STOP_ONE |
-                          UART_CONFIG_PAR_NONE));
+    //
+    // Use the internal 16MHz oscillator as the UART clock source.
+    //
+    //UARTClockSourceSet(UART0_BASE, UART_CLOCK_PIOSC);
+
+    //
+    // Select the alternate (UART) function for these pins.
+    //
+    GPIOPinTypeUART(GPIO_PORTA_BASE, GPIO_PIN_0 | GPIO_PIN_1);
+
+    //
+    // Initialize the UART for console I/O.
+    //
+    //UARTStdioConfig(0, 115200, 16000000);
+    UARTConfigSetExpClk(UART0_BASE, ui32SysClock, 115200,
+                            (UART_CONFIG_WLEN_8 | UART_CONFIG_STOP_ONE |
+                             UART_CONFIG_PAR_NONE));
+
 }
 
 
