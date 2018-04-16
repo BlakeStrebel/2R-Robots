@@ -35,7 +35,7 @@
 #include "driverlib/i2c.h"
 #include "driverlib/uart.h"
 #include "driverlib/sysctl.h"
-#include "utils/uartstdio.h"
+#include "utils/uartstdio.c"
 
 
 
@@ -390,16 +390,7 @@ int angleFix(int curr_angle){
 
 }
 
-int readMotor1Update(void){
-    int region_2_flag =0;
-    int last_angle;
-    int curr_angle = readMotor1Angle();
-    int angle_change = curr_angle - last_angle;
-    if (curr_angle>90){
-        region_2_flag = 1;
-        globalAngle1 = globalAngle1;
-    }
-}
+
 /*
  * This function converts the absolute encoder into a relative encoder
  *
@@ -903,6 +894,8 @@ void spiInit(void){
     // Motor 2
     GPIOPinTypeGPIOOutput(GPIO_PORTL_BASE,GPIO_PIN_3); // CS
     GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_3,GPIO_PIN_3); //Set CS to HIGH
+    //GPIOPinTypeGPIOOutput(GPIO_PORTA_BASE,GPIO_PIN_6); // CS
+    //GPIOPinWrite(GPIO_PORTA_BASE,GPIO_PIN_6,GPIO_PIN_6); //Set CS to HIGH
 
     // encoder 1
     GPIOPinTypeSSI(GPIO_PORTA_BASE, GPIO_PIN_4 | GPIO_PIN_5); // MOSI/MISO
