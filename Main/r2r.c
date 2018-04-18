@@ -263,13 +263,16 @@ void encoderRead(void){
  */
 
 void motorInit(void){
-    // Setting up motor driver pins, directions PK0:1, PK2:2
-       // Motor enable pins, PK1: 1, PK3: 2
-       // Motor brake pins, PK4: 1, PK5: 2
+       // Setting up motor driver pins,
+       // Motor direction pins, PK0 (motor 1), PK2 (motor 2)
+       // Motor enable pins, PK1 (motor 1), PK3 (motor 2)
+       // Motor brake pins, PP4 (motor 1), PP5: 2 (motor 2)
+       //
        SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOK);
        SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOJ);
+       SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOP);
        GPIOPinTypeGPIOOutput(GPIO_PORTK_BASE, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3 | GPIO_PIN_4 | GPIO_PIN_5);
-
+       GPIOPinTypeGPIOOutput(GPIO_PORTP_BASE, GPIO_PIN_4 | GPIO_PIN_5);
        // GPIOPinWrite(GPIO_PORTF_BASE, RED_LED|BLUE_LED|GREEN_LED, ledTable[i]);
        // Pulled low on motor fault PK6:1, PK7: 2
        GPIOPinTypeGPIOInput(GPIO_PORTK_BASE, GPIO_PIN_6 | GPIO_PIN_7);
@@ -281,11 +284,11 @@ void motorInit(void){
        // turn on
        GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_1 |  GPIO_PIN_3 , GPIO_PIN_3+GPIO_PIN_1);
 
+       GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_0,GPIO_PIN_0); // dir for motor 1, set to forward
+       GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_2,GPIO_PIN_2); // dir for motor 2, set to forward
 
-
-       GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_0,GPIO_PIN_0); // dir for motor 2, set to forward
-       GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_4,GPIO_PIN_4); // brake for motor 2, set HIGH so no braking
-
+       GPIOPinWrite(GPIO_PORTP_BASE,GPIO_PIN_4,GPIO_PIN_4); // brake for motor 1, set HIGH so no braking
+       GPIOPinWrite(GPIO_PORTP_BASE,GPIO_PIN_5,GPIO_PIN_5); // brake for motor 2
 }
 
 /*
@@ -324,28 +327,75 @@ void motorDriverInit(void){
    //SysCtlDelay(1000);
    SysCtlDelay(1000);
    // Done
+   // Repeat for motor 2
+   while(SSIDataGetNonBlocking(SSI2_BASE, &pui32DataRx[0])){
+      }
+      pui32DataTx[0] = 0b1001000000000000; // read register 3
+      pui32DataTx[1] = 0b0001000001000000; // set register 3, bit 6 and 5 to 10, option 3, 1x PWM mode
+      pui32DataTx[2]=  0b1001000000000000; // read register 3
+      //
+      // Send 3 bytes of data.
+      //
+      GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_3,0x00);
+      SysCtlDelay(1);
+      for(ui32Index = 0; ui32Index < NUM_SSI_DATA; ui32Index++){
+          GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_3,0x00); // Pull CS pin low
+          SysCtlDelay(1);
+          SSIDataPut(SSI2_BASE, pui32DataTx[ui32Index]); // Send data
+          SysCtlDelay(1000); // wait (at least 50ns)
+          GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_3,GPIO_PIN_3); // Being the CS pin high
+          SSIDataGet(SSI2_BASE, &pui32DataRx[ui32Index]); // Get the data
+      }
+      while(SSIBusy(SSI2_BASE)){
+      }
+
+      GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_3,GPIO_PIN_3); // Make sure the pin is high
+      //SysCtlDelay(1000);
+      SysCtlDelay(1000);
+      // Done
+
 }
 
 /*
  * Wrapper function that takes in a control signal for the 1xPWM mode
  * if control is zero = brake!
  */
-void motor2ControlPWM(int control){
+void motor1ControlPWM(int control){
     if (control>0){
         // Positive direction
         GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_0,GPIO_PIN_0); // Set to HIGH  - forward
-        GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_4,GPIO_PIN_4); // Set to HIGH - no braking
+        GPIOPinWrite(GPIO_PORTP_BASE,GPIO_PIN_4,GPIO_PIN_4); // Set to HIGH - no braking
         motor2PWM(control);
     }
     else if (control<0) {
         // Negative direction
         GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_0,0);
-        GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_4,GPIO_PIN_4);
+        GPIOPinWrite(GPIO_PORTP_BASE,GPIO_PIN_4,GPIO_PIN_4);
         motor2PWM(-1*control);
     }
     else {
         GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_0,0);
-        GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_4,0); // Set brake pin to low, brake!
+        GPIOPinWrite(GPIO_PORTP_BASE,GPIO_PIN_4,0); // Set brake pin to low, brake!
+    }
+}
+
+
+void motor2ControlPWM(int control){
+    if (control>0){
+        // Positive direction
+        GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_2,GPIO_PIN_2); // Set to HIGH  - forward
+        GPIOPinWrite(GPIO_PORTP_BASE,GPIO_PIN_5,GPIO_PIN_5); // Set to HIGH - no braking
+        motor2PWM(control);
+    }
+    else if (control<0) {
+        // Negative direction
+        GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_2,0);
+        GPIOPinWrite(GPIO_PORTP_BASE,GPIO_PIN_5,GPIO_PIN_5);
+        motor2PWM(-1*control);
+    }
+    else {
+        GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_2,0);
+        GPIOPinWrite(GPIO_PORTP_BASE,GPIO_PIN_5,0); // Set brake pin to low, brake!
     }
 }
 
@@ -358,16 +408,16 @@ void motor2ControlPWM(int control){
  * spiInit()
  * motorDriverInit()
  */
-
+// PF0
 void motor1PWM(int pwmValue){
     // assuming PWM has been initialized.
     PWMPulseWidthSet(PWM0_BASE, PWM_OUT_0,pwmValue);
 
 }
-
+// PG0
 void motor2PWM(int pwmValue){
     // assuming PWM has been initialized.
-    PWMPulseWidthSet(PWM0_BASE, PWM_OUT_2,pwmValue);
+    PWMPulseWidthSet(PWM0_BASE, PWM_OUT_4,pwmValue);
 }
 
 /*
@@ -961,29 +1011,32 @@ void spiInit(void){
 
 /*
  * This function sets up the pwm on pins PF1,PF2,PF3 which are avaliable on the TM4C123 Launchpad as RGB outputs.
- * TODO: Change PWM output pins
+ *
  */
 
-
+// PF0 is PWM motor 1
+// PG0 is PWM motor 2
 void pwmInit(void){
     SysCtlPWMClockSet(SYSCTL_PWMDIV_1);
     // Enable the peripherals used by this program.
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOF);
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOG);
     // SysCtlPeripheralEnable(SYSCTL_PERIPH_PWM1);  //The Tiva Launchpad 123 has two modules (0 and 1). Module 1 covers the LED pins
     SysCtlPeripheralEnable(SYSCTL_PERIPH_PWM0);  //The Tiva Launchpad 129 has one modules (0). Module 0 covers the motor pins
     //Configure PF0,PF2 Pins as PWM, note 129 M0, but 123 M1
     GPIOPinConfigure(GPIO_PF0_M0PWM0);
-    GPIOPinConfigure(GPIO_PF2_M0PWM2);
+    GPIOPinConfigure(GPIO_PG0_M0PWM4);
     //GPIOPinConfigure(GPIO_PF0_M1PWM4);
     //GPIOPinConfigure(GPIO_PF1_M1PWM6);
     //GPIOPinConfigure(GPIO_PF3_M1PWM7);
-    GPIOPinTypePWM(GPIO_PORTF_BASE, GPIO_PIN_0 | GPIO_PIN_2);
+    GPIOPinTypePWM(GPIO_PORTF_BASE, GPIO_PIN_0);
+    GPIOPinTypePWM(GPIO_PORTG_BASE, GPIO_PIN_0);
     // GPIOPinTypePWM(GPIO_PORTF_BASE, GPIO_PIN_0 | GPIO_PIN_2 | GPIO_PIN_3);
     //Configure PWM Options
     //PWM_GEN_2 Covers M1PWM4 and M1PWM5
     //PWM_GEN_3 Covers M1PWM6 and M1PWM7 See page 207 4/11/13 DriverLib doc
     PWMGenConfigure(PWM0_BASE, PWM_GEN_0, PWM_GEN_MODE_DOWN | PWM_GEN_MODE_NO_SYNC);
-    PWMGenConfigure(PWM0_BASE, PWM_GEN_1, PWM_GEN_MODE_DOWN | PWM_GEN_MODE_NO_SYNC);
+    PWMGenConfigure(PWM0_BASE, PWM_GEN_2, PWM_GEN_MODE_DOWN | PWM_GEN_MODE_NO_SYNC);
     // PWMGenConfigure(PWM1_BASE, PWM_GEN_2, PWM_GEN_MODE_DOWN | PWM_GEN_MODE_NO_SYNC);
     // PWMGenConfigure(PWM1_BASE, PWM_GEN_3, PWM_GEN_MODE_DOWN | PWM_GEN_MODE_NO_SYNC);
     // Set the Period (expressed in clock ticks)
@@ -994,16 +1047,16 @@ void pwmInit(void){
     // In this case you get: (1 / 12500  Hz) * 4MHz = 320 cycles.  Note that
     // the maximum period you can set is 2^16 - 1.
     PWMGenPeriodSet(PWM0_BASE, PWM_GEN_0, 320); // PF0
-    PWMGenPeriodSet(PWM0_BASE, PWM_GEN_1, 320); // PF2
+    PWMGenPeriodSet(PWM0_BASE, PWM_GEN_2, 320); // PG0
     //Set PWM duty-50% (Period /2)
     PWMPulseWidthSet(PWM0_BASE, PWM_OUT_0,0);
-    PWMPulseWidthSet(PWM0_BASE, PWM_OUT_2,0);
+    PWMPulseWidthSet(PWM0_BASE, PWM_OUT_4,0);
     // PWMPulseWidthSet(PWM1_BASE, PWM_OUT_7,0);
     // Enable the PWM generator
     PWMGenEnable(PWM0_BASE, PWM_GEN_0);
-    PWMGenEnable(PWM0_BASE, PWM_GEN_1);
+    PWMGenEnable(PWM0_BASE, PWM_GEN_2);
     // Turn on the Output pins
-    PWMOutputState(PWM0_BASE, PWM_OUT_0_BIT | PWM_OUT_2_BIT , true);
+    PWMOutputState(PWM0_BASE, PWM_OUT_0_BIT | PWM_OUT_4_BIT , true);
     // PWMOutputState(PWM1_BASE, PWM_OUT_5_BIT | PWM_OUT_6_BIT | PWM_OUT_7_BIT, true);
 }
 
