@@ -1,8 +1,12 @@
-/*
- * r2r.c
+/**
+ * @file r2r.c
+ * @brief Main R2R library
  *
- *  Created on: Feb 21, 2018
- *      Author: Ben
+ * This file contains all the functions for the R2R Project
+ *
+ * @author Benjamen Lim
+ * @author Huan Weng
+ *
  */
 
 #include <stdbool.h>
@@ -35,11 +39,15 @@
 #include "driverlib/i2c.h"
 #include "driverlib/uart.h"
 #include "driverlib/sysctl.h"
-#include "utils/uartstdio.h"
+#include "utils/uartstdio.c"
 
 
 
 #include "r2r.h"
+
+// DEBUG flag
+// 1 = DEBUG mode, 0 = not DEBUGGING
+int r2rdebug = 1;
 
 uint32_t adcArray[4]={0};
 
@@ -64,6 +72,12 @@ uint32_t ui32Index2;
 // Array to store encoder data
 uint32_t encoderVal[2];
 
+// Global angle
+uint32_t globalAngle1;
+uint32_t modifier=0;
+uint32_t last_motor_2_angle = 0;
+
+
 
 
 /*
@@ -78,9 +92,8 @@ void r2rDefaultInit(void){
     spiInit(); // Init SPI communication for motor driver 1 and 2, and encoder 1, and encoder 2
     motorInit(); // Set up PWM pins for motor driver, already includes pwmInit()
     motorDriverInit(); // Send values to set up the motor for 1x PWM mode
-    //pwmInit();
-    adcInit(); // Init for current and temperture
-    gpioInit(); // Init for general GPIO - set to input for safety
+    //adcInit(); // Init for current and temperture
+    //gpioInit(); // Init for general GPIO - set to input for safety
     //timerIntInit();
 
 }
@@ -140,11 +153,11 @@ void sensorUpdate(void){
  *
  * Comes after:
  * - sysInit()
-
+ */
 void timerIntInit(void){
     SysCtlPeripheralEnable(SYSCTL_PERIPH_TIMER1); // Use timer 1
     TimerConfigure(TIMER1_BASE, TIMER_CFG_PERIODIC);
-    TimerLoadSet(TIMER1_BASE, TIMER_A, ui32SysClock/4); // Use timer B // activate every 1/2 of a second 120/120/2 = 0.5s
+    TimerLoadSet(TIMER1_BASE, TIMER_A, ui32SysClock/100); // Use timer B // activate every 1/2 of a second 120/120/2 = 0.5s
     IntEnable(INT_TIMER1A);
     TimerIntEnable(TIMER1_BASE, TIMER_TIMA_TIMEOUT);
     TimerEnable(TIMER1_BASE, TIMER_A);
@@ -152,57 +165,8 @@ void timerIntInit(void){
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPION);
     GPIOPinTypeGPIOOutput(GPIO_PORTN_BASE, GPIO_PIN_0); // LED PN0
     GPIOPinWrite(GPIO_PORTN_BASE,GPIO_PIN_0,GPIO_PIN_0); // Turn on the damn thing
-}
- */
-void timerIntInit(void){               // Set the clocking to run directly from the crystal at 120MHz.  So we need to decide the sysclock, maybe the largest
-    //
-    // Enable processor interrupts.
-    //
-    IntMasterEnable();
-
-    //
-    // Enable the peripherals used by this example.
-    //
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_TIMER1);              //Not sure if we can use timer0 or timer1
-
-    //
-    // Configure the 32-bit periodic timer.
-    //
-    TimerConfigure(TIMER1_BASE, TIMER_CFG_PERIODIC);
-    TimerLoadSet(TIMER1_BASE, TIMER_A, ui32SysClock/100);    //should be one second /100
-
-    //
-    // Setup the interrupts for the timer timeouts.
-    //
-    IntEnable(INT_TIMER1A);
-    TimerIntEnable(TIMER1_BASE, TIMER_TIMA_TIMEOUT);
-
-    //
-    // Enable the timers.
-    //
-    TimerEnable(TIMER1_BASE, TIMER_A);
-
-
-    //test
-    //
-    // Enable the GPIO port that is used for the on-board LEDs.
-    //
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOP);
-
-    //
-    // Enable the GPIO pins for the LEDs (PN0 & PN1).
-    //
-    GPIOPinTypeGPIOOutput(GPIO_PORTP_BASE, GPIO_PIN_0);
-
-    //
-    // Disable processor interrupts.
-    //
     IntMasterDisable();
 }
-
-
-
-
 
 /*
  *  This function sets up all the GPIO pins for unused and other pins that are used in other functions.
@@ -304,12 +268,18 @@ void encoderRead(void){
  */
 
 void motorInit(void){
-    // Setting up motor driver pins, directions PK0:1, PK2:2
+       // Setting up motor driver pins,
+       // Motor directions PK0:1, PK2:2
        // Motor enable pins, PK1: 1, PK3: 2
-       // Motor brake pins, PK4: 1, PK5: 2
+       // Motor brake pins, PP4: 1, PP5: 2
        SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOK);
        SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOJ);
-       GPIOPinTypeGPIOOutput(GPIO_PORTK_BASE, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3 | GPIO_PIN_4 | GPIO_PIN_5);
+       SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOP);
+
+
+
+       GPIOPinTypeGPIOOutput(GPIO_PORTK_BASE, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3);
+       GPIOPinTypeGPIOOutput(GPIO_PORTP_BASE, GPIO_PIN_4 | GPIO_PIN_5);
 
        // GPIOPinWrite(GPIO_PORTF_BASE, RED_LED|BLUE_LED|GREEN_LED, ledTable[i]);
        // Pulled low on motor fault PK6:1, PK7: 2
@@ -322,10 +292,13 @@ void motorInit(void){
        // turn on
        GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_1 |  GPIO_PIN_3 , GPIO_PIN_3+GPIO_PIN_1);
 
+       GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_0,GPIO_PIN_0); // dir for motor 1, set to forward
+       GPIOPinWrite(GPIO_PORTP_BASE,GPIO_PIN_4,GPIO_PIN_4); // brake for motor 1, set HIGH so no braking
 
 
-       GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_0,GPIO_PIN_0); // dir for motor 2, set to forward
-       GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_4,GPIO_PIN_4); // brake for motor 2, set HIGH so no braking
+
+       GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_2,GPIO_PIN_2); // dir for motor 2, set to forward
+       GPIOPinWrite(GPIO_PORTP_BASE,GPIO_PIN_5,GPIO_PIN_5); // brake for motor 2, set HIGH so no braking
 
 }
 
@@ -340,17 +313,50 @@ void motorInit(void){
  */
 
 void motorDriverInit(void){
+    while(SSIDataGetNonBlocking(SSI2_BASE, &pui32DataRx[0])){
+    }
+
+    pui32DataTx[0] = 0b1001000000000000; // read register 3
+    pui32DataTx[1] = 0b0001000001000000; // set register 3, bit 6 and 5 to 10, option 3, 1x PWM mode
+    pui32DataTx[2]=  0b1001000000000000; // read register 3
+    pui32DataTx[3]=  0b1001000000000000; // read register 3 one more time
+
+    GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_3,0x00);
+    SysCtlDelay(1);
+    for(ui32Index = 0; ui32Index < 4; ui32Index++){ // only reading and writing 3 times
+        GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_3,0x00); // Pull CS pin low
+        SysCtlDelay(1);
+        SSIDataPut(SSI2_BASE, pui32DataTx[ui32Index]); // Send data
+        SysCtlDelay(1000); // wait (at least 50ns)
+        GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_3,GPIO_PIN_3); // Being the CS pin high
+        SSIDataGet(SSI2_BASE, &pui32DataRx[ui32Index]); // Get the data
+    }
+    while(SSIBusy(SSI2_BASE)){
+    }
+
+    GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_3,GPIO_PIN_3); // Make sure the pin is high
+
+    //SysCtlDelay(1000);
+    delayMS(1000);
+
+
+
+
    while(SSIDataGetNonBlocking(SSI2_BASE, &pui32DataRx[0])){
    }
    pui32DataTx[0] = 0b1001000000000000; // read register 3
    pui32DataTx[1] = 0b0001000001000000; // set register 3, bit 6 and 5 to 10, option 3, 1x PWM mode
    pui32DataTx[2]=  0b1001000000000000; // read register 3
+   pui32DataTx[3]=  0b1001000000000000; // read register 3 one more time
    //
    // Send 3 bytes of data.
    //
+
+   // JUST FOR MOTOR 1
+
    GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_2,0x00);
    SysCtlDelay(1);
-   for(ui32Index = 0; ui32Index < NUM_SSI_DATA; ui32Index++){
+   for(ui32Index = 0; ui32Index < 4; ui32Index++){ // only reading and writing 3 times
        GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_2,0x00); // Pull CS pin low
        SysCtlDelay(1);
        SSIDataPut(SSI2_BASE, pui32DataTx[ui32Index]); // Send data
@@ -364,7 +370,9 @@ void motorDriverInit(void){
    GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_2,GPIO_PIN_2); // Make sure the pin is high
    //SysCtlDelay(1000);
    SysCtlDelay(1000);
-   // Done
+
+
+
 }
 
 /*
@@ -385,7 +393,6 @@ void motor2ControlPWM(int control){
         motor2PWM(-1*control);
     }
     else {
-        motor2PWM(1);
         GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_0,0);
         GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_4,0); // Set brake pin to low, brake!
     }
@@ -409,7 +416,7 @@ void motor1PWM(int pwmValue){
 
 void motor2PWM(int pwmValue){
     // assuming PWM has been initialized.
-    PWMPulseWidthSet(PWM0_BASE, PWM_OUT_2,pwmValue);
+    PWMPulseWidthSet(PWM0_BASE, PWM_OUT_4,pwmValue);
 }
 
 /*
@@ -418,6 +425,49 @@ void motor2PWM(int pwmValue){
  * Comes after:
  * sensorUpdate()
  */
+
+int angleFix(int curr_angle){
+    int output_angle = 0;
+    if ((curr_angle<90) || (curr_angle>270)){
+        output_angle = curr_angle - 180;
+
+    }
+    else {
+        output_angle = curr_angle;
+    }
+    return output_angle;
+
+}
+
+
+/*
+ * This function converts the absolute encoder into a relative encoder
+ *
+ * Comes after:
+ * sensorUpdate();
+ *
+ * Uses globals:
+ * modifier
+ * last_motor_2_angle
+ *
+ * TODO: CHANGE RANDOM 4000 value
+ */
+
+uint32_t readMotor2RawRelative(void){
+    int angle_gap = readMotor2Raw() - last_motor_2_angle;
+    if (angle_gap>4000){
+        modifier = modifier - 16383;
+    }
+    else if (angle_gap<-4000){
+        modifier = modifier + 16383;
+    }
+    uint32_t relative_angle = readMotor2Raw()+modifier;
+    last_motor_2_angle = readMotor2Raw();
+    return relative_angle;
+
+
+}
+
 int readMotor2Raw(void){
     return encoderVal[1];
 }
@@ -718,37 +768,52 @@ void PIDCurrUpdate(void){
  * It is set up for 115200 baud 8N1. To send numbers and characters use
  * UARTprintf.
  */
-void uartInit(void){   //There will be only UART0 and not interrupt
-     //
-     // Enable the GPIO Peripheral used by the UART.
-     //
-     ROM_SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOA);
+void uartInit(void){
+    //
+    // Enable GPIO port A which is used for UART0 pins.
+    //
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOA);
 
-     //
-     // Enable UART0.
-     //
-     ROM_SysCtlPeripheralEnable(SYSCTL_PERIPH_UART0);
+    //
+    // Configure the pin muxing for UART0 functions on port A0 and A1.
+    // This step is not necessary if your part does not support pin muxing.
+    //
+    GPIOPinConfigure(GPIO_PA0_U0RX);
+    GPIOPinConfigure(GPIO_PA1_U0TX);
 
-     //
-     // Configure the GPIO pin muxing for the UART function.
-     //
-     GPIOPinConfigure(GPIO_PA0_U0RX);
-     GPIOPinConfigure(GPIO_PA1_U0TX);
+    //
+    // Enable UART0 so that we can configure the clock.
+    //
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_UART0);
 
-     //
-     // Since GPIO A0 and A1 are used for the UART function, they must be
-     // configured for use as a peripheral function (instead of GPIO).
-     //
-     GPIOPinTypeUART(GPIO_PORTA_BASE, GPIO_PIN_0 | GPIO_PIN_1);
-     //
-     // Configure the UART for 115,200, 8-N-1 operation.
-     // This function uses ui32SysClock to get the system clock
-     // frequency.  This could be also be a variable or hard coded value
-     // instead of a function call.                                              What does that mean?
-     //
-     UARTConfigSetExpClk(UART0_BASE, ui32SysClock, 115200,
-                         (UART_CONFIG_WLEN_8 | UART_CONFIG_STOP_ONE |
-                          UART_CONFIG_PAR_NONE));
+
+    if(r2rdebug==1){
+        //
+        // Use the internal 16MHz oscillator as the UART clock source.
+        //
+
+        UARTClockSourceSet(UART0_BASE, UART_CLOCK_PIOSC);
+
+        //
+        // Select the alternate (UART) function for these pins.
+        //
+        GPIOPinTypeUART(GPIO_PORTA_BASE, GPIO_PIN_0 | GPIO_PIN_1);
+
+        //
+        // Initialize the UART for console I/O.
+        //
+        UARTStdioConfig(0, 115200, 16000000);
+    }
+    else{
+
+        GPIOPinTypeUART(GPIO_PORTA_BASE, GPIO_PIN_0 | GPIO_PIN_1);
+
+        UARTConfigSetExpClk(UART0_BASE, ui32SysClock, 115200,
+                                (UART_CONFIG_WLEN_8 | UART_CONFIG_STOP_ONE |
+                                 UART_CONFIG_PAR_NONE));
+    }
+
+
 }
 
 
@@ -855,8 +920,8 @@ void spiInit(void){
 
     // Motor
     GPIOPinConfigure(GPIO_PD3_SSI2CLK);
-    GPIOPinConfigure(GPIO_PD1_SSI2XDAT0);
-    GPIOPinConfigure(GPIO_PD0_SSI2XDAT1);
+    GPIOPinConfigure(GPIO_PD1_SSI2XDAT0); // MOSI
+    GPIOPinConfigure(GPIO_PD0_SSI2XDAT1); // MISO
 
     // Encoder 1
     GPIOPinConfigure(GPIO_PA4_SSI0XDAT0);
@@ -878,6 +943,8 @@ void spiInit(void){
     // Motor 2
     GPIOPinTypeGPIOOutput(GPIO_PORTL_BASE,GPIO_PIN_3); // CS
     GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_3,GPIO_PIN_3); //Set CS to HIGH
+    //GPIOPinTypeGPIOOutput(GPIO_PORTA_BASE,GPIO_PIN_6); // CS
+    //GPIOPinWrite(GPIO_PORTA_BASE,GPIO_PIN_6,GPIO_PIN_6); //Set CS to HIGH
 
     // encoder 1
     GPIOPinTypeSSI(GPIO_PORTA_BASE, GPIO_PIN_4 | GPIO_PIN_5); // MOSI/MISO
@@ -951,21 +1018,23 @@ void pwmInit(void){
     SysCtlPWMClockSet(SYSCTL_PWMDIV_1);
     // Enable the peripherals used by this program.
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOF);
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOG);
     // SysCtlPeripheralEnable(SYSCTL_PERIPH_PWM1);  //The Tiva Launchpad 123 has two modules (0 and 1). Module 1 covers the LED pins
     SysCtlPeripheralEnable(SYSCTL_PERIPH_PWM0);  //The Tiva Launchpad 129 has one modules (0). Module 0 covers the motor pins
     //Configure PF0,PF2 Pins as PWM, note 129 M0, but 123 M1
     GPIOPinConfigure(GPIO_PF0_M0PWM0);
-    GPIOPinConfigure(GPIO_PF2_M0PWM2);
+    GPIOPinConfigure(GPIO_PG0_M0PWM4);
     //GPIOPinConfigure(GPIO_PF0_M1PWM4);
     //GPIOPinConfigure(GPIO_PF1_M1PWM6);
     //GPIOPinConfigure(GPIO_PF3_M1PWM7);
-    GPIOPinTypePWM(GPIO_PORTF_BASE, GPIO_PIN_0 | GPIO_PIN_2);
+    GPIOPinTypePWM(GPIO_PORTF_BASE, GPIO_PIN_0);
+    GPIOPinTypePWM(GPIO_PORTG_BASE, GPIO_PIN_0);
     // GPIOPinTypePWM(GPIO_PORTF_BASE, GPIO_PIN_0 | GPIO_PIN_2 | GPIO_PIN_3);
     //Configure PWM Options
     //PWM_GEN_2 Covers M1PWM4 and M1PWM5
     //PWM_GEN_3 Covers M1PWM6 and M1PWM7 See page 207 4/11/13 DriverLib doc
     PWMGenConfigure(PWM0_BASE, PWM_GEN_0, PWM_GEN_MODE_DOWN | PWM_GEN_MODE_NO_SYNC);
-    PWMGenConfigure(PWM0_BASE, PWM_GEN_1, PWM_GEN_MODE_DOWN | PWM_GEN_MODE_NO_SYNC);
+    PWMGenConfigure(PWM0_BASE, PWM_GEN_2, PWM_GEN_MODE_DOWN | PWM_GEN_MODE_NO_SYNC);
     // PWMGenConfigure(PWM1_BASE, PWM_GEN_2, PWM_GEN_MODE_DOWN | PWM_GEN_MODE_NO_SYNC);
     // PWMGenConfigure(PWM1_BASE, PWM_GEN_3, PWM_GEN_MODE_DOWN | PWM_GEN_MODE_NO_SYNC);
     // Set the Period (expressed in clock ticks)
@@ -976,16 +1045,16 @@ void pwmInit(void){
     // In this case you get: (1 / 12500  Hz) * 4MHz = 320 cycles.  Note that
     // the maximum period you can set is 2^16 - 1.
     PWMGenPeriodSet(PWM0_BASE, PWM_GEN_0, 320); // PF0
-    PWMGenPeriodSet(PWM0_BASE, PWM_GEN_1, 320); // PF2
+    PWMGenPeriodSet(PWM0_BASE, PWM_GEN_2, 320); // PG0
     //Set PWM duty-50% (Period /2)
-    PWMPulseWidthSet(PWM0_BASE, PWM_OUT_0,0);
-    PWMPulseWidthSet(PWM0_BASE, PWM_OUT_2,0);
+    PWMPulseWidthSet(PWM0_BASE, PWM_OUT_0,1);
+    PWMPulseWidthSet(PWM0_BASE, PWM_OUT_4,1);
     // PWMPulseWidthSet(PWM1_BASE, PWM_OUT_7,0);
     // Enable the PWM generator
     PWMGenEnable(PWM0_BASE, PWM_GEN_0);
-    PWMGenEnable(PWM0_BASE, PWM_GEN_1);
+    PWMGenEnable(PWM0_BASE, PWM_GEN_2);
     // Turn on the Output pins
-    PWMOutputState(PWM0_BASE, PWM_OUT_0_BIT | PWM_OUT_2_BIT , true);
+    PWMOutputState(PWM0_BASE, PWM_OUT_0_BIT | PWM_OUT_4_BIT , true);
     // PWMOutputState(PWM1_BASE, PWM_OUT_5_BIT | PWM_OUT_6_BIT | PWM_OUT_7_BIT, true);
 }
 

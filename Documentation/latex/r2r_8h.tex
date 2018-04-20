@@ -1,0 +1,530 @@
+\hypertarget{r2r_8h}{}\section{C\+:/\+Users/\+Ben/\+Documents/\+Git\+Hub/2\+R-\/\+Robots/\+Main/r2r.h File Reference}
+\label{r2r_8h}\index{C\+:/\+Users/\+Ben/\+Documents/\+Git\+Hub/2\+R-\/\+Robots/\+Main/r2r.\+h@{C\+:/\+Users/\+Ben/\+Documents/\+Git\+Hub/2\+R-\/\+Robots/\+Main/r2r.\+h}}
+
+
+Main R2R library header.  
+
+
+{\ttfamily \#include $<$stdbool.\+h$>$}\newline
+{\ttfamily \#include $<$stdint.\+h$>$}\newline
+{\ttfamily \#include $<$stdlib.\+h$>$}\newline
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include $<$stdarg.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}sensorlib/i2cm\+\_\+drv.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}sensorlib/hw\+\_\+mpu6050.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}sensorlib/mpu6050.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}inc/hw\+\_\+ints.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}inc/hw\+\_\+memmap.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}inc/hw\+\_\+sysctl.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}inc/hw\+\_\+types.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}inc/hw\+\_\+i2c.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}inc/hw\+\_\+gpio.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}driverlib/gpio.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}driverlib/pin\+\_\+map.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}driverlib/rom.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}driverlib/rom\+\_\+map.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}driverlib/debug.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}driverlib/interrupt.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}driverlib/i2c.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}driverlib/sysctl.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}driverlib/pwm.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}driverlib/timer.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}driverlib/uart.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}utils/uartstdio.\+h\char`\"{}}\newline
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{r2r_8h_af06127bca89306e7f9af0ea36f162ca0}{r2r\+Default\+Init}} (void)
+\begin{DoxyCompactList}\small\item\em Initializes the default connections for the R2R project. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{r2r_8h_a9708de954e135b89af84d9d82b552667}{sys\+Init}} (void)
+\begin{DoxyCompactList}\small\item\em Initializes the system clock and the master interrupts for the R2R project. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{r2r_8h_aa29e2982047be0f7afbb10c8d6f3f5c3}{motor\+Init}} (void)
+\begin{DoxyCompactList}\small\item\em Initializes the G\+P\+IO to control the motor\textquotesingle{}s direction, enable and brake pins. It also calls pwm\+Init to initialize the P\+WM pins for 1x P\+WM mode. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{r2r_8h_a3c484a97cdec02c5dbf46a11245e3395}{spi\+Init}} (void)
+\begin{DoxyCompactList}\small\item\em Initializes the S\+PI channels for the motor drivers, encoders, and R\+AM. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{r2r_8h_a4e7b27c5715df8d71dfe87a22ae0b004}{motor\+Driver\+Init}} (void)
+\begin{DoxyCompactList}\small\item\em Initializes the S\+PI commands to set the motor\textquotesingle{}s configuration for 1x P\+WM mode. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{r2r_8h_a1c8ae46921c4ae7d57bd44dd994e10bd}{pwm\+Init}} (void)
+\begin{DoxyCompactList}\small\item\em Initializes P\+WM. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{r2r_8h_a373f5edc40df48a516acb229a5795c4c}\label{r2r_8h_a373f5edc40df48a516acb229a5795c4c}} 
+void {\bfseries timer\+Int\+Init} (void)
+\item 
+void \mbox{\hyperlink{r2r_8h_adab76f1253da89e657056817a3a9a11a}{gpio\+Init}} (void)
+\begin{DoxyCompactList}\small\item\em Initializes all unused G\+P\+IO pins in High-\/Z state. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{r2r_8h_ace09a3c8965a45676cd69533a94e1e99}{safety\+Check}} (void)
+\begin{DoxyCompactList}\small\item\em Checks for all end conditions and shuts down the motor control if any are detected. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{r2r_8h_ab0b86e69a6c13e01349840d66db0f1f3}{delay\+MS}} (int ms)
+\begin{DoxyCompactList}\small\item\em Stops the processor for a given amount of time. This is an approximate time. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{r2r_8h_ad22b938bbd9c44b3de841391716d46b9}{sensor\+Update}} (void)
+\begin{DoxyCompactList}\small\item\em Updates all sensor arrays. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{r2r_8h_acd9c2b2ef340694a18298134d70b8e33}\label{r2r_8h_acd9c2b2ef340694a18298134d70b8e33}} 
+void {\bfseries matlab\+Menu} (char menuchar)
+\item 
+\mbox{\Hypertarget{r2r_8h_a01631e175c108161381775dd73b54a08}\label{r2r_8h_a01631e175c108161381775dd73b54a08}} 
+void {\bfseries menu\+Header} (uint8\+\_\+t input)
+\item 
+\mbox{\Hypertarget{r2r_8h_ac09f684479b37bb3ce217c7909d33c9b}\label{r2r_8h_ac09f684479b37bb3ce217c7909d33c9b}} 
+void {\bfseries menu\+Init} (void)
+\item 
+\mbox{\Hypertarget{r2r_8h_a27f2da36574ecdc88385e140b6767b8e}\label{r2r_8h_a27f2da36574ecdc88385e140b6767b8e}} 
+void {\bfseries menu\+Options} (uint8\+\_\+t input)
+\item 
+\mbox{\Hypertarget{r2r_8h_aae7c5504f3f7f55bca2b4576e0424409}\label{r2r_8h_aae7c5504f3f7f55bca2b4576e0424409}} 
+void {\bfseries process\+User\+Input} (void)
+\item 
+void \mbox{\hyperlink{r2r_8h_a66eea06de5674ba28dc7473842af0b8f}{motor1\+P\+WM}} (int pwm\+Value)
+\begin{DoxyCompactList}\small\item\em Sets the P\+WM value to motor 1. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{r2r_8h_a17b8580b21da18028807be50e9c29020}{motor2\+P\+WM}} (int pwm\+Value)
+\begin{DoxyCompactList}\small\item\em Sets the P\+WM value to motor 1. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{r2r_8h_a8ab898affd7b6bbc1d359284e85c31c3}{motor1\+Control\+P\+WM}} (int control)
+\begin{DoxyCompactList}\small\item\em Sets the P\+WM value and direction to motor 1. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{r2r_8h_aa3421fe96b22e90c356e013a0abef7d6}{motor2\+Control\+P\+WM}} (int control)
+\begin{DoxyCompactList}\small\item\em Sets the P\+WM value and direction to motor 2. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{r2r_8h_ad2fb0421114b988126b41428644453a3}\label{r2r_8h_ad2fb0421114b988126b41428644453a3}} 
+int {\bfseries motor\+Error} (void)
+\item 
+void \mbox{\hyperlink{r2r_8h_aa027163ba1e9951d437f3f4e260fd9bb}{encoder\+Read}} (void)
+\begin{DoxyCompactList}\small\item\em Updates value in sensor array. \end{DoxyCompactList}\item 
+float \mbox{\hyperlink{r2r_8h_a3158f6a637c9f6e10084501a81431581}{read\+Motor1\+Angle}} (void)
+\begin{DoxyCompactList}\small\item\em Reads value in encoder\+Val array for motor 1 and converts it to an angle. \end{DoxyCompactList}\item 
+float \mbox{\hyperlink{r2r_8h_acf5c46f542d35b78a92a1cefac802888}{read\+Motor2\+Angle}} (void)
+\begin{DoxyCompactList}\small\item\em Reads value in encoder\+Val array for motor 2 and converts it to an angle. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{r2r_8h_a41631dbb83071f47c7e30a38b05f269c}{read\+Motor1\+Raw}} (void)
+\begin{DoxyCompactList}\small\item\em Reads value in encoder\+Val array for motor 1. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{r2r_8h_ad2f5f86641346f94615d9962f214438a}{read\+Motor2\+Raw}} (void)
+\begin{DoxyCompactList}\small\item\em Reads value in encoder\+Val array for motor 2. \end{DoxyCompactList}\item 
+uint32\+\_\+t \mbox{\hyperlink{r2r_8h_af75ba63e08b72bddcfbc9cd102c94b8a}{read\+Motor2\+Raw\+Relative}} (void)
+\begin{DoxyCompactList}\small\item\em Reads value in encoder\+Val array for motor 1 and keeps track of multiturn angles. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{r2r_8h_ad9e154ce511d38e9a29a20e18c196683}\label{r2r_8h_ad9e154ce511d38e9a29a20e18c196683}} 
+void {\bfseries P\+I\+D\+Update} (void)
+\item 
+\mbox{\Hypertarget{r2r_8h_a29154e763b66fd963d87890e8122d920}\label{r2r_8h_a29154e763b66fd963d87890e8122d920}} 
+void {\bfseries P\+I\+D\+Curr\+Update} (void)
+\item 
+\mbox{\Hypertarget{r2r_8h_afd645b17cf0581bcaa22c56011c775e4}\label{r2r_8h_afd645b17cf0581bcaa22c56011c775e4}} 
+void {\bfseries adc\+Init} (void)
+\item 
+\mbox{\Hypertarget{r2r_8h_abe02cc201baa3f3c88b6cfe688d13cb2}\label{r2r_8h_abe02cc201baa3f3c88b6cfe688d13cb2}} 
+void {\bfseries adc\+Read} (void)
+\item 
+\mbox{\Hypertarget{r2r_8h_a18b7e8958a230c54f3fe5ac8bc24b24c}\label{r2r_8h_a18b7e8958a230c54f3fe5ac8bc24b24c}} 
+uint32\+\_\+t {\bfseries current\+Read1} (void)
+\item 
+\mbox{\Hypertarget{r2r_8h_abdb4ca825a07f76a89212240e43546ca}\label{r2r_8h_abdb4ca825a07f76a89212240e43546ca}} 
+uint32\+\_\+t {\bfseries current\+Read2} (void)
+\item 
+\mbox{\Hypertarget{r2r_8h_a3f64aa234674df8aeb7332aa17941b75}\label{r2r_8h_a3f64aa234674df8aeb7332aa17941b75}} 
+uint32\+\_\+t {\bfseries temp\+Read1} (void)
+\item 
+\mbox{\Hypertarget{r2r_8h_a3cec2a038dd769dc059ca76a26954e4b}\label{r2r_8h_a3cec2a038dd769dc059ca76a26954e4b}} 
+uint32\+\_\+t {\bfseries temp\+Read2} (void)
+\item 
+\mbox{\Hypertarget{r2r_8h_a09a7a9ed4194733a7b753c3b795b1734}\label{r2r_8h_a09a7a9ed4194733a7b753c3b795b1734}} 
+void {\bfseries uart\+Init} (void)
+\item 
+\mbox{\Hypertarget{r2r_8h_a498b580a06894f91127558eaf3ec31c4}\label{r2r_8h_a498b580a06894f91127558eaf3ec31c4}} 
+void {\bfseries uart\+Send} (const uint8\+\_\+t $\ast$pui8\+Buffer, uint32\+\_\+t ui32\+Count)
+\item 
+\mbox{\Hypertarget{r2r_8h_a6f831d6237f4dfc527dd118fe75cf8cb}\label{r2r_8h_a6f831d6237f4dfc527dd118fe75cf8cb}} 
+void {\bfseries init\+Console} (void)
+\item 
+\mbox{\Hypertarget{r2r_8h_a03e7e3ce51b56b0571a8bd85ec4a5c3e}\label{r2r_8h_a03e7e3ce51b56b0571a8bd85ec4a5c3e}} 
+void {\bfseries i2c\+Init} (t\+I2\+C\+M\+Instance g\+\_\+s\+I2\+C\+M\+Simple\+Inst)
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{r2r_8h_a154fb4804d750b00be804fc5fbbfad48}\label{r2r_8h_a154fb4804d750b00be804fc5fbbfad48}} 
+uint32\+\_\+t {\bfseries adc\+Array} \mbox{[}4\mbox{]}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Main R2R library header. 
+
+This file contains all the prototypes for the R2R Project
+
+\begin{DoxyAuthor}{Author}
+Benjamen Lim 
+
+Huan Weng 
+\end{DoxyAuthor}
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{r2r_8h_ab0b86e69a6c13e01349840d66db0f1f3}\label{r2r_8h_ab0b86e69a6c13e01349840d66db0f1f3}} 
+\index{r2r.\+h@{r2r.\+h}!delay\+MS@{delay\+MS}}
+\index{delay\+MS@{delay\+MS}!r2r.\+h@{r2r.\+h}}
+\subsubsection{\texorpdfstring{delay\+M\+S()}{delayMS()}}
+{\footnotesize\ttfamily void delay\+MS (\begin{DoxyParamCaption}\item[{int}]{ms }\end{DoxyParamCaption})}
+
+
+
+Stops the processor for a given amount of time. This is an approximate time. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em ms} & milliseconds \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{r2r_8h_aa027163ba1e9951d437f3f4e260fd9bb}\label{r2r_8h_aa027163ba1e9951d437f3f4e260fd9bb}} 
+\index{r2r.\+h@{r2r.\+h}!encoder\+Read@{encoder\+Read}}
+\index{encoder\+Read@{encoder\+Read}!r2r.\+h@{r2r.\+h}}
+\subsubsection{\texorpdfstring{encoder\+Read()}{encoderRead()}}
+{\footnotesize\ttfamily void encoder\+Read (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Updates value in sensor array. 
+
+This function sends a \textquotesingle{}t\textquotesingle{} and 40 pulses via S\+PI to the encoder and reads out the encoder\textquotesingle{}s reply to the encoder\+Val array
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{r2r_8h_adab76f1253da89e657056817a3a9a11a}\label{r2r_8h_adab76f1253da89e657056817a3a9a11a}} 
+\index{r2r.\+h@{r2r.\+h}!gpio\+Init@{gpio\+Init}}
+\index{gpio\+Init@{gpio\+Init}!r2r.\+h@{r2r.\+h}}
+\subsubsection{\texorpdfstring{gpio\+Init()}{gpioInit()}}
+{\footnotesize\ttfamily void gpio\+Init (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Initializes all unused G\+P\+IO pins in High-\/Z state. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{r2r_8h_a8ab898affd7b6bbc1d359284e85c31c3}\label{r2r_8h_a8ab898affd7b6bbc1d359284e85c31c3}} 
+\index{r2r.\+h@{r2r.\+h}!motor1\+Control\+P\+WM@{motor1\+Control\+P\+WM}}
+\index{motor1\+Control\+P\+WM@{motor1\+Control\+P\+WM}!r2r.\+h@{r2r.\+h}}
+\subsubsection{\texorpdfstring{motor1\+Control\+P\+W\+M()}{motor1ControlPWM()}}
+{\footnotesize\ttfamily void motor1\+Control\+P\+WM (\begin{DoxyParamCaption}\item[{int}]{control }\end{DoxyParamCaption})}
+
+
+
+Sets the P\+WM value and direction to motor 1. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em control} & The pwm\+Value ranges from -\/maximum pwm period to the positive period. The default pwm period is 320 Sys\+Clk cycles \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{r2r_8h_a66eea06de5674ba28dc7473842af0b8f}\label{r2r_8h_a66eea06de5674ba28dc7473842af0b8f}} 
+\index{r2r.\+h@{r2r.\+h}!motor1\+P\+WM@{motor1\+P\+WM}}
+\index{motor1\+P\+WM@{motor1\+P\+WM}!r2r.\+h@{r2r.\+h}}
+\subsubsection{\texorpdfstring{motor1\+P\+W\+M()}{motor1PWM()}}
+{\footnotesize\ttfamily void motor1\+P\+WM (\begin{DoxyParamCaption}\item[{int}]{pwm\+Value }\end{DoxyParamCaption})}
+
+
+
+Sets the P\+WM value to motor 1. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em pwm\+Value} & The pwm\+Value ranges from 0 to the pwm period. The default pwm period is 320 Sys\+Clk cycles \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{r2r_8h_aa3421fe96b22e90c356e013a0abef7d6}\label{r2r_8h_aa3421fe96b22e90c356e013a0abef7d6}} 
+\index{r2r.\+h@{r2r.\+h}!motor2\+Control\+P\+WM@{motor2\+Control\+P\+WM}}
+\index{motor2\+Control\+P\+WM@{motor2\+Control\+P\+WM}!r2r.\+h@{r2r.\+h}}
+\subsubsection{\texorpdfstring{motor2\+Control\+P\+W\+M()}{motor2ControlPWM()}}
+{\footnotesize\ttfamily void motor2\+Control\+P\+WM (\begin{DoxyParamCaption}\item[{int}]{control }\end{DoxyParamCaption})}
+
+
+
+Sets the P\+WM value and direction to motor 2. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em control} & The pwm\+Value ranges from -\/maximum pwm period to the positive period. The default pwm period is 320 Sys\+Clk cycles \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{r2r_8h_a17b8580b21da18028807be50e9c29020}\label{r2r_8h_a17b8580b21da18028807be50e9c29020}} 
+\index{r2r.\+h@{r2r.\+h}!motor2\+P\+WM@{motor2\+P\+WM}}
+\index{motor2\+P\+WM@{motor2\+P\+WM}!r2r.\+h@{r2r.\+h}}
+\subsubsection{\texorpdfstring{motor2\+P\+W\+M()}{motor2PWM()}}
+{\footnotesize\ttfamily void motor2\+P\+WM (\begin{DoxyParamCaption}\item[{int}]{pwm\+Value }\end{DoxyParamCaption})}
+
+
+
+Sets the P\+WM value to motor 1. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em pwm\+Value} & The pwm\+Value ranges from 0 to the pwm period. The default pwm period is 320 Sys\+Clk cycles \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{r2r_8h_a4e7b27c5715df8d71dfe87a22ae0b004}\label{r2r_8h_a4e7b27c5715df8d71dfe87a22ae0b004}} 
+\index{r2r.\+h@{r2r.\+h}!motor\+Driver\+Init@{motor\+Driver\+Init}}
+\index{motor\+Driver\+Init@{motor\+Driver\+Init}!r2r.\+h@{r2r.\+h}}
+\subsubsection{\texorpdfstring{motor\+Driver\+Init()}{motorDriverInit()}}
+{\footnotesize\ttfamily void motor\+Driver\+Init (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Initializes the S\+PI commands to set the motor\textquotesingle{}s configuration for 1x P\+WM mode. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{r2r_8h_aa29e2982047be0f7afbb10c8d6f3f5c3}\label{r2r_8h_aa29e2982047be0f7afbb10c8d6f3f5c3}} 
+\index{r2r.\+h@{r2r.\+h}!motor\+Init@{motor\+Init}}
+\index{motor\+Init@{motor\+Init}!r2r.\+h@{r2r.\+h}}
+\subsubsection{\texorpdfstring{motor\+Init()}{motorInit()}}
+{\footnotesize\ttfamily void motor\+Init (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Initializes the G\+P\+IO to control the motor\textquotesingle{}s direction, enable and brake pins. It also calls pwm\+Init to initialize the P\+WM pins for 1x P\+WM mode. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{r2r_8h_a1c8ae46921c4ae7d57bd44dd994e10bd}\label{r2r_8h_a1c8ae46921c4ae7d57bd44dd994e10bd}} 
+\index{r2r.\+h@{r2r.\+h}!pwm\+Init@{pwm\+Init}}
+\index{pwm\+Init@{pwm\+Init}!r2r.\+h@{r2r.\+h}}
+\subsubsection{\texorpdfstring{pwm\+Init()}{pwmInit()}}
+{\footnotesize\ttfamily void pwm\+Init (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Initializes P\+WM. 
+
+Initialize P\+WM on P\+F0 (motor 1) and P\+G0 (motor 2), and the default period if 320 Sys\+Clk cycles.
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{r2r_8h_af06127bca89306e7f9af0ea36f162ca0}\label{r2r_8h_af06127bca89306e7f9af0ea36f162ca0}} 
+\index{r2r.\+h@{r2r.\+h}!r2r\+Default\+Init@{r2r\+Default\+Init}}
+\index{r2r\+Default\+Init@{r2r\+Default\+Init}!r2r.\+h@{r2r.\+h}}
+\subsubsection{\texorpdfstring{r2r\+Default\+Init()}{r2rDefaultInit()}}
+{\footnotesize\ttfamily void r2r\+Default\+Init (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Initializes the default connections for the R2R project. 
+
+This function initializes all peripherals and G\+P\+IO pins. This function only needs to be called in main.\+c once
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{r2r_8h_a3158f6a637c9f6e10084501a81431581}\label{r2r_8h_a3158f6a637c9f6e10084501a81431581}} 
+\index{r2r.\+h@{r2r.\+h}!read\+Motor1\+Angle@{read\+Motor1\+Angle}}
+\index{read\+Motor1\+Angle@{read\+Motor1\+Angle}!r2r.\+h@{r2r.\+h}}
+\subsubsection{\texorpdfstring{read\+Motor1\+Angle()}{readMotor1Angle()}}
+{\footnotesize\ttfamily float read\+Motor1\+Angle (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Reads value in encoder\+Val array for motor 1 and converts it to an angle. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The angle as a float 
+\end{DoxyReturn}
+\mbox{\Hypertarget{r2r_8h_a41631dbb83071f47c7e30a38b05f269c}\label{r2r_8h_a41631dbb83071f47c7e30a38b05f269c}} 
+\index{r2r.\+h@{r2r.\+h}!read\+Motor1\+Raw@{read\+Motor1\+Raw}}
+\index{read\+Motor1\+Raw@{read\+Motor1\+Raw}!r2r.\+h@{r2r.\+h}}
+\subsubsection{\texorpdfstring{read\+Motor1\+Raw()}{readMotor1Raw()}}
+{\footnotesize\ttfamily int read\+Motor1\+Raw (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Reads value in encoder\+Val array for motor 1. 
+
+The range for the read angle is 0 to 16383
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The angle as an int 
+\end{DoxyReturn}
+\mbox{\Hypertarget{r2r_8h_acf5c46f542d35b78a92a1cefac802888}\label{r2r_8h_acf5c46f542d35b78a92a1cefac802888}} 
+\index{r2r.\+h@{r2r.\+h}!read\+Motor2\+Angle@{read\+Motor2\+Angle}}
+\index{read\+Motor2\+Angle@{read\+Motor2\+Angle}!r2r.\+h@{r2r.\+h}}
+\subsubsection{\texorpdfstring{read\+Motor2\+Angle()}{readMotor2Angle()}}
+{\footnotesize\ttfamily float read\+Motor2\+Angle (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Reads value in encoder\+Val array for motor 2 and converts it to an angle. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The angle as a float 
+\end{DoxyReturn}
+\mbox{\Hypertarget{r2r_8h_ad2f5f86641346f94615d9962f214438a}\label{r2r_8h_ad2f5f86641346f94615d9962f214438a}} 
+\index{r2r.\+h@{r2r.\+h}!read\+Motor2\+Raw@{read\+Motor2\+Raw}}
+\index{read\+Motor2\+Raw@{read\+Motor2\+Raw}!r2r.\+h@{r2r.\+h}}
+\subsubsection{\texorpdfstring{read\+Motor2\+Raw()}{readMotor2Raw()}}
+{\footnotesize\ttfamily int read\+Motor2\+Raw (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Reads value in encoder\+Val array for motor 2. 
+
+The range for the read angle is 0 to 16383
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The angle as an int 
+\end{DoxyReturn}
+\mbox{\Hypertarget{r2r_8h_af75ba63e08b72bddcfbc9cd102c94b8a}\label{r2r_8h_af75ba63e08b72bddcfbc9cd102c94b8a}} 
+\index{r2r.\+h@{r2r.\+h}!read\+Motor2\+Raw\+Relative@{read\+Motor2\+Raw\+Relative}}
+\index{read\+Motor2\+Raw\+Relative@{read\+Motor2\+Raw\+Relative}!r2r.\+h@{r2r.\+h}}
+\subsubsection{\texorpdfstring{read\+Motor2\+Raw\+Relative()}{readMotor2RawRelative()}}
+{\footnotesize\ttfamily uint32\+\_\+t read\+Motor2\+Raw\+Relative (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Reads value in encoder\+Val array for motor 1 and keeps track of multiturn angles. 
+
+This function reads out the angle and keeps track of it for multiple turns. The value ranges from -\/2,147,483,648 to 2,147,483,648
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The angle as an int 
+\end{DoxyReturn}
+\mbox{\Hypertarget{r2r_8h_ace09a3c8965a45676cd69533a94e1e99}\label{r2r_8h_ace09a3c8965a45676cd69533a94e1e99}} 
+\index{r2r.\+h@{r2r.\+h}!safety\+Check@{safety\+Check}}
+\index{safety\+Check@{safety\+Check}!r2r.\+h@{r2r.\+h}}
+\subsubsection{\texorpdfstring{safety\+Check()}{safetyCheck()}}
+{\footnotesize\ttfamily void safety\+Check (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Checks for all end conditions and shuts down the motor control if any are detected. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{r2r_8h_ad22b938bbd9c44b3de841391716d46b9}\label{r2r_8h_ad22b938bbd9c44b3de841391716d46b9}} 
+\index{r2r.\+h@{r2r.\+h}!sensor\+Update@{sensor\+Update}}
+\index{sensor\+Update@{sensor\+Update}!r2r.\+h@{r2r.\+h}}
+\subsubsection{\texorpdfstring{sensor\+Update()}{sensorUpdate()}}
+{\footnotesize\ttfamily void sensor\+Update (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Updates all sensor arrays. 
+
+Sensors are grouped for the ease of use into one function and the array is updated each time this function is called.
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{r2r_8h_a3c484a97cdec02c5dbf46a11245e3395}\label{r2r_8h_a3c484a97cdec02c5dbf46a11245e3395}} 
+\index{r2r.\+h@{r2r.\+h}!spi\+Init@{spi\+Init}}
+\index{spi\+Init@{spi\+Init}!r2r.\+h@{r2r.\+h}}
+\subsubsection{\texorpdfstring{spi\+Init()}{spiInit()}}
+{\footnotesize\ttfamily void spi\+Init (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Initializes the S\+PI channels for the motor drivers, encoders, and R\+AM. 
+
+Initializes S\+S\+I1 $\sim$ 4 and their corresponding G\+P\+IO pins
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{r2r_8h_a9708de954e135b89af84d9d82b552667}\label{r2r_8h_a9708de954e135b89af84d9d82b552667}} 
+\index{r2r.\+h@{r2r.\+h}!sys\+Init@{sys\+Init}}
+\index{sys\+Init@{sys\+Init}!r2r.\+h@{r2r.\+h}}
+\subsubsection{\texorpdfstring{sys\+Init()}{sysInit()}}
+{\footnotesize\ttfamily void sys\+Init (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Initializes the system clock and the master interrupts for the R2R project. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}

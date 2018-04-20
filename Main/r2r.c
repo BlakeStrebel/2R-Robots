@@ -1,8 +1,12 @@
-/*
- * r2r.c
+/**
+ * @file r2r.c
+ * @brief Main R2R library
  *
- *  Created on: Feb 21, 2018
- *      Author: Ben
+ * This file contains all the functions for the R2R Project
+ *
+ * @author Benjamen Lim
+ * @author Huan Weng
+ *
  */
 
 #include <stdbool.h>
@@ -43,7 +47,7 @@
 
 // DEBUG flag
 // 1 = DEBUG mode, 0 = not DEBUGGING
-int r2rdebug = 0;
+int r2rdebug = 1;
 
 uint32_t adcArray[4]={0};
 
@@ -74,6 +78,8 @@ uint32_t modifier=0;
 uint32_t last_motor_2_angle = 0;
 
 
+
+
 /*
  * This function does initialisation for all the default connections
  *
@@ -86,10 +92,9 @@ void r2rDefaultInit(void){
     spiInit(); // Init SPI communication for motor driver 1 and 2, and encoder 1, and encoder 2
     motorInit(); // Set up PWM pins for motor driver, already includes pwmInit()
     motorDriverInit(); // Send values to set up the motor for 1x PWM mode
-    //pwmInit();
-    adcInit(); // Init for current and temperture
-    gpioInit(); // Init for general GPIO - set to input for safety
-    timerIntInit();
+    //adcInit(); // Init for current and temperture
+    //gpioInit(); // Init for general GPIO - set to input for safety
+    //timerIntInit();
 
 }
 
@@ -137,7 +142,7 @@ void safetyCheck(void){
  * TODO: Add sensor functions, add interrupts
  */
 void sensorUpdate(void){
-    adcRead();
+    //adcRead();
     encoderRead();
 }
 
@@ -264,15 +269,18 @@ void encoderRead(void){
 
 void motorInit(void){
        // Setting up motor driver pins,
-       // Motor direction pins, PK0 (motor 1), PK2 (motor 2)
-       // Motor enable pins, PK1 (motor 1), PK3 (motor 2)
-       // Motor brake pins, PP4 (motor 1), PP5: 2 (motor 2)
-       //
+       // Motor directions PK0:1, PK2:2
+       // Motor enable pins, PK1: 1, PK3: 2
+       // Motor brake pins, PP4: 1, PP5: 2
        SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOK);
        SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOJ);
        SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOP);
-       GPIOPinTypeGPIOOutput(GPIO_PORTK_BASE, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3 | GPIO_PIN_4 | GPIO_PIN_5);
+
+
+
+       GPIOPinTypeGPIOOutput(GPIO_PORTK_BASE, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3);
        GPIOPinTypeGPIOOutput(GPIO_PORTP_BASE, GPIO_PIN_4 | GPIO_PIN_5);
+
        // GPIOPinWrite(GPIO_PORTF_BASE, RED_LED|BLUE_LED|GREEN_LED, ledTable[i]);
        // Pulled low on motor fault PK6:1, PK7: 2
        GPIOPinTypeGPIOInput(GPIO_PORTK_BASE, GPIO_PIN_6 | GPIO_PIN_7);
@@ -285,10 +293,13 @@ void motorInit(void){
        GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_1 |  GPIO_PIN_3 , GPIO_PIN_3+GPIO_PIN_1);
 
        GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_0,GPIO_PIN_0); // dir for motor 1, set to forward
-       GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_2,GPIO_PIN_2); // dir for motor 2, set to forward
-
        GPIOPinWrite(GPIO_PORTP_BASE,GPIO_PIN_4,GPIO_PIN_4); // brake for motor 1, set HIGH so no braking
-       GPIOPinWrite(GPIO_PORTP_BASE,GPIO_PIN_5,GPIO_PIN_5); // brake for motor 2
+
+
+
+       GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_2,GPIO_PIN_2); // dir for motor 2, set to forward
+       GPIOPinWrite(GPIO_PORTP_BASE,GPIO_PIN_5,GPIO_PIN_5); // brake for motor 2, set HIGH so no braking
+
 }
 
 /*
@@ -302,17 +313,50 @@ void motorInit(void){
  */
 
 void motorDriverInit(void){
+    while(SSIDataGetNonBlocking(SSI2_BASE, &pui32DataRx[0])){
+    }
+
+    pui32DataTx[0] = 0b1001000000000000; // read register 3
+    pui32DataTx[1] = 0b0001000001000000; // set register 3, bit 6 and 5 to 10, option 3, 1x PWM mode
+    pui32DataTx[2]=  0b1001000000000000; // read register 3
+    pui32DataTx[3]=  0b1001000000000000; // read register 3 one more time
+
+    GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_3,0x00);
+    SysCtlDelay(1);
+    for(ui32Index = 0; ui32Index < 4; ui32Index++){ // only reading and writing 3 times
+        GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_3,0x00); // Pull CS pin low
+        SysCtlDelay(1);
+        SSIDataPut(SSI2_BASE, pui32DataTx[ui32Index]); // Send data
+        SysCtlDelay(1000); // wait (at least 50ns)
+        GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_3,GPIO_PIN_3); // Being the CS pin high
+        SSIDataGet(SSI2_BASE, &pui32DataRx[ui32Index]); // Get the data
+    }
+    while(SSIBusy(SSI2_BASE)){
+    }
+
+    GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_3,GPIO_PIN_3); // Make sure the pin is high
+
+    //SysCtlDelay(1000);
+    delayMS(1000);
+
+
+
+
    while(SSIDataGetNonBlocking(SSI2_BASE, &pui32DataRx[0])){
    }
    pui32DataTx[0] = 0b1001000000000000; // read register 3
    pui32DataTx[1] = 0b0001000001000000; // set register 3, bit 6 and 5 to 10, option 3, 1x PWM mode
    pui32DataTx[2]=  0b1001000000000000; // read register 3
+   pui32DataTx[3]=  0b1001000000000000; // read register 3 one more time
    //
    // Send 3 bytes of data.
    //
+
+   // JUST FOR MOTOR 1
+
    GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_2,0x00);
    SysCtlDelay(1);
-   for(ui32Index = 0; ui32Index < NUM_SSI_DATA; ui32Index++){
+   for(ui32Index = 0; ui32Index < 4; ui32Index++){ // only reading and writing 3 times
        GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_2,0x00); // Pull CS pin low
        SysCtlDelay(1);
        SSIDataPut(SSI2_BASE, pui32DataTx[ui32Index]); // Send data
@@ -326,33 +370,8 @@ void motorDriverInit(void){
    GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_2,GPIO_PIN_2); // Make sure the pin is high
    //SysCtlDelay(1000);
    SysCtlDelay(1000);
-   // Done
-   // Repeat for motor 2
-   while(SSIDataGetNonBlocking(SSI2_BASE, &pui32DataRx[0])){
-      }
-      pui32DataTx[0] = 0b1001000000000000; // read register 3
-      pui32DataTx[1] = 0b0001000001000000; // set register 3, bit 6 and 5 to 10, option 3, 1x PWM mode
-      pui32DataTx[2]=  0b1001000000000000; // read register 3
-      //
-      // Send 3 bytes of data.
-      //
-      GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_3,0x00);
-      SysCtlDelay(1);
-      for(ui32Index = 0; ui32Index < NUM_SSI_DATA; ui32Index++){
-          GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_3,0x00); // Pull CS pin low
-          SysCtlDelay(1);
-          SSIDataPut(SSI2_BASE, pui32DataTx[ui32Index]); // Send data
-          SysCtlDelay(1000); // wait (at least 50ns)
-          GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_3,GPIO_PIN_3); // Being the CS pin high
-          SSIDataGet(SSI2_BASE, &pui32DataRx[ui32Index]); // Get the data
-      }
-      while(SSIBusy(SSI2_BASE)){
-      }
 
-      GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_3,GPIO_PIN_3); // Make sure the pin is high
-      //SysCtlDelay(1000);
-      SysCtlDelay(1000);
-      // Done
+
 
 }
 
@@ -360,42 +379,22 @@ void motorDriverInit(void){
  * Wrapper function that takes in a control signal for the 1xPWM mode
  * if control is zero = brake!
  */
-void motor1ControlPWM(int control){
-    if (control>0){
-        // Positive direction
-        GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_0,GPIO_PIN_0); // Set to HIGH  - forward
-        GPIOPinWrite(GPIO_PORTP_BASE,GPIO_PIN_4,GPIO_PIN_4); // Set to HIGH - no braking
-        motor2PWM(control);
-    }
-    else if (control<0) {
-        // Negative direction
-        GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_0,0);
-        GPIOPinWrite(GPIO_PORTP_BASE,GPIO_PIN_4,GPIO_PIN_4);
-        motor2PWM(-1*control);
-    }
-    else {
-        GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_0,0);
-        GPIOPinWrite(GPIO_PORTP_BASE,GPIO_PIN_4,0); // Set brake pin to low, brake!
-    }
-}
-
-
 void motor2ControlPWM(int control){
     if (control>0){
         // Positive direction
-        GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_2,GPIO_PIN_2); // Set to HIGH  - forward
-        GPIOPinWrite(GPIO_PORTP_BASE,GPIO_PIN_5,GPIO_PIN_5); // Set to HIGH - no braking
+        GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_0,GPIO_PIN_0); // Set to HIGH  - forward
+        GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_4,GPIO_PIN_4); // Set to HIGH - no braking
         motor2PWM(control);
     }
     else if (control<0) {
         // Negative direction
-        GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_2,0);
-        GPIOPinWrite(GPIO_PORTP_BASE,GPIO_PIN_5,GPIO_PIN_5);
+        GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_0,0);
+        GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_4,GPIO_PIN_4);
         motor2PWM(-1*control);
     }
     else {
-        GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_2,0);
-        GPIOPinWrite(GPIO_PORTP_BASE,GPIO_PIN_5,0); // Set brake pin to low, brake!
+        GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_0,0);
+        GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_4,0); // Set brake pin to low, brake!
     }
 }
 
@@ -408,13 +407,13 @@ void motor2ControlPWM(int control){
  * spiInit()
  * motorDriverInit()
  */
-// PF0
+
 void motor1PWM(int pwmValue){
     // assuming PWM has been initialized.
     PWMPulseWidthSet(PWM0_BASE, PWM_OUT_0,pwmValue);
 
 }
-// PG0
+
 void motor2PWM(int pwmValue){
     // assuming PWM has been initialized.
     PWMPulseWidthSet(PWM0_BASE, PWM_OUT_4,pwmValue);
@@ -462,7 +461,7 @@ uint32_t readMotor2RawRelative(void){
     else if (angle_gap<-4000){
         modifier = modifier + 16383;
     }
-    int relative_angle = readMotor2Raw()+modifier;
+    uint32_t relative_angle = readMotor2Raw()+modifier;
     last_motor_2_angle = readMotor2Raw();
     return relative_angle;
 
@@ -921,8 +920,8 @@ void spiInit(void){
 
     // Motor
     GPIOPinConfigure(GPIO_PD3_SSI2CLK);
-    GPIOPinConfigure(GPIO_PD1_SSI2XDAT0);
-    GPIOPinConfigure(GPIO_PD0_SSI2XDAT1);
+    GPIOPinConfigure(GPIO_PD1_SSI2XDAT0); // MOSI
+    GPIOPinConfigure(GPIO_PD0_SSI2XDAT1); // MISO
 
     // Encoder 1
     GPIOPinConfigure(GPIO_PA4_SSI0XDAT0);
@@ -1011,11 +1010,10 @@ void spiInit(void){
 
 /*
  * This function sets up the pwm on pins PF1,PF2,PF3 which are avaliable on the TM4C123 Launchpad as RGB outputs.
- *
+ * TODO: Change PWM output pins
  */
 
-// PF0 is PWM motor 1
-// PG0 is PWM motor 2
+
 void pwmInit(void){
     SysCtlPWMClockSet(SYSCTL_PWMDIV_1);
     // Enable the peripherals used by this program.
@@ -1049,8 +1047,8 @@ void pwmInit(void){
     PWMGenPeriodSet(PWM0_BASE, PWM_GEN_0, 320); // PF0
     PWMGenPeriodSet(PWM0_BASE, PWM_GEN_2, 320); // PG0
     //Set PWM duty-50% (Period /2)
-    PWMPulseWidthSet(PWM0_BASE, PWM_OUT_0,0);
-    PWMPulseWidthSet(PWM0_BASE, PWM_OUT_4,0);
+    PWMPulseWidthSet(PWM0_BASE, PWM_OUT_0,1);
+    PWMPulseWidthSet(PWM0_BASE, PWM_OUT_4,1);
     // PWMPulseWidthSet(PWM1_BASE, PWM_OUT_7,0);
     // Enable the PWM generator
     PWMGenEnable(PWM0_BASE, PWM_GEN_0);
