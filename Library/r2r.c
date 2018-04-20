@@ -47,7 +47,7 @@
 
 // DEBUG flag
 // 1 = DEBUG mode, 0 = not DEBUGGING
-int r2rdebug = 1;
+int r2rdebug = 0;
 
 uint32_t adcArray[4]={0};
 
@@ -707,10 +707,10 @@ uint32_t readMotor2RawRelative(void){
 }
 
 float readMotor1AngleRelative(void){
-    return ((float)readMotor1RawRelative()/16383.0)*360.0;
+    return ((float)((int)readMotor1RawRelative())/16383.0)*360.0;
 }
 float readMotor2AngleRelative(void){
-    return ((float)readMotor2RawRelative()/16383.0)*360.0;
+    return ((float)((int)readMotor2RawRelative())/16383.0)*360.0;
 }
 
 float readMotor1RadRelative(void){

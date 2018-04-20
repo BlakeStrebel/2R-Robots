@@ -236,16 +236,50 @@ extern int readMotor1Raw(void);
 extern int readMotor2Raw(void);
 
 /**
- * @brief Reads value in encoderVal array for motor 1 and keeps track of multiturn angles
+ * @brief Reads value in encoderVal array for motor 1 and keeps track of multiturn counts
+ *
+ * This function reads out the angle and keeps track of it for multiple turns. The value
+ * ranges from -2,147,483,648 to 2,147,483,648. Each turn is 16383 counts
+ *
+ * @param Void
+ * @return The counts as an int
+ *
+ */
+extern uint32_t readMotor1RawRelative(void);
+
+/**
+ * @brief Reads value in encoderVal array for motor 2 and keeps track of multiturn counts
  *
  * This function reads out the angle and keeps track of it for multiple turns. The value
  * ranges from -2,147,483,648 to 2,147,483,648
  *
  * @param Void
- * @return The angle as an int
+ * @return The counts as an int
  *
  */
 extern uint32_t readMotor2RawRelative(void);
+
+/**
+ * @brief Reads value in encoderVal array for motor 1 and keeps track of multiturn angles
+ *
+ * This function reads out the angle and keeps track of it for multiple turns.
+ *
+ * @param Void
+ * @return The angle as an int
+ *
+ */
+extern uint32_t readMotor1RawAngle(void);
+
+/**
+ * @brief Reads value in encoderVal array for motor 2 and keeps track of multiturn angles
+ *
+ * This function reads out the angle and keeps track of it for multiple turns.
+ *
+ * @param Void
+ * @return The angle as an int
+ *
+ */
+extern uint32_t readMotor2RawAngle(void);
 
 /*
  * Control functions
