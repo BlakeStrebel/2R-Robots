@@ -80,8 +80,9 @@ Timer1IntHandler(void)                          //This is the time interrupt
 
 
 
-    float desired_angle = 60;
-    float current_angle = readMotor2Angle() - offset_angle;
+    float desired_angle = -60;
+    float current_angle;
+    current_angle = readMotor2Angle() - offset_angle;
 
     float error = desired_angle - current_angle;
 
@@ -140,6 +141,7 @@ int main()
     while(numcount<1000000){
         motor2ControlPWM(1500);
         motor1PWM(1500);
+        //motor1PWM(0);
         numcount++;
     }
     motor2PWM(1); // stop the motor.
