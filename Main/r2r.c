@@ -90,26 +90,13 @@ void r2rDefaultInit(void){
     sysInit(); // Init system clock and Master interrupt
     uartInit(); // Init UART communication
     spiInit(); // Init SPI communication for motor driver 1 and 2, and encoder 1, and encoder 2
-    motorInit(); // Set up PWM pins for motor driver, already includes pwmInit()
+    pwmInit(); // PWM OUT 4 and PWM OUT 6, PF0 and PF2
+    motorInit(); // Set useful signal outputs.
     motorDriverInit(); // Send values to set up the motor for 1x PWM mode
     //adcInit(); // Init for current and temperture
     //gpioInit(); // Init for general GPIO - set to input for safety
-    //timerIntInit();
-
+    timerIntInit();
 }
-
-/*
- * This function stops the clock for a given amount of ms
- *
- * Comes after:
- * sysInit()
- */
-void delayMS(int ms) {
-    //SysCtlDelay( (SysCtlClockGet()/(3*1000))*ms ) ;
-    SysCtlDelay( (ui32SysClock/(3*1000))*ms ) ;
-
-}
-
 
 /*
  * The system init function initiazes the system clock and the processor interrupts
@@ -126,8 +113,295 @@ void sysInit(void){
                                              SYSCTL_OSC_MAIN |
                                              SYSCTL_USE_PLL |
                                              SYSCTL_CFG_VCO_480), 120000000); // Use 25Mhz crystal and use PLL to accelerate to 120MHz
-    IntMasterEnable();
 }
+
+/*
+ * This function sets up the UART on UART0, PA0(RX) and PA1 (TX)
+ * It is set up for 115200 baud 8N1. To send numbers and characters use
+ * UARTprintf.
+ */
+void uartInit(void){
+    //
+    // Enable GPIO port A which is used for UART0 pins.
+    //
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOA);
+
+    //
+    // Configure the pin muxing for UART0 functions on port A0 and A1.
+    // This step is not necessary if your part does not support pin muxing.
+    //
+    GPIOPinConfigure(GPIO_PA0_U0RX);
+    GPIOPinConfigure(GPIO_PA1_U0TX);
+
+    //
+    // Enable UART0 so that we can configure the clock.
+    //
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_UART0);
+
+    //
+    // Select the alternate (UART) function for these pins.
+    //
+    GPIOPinTypeUART(GPIO_PORTA_BASE, GPIO_PIN_0 | GPIO_PIN_1);
+
+    if(r2rdebug==1){
+        //
+        // Use the internal 16MHz oscillator as the UART clock source.
+        //
+        UARTClockSourceSet(UART0_BASE, UART_CLOCK_PIOSC);
+
+        //
+        // Initialize the UART for console I/O.
+        //
+        UARTStdioConfig(0, 115200, 16000000);
+    }
+    else{
+        UARTConfigSetExpClk(UART0_BASE, ui32SysClock, 115200,
+                                (UART_CONFIG_WLEN_8 | UART_CONFIG_STOP_ONE |
+                                 UART_CONFIG_PAR_NONE));
+    }
+}
+
+/*
+ * This function initilizes the SPI on SSI0, using PA2 (CLK), PA3(SS), PA4(RX), PA5(TX)
+ */
+void spiInit(void){
+    //
+    // The SSI0 peripheral must be enabled for use.
+    //
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_SSI0); // SSI0
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_SSI1); // SSI1
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_SSI2); // SSI2
+
+    //
+    // For this example SSI0 is used with PortA[5:2].  The actual port and pins
+    // used may be different on your part, consult the data sheet for more
+    // information.  GPIO port A needs to be enabled so these pins can be used.
+    // TODO: change this to whichever GPIO port you are using.
+    //
+    // Encoder1
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOA);
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOL);
+    // Encoder2
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOB);
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOE);
+    // Motors
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOD);
+
+    //
+    // Configure the pin muxing for SSI0 functions on port A2, A3, A4, and A5.
+    // This step is not necessary if your part does not support pin muxing.
+    // TODO: change this to select the port/pin you are using.
+    //
+    // Encoder 1
+    GPIOPinConfigure(GPIO_PA2_SSI0CLK);
+    GPIOPinConfigure(GPIO_PA4_SSI0XDAT0);
+    GPIOPinConfigure(GPIO_PA5_SSI0XDAT1);
+    // Encoder 2
+    GPIOPinConfigure(GPIO_PB5_SSI1CLK);
+    GPIOPinConfigure(GPIO_PE4_SSI1XDAT0);
+    GPIOPinConfigure(GPIO_PE5_SSI1XDAT1);
+    // Motor
+    GPIOPinConfigure(GPIO_PD3_SSI2CLK);
+    GPIOPinConfigure(GPIO_PD1_SSI2XDAT0); // MOSI
+    GPIOPinConfigure(GPIO_PD0_SSI2XDAT1); // MISO
+
+    //
+    // Configure the GPIO settings for the SSI pins.  This function also gives
+    // control of these pins to the SSI hardware.  Consult the data sheet to
+    // see which functions are allocated per pin.
+    // The pins are assigned as follows:
+    //      PA5 - SSI0Tx
+    //      PA4 - SSI0Rx
+    //      PA3 - SSI0Fss
+    //      PA2 - SSI0CLK
+    // TODO: change this to select the port/pin you are using.
+    //
+    // encoder 1
+    GPIOPinTypeSSI(GPIO_PORTA_BASE, GPIO_PIN_2 | GPIO_PIN_4 | GPIO_PIN_5); // SCK/MOSI/MISO
+    GPIOPinTypeGPIOOutput(GPIO_PORTL_BASE, GPIO_PIN_0); //CS
+    // encoder 2
+    GPIOPinTypeSSI(GPIO_PORTB_BASE, GPIO_PIN_5); // SCK
+    GPIOPinTypeSSI(GPIO_PORTE_BASE, GPIO_PIN_5 | GPIO_PIN_4); // MOSI/MISO
+    GPIOPinTypeGPIOOutput(GPIO_PORTL_BASE, GPIO_PIN_1); //CS
+    // Motors
+    GPIOPinTypeSSI(GPIO_PORTD_BASE, GPIO_PIN_0 | GPIO_PIN_1 |  GPIO_PIN_3); // SCK/MOSI/MISO
+    GPIOPinTypeGPIOOutput(GPIO_PORTL_BASE,GPIO_PIN_2 | GPIO_PIN_3); // CS L2 for 1, L3 for 2
+
+    //
+    // Configure and enable the SSI port for SPI master mode.  Use SSI0,
+    // system clock supply, idle clock level low and active low clock in
+    // freescale SPI mode, master mode, 1MHz SSI frequency, and 8-bit data.
+    // For SPI mode, you can set the polarity of the SSI clock when the SSI
+    // unit is idle.  You can also configure what clock edge you want to
+    // capture data on.  Please reference the datasheet for more information on
+    // the different SPI modes.
+    //
+    SSIConfigSetExpClk(SSI1_BASE, ui32SysClock, SSI_FRF_MOTO_MODE_1,
+                            SSI_MODE_MASTER, 1000000, 8); // 8 bits for encoder, note that we can't go above 16 bits using SPI Freescale mode
+    SSIConfigSetExpClk(SSI0_BASE, ui32SysClock, SSI_FRF_MOTO_MODE_1,
+                                SSI_MODE_MASTER, 1000000, 8); // 8 bits for encoder, note that we can't go above 16 bits using SPI Freescale mode
+    SSIConfigSetExpClk(SSI2_BASE, ui32SysClock, SSI_FRF_MOTO_MODE_1,
+                           SSI_MODE_MASTER, 1000000, 16); // 16 bits for motor
+
+    //
+    // Configure all the CS
+    //
+    GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_1,GPIO_PIN_1); // Set CS to HIGH        //Is it necessary for L0?
+    GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_2,GPIO_PIN_2); //Set CS to HIGH
+    GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_3,GPIO_PIN_3); //Set CS to HIGH
+
+    //
+    // Enable the SSI0 module.
+    //
+    SSIEnable(SSI2_BASE);
+    SSIEnable(SSI1_BASE);
+    SSIEnable(SSI0_BASE);
+}
+
+/*
+ * This function sets up the pwm on pins PF1,PF2,PF3 which are avaliable on the TM4C123 Launchpad as RGB outputs.
+ * TODO: Change PWM output pins
+ */
+void pwmInit(void){
+    //
+    // Set the PWM clock to the system clock.
+    //
+    SysCtlPWMClockSet(SYSCTL_PWMDIV_1);
+
+    //
+    // The PWM peripheral must be enabled for use.
+    //
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_PWM0);
+
+    //
+    // For this example PWM0 is used with PortB Pins 6 and 7.  The actual port
+    // and pins used may be different on your part, consult the data sheet for
+    // more information.  GPIO port B needs to be enabled so these pins can be
+    // used.
+    // TODO: change this to whichever GPIO port you are using.
+    //
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOF);
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOG);
+
+    //
+    // Configure the GPIO pin muxing to select PWM functions for these pins.
+    // This step selects which alternate function is available for these pins.
+    // This is necessary if your part supports GPIO pin function muxing.
+    // Consult the data sheet to see which functions are allocated per pin.
+    // TODO: change this to select the port/pin you are using.
+    //
+    GPIOPinConfigure(GPIO_PF0_M0PWM0);
+    GPIOPinConfigure(GPIO_PG0_M0PWM4);
+
+    //
+    // Configure the GPIO pad for PWM function on pins PB6 and PB7.  Consult
+    // the data sheet to see which functions are allocated per pin.
+    // TODO: change this to select the port/pin you are using.
+    //
+    GPIOPinTypePWM(GPIO_PORTF_BASE, GPIO_PIN_0);
+    GPIOPinTypePWM(GPIO_PORTG_BASE, GPIO_PIN_0);
+
+    //
+    // Configure the PWM0 to count up/down without synchronization.
+    // Note: Enabling the dead-band generator automatically couples the 2
+    // outputs from the PWM block so we don't use the PWM synchronization.
+    //
+    PWMGenConfigure(PWM0_BASE, PWM_GEN_0, PWM_GEN_MODE_UP_DOWN |
+                    PWM_GEN_MODE_NO_SYNC);
+    PWMGenConfigure(PWM0_BASE, PWM_GEN_2, PWM_GEN_MODE_UP_DOWN |
+                    PWM_GEN_MODE_NO_SYNC);
+
+    //
+    // Set the PWM period to 250Hz.  To calculate the appropriate parameter
+    // use the following equation: N = (1 / f) * SysClk.  Where N is the
+    // function parameter, f is the desired frequency, and SysClk is the
+    // system clock frequency.
+    // In this case you get: (1 / 12500Hz) * 120MHz = 9600 cycles.  Note that
+    // the maximum period you can set is 2^16 - 1.
+    // TODO: modify this calculation to use the clock frequency that you are
+    // using.
+    //
+    PWMGenPeriodSet(PWM0_BASE, PWM_GEN_0, 9600);
+    PWMGenPeriodSet(PWM0_BASE, PWM_GEN_2, 9600);
+
+    //
+    // Set PWM0 PD0 to a duty cycle of 25%.  You set the duty cycle as a
+    // function of the period.  Since the period was set above, you can use the
+    // PWMGenPeriodGet() function.  For this example the PWM will be high for
+    // 25% of the time or 16000 clock cycles (64000 / 4).
+    //
+    PWMPulseWidthSet(PWM0_BASE, PWM_OUT_0,1);
+    PWMPulseWidthSet(PWM0_BASE, PWM_OUT_4,1);
+
+    //
+    // Enable the PWM0 Bit 0 (PD0) and Bit 1 (PD1) output signals.
+    //
+    PWMOutputState(PWM0_BASE, PWM_OUT_0_BIT | PWM_OUT_4_BIT, true);
+
+    //
+    // Enables the counter for a PWM generator block.
+    //
+    PWMGenEnable(PWM0_BASE, PWM_GEN_0);
+    PWMGenEnable(PWM0_BASE, PWM_GEN_2);
+}
+
+/*
+ * This function sets up all the PWM pins and the gpio pins for the motor, may also optionally call SPI pins
+ *
+ * Comes after:
+ * pwmInit()
+ * sysInit()
+ *
+ */
+void motorInit(void){
+       // Setting up motor driver pins,
+       // Motor directions PK0:1, PK2:2
+       // Motor enable pins, PK1: 1, PK3: 2
+       // Motor brake pins, PP4: 1, PP5: 2
+       SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOK);
+       SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOP);
+
+       GPIOPinTypeGPIOOutput(GPIO_PORTK_BASE, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3);
+       GPIOPinTypeGPIOOutput(GPIO_PORTP_BASE, GPIO_PIN_4 | GPIO_PIN_5);
+
+       //set directions
+       GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_0 | GPIO_PIN_2 , GPIO_PIN_0 + GPIO_PIN_2);
+
+       // turn on
+       GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_1 |  GPIO_PIN_3 , GPIO_PIN_3 + GPIO_PIN_1);     //Why using +?
+
+       GPIOPinWrite(GPIO_PORTP_BASE,GPIO_PIN_4,GPIO_PIN_4); // brake for motor 1, set HIGH so no braking
+       GPIOPinWrite(GPIO_PORTP_BASE,GPIO_PIN_5,GPIO_PIN_5); // brake for motor 2, set HIGH so no braking
+
+       //GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_0,GPIO_PIN_0); // dir for motor 1, set to forward
+       //GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_2,GPIO_PIN_2); // dir for motor 2, set to forward
+       // Pulled low on motor fault PK6:1, PK7: 2
+       //GPIOPinTypeGPIOInput(GPIO_PORTK_BASE, GPIO_PIN_6 | GPIO_PIN_7);
+       //SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOJ);
+       // TODO: Cal, short all amplifier inputs together (why?)
+       //GPIOPinTypeGPIOOutput(GPIO_PORTJ_BASE, GPIO_PIN_0 | GPIO_PIN_1 );
+}
+
+
+
+
+
+
+
+/*
+ * This function stops the clock for a given amount of ms
+ *
+ * Comes after:
+ * sysInit()
+ */
+void delayMS(int ms) {
+    //SysCtlDelay( (SysCtlClockGet()/(3*1000))*ms ) ;
+    SysCtlDelay( (ui32SysClock/(3*1000))*ms ) ;
+
+}
+
+
+
 
 /*
  * This function explicitly checks for safety conditions, and it uses a global variable run_program to turn off the motor
@@ -258,49 +532,7 @@ void encoderRead(void){
 }
 
 
-/*
- * This function sets up all the PWM pins and the gpio pins for the motor, may also optionally call SPI pins
- *
- * Comes after:
- * pwmInit()
- * sysInit()
- *
- */
 
-void motorInit(void){
-       // Setting up motor driver pins,
-       // Motor directions PK0:1, PK2:2
-       // Motor enable pins, PK1: 1, PK3: 2
-       // Motor brake pins, PP4: 1, PP5: 2
-       SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOK);
-       SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOJ);
-       SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOP);
-
-
-
-       GPIOPinTypeGPIOOutput(GPIO_PORTK_BASE, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3);
-       GPIOPinTypeGPIOOutput(GPIO_PORTP_BASE, GPIO_PIN_4 | GPIO_PIN_5);
-
-       // GPIOPinWrite(GPIO_PORTF_BASE, RED_LED|BLUE_LED|GREEN_LED, ledTable[i]);
-       // Pulled low on motor fault PK6:1, PK7: 2
-       GPIOPinTypeGPIOInput(GPIO_PORTK_BASE, GPIO_PIN_6 | GPIO_PIN_7);
-       // TODO: Cal, short all amplifier inputs together (why?)
-       GPIOPinTypeGPIOOutput(GPIO_PORTJ_BASE, GPIO_PIN_0 | GPIO_PIN_1 );
-       pwmInit(); // PWM OUT 4 and PWM OUT 6, PF0 and PF2
-       //set directions
-       GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_0 | GPIO_PIN_2 , GPIO_PIN_0+GPIO_PIN_2);
-       // turn on
-       GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_1 |  GPIO_PIN_3 , GPIO_PIN_3+GPIO_PIN_1);
-
-       GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_0,GPIO_PIN_0); // dir for motor 1, set to forward
-       GPIOPinWrite(GPIO_PORTP_BASE,GPIO_PIN_4,GPIO_PIN_4); // brake for motor 1, set HIGH so no braking
-
-
-
-       GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_2,GPIO_PIN_2); // dir for motor 2, set to forward
-       GPIOPinWrite(GPIO_PORTP_BASE,GPIO_PIN_5,GPIO_PIN_5); // brake for motor 2, set HIGH so no braking
-
-}
 
 /*
  * This function sends SPI data over to the motor driver to setup the driver for 1x PWM mode
@@ -339,9 +571,6 @@ void motorDriverInit(void){
     //SysCtlDelay(1000);
     delayMS(1000);
 
-
-
-
    while(SSIDataGetNonBlocking(SSI2_BASE, &pui32DataRx[0])){
    }
    pui32DataTx[0] = 0b1001000000000000; // read register 3
@@ -370,9 +599,6 @@ void motorDriverInit(void){
    GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_2,GPIO_PIN_2); // Make sure the pin is high
    //SysCtlDelay(1000);
    SysCtlDelay(1000);
-
-
-
 }
 
 /*
@@ -763,58 +989,6 @@ void PIDCurrUpdate(void){
 
 
 
-/*
- * This function sets up the UART on UART0, PA0(RX) and PA1 (TX)
- * It is set up for 115200 baud 8N1. To send numbers and characters use
- * UARTprintf.
- */
-void uartInit(void){
-    //
-    // Enable GPIO port A which is used for UART0 pins.
-    //
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOA);
-
-    //
-    // Configure the pin muxing for UART0 functions on port A0 and A1.
-    // This step is not necessary if your part does not support pin muxing.
-    //
-    GPIOPinConfigure(GPIO_PA0_U0RX);
-    GPIOPinConfigure(GPIO_PA1_U0TX);
-
-    //
-    // Enable UART0 so that we can configure the clock.
-    //
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_UART0);
-
-
-    if(r2rdebug==1){
-        //
-        // Use the internal 16MHz oscillator as the UART clock source.
-        //
-
-        UARTClockSourceSet(UART0_BASE, UART_CLOCK_PIOSC);
-
-        //
-        // Select the alternate (UART) function for these pins.
-        //
-        GPIOPinTypeUART(GPIO_PORTA_BASE, GPIO_PIN_0 | GPIO_PIN_1);
-
-        //
-        // Initialize the UART for console I/O.
-        //
-        UARTStdioConfig(0, 115200, 16000000);
-    }
-    else{
-
-        GPIOPinTypeUART(GPIO_PORTA_BASE, GPIO_PIN_0 | GPIO_PIN_1);
-
-        UARTConfigSetExpClk(UART0_BASE, ui32SysClock, 115200,
-                                (UART_CONFIG_WLEN_8 | UART_CONFIG_STOP_ONE |
-                                 UART_CONFIG_PAR_NONE));
-    }
-
-
-}
 
 
 /*
@@ -894,170 +1068,6 @@ void i2cInit(tI2CMInstance g_sI2CMSimpleInst){
     // Initialize the I2C master driver.
     I2CMInit(&g_sI2CMSimpleInst, I2C0_BASE, INT_I2C0, 0xff, 0xff, SysCtlClockGet());
 }
-
-/*
- * This function initilizes the SPI on SSI0, using PA2 (CLK), PA3(SS), PA4(RX), PA5(TX)
- */
-
-void spiInit(void){
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_SSI2); // SSI2
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_SSI1); // SSI1
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_SSI0); // SSI1
-    //
-    // For this example SSI0 is used with PortA[5:2].  The actual port and pins
-    // used may be different on your part, consult the data sheet for more
-    // information.  GPIO port A needs to be enabled so these pins can be used.
-    // TODO: change this to whichever GPIO port you are using.
-    //
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOA);
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOD);
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOK);
-
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOL);
-
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOE);
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOB);
-
-    // Motor
-    GPIOPinConfigure(GPIO_PD3_SSI2CLK);
-    GPIOPinConfigure(GPIO_PD1_SSI2XDAT0); // MOSI
-    GPIOPinConfigure(GPIO_PD0_SSI2XDAT1); // MISO
-
-    // Encoder 1
-    GPIOPinConfigure(GPIO_PA4_SSI0XDAT0);
-    GPIOPinConfigure(GPIO_PA5_SSI0XDAT1);
-    GPIOPinConfigure(GPIO_PA2_SSI0CLK);
-
-    // Encoder 2
-    GPIOPinConfigure(GPIO_PE5_SSI1XDAT1);
-    GPIOPinConfigure(GPIO_PE4_SSI1XDAT0);
-    GPIOPinConfigure(GPIO_PB5_SSI1CLK);
-
-
-
-    // Motor 1
-    GPIOPinTypeSSI(GPIO_PORTD_BASE, GPIO_PIN_0 | GPIO_PIN_1 |  GPIO_PIN_3); // SCK/MOSI/MISO (shared)
-    GPIOPinTypeGPIOOutput(GPIO_PORTL_BASE,GPIO_PIN_2); // CS
-    GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_2,GPIO_PIN_2); //Set CS to HIGH
-
-    // Motor 2
-    GPIOPinTypeGPIOOutput(GPIO_PORTL_BASE,GPIO_PIN_3); // CS
-    GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_3,GPIO_PIN_3); //Set CS to HIGH
-    //GPIOPinTypeGPIOOutput(GPIO_PORTA_BASE,GPIO_PIN_6); // CS
-    //GPIOPinWrite(GPIO_PORTA_BASE,GPIO_PIN_6,GPIO_PIN_6); //Set CS to HIGH
-
-    // encoder 1
-    GPIOPinTypeSSI(GPIO_PORTA_BASE, GPIO_PIN_4 | GPIO_PIN_5); // MOSI/MISO
-    GPIOPinTypeSSI(GPIO_PORTA_BASE, GPIO_PIN_2); // SCK
-    GPIOPinTypeGPIOOutput(GPIO_PORTL_BASE,GPIO_PIN_0); //CS
-
-    // encoder 2
-    GPIOPinTypeSSI(GPIO_PORTE_BASE, GPIO_PIN_5 | GPIO_PIN_4); // MOSI/MISO
-    GPIOPinTypeSSI(GPIO_PORTB_BASE, GPIO_PIN_5); // SCK
-    GPIOPinTypeGPIOOutput(GPIO_PORTL_BASE,GPIO_PIN_1); //CS
-    GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_1,GPIO_PIN_1); // Set CS to HIGH
-
-    SSIConfigSetExpClk(SSI2_BASE, ui32SysClock, SSI_FRF_MOTO_MODE_1,
-                           SSI_MODE_MASTER, 1000000, 16); // 16 bits for motor
-    SSIConfigSetExpClk(SSI1_BASE, ui32SysClock, SSI_FRF_MOTO_MODE_1,
-                            SSI_MODE_MASTER, 1000000, 8); // 8 bits for encoder, note that we can't go above 16 bits using SPI Freescale mode
-    SSIConfigSetExpClk(SSI0_BASE, ui32SysClock, SSI_FRF_MOTO_MODE_1,
-                                SSI_MODE_MASTER, 1000000, 8); // 8 bits for encoder, note that we can't go above 16 bits using SPI Freescale mode
-    SSIEnable(SSI2_BASE);
-    SSIEnable(SSI1_BASE);
-    SSIEnable(SSI0_BASE);
-
-}
-
-/*
-void spiInit(void){
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOD);
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOL);
-
-        //
-        // Configure the pin muxing for SSI0 functions on port A2, A3, A4, and A5.
-        // This step is not necessary if your part does not support pin muxing.
-        // TODO: change this to select the port/pin you are using.
-        //
-
-        GPIOPinConfigure(GPIO_PD3_SSI2CLK);
-        GPIOPinConfigure(GPIO_PD2_SSI2FSS); // NC
-        GPIOPinConfigure(GPIO_PL2_C0O); //motor 1
-        GPIOPinConfigure(GPIO_PL3_C1O); // motor 2
-        GPIOPinConfigure(GPIO_PD0_SSI2XDAT1);
-        GPIOPinConfigure(GPIO_PD1_SSI2XDAT0);
-
-
-        //
-        // Configure the GPIO settings for the SSI pins.  This function also gives
-        // control of these pins to the SSI hardware.  Consult the data sheet to
-        // see which functions are allocated per pin.
-        // The pins are assigned as follows:
-        //      PA5 - SSI0Tx
-        //      PA4 - SSI0Rx
-        //      PA3 - SSI0Fss
-        //      PA2 - SSI0CLK
-        // TODO: change this to select the port/pin you are using.
-        //
-        GPIOPinTypeSSI(GPIO_PORTD_BASE, GPIO_PIN_1 | GPIO_PIN_0 | GPIO_PIN_2 |
-                       GPIO_PIN_3);
-        SSIConfigSetExpClk(SSI2_BASE, SysCtlClockGet(), SSI_FRF_MOTO_MODE_0,
-                               SSI_MODE_MASTER, 1000000, 8);
-        SSIEnable(SSI2_BASE);
-
-}*/
-
-
-/*
- * This function sets up the pwm on pins PF1,PF2,PF3 which are avaliable on the TM4C123 Launchpad as RGB outputs.
- * TODO: Change PWM output pins
- */
-
-
-void pwmInit(void){
-    SysCtlPWMClockSet(SYSCTL_PWMDIV_1);
-    // Enable the peripherals used by this program.
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOF);
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOG);
-    // SysCtlPeripheralEnable(SYSCTL_PERIPH_PWM1);  //The Tiva Launchpad 123 has two modules (0 and 1). Module 1 covers the LED pins
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_PWM0);  //The Tiva Launchpad 129 has one modules (0). Module 0 covers the motor pins
-    //Configure PF0,PF2 Pins as PWM, note 129 M0, but 123 M1
-    GPIOPinConfigure(GPIO_PF0_M0PWM0);
-    GPIOPinConfigure(GPIO_PG0_M0PWM4);
-    //GPIOPinConfigure(GPIO_PF0_M1PWM4);
-    //GPIOPinConfigure(GPIO_PF1_M1PWM6);
-    //GPIOPinConfigure(GPIO_PF3_M1PWM7);
-    GPIOPinTypePWM(GPIO_PORTF_BASE, GPIO_PIN_0);
-    GPIOPinTypePWM(GPIO_PORTG_BASE, GPIO_PIN_0);
-    // GPIOPinTypePWM(GPIO_PORTF_BASE, GPIO_PIN_0 | GPIO_PIN_2 | GPIO_PIN_3);
-    //Configure PWM Options
-    //PWM_GEN_2 Covers M1PWM4 and M1PWM5
-    //PWM_GEN_3 Covers M1PWM6 and M1PWM7 See page 207 4/11/13 DriverLib doc
-    PWMGenConfigure(PWM0_BASE, PWM_GEN_0, PWM_GEN_MODE_DOWN | PWM_GEN_MODE_NO_SYNC);
-    PWMGenConfigure(PWM0_BASE, PWM_GEN_2, PWM_GEN_MODE_DOWN | PWM_GEN_MODE_NO_SYNC);
-    // PWMGenConfigure(PWM1_BASE, PWM_GEN_2, PWM_GEN_MODE_DOWN | PWM_GEN_MODE_NO_SYNC);
-    // PWMGenConfigure(PWM1_BASE, PWM_GEN_3, PWM_GEN_MODE_DOWN | PWM_GEN_MODE_NO_SYNC);
-    // Set the Period (expressed in clock ticks)
-    // To calculate the appropriate parameter
-    // use the following equation: N = (1 / f) * SysClk.  Where N is the
-    // function parameter, f is the desired frequency, and SysClk is the
-    // system clock frequency.
-    // In this case you get: (1 / 12500  Hz) * 4MHz = 320 cycles.  Note that
-    // the maximum period you can set is 2^16 - 1.
-    PWMGenPeriodSet(PWM0_BASE, PWM_GEN_0, 320); // PF0
-    PWMGenPeriodSet(PWM0_BASE, PWM_GEN_2, 320); // PG0
-    //Set PWM duty-50% (Period /2)
-    PWMPulseWidthSet(PWM0_BASE, PWM_OUT_0,1);
-    PWMPulseWidthSet(PWM0_BASE, PWM_OUT_4,1);
-    // PWMPulseWidthSet(PWM1_BASE, PWM_OUT_7,0);
-    // Enable the PWM generator
-    PWMGenEnable(PWM0_BASE, PWM_GEN_0);
-    PWMGenEnable(PWM0_BASE, PWM_GEN_2);
-    // Turn on the Output pins
-    PWMOutputState(PWM0_BASE, PWM_OUT_0_BIT | PWM_OUT_4_BIT , true);
-    // PWMOutputState(PWM1_BASE, PWM_OUT_5_BIT | PWM_OUT_6_BIT | PWM_OUT_7_BIT, true);
-}
-
 
 /*
  * This function enables the ADC unit on the TM4C

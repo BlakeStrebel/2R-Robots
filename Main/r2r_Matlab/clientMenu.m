@@ -21,7 +21,7 @@ clear all;
 clc;
 addpath('functions');
 
-userserial = serialConfig('COM16');
+userserial = serialConfig('COM7');
 fopen(userserial);
 finishup = onCleanup(@()fclose(userserial)); %closes serial on termination!
 

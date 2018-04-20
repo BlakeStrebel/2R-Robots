@@ -9,14 +9,13 @@ elseif (strcmp(oldstep, 'at1dXyy') || strcmp(oldstep, 'at1dXyn')) && symbol == '
 elseif (strcmp(oldstep, 'at1dXyy') || strcmp(oldstep, 'at1dXyn')) && symbol == 'n'
     steplog = 'a';
 else
-    switch symbol            
+    switch symbol
+        case {'q', 'a'}
+            steplog = symbol;
+        case 'r'
+            steplog = oldstep(1: end - 1);
         case options
             steplog = [oldstep, symbol];
-            if symbol == 'q' || symbol == 'a'
-                steplog = symbol;
-            elseif symbol == 'r'
-                steplog = oldstep(1: end - 1);
-            end
         otherwise
             steplog = oldstep;
     end

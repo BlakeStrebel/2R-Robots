@@ -7,13 +7,12 @@ switch steplog
         while s.BytesAvailable == 0
         end
     case 'at1dXy'            
-            if fread(s,1) == 'p'
-                fwrite(s,'s');
-                while s.BytesAvailable == 0
-                end
-                matrix = readArray(s, 500, 1);
-                figure
-                plot(matrix)
+            if fread(s,1)
+            fwrite(s,'s');
+            while s.BytesAvailable == 0
             end
+            matrix = readArray(s, 500, 1);
+            figure
+            plot(matrix)
 end
 end               
