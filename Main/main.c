@@ -82,7 +82,7 @@ Timer1IntHandler(void)                          //This is the time interrupt
 
     float desired_angle = -60;
     float current_angle;
-    current_angle = readMotor2Angle() - offset_angle;
+    current_angle = readMotor2AngleRelative() - offset_angle;
 
     float error = desired_angle - current_angle;
 
@@ -170,7 +170,7 @@ int main()
             while(!UARTCharsAvail(UART0_BASE)){}
             //GPIOPinWrite(GPIO_PORTP_BASE, GPIO_PIN_0, 1);
             if (UARTCharGet(UART0_BASE) == 's'){
-               offset_angle = readMotor2Angle();
+               offset_angle = readMotor2AngleRelative();
                IntMasterEnable();
                i = 0;
             }
