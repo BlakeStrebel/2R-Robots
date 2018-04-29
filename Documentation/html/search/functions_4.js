@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['pwminit',['pwmInit',['../r2r_8c.html#a1c8ae46921c4ae7d57bd44dd994e10bd',1,'pwmInit(void):&#160;r2r.c'],['../r2r_8h.html#a1c8ae46921c4ae7d57bd44dd994e10bd',1,'pwmInit(void):&#160;r2r.c']]]
+  ['gpioinit',['gpioInit',['../r2r_8c.html#adab76f1253da89e657056817a3a9a11a',1,'gpioInit(void):&#160;r2r.c'],['../r2r_8h.html#adab76f1253da89e657056817a3a9a11a',1,'gpioInit(void):&#160;r2r.c']]]
 ];

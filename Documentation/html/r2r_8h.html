@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.14"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>R2R Project: C:/Users/Ben/Documents/GitHub/2R-Robots/Main/r2r.h File Reference</title>
+<title>R2R Project: C:/Users/Ben/Documents/GitHub/2R-Robots/Library/r2r.h File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -61,7 +61,7 @@ $(function() {
 
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="dir_f4e982bca5d979afcf7d664254407d09.html">Main</a></li>  </ul>
+<li class="navelem"><a class="el" href="dir_5ad7f572bbca03234e8e621e192fc099.html">Library</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
@@ -184,42 +184,48 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>motorError</b> (void)<
 <tr class="memitem:ad2f5f86641346f94615d9962f214438a"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="r2r_8h.html#ad2f5f86641346f94615d9962f214438a">readMotor2Raw</a> (void)</td></tr>
 <tr class="memdesc:ad2f5f86641346f94615d9962f214438a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads value in encoderVal array for motor 2.  <a href="#ad2f5f86641346f94615d9962f214438a">More...</a><br /></td></tr>
 <tr class="separator:ad2f5f86641346f94615d9962f214438a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae9fdda991128997c07bf92e292f7c7a3"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="r2r_8h.html#ae9fdda991128997c07bf92e292f7c7a3">readMotor1RawRelative</a> (void)</td></tr>
+<tr class="memdesc:ae9fdda991128997c07bf92e292f7c7a3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads value in encoderVal array for motor 1 and keeps track of multiturn counts.  <a href="#ae9fdda991128997c07bf92e292f7c7a3">More...</a><br /></td></tr>
+<tr class="separator:ae9fdda991128997c07bf92e292f7c7a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af75ba63e08b72bddcfbc9cd102c94b8a"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="r2r_8h.html#af75ba63e08b72bddcfbc9cd102c94b8a">readMotor2RawRelative</a> (void)</td></tr>
-<tr class="memdesc:af75ba63e08b72bddcfbc9cd102c94b8a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads value in encoderVal array for motor 1 and keeps track of multiturn angles.  <a href="#af75ba63e08b72bddcfbc9cd102c94b8a">More...</a><br /></td></tr>
+<tr class="memdesc:af75ba63e08b72bddcfbc9cd102c94b8a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads value in encoderVal array for motor 2 and keeps track of multiturn counts.  <a href="#af75ba63e08b72bddcfbc9cd102c94b8a">More...</a><br /></td></tr>
 <tr class="separator:af75ba63e08b72bddcfbc9cd102c94b8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adadde057f0a039eba73600bd55a68048"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="r2r_8h.html#adadde057f0a039eba73600bd55a68048">readMotor1AngleRelative</a> (void)</td></tr>
+<tr class="memdesc:adadde057f0a039eba73600bd55a68048"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads value in encoderVal array for motor 1 and keeps track of multiturn angles.  <a href="#adadde057f0a039eba73600bd55a68048">More...</a><br /></td></tr>
+<tr class="separator:adadde057f0a039eba73600bd55a68048"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8277b1c9a143a978685671b1a0c7f90d"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="r2r_8h.html#a8277b1c9a143a978685671b1a0c7f90d">readMotor2AngleRelative</a> (void)</td></tr>
+<tr class="memdesc:a8277b1c9a143a978685671b1a0c7f90d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads value in encoderVal array for motor 2 and keeps track of multiturn angles.  <a href="#a8277b1c9a143a978685671b1a0c7f90d">More...</a><br /></td></tr>
+<tr class="separator:a8277b1c9a143a978685671b1a0c7f90d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad9e154ce511d38e9a29a20e18c196683"><td class="memItemLeft" align="right" valign="top"><a id="ad9e154ce511d38e9a29a20e18c196683"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>PIDUpdate</b> (void)</td></tr>
 <tr class="separator:ad9e154ce511d38e9a29a20e18c196683"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a29154e763b66fd963d87890e8122d920"><td class="memItemLeft" align="right" valign="top"><a id="a29154e763b66fd963d87890e8122d920"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>PIDCurrUpdate</b> (void)</td></tr>
 <tr class="separator:a29154e763b66fd963d87890e8122d920"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afd645b17cf0581bcaa22c56011c775e4"><td class="memItemLeft" align="right" valign="top"><a id="afd645b17cf0581bcaa22c56011c775e4"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>adcInit</b> (void)</td></tr>
+<tr class="memitem:afd645b17cf0581bcaa22c56011c775e4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="r2r_8h.html#afd645b17cf0581bcaa22c56011c775e4">adcInit</a> (void)</td></tr>
+<tr class="memdesc:afd645b17cf0581bcaa22c56011c775e4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes ADC MUX.  <a href="#afd645b17cf0581bcaa22c56011c775e4">More...</a><br /></td></tr>
 <tr class="separator:afd645b17cf0581bcaa22c56011c775e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abe02cc201baa3f3c88b6cfe688d13cb2"><td class="memItemLeft" align="right" valign="top"><a id="abe02cc201baa3f3c88b6cfe688d13cb2"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>adcRead</b> (void)</td></tr>
+<tr class="memitem:abe02cc201baa3f3c88b6cfe688d13cb2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="r2r_8h.html#abe02cc201baa3f3c88b6cfe688d13cb2">adcRead</a> (void)</td></tr>
+<tr class="memdesc:abe02cc201baa3f3c88b6cfe688d13cb2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads the ADC values and saves them to a global variable adcArray.  <a href="#abe02cc201baa3f3c88b6cfe688d13cb2">More...</a><br /></td></tr>
 <tr class="separator:abe02cc201baa3f3c88b6cfe688d13cb2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a18b7e8958a230c54f3fe5ac8bc24b24c"><td class="memItemLeft" align="right" valign="top"><a id="a18b7e8958a230c54f3fe5ac8bc24b24c"></a>
-uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>currentRead1</b> (void)</td></tr>
+<tr class="memitem:a18b7e8958a230c54f3fe5ac8bc24b24c"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="r2r_8h.html#a18b7e8958a230c54f3fe5ac8bc24b24c">currentRead1</a> (void)</td></tr>
+<tr class="memdesc:a18b7e8958a230c54f3fe5ac8bc24b24c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wrapper function for obtaining the current through motor 1.  <a href="#a18b7e8958a230c54f3fe5ac8bc24b24c">More...</a><br /></td></tr>
 <tr class="separator:a18b7e8958a230c54f3fe5ac8bc24b24c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abdb4ca825a07f76a89212240e43546ca"><td class="memItemLeft" align="right" valign="top"><a id="abdb4ca825a07f76a89212240e43546ca"></a>
-uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>currentRead2</b> (void)</td></tr>
+<tr class="memitem:abdb4ca825a07f76a89212240e43546ca"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="r2r_8h.html#abdb4ca825a07f76a89212240e43546ca">currentRead2</a> (void)</td></tr>
+<tr class="memdesc:abdb4ca825a07f76a89212240e43546ca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wrapper function for obtaining the current through motor 2.  <a href="#abdb4ca825a07f76a89212240e43546ca">More...</a><br /></td></tr>
 <tr class="separator:abdb4ca825a07f76a89212240e43546ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3f64aa234674df8aeb7332aa17941b75"><td class="memItemLeft" align="right" valign="top"><a id="a3f64aa234674df8aeb7332aa17941b75"></a>
-uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>tempRead1</b> (void)</td></tr>
+<tr class="memitem:a3f64aa234674df8aeb7332aa17941b75"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="r2r_8h.html#a3f64aa234674df8aeb7332aa17941b75">tempRead1</a> (void)</td></tr>
+<tr class="memdesc:a3f64aa234674df8aeb7332aa17941b75"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wrapper function for obtaining the temperature on motor 1.  <a href="#a3f64aa234674df8aeb7332aa17941b75">More...</a><br /></td></tr>
 <tr class="separator:a3f64aa234674df8aeb7332aa17941b75"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3cec2a038dd769dc059ca76a26954e4b"><td class="memItemLeft" align="right" valign="top"><a id="a3cec2a038dd769dc059ca76a26954e4b"></a>
-uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>tempRead2</b> (void)</td></tr>
+<tr class="memitem:a3cec2a038dd769dc059ca76a26954e4b"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="r2r_8h.html#a3cec2a038dd769dc059ca76a26954e4b">tempRead2</a> (void)</td></tr>
+<tr class="memdesc:a3cec2a038dd769dc059ca76a26954e4b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wrapper function for obtaining the temperature on motor 2.  <a href="#a3cec2a038dd769dc059ca76a26954e4b">More...</a><br /></td></tr>
 <tr class="separator:a3cec2a038dd769dc059ca76a26954e4b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a09a7a9ed4194733a7b753c3b795b1734"><td class="memItemLeft" align="right" valign="top"><a id="a09a7a9ed4194733a7b753c3b795b1734"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>uartInit</b> (void)</td></tr>
+<tr class="memitem:a09a7a9ed4194733a7b753c3b795b1734"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="r2r_8h.html#a09a7a9ed4194733a7b753c3b795b1734">uartInit</a> (void)</td></tr>
+<tr class="memdesc:a09a7a9ed4194733a7b753c3b795b1734"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialises UART, and configures for PuTTY if r2rdebug=1, otherwise configures for MATLAB.  <a href="#a09a7a9ed4194733a7b753c3b795b1734">More...</a><br /></td></tr>
 <tr class="separator:a09a7a9ed4194733a7b753c3b795b1734"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a498b580a06894f91127558eaf3ec31c4"><td class="memItemLeft" align="right" valign="top"><a id="a498b580a06894f91127558eaf3ec31c4"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>uartSend</b> (const uint8_t *pui8Buffer, uint32_t ui32Count)</td></tr>
+<tr class="memitem:a498b580a06894f91127558eaf3ec31c4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="r2r_8h.html#a498b580a06894f91127558eaf3ec31c4">uartSend</a> (const uint8_t *pui8Buffer, uint32_t ui32Count)</td></tr>
+<tr class="memdesc:a498b580a06894f91127558eaf3ec31c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sends values over UART using a char buffer.  <a href="#a498b580a06894f91127558eaf3ec31c4">More...</a><br /></td></tr>
 <tr class="separator:a498b580a06894f91127558eaf3ec31c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6f831d6237f4dfc527dd118fe75cf8cb"><td class="memItemLeft" align="right" valign="top"><a id="a6f831d6237f4dfc527dd118fe75cf8cb"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>initConsole</b> (void)</td></tr>
-<tr class="separator:a6f831d6237f4dfc527dd118fe75cf8cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a03e7e3ce51b56b0571a8bd85ec4a5c3e"><td class="memItemLeft" align="right" valign="top"><a id="a03e7e3ce51b56b0571a8bd85ec4a5c3e"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>i2cInit</b> (tI2CMInstance g_sI2CMSimpleInst)</td></tr>
 <tr class="separator:a03e7e3ce51b56b0571a8bd85ec4a5c3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -237,6 +243,119 @@ uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>adcArray</b> [4]<
 <dd>
 Huan Weng </dd></dl>
 </div><h2 class="groupheader">Function Documentation</h2>
+<a id="afd645b17cf0581bcaa22c56011c775e4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afd645b17cf0581bcaa22c56011c775e4">&#9670;&nbsp;</a></span>adcInit()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void adcInit </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Initializes ADC MUX. </p>
+<p>The ADC is initialized for sample sequence 3. Sequence 3 will do a single sample when the processor sends a signal to start the conversion.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">Void</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Void</dd></dl>
+<p>Initializes ADC MUX.</p>
+<p>This function initializes the ADC module on the TM4C f </p>
+
+</div>
+</div>
+<a id="abe02cc201baa3f3c88b6cfe688d13cb2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abe02cc201baa3f3c88b6cfe688d13cb2">&#9670;&nbsp;</a></span>adcRead()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void adcRead </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Reads the ADC values and saves them to a global variable adcArray. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">Void</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Void </dd></dl>
+
+</div>
+</div>
+<a id="a18b7e8958a230c54f3fe5ac8bc24b24c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a18b7e8958a230c54f3fe5ac8bc24b24c">&#9670;&nbsp;</a></span>currentRead1()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t currentRead1 </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Wrapper function for obtaining the current through motor 1. </p>
+<p>Reads the value saved in adcArray for motor 1.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">Void</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>uint32_t current </dd></dl>
+
+</div>
+</div>
+<a id="abdb4ca825a07f76a89212240e43546ca"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abdb4ca825a07f76a89212240e43546ca">&#9670;&nbsp;</a></span>currentRead2()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t currentRead2 </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Wrapper function for obtaining the current through motor 2. </p>
+<p>Reads the value saved in adcArray for motor 2.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">Void</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>uint32_t current </dd></dl>
+
+</div>
+</div>
 <a id="ab0b86e69a6c13e01349840d66db0f1f3"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab0b86e69a6c13e01349840d66db0f1f3">&#9670;&nbsp;</a></span>delayMS()</h2>
 
@@ -281,7 +400,9 @@ Huan Weng </dd></dl>
 </div><div class="memdoc">
 
 <p>Updates value in sensor array. </p>
-<p>This function sends a 't' and 40 pulses via SPI to the encoder and reads out the encoder's reply to the encoderVal array</p>
+<p>This function sends a 't', which is a request to read the readhead temperature and 40 pulses via SPI to the encoder and reads out the encoder's reply to the encoderVal array</p>
+<p>Additional commands are:</p>
+<p>s: 16 bits signed, speed in revolutions per second multiplied by 10</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">Void</td><td></td></tr>
@@ -564,6 +685,34 @@ Huan Weng </dd></dl>
 
 </div>
 </div>
+<a id="adadde057f0a039eba73600bd55a68048"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adadde057f0a039eba73600bd55a68048">&#9670;&nbsp;</a></span>readMotor1AngleRelative()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float readMotor1AngleRelative </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Reads value in encoderVal array for motor 1 and keeps track of multiturn angles. </p>
+<p>This function reads out the angle and keeps track of it for multiple turns.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">Void</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The angle as an float </dd></dl>
+
+</div>
+</div>
 <a id="a41631dbb83071f47c7e30a38b05f269c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a41631dbb83071f47c7e30a38b05f269c">&#9670;&nbsp;</a></span>readMotor1Raw()</h2>
 
@@ -592,6 +741,34 @@ Huan Weng </dd></dl>
 
 </div>
 </div>
+<a id="ae9fdda991128997c07bf92e292f7c7a3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae9fdda991128997c07bf92e292f7c7a3">&#9670;&nbsp;</a></span>readMotor1RawRelative()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t readMotor1RawRelative </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Reads value in encoderVal array for motor 1 and keeps track of multiturn counts. </p>
+<p>This function reads out the angle and keeps track of it for multiple turns. The value ranges from -2,147,483,648 to 2,147,483,648. Each turn is 16383 counts</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">Void</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The counts as an int </dd></dl>
+
+</div>
+</div>
 <a id="acf5c46f542d35b78a92a1cefac802888"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#acf5c46f542d35b78a92a1cefac802888">&#9670;&nbsp;</a></span>readMotor2Angle()</h2>
 
@@ -609,6 +786,34 @@ Huan Weng </dd></dl>
 </div><div class="memdoc">
 
 <p>Reads value in encoderVal array for motor 2 and converts it to an angle. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">Void</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The angle as a float </dd></dl>
+
+</div>
+</div>
+<a id="a8277b1c9a143a978685671b1a0c7f90d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8277b1c9a143a978685671b1a0c7f90d">&#9670;&nbsp;</a></span>readMotor2AngleRelative()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float readMotor2AngleRelative </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Reads value in encoderVal array for motor 2 and keeps track of multiturn angles. </p>
+<p>This function reads out the angle and keeps track of it for multiple turns.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">Void</td><td></td></tr>
@@ -663,7 +868,7 @@ Huan Weng </dd></dl>
       </table>
 </div><div class="memdoc">
 
-<p>Reads value in encoderVal array for motor 1 and keeps track of multiturn angles. </p>
+<p>Reads value in encoderVal array for motor 2 and keeps track of multiturn counts. </p>
 <p>This function reads out the angle and keeps track of it for multiple turns. The value ranges from -2,147,483,648 to 2,147,483,648</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -671,7 +876,7 @@ Huan Weng </dd></dl>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>The angle as an int </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The counts as an int </dd></dl>
 
 </div>
 </div>
@@ -778,6 +983,127 @@ Huan Weng </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">Void</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Void </dd></dl>
+
+</div>
+</div>
+<a id="a3f64aa234674df8aeb7332aa17941b75"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3f64aa234674df8aeb7332aa17941b75">&#9670;&nbsp;</a></span>tempRead1()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t tempRead1 </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Wrapper function for obtaining the temperature on motor 1. </p>
+<p>Reads the value saved in adcArray for motor 1.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">Void</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>uint32_t temperature </dd></dl>
+
+</div>
+</div>
+<a id="a3cec2a038dd769dc059ca76a26954e4b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3cec2a038dd769dc059ca76a26954e4b">&#9670;&nbsp;</a></span>tempRead2()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t tempRead2 </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Wrapper function for obtaining the temperature on motor 2. </p>
+<p>Reads the value saved in adcArray for motor 2.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">Void</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>uint32_t temperature </dd></dl>
+
+</div>
+</div>
+<a id="a09a7a9ed4194733a7b753c3b795b1734"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a09a7a9ed4194733a7b753c3b795b1734">&#9670;&nbsp;</a></span>uartInit()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void uartInit </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Initialises UART, and configures for PuTTY if r2rdebug=1, otherwise configures for MATLAB. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">Void</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Void </dd></dl>
+
+</div>
+</div>
+<a id="a498b580a06894f91127558eaf3ec31c4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a498b580a06894f91127558eaf3ec31c4">&#9670;&nbsp;</a></span>uartSend()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void uartSend </td>
+          <td>(</td>
+          <td class="paramtype">const uint8_t *&#160;</td>
+          <td class="paramname"><em>pui8Buffer</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>ui32Count</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Sends values over UART using a char buffer. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">uint8_t*</td><td>pointer to a buffer </td></tr>
+    <tr><td class="paramname">uint32_t</td><td>length of buffer </td></tr>
   </table>
   </dd>
 </dl>

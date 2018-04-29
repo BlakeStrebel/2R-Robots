@@ -186,8 +186,13 @@ extern int motorError(void); // returns 50 on no error, 51 on motor 1 error, 52 
 /**
  * @brief Updates value in sensor array
  *
- * This function sends a 't' and 40 pulses via SPI to the encoder and reads out the encoder's reply to
+ * This function sends a 't', which is a request to read the readhead temperature
+ * and 40 pulses via SPI to the encoder and reads out the encoder's reply to
  * the encoderVal array
+ * 
+ * Additional commands are: 
+ * 
+ * s: 16 bits signed, speed in revolutions per second multiplied by 10 
  *
  * @param Void
  * @return Void
@@ -293,22 +298,96 @@ extern void PIDCurrUpdate(void);
  */
 extern uint32_t adcArray[4]; // This variable is defined globally
 
+/**
+ * @brief Initializes ADC MUX
+ *
+ *  The ADC is initialized for sample sequence 3.  Sequence 3
+ *  will do a single sample when the processor sends a signal to start the
+ *  conversion.
+ *
+ * @param Void
+ * @return Void
+ *
+ */
 extern void adcInit(void);
+
+
+/**
+ * @brief Reads the ADC values and saves them to a global variable adcArray
+ *
+ * @param Void
+ * @return Void
+ */
 extern void adcRead(void);
-// Wrapper functions for reading current and temperature
+
+/**
+ * @brief Wrapper function for obtaining the current through motor 1
+ *
+ * Reads the value saved in adcArray for motor 1.
+ *
+ * @param Void
+ * @return uint32_t current
+ *
+ */
 extern uint32_t currentRead1(void);
+
+/**
+ * @brief Wrapper function for obtaining the current through motor 2
+ *
+ * Reads the value saved in adcArray for motor 2.
+ *
+ * @param Void
+ * @return uint32_t current
+ *
+ */
 extern uint32_t currentRead2(void);
+
+
+/**
+ * @brief Wrapper function for obtaining the temperature on motor 1
+ *
+ * Reads the value saved in adcArray for motor 1.
+ *
+ * @param Void
+ * @return uint32_t temperature
+ *
+ */
 extern uint32_t  tempRead1(void);
+
+/**
+ * @brief Wrapper function for obtaining the temperature on motor 2
+ *
+ * Reads the value saved in adcArray for motor 2.
+ *
+ * @param Void
+ * @return uint32_t temperature
+ *
+ */
 extern uint32_t  tempRead2(void);
 
 
 
 
-
+/**
+ * @brief Initialises UART, and configures for PuTTY if r2rdebug=1, otherwise configures for MATLAB
+ *
+ * @param Void
+ * @return Void
+ *
+ */
 extern void uartInit(void);
+
+/**
+ * @brief Sends values over UART using a char buffer
+ *
+ * @param uint8_t* pointer to a buffer
+ * @param uint32_t length of buffer
+ * @return Void
+ *
+ */
 extern void uartSend(const uint8_t *pui8Buffer, uint32_t ui32Count);
-extern void initConsole(void);
-//extern void uartIntHandler(void);
+
+
 /*
  * Other external useful functions for UART
  * UARTprintf()

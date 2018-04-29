@@ -1,5 +1,5 @@
-\hypertarget{r2r_8h}{}\section{C\+:/\+Users/\+Ben/\+Documents/\+Git\+Hub/2\+R-\/\+Robots/\+Main/r2r.h File Reference}
-\label{r2r_8h}\index{C\+:/\+Users/\+Ben/\+Documents/\+Git\+Hub/2\+R-\/\+Robots/\+Main/r2r.\+h@{C\+:/\+Users/\+Ben/\+Documents/\+Git\+Hub/2\+R-\/\+Robots/\+Main/r2r.\+h}}
+\hypertarget{r2r_8h}{}\section{C\+:/\+Users/\+Ben/\+Documents/\+Git\+Hub/2\+R-\/\+Robots/\+Library/r2r.h File Reference}
+\label{r2r_8h}\index{C\+:/\+Users/\+Ben/\+Documents/\+Git\+Hub/2\+R-\/\+Robots/\+Library/r2r.\+h@{C\+:/\+Users/\+Ben/\+Documents/\+Git\+Hub/2\+R-\/\+Robots/\+Library/r2r.\+h}}
 
 
 Main R2R library header.  
@@ -93,41 +93,36 @@ int \mbox{\hyperlink{r2r_8h_a41631dbb83071f47c7e30a38b05f269c}{read\+Motor1\+Raw
 \begin{DoxyCompactList}\small\item\em Reads value in encoder\+Val array for motor 1. \end{DoxyCompactList}\item 
 int \mbox{\hyperlink{r2r_8h_ad2f5f86641346f94615d9962f214438a}{read\+Motor2\+Raw}} (void)
 \begin{DoxyCompactList}\small\item\em Reads value in encoder\+Val array for motor 2. \end{DoxyCompactList}\item 
+uint32\+\_\+t \mbox{\hyperlink{r2r_8h_ae9fdda991128997c07bf92e292f7c7a3}{read\+Motor1\+Raw\+Relative}} (void)
+\begin{DoxyCompactList}\small\item\em Reads value in encoder\+Val array for motor 1 and keeps track of multiturn counts. \end{DoxyCompactList}\item 
 uint32\+\_\+t \mbox{\hyperlink{r2r_8h_af75ba63e08b72bddcfbc9cd102c94b8a}{read\+Motor2\+Raw\+Relative}} (void)
+\begin{DoxyCompactList}\small\item\em Reads value in encoder\+Val array for motor 2 and keeps track of multiturn counts. \end{DoxyCompactList}\item 
+float \mbox{\hyperlink{r2r_8h_adadde057f0a039eba73600bd55a68048}{read\+Motor1\+Angle\+Relative}} (void)
 \begin{DoxyCompactList}\small\item\em Reads value in encoder\+Val array for motor 1 and keeps track of multiturn angles. \end{DoxyCompactList}\item 
+float \mbox{\hyperlink{r2r_8h_a8277b1c9a143a978685671b1a0c7f90d}{read\+Motor2\+Angle\+Relative}} (void)
+\begin{DoxyCompactList}\small\item\em Reads value in encoder\+Val array for motor 2 and keeps track of multiturn angles. \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{r2r_8h_ad9e154ce511d38e9a29a20e18c196683}\label{r2r_8h_ad9e154ce511d38e9a29a20e18c196683}} 
 void {\bfseries P\+I\+D\+Update} (void)
 \item 
 \mbox{\Hypertarget{r2r_8h_a29154e763b66fd963d87890e8122d920}\label{r2r_8h_a29154e763b66fd963d87890e8122d920}} 
 void {\bfseries P\+I\+D\+Curr\+Update} (void)
 \item 
-\mbox{\Hypertarget{r2r_8h_afd645b17cf0581bcaa22c56011c775e4}\label{r2r_8h_afd645b17cf0581bcaa22c56011c775e4}} 
-void {\bfseries adc\+Init} (void)
-\item 
-\mbox{\Hypertarget{r2r_8h_abe02cc201baa3f3c88b6cfe688d13cb2}\label{r2r_8h_abe02cc201baa3f3c88b6cfe688d13cb2}} 
-void {\bfseries adc\+Read} (void)
-\item 
-\mbox{\Hypertarget{r2r_8h_a18b7e8958a230c54f3fe5ac8bc24b24c}\label{r2r_8h_a18b7e8958a230c54f3fe5ac8bc24b24c}} 
-uint32\+\_\+t {\bfseries current\+Read1} (void)
-\item 
-\mbox{\Hypertarget{r2r_8h_abdb4ca825a07f76a89212240e43546ca}\label{r2r_8h_abdb4ca825a07f76a89212240e43546ca}} 
-uint32\+\_\+t {\bfseries current\+Read2} (void)
-\item 
-\mbox{\Hypertarget{r2r_8h_a3f64aa234674df8aeb7332aa17941b75}\label{r2r_8h_a3f64aa234674df8aeb7332aa17941b75}} 
-uint32\+\_\+t {\bfseries temp\+Read1} (void)
-\item 
-\mbox{\Hypertarget{r2r_8h_a3cec2a038dd769dc059ca76a26954e4b}\label{r2r_8h_a3cec2a038dd769dc059ca76a26954e4b}} 
-uint32\+\_\+t {\bfseries temp\+Read2} (void)
-\item 
-\mbox{\Hypertarget{r2r_8h_a09a7a9ed4194733a7b753c3b795b1734}\label{r2r_8h_a09a7a9ed4194733a7b753c3b795b1734}} 
-void {\bfseries uart\+Init} (void)
-\item 
-\mbox{\Hypertarget{r2r_8h_a498b580a06894f91127558eaf3ec31c4}\label{r2r_8h_a498b580a06894f91127558eaf3ec31c4}} 
-void {\bfseries uart\+Send} (const uint8\+\_\+t $\ast$pui8\+Buffer, uint32\+\_\+t ui32\+Count)
-\item 
-\mbox{\Hypertarget{r2r_8h_a6f831d6237f4dfc527dd118fe75cf8cb}\label{r2r_8h_a6f831d6237f4dfc527dd118fe75cf8cb}} 
-void {\bfseries init\+Console} (void)
-\item 
+void \mbox{\hyperlink{r2r_8h_afd645b17cf0581bcaa22c56011c775e4}{adc\+Init}} (void)
+\begin{DoxyCompactList}\small\item\em Initializes A\+DC M\+UX. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{r2r_8h_abe02cc201baa3f3c88b6cfe688d13cb2}{adc\+Read}} (void)
+\begin{DoxyCompactList}\small\item\em Reads the A\+DC values and saves them to a global variable adc\+Array. \end{DoxyCompactList}\item 
+uint32\+\_\+t \mbox{\hyperlink{r2r_8h_a18b7e8958a230c54f3fe5ac8bc24b24c}{current\+Read1}} (void)
+\begin{DoxyCompactList}\small\item\em Wrapper function for obtaining the current through motor 1. \end{DoxyCompactList}\item 
+uint32\+\_\+t \mbox{\hyperlink{r2r_8h_abdb4ca825a07f76a89212240e43546ca}{current\+Read2}} (void)
+\begin{DoxyCompactList}\small\item\em Wrapper function for obtaining the current through motor 2. \end{DoxyCompactList}\item 
+uint32\+\_\+t \mbox{\hyperlink{r2r_8h_a3f64aa234674df8aeb7332aa17941b75}{temp\+Read1}} (void)
+\begin{DoxyCompactList}\small\item\em Wrapper function for obtaining the temperature on motor 1. \end{DoxyCompactList}\item 
+uint32\+\_\+t \mbox{\hyperlink{r2r_8h_a3cec2a038dd769dc059ca76a26954e4b}{temp\+Read2}} (void)
+\begin{DoxyCompactList}\small\item\em Wrapper function for obtaining the temperature on motor 2. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{r2r_8h_a09a7a9ed4194733a7b753c3b795b1734}{uart\+Init}} (void)
+\begin{DoxyCompactList}\small\item\em Initialises U\+A\+RT, and configures for Pu\+T\+TY if r2rdebug=1, otherwise configures for M\+A\+T\+L\+AB. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{r2r_8h_a498b580a06894f91127558eaf3ec31c4}{uart\+Send}} (const uint8\+\_\+t $\ast$pui8\+Buffer, uint32\+\_\+t ui32\+Count)
+\begin{DoxyCompactList}\small\item\em Sends values over U\+A\+RT using a char buffer. \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{r2r_8h_a03e7e3ce51b56b0571a8bd85ec4a5c3e}\label{r2r_8h_a03e7e3ce51b56b0571a8bd85ec4a5c3e}} 
 void {\bfseries i2c\+Init} (t\+I2\+C\+M\+Instance g\+\_\+s\+I2\+C\+M\+Simple\+Inst)
 \end{DoxyCompactItemize}
@@ -152,6 +147,86 @@ Huan Weng
 
 
 \subsection{Function Documentation}
+\mbox{\Hypertarget{r2r_8h_afd645b17cf0581bcaa22c56011c775e4}\label{r2r_8h_afd645b17cf0581bcaa22c56011c775e4}} 
+\index{r2r.\+h@{r2r.\+h}!adc\+Init@{adc\+Init}}
+\index{adc\+Init@{adc\+Init}!r2r.\+h@{r2r.\+h}}
+\subsubsection{\texorpdfstring{adc\+Init()}{adcInit()}}
+{\footnotesize\ttfamily void adc\+Init (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Initializes A\+DC M\+UX. 
+
+The A\+DC is initialized for sample sequence 3. Sequence 3 will do a single sample when the processor sends a signal to start the conversion.
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void
+\end{DoxyReturn}
+Initializes A\+DC M\+UX.
+
+This function initializes the A\+DC module on the T\+M4C f \mbox{\Hypertarget{r2r_8h_abe02cc201baa3f3c88b6cfe688d13cb2}\label{r2r_8h_abe02cc201baa3f3c88b6cfe688d13cb2}} 
+\index{r2r.\+h@{r2r.\+h}!adc\+Read@{adc\+Read}}
+\index{adc\+Read@{adc\+Read}!r2r.\+h@{r2r.\+h}}
+\subsubsection{\texorpdfstring{adc\+Read()}{adcRead()}}
+{\footnotesize\ttfamily void adc\+Read (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Reads the A\+DC values and saves them to a global variable adc\+Array. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{r2r_8h_a18b7e8958a230c54f3fe5ac8bc24b24c}\label{r2r_8h_a18b7e8958a230c54f3fe5ac8bc24b24c}} 
+\index{r2r.\+h@{r2r.\+h}!current\+Read1@{current\+Read1}}
+\index{current\+Read1@{current\+Read1}!r2r.\+h@{r2r.\+h}}
+\subsubsection{\texorpdfstring{current\+Read1()}{currentRead1()}}
+{\footnotesize\ttfamily uint32\+\_\+t current\+Read1 (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Wrapper function for obtaining the current through motor 1. 
+
+Reads the value saved in adc\+Array for motor 1.
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+uint32\+\_\+t current 
+\end{DoxyReturn}
+\mbox{\Hypertarget{r2r_8h_abdb4ca825a07f76a89212240e43546ca}\label{r2r_8h_abdb4ca825a07f76a89212240e43546ca}} 
+\index{r2r.\+h@{r2r.\+h}!current\+Read2@{current\+Read2}}
+\index{current\+Read2@{current\+Read2}!r2r.\+h@{r2r.\+h}}
+\subsubsection{\texorpdfstring{current\+Read2()}{currentRead2()}}
+{\footnotesize\ttfamily uint32\+\_\+t current\+Read2 (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Wrapper function for obtaining the current through motor 2. 
+
+Reads the value saved in adc\+Array for motor 2.
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+uint32\+\_\+t current 
+\end{DoxyReturn}
 \mbox{\Hypertarget{r2r_8h_ab0b86e69a6c13e01349840d66db0f1f3}\label{r2r_8h_ab0b86e69a6c13e01349840d66db0f1f3}} 
 \index{r2r.\+h@{r2r.\+h}!delay\+MS@{delay\+MS}}
 \index{delay\+MS@{delay\+MS}!r2r.\+h@{r2r.\+h}}
@@ -180,7 +255,11 @@ Void
 
 Updates value in sensor array. 
 
-This function sends a \textquotesingle{}t\textquotesingle{} and 40 pulses via S\+PI to the encoder and reads out the encoder\textquotesingle{}s reply to the encoder\+Val array
+This function sends a \textquotesingle{}t\textquotesingle{}, which is a request to read the readhead temperature and 40 pulses via S\+PI to the encoder and reads out the encoder\textquotesingle{}s reply to the encoder\+Val array
+
+Additional commands are\+:
+
+s\+: 16 bits signed, speed in revolutions per second multiplied by 10
 
 
 \begin{DoxyParams}{Parameters}
@@ -374,6 +453,26 @@ Reads value in encoder\+Val array for motor 1 and converts it to an angle.
 \begin{DoxyReturn}{Returns}
 The angle as a float 
 \end{DoxyReturn}
+\mbox{\Hypertarget{r2r_8h_adadde057f0a039eba73600bd55a68048}\label{r2r_8h_adadde057f0a039eba73600bd55a68048}} 
+\index{r2r.\+h@{r2r.\+h}!read\+Motor1\+Angle\+Relative@{read\+Motor1\+Angle\+Relative}}
+\index{read\+Motor1\+Angle\+Relative@{read\+Motor1\+Angle\+Relative}!r2r.\+h@{r2r.\+h}}
+\subsubsection{\texorpdfstring{read\+Motor1\+Angle\+Relative()}{readMotor1AngleRelative()}}
+{\footnotesize\ttfamily float read\+Motor1\+Angle\+Relative (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Reads value in encoder\+Val array for motor 1 and keeps track of multiturn angles. 
+
+This function reads out the angle and keeps track of it for multiple turns.
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The angle as an float 
+\end{DoxyReturn}
 \mbox{\Hypertarget{r2r_8h_a41631dbb83071f47c7e30a38b05f269c}\label{r2r_8h_a41631dbb83071f47c7e30a38b05f269c}} 
 \index{r2r.\+h@{r2r.\+h}!read\+Motor1\+Raw@{read\+Motor1\+Raw}}
 \index{read\+Motor1\+Raw@{read\+Motor1\+Raw}!r2r.\+h@{r2r.\+h}}
@@ -394,6 +493,26 @@ The range for the read angle is 0 to 16383
 \begin{DoxyReturn}{Returns}
 The angle as an int 
 \end{DoxyReturn}
+\mbox{\Hypertarget{r2r_8h_ae9fdda991128997c07bf92e292f7c7a3}\label{r2r_8h_ae9fdda991128997c07bf92e292f7c7a3}} 
+\index{r2r.\+h@{r2r.\+h}!read\+Motor1\+Raw\+Relative@{read\+Motor1\+Raw\+Relative}}
+\index{read\+Motor1\+Raw\+Relative@{read\+Motor1\+Raw\+Relative}!r2r.\+h@{r2r.\+h}}
+\subsubsection{\texorpdfstring{read\+Motor1\+Raw\+Relative()}{readMotor1RawRelative()}}
+{\footnotesize\ttfamily uint32\+\_\+t read\+Motor1\+Raw\+Relative (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Reads value in encoder\+Val array for motor 1 and keeps track of multiturn counts. 
+
+This function reads out the angle and keeps track of it for multiple turns. The value ranges from -\/2,147,483,648 to 2,147,483,648. Each turn is 16383 counts
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The counts as an int 
+\end{DoxyReturn}
 \mbox{\Hypertarget{r2r_8h_acf5c46f542d35b78a92a1cefac802888}\label{r2r_8h_acf5c46f542d35b78a92a1cefac802888}} 
 \index{r2r.\+h@{r2r.\+h}!read\+Motor2\+Angle@{read\+Motor2\+Angle}}
 \index{read\+Motor2\+Angle@{read\+Motor2\+Angle}!r2r.\+h@{r2r.\+h}}
@@ -403,6 +522,26 @@ The angle as an int
 
 
 Reads value in encoder\+Val array for motor 2 and converts it to an angle. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The angle as a float 
+\end{DoxyReturn}
+\mbox{\Hypertarget{r2r_8h_a8277b1c9a143a978685671b1a0c7f90d}\label{r2r_8h_a8277b1c9a143a978685671b1a0c7f90d}} 
+\index{r2r.\+h@{r2r.\+h}!read\+Motor2\+Angle\+Relative@{read\+Motor2\+Angle\+Relative}}
+\index{read\+Motor2\+Angle\+Relative@{read\+Motor2\+Angle\+Relative}!r2r.\+h@{r2r.\+h}}
+\subsubsection{\texorpdfstring{read\+Motor2\+Angle\+Relative()}{readMotor2AngleRelative()}}
+{\footnotesize\ttfamily float read\+Motor2\+Angle\+Relative (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Reads value in encoder\+Val array for motor 2 and keeps track of multiturn angles. 
+
+This function reads out the angle and keeps track of it for multiple turns.
 
 
 \begin{DoxyParams}{Parameters}
@@ -440,7 +579,7 @@ The angle as an int
 
 
 
-Reads value in encoder\+Val array for motor 1 and keeps track of multiturn angles. 
+Reads value in encoder\+Val array for motor 2 and keeps track of multiturn counts. 
 
 This function reads out the angle and keeps track of it for multiple turns. The value ranges from -\/2,147,483,648 to 2,147,483,648
 
@@ -450,7 +589,7 @@ This function reads out the angle and keeps track of it for multiple turns. The 
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
-The angle as an int 
+The counts as an int 
 \end{DoxyReturn}
 \mbox{\Hypertarget{r2r_8h_ace09a3c8965a45676cd69533a94e1e99}\label{r2r_8h_ace09a3c8965a45676cd69533a94e1e99}} 
 \index{r2r.\+h@{r2r.\+h}!safety\+Check@{safety\+Check}}
@@ -523,6 +662,84 @@ Initializes the system clock and the master interrupts for the R2R project.
 
 \begin{DoxyParams}{Parameters}
 {\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{r2r_8h_a3f64aa234674df8aeb7332aa17941b75}\label{r2r_8h_a3f64aa234674df8aeb7332aa17941b75}} 
+\index{r2r.\+h@{r2r.\+h}!temp\+Read1@{temp\+Read1}}
+\index{temp\+Read1@{temp\+Read1}!r2r.\+h@{r2r.\+h}}
+\subsubsection{\texorpdfstring{temp\+Read1()}{tempRead1()}}
+{\footnotesize\ttfamily uint32\+\_\+t temp\+Read1 (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Wrapper function for obtaining the temperature on motor 1. 
+
+Reads the value saved in adc\+Array for motor 1.
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+uint32\+\_\+t temperature 
+\end{DoxyReturn}
+\mbox{\Hypertarget{r2r_8h_a3cec2a038dd769dc059ca76a26954e4b}\label{r2r_8h_a3cec2a038dd769dc059ca76a26954e4b}} 
+\index{r2r.\+h@{r2r.\+h}!temp\+Read2@{temp\+Read2}}
+\index{temp\+Read2@{temp\+Read2}!r2r.\+h@{r2r.\+h}}
+\subsubsection{\texorpdfstring{temp\+Read2()}{tempRead2()}}
+{\footnotesize\ttfamily uint32\+\_\+t temp\+Read2 (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Wrapper function for obtaining the temperature on motor 2. 
+
+Reads the value saved in adc\+Array for motor 2.
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+uint32\+\_\+t temperature 
+\end{DoxyReturn}
+\mbox{\Hypertarget{r2r_8h_a09a7a9ed4194733a7b753c3b795b1734}\label{r2r_8h_a09a7a9ed4194733a7b753c3b795b1734}} 
+\index{r2r.\+h@{r2r.\+h}!uart\+Init@{uart\+Init}}
+\index{uart\+Init@{uart\+Init}!r2r.\+h@{r2r.\+h}}
+\subsubsection{\texorpdfstring{uart\+Init()}{uartInit()}}
+{\footnotesize\ttfamily void uart\+Init (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Initialises U\+A\+RT, and configures for Pu\+T\+TY if r2rdebug=1, otherwise configures for M\+A\+T\+L\+AB. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{r2r_8h_a498b580a06894f91127558eaf3ec31c4}\label{r2r_8h_a498b580a06894f91127558eaf3ec31c4}} 
+\index{r2r.\+h@{r2r.\+h}!uart\+Send@{uart\+Send}}
+\index{uart\+Send@{uart\+Send}!r2r.\+h@{r2r.\+h}}
+\subsubsection{\texorpdfstring{uart\+Send()}{uartSend()}}
+{\footnotesize\ttfamily void uart\+Send (\begin{DoxyParamCaption}\item[{const uint8\+\_\+t $\ast$}]{pui8\+Buffer,  }\item[{uint32\+\_\+t}]{ui32\+Count }\end{DoxyParamCaption})}
+
+
+
+Sends values over U\+A\+RT using a char buffer. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em uint8\+\_\+t$\ast$} & pointer to a buffer \\
+\hline
+{\em uint32\+\_\+t} & length of buffer \\
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}

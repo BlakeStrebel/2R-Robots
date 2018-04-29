@@ -432,7 +432,7 @@ void sensorUpdate(void){
 void timerIntInit(void){
     SysCtlPeripheralEnable(SYSCTL_PERIPH_TIMER1); // Use timer 1
     TimerConfigure(TIMER1_BASE, TIMER_CFG_PERIODIC);
-    TimerLoadSet(TIMER1_BASE, TIMER_A, ui32SysClock/100); // Use timer B // activate every 1/2 of a second 120/120/2 = 0.5s
+    TimerLoadSet(TIMER1_BASE, TIMER_A, ui32SysClock/1000); // Use timer B // activate every 1/2 of a second 120/120/2 = 0.5s
     IntEnable(INT_TIMER1A);
     TimerIntEnable(TIMER1_BASE, TIMER_TIMA_TIMEOUT);
     TimerEnable(TIMER1_BASE, TIMER_A);

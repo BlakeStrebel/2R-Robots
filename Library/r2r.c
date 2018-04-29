@@ -47,7 +47,7 @@
 
 // DEBUG flag
 // 1 = DEBUG mode, 0 = not DEBUGGING
-int r2rdebug = 0;
+int r2rdebug = 1;
 
 uint32_t adcArray[4]={0};
 
@@ -94,7 +94,7 @@ void r2rDefaultInit(void){
     pwmInit(); // PWM OUT 4 and PWM OUT 6, PF0 and PF2
     motorInit(); // Set useful signal outputs.
     motorDriverInit(); // Send values to set up the motor for 1x PWM mode
-    //adcInit(); // Init for current and temperture
+    adcInit(); // Init for current and temperture
     //gpioInit(); // Init for general GPIO - set to input for safety
     timerIntInit();
 }
@@ -417,7 +417,7 @@ void safetyCheck(void){
  * TODO: Add sensor functions, add interrupts
  */
 void sensorUpdate(void){
-    //adcRead();
+    adcRead();
     encoderRead();
 }
 
@@ -432,7 +432,7 @@ void sensorUpdate(void){
 void timerIntInit(void){
     SysCtlPeripheralEnable(SYSCTL_PERIPH_TIMER1); // Use timer 1
     TimerConfigure(TIMER1_BASE, TIMER_CFG_PERIODIC);
-    TimerLoadSet(TIMER1_BASE, TIMER_A, ui32SysClock/100); // Use timer B // activate every 1/2 of a second 120/120/2 = 0.5s
+    TimerLoadSet(TIMER1_BASE, TIMER_A, ui32SysClock/1000); // Use timer B // activate every 1/1000 of a second 120/120/1000 = 1ms
     IntEnable(INT_TIMER1A);
     TimerIntEnable(TIMER1_BASE, TIMER_TIMA_TIMEOUT);
     TimerEnable(TIMER1_BASE, TIMER_A);
@@ -1122,8 +1122,13 @@ void i2cInit(tI2CMInstance g_sI2CMSimpleInst){
     I2CMInit(&g_sI2CMSimpleInst, I2C0_BASE, INT_I2C0, 0xff, 0xff, SysCtlClockGet());
 }
 
-/*
- * This function enables the ADC unit on the TM4C
+
+
+/**
+ * @brief This function initializes the ADC module
+ *
+ * This function initializes the ADC module on the TM4C f
+ *
  */
 void adcInit(){
     // ADC MUX,
@@ -1133,17 +1138,19 @@ void adcInit(){
     //GPIOPinTypeGPIOOutput(GPIO_PORTM_BASE, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3);
 
     SysCtlPeripheralEnable(SYSCTL_PERIPH_ADC0);
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOE);
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOM);
+
+
 
     //
     // Select the analog ADC function for these pins.
     // Consult the data sheet to see which functions are allocated per pin.
     // TODO: change this to select the port/pin you are using.
     //
-    GPIOPinTypeADC(GPIO_PORTE_BASE, GPIO_PIN_0); // Current Sense 2
-    GPIOPinTypeADC(GPIO_PORTE_BASE, GPIO_PIN_1); // Current Sense 1
-    GPIOPinTypeADC(GPIO_PORTE_BASE, GPIO_PIN_2); // Temp Sense 2
-    GPIOPinTypeADC(GPIO_PORTE_BASE, GPIO_PIN_3); // Temp Sense 1
+    GPIOPinTypeADC(GPIO_PORTM_BASE, GPIO_PIN_0); // Current Sense 2
+    GPIOPinTypeADC(GPIO_PORTM_BASE, GPIO_PIN_1); // Current Sense 1
+    GPIOPinTypeADC(GPIO_PORTM_BASE, GPIO_PIN_2); // Temp Sense 2
+    GPIOPinTypeADC(GPIO_PORTM_BASE, GPIO_PIN_3); // Temp Sense 1
     //
     // Enable sample sequence 3 with a processor signal trigger.  Sequence 3
     // will do a single sample when the processor sends a singal to start the
