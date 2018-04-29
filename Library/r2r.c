@@ -432,7 +432,11 @@ void sensorUpdate(void){
 void timerIntInit(void){
     SysCtlPeripheralEnable(SYSCTL_PERIPH_TIMER1); // Use timer 1
     TimerConfigure(TIMER1_BASE, TIMER_CFG_PERIODIC);
+<<<<<<< HEAD
     TimerLoadSet(TIMER1_BASE, TIMER_A, ui32SysClock/1000); // Use timer B // activate every 1/1000 of a second 120/120/1000 = 1ms
+=======
+    TimerLoadSet(TIMER1_BASE, TIMER_A, ui32SysClock/1000); // Use timer B // activate every 1/2 of a second 120/120/2 = 0.5s
+>>>>>>> 896d9fe29e9553419f4761f0af49db622ce20df5
     IntEnable(INT_TIMER1A);
     TimerIntEnable(TIMER1_BASE, TIMER_TIMA_TIMEOUT);
     TimerEnable(TIMER1_BASE, TIMER_A);
@@ -478,7 +482,7 @@ void encoderRead(void){
     while(SSIDataGetNonBlocking(SSI0_BASE, &pui32DataRx2[0])){
     }
 
-    GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_3,0x00);
+    GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_0,0x00);
     SysCtlDelay(10);
 
     for(ui32Index2 = 0; ui32Index2 < NUM_SSI_DATA2; ui32Index2++)
@@ -489,8 +493,8 @@ void encoderRead(void){
     {
     }
 
-    GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_3,GPIO_PIN_3);
-    SysCtlDelay(1000);
+    GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_0,GPIO_PIN_0);
+    SysCtlDelay(10);
 
     for(ui32Index2 = 0; ui32Index2 < NUM_SSI_DATA2; ui32Index2++)
     {
@@ -519,7 +523,7 @@ void encoderRead(void){
     }
 
     GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_1,GPIO_PIN_1);
-    SysCtlDelay(1000);
+    SysCtlDelay(10);
 
     for(ui32Index2 = 0; ui32Index2 < NUM_SSI_DATA2; ui32Index2++)
     {

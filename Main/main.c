@@ -11,6 +11,8 @@ float kp = 0.01;
 float kd = 0.1;
 float ki = 0.1;
 float offset_angle;
+char trajr[40000];
+float *getfloat;
 // Interrupts
 // Update the STARTUP_CCS.C file when adding new interrupts!
 /*
@@ -45,7 +47,7 @@ Timer0IntHandler(void)
 */
 
 int i;
-float data[2000];
+float data[10000];
 
 void
 Timer1IntHandler(void)                          //This is the time interrupt
@@ -84,7 +86,8 @@ Timer1IntHandler(void)                          //This is the time interrupt
     float current_angle;
     current_angle = readMotor2AngleRelative() - offset_angle;
 
-    float error = desired_angle - current_angle;
+    //float error = desired_angle - current_angle;
+    float error = (*getfloat++) /3.1415926 * 180 - current_angle;
 
     //UARTprintf("Desired_angle: %d \t Current Angle: %d\n",desired_angle,(int)current_angle);
 
@@ -105,12 +108,13 @@ Timer1IntHandler(void)                          //This is the time interrupt
         control = -1800;
     }
     //UARTprintf("Motor 2: %d \t Motor 2 angle: %d \t Motor 2 control: %d\n",readMotor2Raw(),(int)readMotor2Angle(),(int)control);
+    motor1ControlPWM((int)control);
     motor2ControlPWM((int)control);
     eprev=error;
 
     data[i++] = current_angle;
     GPIOPinWrite(GPIO_PORTQ_BASE, GPIO_PIN_1, 0);
-    if (i < 500)
+    if (i < 10000)
 
         IntMasterEnable();
 
@@ -127,7 +131,7 @@ int main()
     char traj[2000];
     char recev[12];
     uint8_t *array;
-    float *getfloat;
+
     uint8_t x;
 
 
@@ -168,20 +172,32 @@ int main()
             //GPIOPinWrite(GPIO_PORTP_BASE, GPIO_PIN_0, 1);
             UARTCharPut(UART0_BASE,'p');
             while(!UARTCharsAvail(UART0_BASE)){}
+
+            for (i = 0; i < 4 * 10000; i++) {
+                trajr[i] = UARTCharGet(UART0_BASE);
+            }
+            getfloat = &trajr;
+
+            UARTCharPut(UART0_BASE,'p');
+            while(!UARTCharsAvail(UART0_BASE)){}
+
+
             //GPIOPinWrite(GPIO_PORTP_BASE, GPIO_PIN_0, 1);
             if (UARTCharGet(UART0_BASE) == 's'){
                offset_angle = readMotor2AngleRelative();
-               IntMasterEnable();
                i = 0;
+               IntMasterEnable();
+
             }
 
         }
-        if (i == 500){
+        if (i == 10000){
 
             motor2PWM(1);
+            motor1PWM(1);
             GPIOPinWrite(GPIO_PORTQ_BASE, GPIO_PIN_1, 1);
             array = &data;
-            for (i = 0; i < 500 * 4; i++){
+            for (i = 0; i < 10000 * 4; i++){
                 UARTCharPut(UART0_BASE, *array++);
             }
         }
@@ -192,11 +208,6 @@ int main()
 
 
     }
-
-
-
-
-
 
 
     return(0);
