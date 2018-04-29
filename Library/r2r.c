@@ -385,10 +385,6 @@ void motorInit(void){
 
 
 
-
-
-
-
 /*
  * This function stops the clock for a given amount of ms
  *
@@ -533,9 +529,6 @@ void encoderRead(void){
     num = num | (pui32DataRx2[1]>>2);
     encoderVal[1] = num;
 }
-
-
-
 
 /*
  * This function sends SPI data over to the motor driver to setup the driver for 1x PWM mode
@@ -1140,19 +1133,17 @@ void adcInit(){
     //GPIOPinTypeGPIOOutput(GPIO_PORTM_BASE, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3);
 
     SysCtlPeripheralEnable(SYSCTL_PERIPH_ADC0);
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOM);
-
-
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOE);
 
     //
     // Select the analog ADC function for these pins.
     // Consult the data sheet to see which functions are allocated per pin.
     // TODO: change this to select the port/pin you are using.
     //
-    GPIOPinTypeADC(GPIO_PORTM_BASE, GPIO_PIN_0); // Current Sense 2
-    GPIOPinTypeADC(GPIO_PORTM_BASE, GPIO_PIN_1); // Current Sense 1
-    GPIOPinTypeADC(GPIO_PORTM_BASE, GPIO_PIN_2); // Temp Sense 2
-    GPIOPinTypeADC(GPIO_PORTM_BASE, GPIO_PIN_3); // Temp Sense 1
+    GPIOPinTypeADC(GPIO_PORTE_BASE, GPIO_PIN_0); // Current Sense 2
+    GPIOPinTypeADC(GPIO_PORTE_BASE, GPIO_PIN_1); // Current Sense 1
+    GPIOPinTypeADC(GPIO_PORTE_BASE, GPIO_PIN_2); // Temp Sense 2
+    GPIOPinTypeADC(GPIO_PORTE_BASE, GPIO_PIN_3); // Temp Sense 1
     //
     // Enable sample sequence 3 with a processor signal trigger.  Sequence 3
     // will do a single sample when the processor sends a singal to start the
