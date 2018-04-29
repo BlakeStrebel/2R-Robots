@@ -78,9 +78,6 @@ uint32_t last_motor_1_angle = 0;
 uint32_t modifier2=0;
 uint32_t last_motor_2_angle = 0;
 
-
-
-
 /*
  * This function does initialisation for all the default connections
  *
