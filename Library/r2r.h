@@ -17,6 +17,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdarg.h>
+#include <string.h>
+//#include <math.h>
 #include "sensorlib/i2cm_drv.h"
 #include "sensorlib/hw_mpu6050.h"
 #include "sensorlib/mpu6050.h"

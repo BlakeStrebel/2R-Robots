@@ -21,7 +21,7 @@ clear all;
 clc;
 addpath('functions');
 
-userserial = serialConfig('COM16');
+userserial = serialConfig('COM7');
 fopen(userserial);
 finishup = onCleanup(@()fclose(userserial)); %closes serial on termination!
 
@@ -46,8 +46,7 @@ while true
         break
     end
     response = input('Enter value(s): ', 's');
-    [steplog, data] = inputProcess(steplog, options, response, data);    
-    
+    [steplog, data] = inputProcess(steplog, options, response, data);        
     matrix = firmwareControl(userserial, steplog, data);
     
     
