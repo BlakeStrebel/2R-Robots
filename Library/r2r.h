@@ -220,6 +220,10 @@ extern float readMotor1Angle(void);
  */
 extern float readMotor2Angle(void);
 
+extern float readMotor2Speed(void);
+
+extern float readMotor1Speed(void);
+
 /**
  * @brief Reads value in encoderVal array for motor 1
  *
