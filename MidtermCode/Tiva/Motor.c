@@ -564,14 +564,4 @@ int motorError(void){
    }
 }
 
-/*
- * Control functions
- */
-void PIDUpdate(void){
-    ; // only update as control changes
-}
-
-void PIDCurrUpdate(void){
-    ; // update the commanded current as fast as possible
-}
 

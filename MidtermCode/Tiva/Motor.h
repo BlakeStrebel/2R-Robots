@@ -2,7 +2,7 @@
 #define MOTOR_H_
 
 /**
- * @brief Initializes the SPI channels for the motor drivers, encoders, and RAM.
+ * @brief Initializes the SPI channels for the motor drivers
  *
  * Initializes SSI1 ~ 4 and their corresponding GPIO pins
  *
@@ -11,6 +11,14 @@
  */
 extern void MotorSPIinit(void);
 
+/**
+* @brief Initializes the GPIO pins for the motor
+* 
+* Initializes the direction, brake, and halt pins for the motor in 1x PWM mode
+* 
+* @param Void
+* @return Void
+*/
 extern void motorInit(void);
 
 /**
@@ -67,7 +75,7 @@ extern void motor1ControlPWM(int control);
 extern void motor2ControlPWM(int control);
 
 
-extern int motorError(void); // returns 50 on no error, 51 on motor 1 error, 52 on motor 2 error'
+extern int motorError(void); // returns 50 on no error, 51 on motor 1 error, 52 on motor 2 error
 
 
 
