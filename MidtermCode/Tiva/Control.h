@@ -29,7 +29,9 @@ void reset_pos(void);                               // Reset desired position to
 void reset_controller_error(void);                  // Reset the error on both controllers to be zero
 void load_position_trajectory(int motor);                // Load desired position trajectory from client
 
-float PID_Controller(int reference, int actual, int motor);
+
+int get_motor_pwm(int motor);
+void PID_Controller(int reference, int actual, int motor);
 
 
 #endif /* CONTROL_H_ */

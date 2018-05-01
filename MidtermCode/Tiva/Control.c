@@ -60,7 +60,6 @@ void set_position_gains(void)   // recieve position control gains
     Kd = Kdtemp;
     reset_controller_error();
     IntMasterEnable();                          // Re-enable interrupts
-
 }
 
 // Set new desired angle for motor
@@ -108,6 +107,20 @@ void reset_controller_error(void)
     E2.Edot = 0;
 }
 
+int get_motor_pwm(int motor)
+{
+    int pwm;
+    if (motor == 1)
+    {
+        pwm = E1.u;
+    }
+    else if (motor == 2)
+    {
+        pwm = E2.u;
+    }
+
+    return pwm;
+}
 
 void
 Timer1IntHandler(void)
@@ -145,8 +158,8 @@ Timer1IntHandler(void)
                 E2.actual = readMotor2RawRelative();
                 E1.desired = get_refPos(i, 1);
                 E2.desired = get_refPos(i, 2);
-                E1.u = PID_Controller(E1.desired, E1.actual, 1);    // motor1 control
-                E2.u = PID_Controller(E2.desired, E2.actual, 2);    // motor2 control
+                PID_Controller(E1.desired, E1.actual, 1);    // motor1 control
+                PID_Controller(E2.desired, E2.actual, 2);    // motor2 control
 
                 i++;    // increment index
 
@@ -166,7 +179,7 @@ Timer1IntHandler(void)
 }
 
 // Calculate control effort and set pwm value to control motor
-float PID_Controller(int reference, int actual, int motor)
+void PID_Controller(int reference, int actual, int motor)
 {
     static float u;
 
@@ -201,10 +214,12 @@ float PID_Controller(int reference, int actual, int motor)
     if (motor == 1)
     {
         motor1ControlPWM(u);
+        E1.u = u;
     }
     else if(motor == 2)
     {
         motor2ControlPWM(u);
+        E2.u = u;
     }
 
     return u;

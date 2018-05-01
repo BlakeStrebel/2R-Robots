@@ -62,7 +62,19 @@ main(void)
                    motor2ControlPWM(p2);
                    break;
                }
-               case 'd':    // Get Desired Angle
+               case 'd':    // Get Motor PWM
+               {
+                   int pwm1, pwm2;
+                   pwm1 = get_motor_pwm(1);
+                   pwm2 = get_motor_pwm(2);
+                   sprintf(buffer, '%d\r\n',pwm1);
+                   UART0write(buffer);
+                   sprintf(buffer, '%d\r\n',pwm2);
+                   UART0write(buffer);
+                   break;
+               }
+
+               case 'e':    // Get Desired Angle
                {
                    int d1, d2;
                    d1 = get_desired_angle(1);
@@ -73,7 +85,7 @@ main(void)
                    UART0write(buffer);
                    break;
                }
-               case 'e':    // Set Desired Angle
+               case 'f':    // Set Desired Angle
                {
                    char buffer[25]; int d1, d2;
                    UART0read(buffer,25);
@@ -82,35 +94,35 @@ main(void)
                    set_desired_angle(d2, 2);
                    break;
                }
-               case 'f':    // Get Motor Mode
+               case 'g':    // Get Motor Mode
                {
                    int mode = getMODE();
                    sprintf(buffer, "%d\r\n",mode);
                    UART0write(buffer);
                    break;
                }
-               case 'g':    // Set Position Gains
+               case 'h':    // Set Position Gains
                {
                    set_position_gains();
                    break;
                }
-               case 'h':    // Get Position Gains
+               case 'i':    // Get Position Gains
                {
                    get_position_gains();
                    break;
                }
-               case 'i':    // Position Hold Mode
+               case 'j':    // Position Hold Mode
                {
                    setMODE(HOLD);
                    break;
                }
-               case 'j':    // Load Position Trajectory
+               case 'k':    // Load Position Trajectory
                {
                    load_position_trajectory(1);
                    load_position_trajectory(2);
                    break;
                }
-               case 'k':    // Execute Position Trajectory
+               case 'l':    // Execute Position Trajectory
                {
                    setMODE(TRACK);
                    send_data();
