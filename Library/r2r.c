@@ -70,16 +70,13 @@ uint32_t pui32DataRx2[NUM_SSI_DATA2];
 uint32_t ui32Index2;
 
 // Array to store encoder data
-uint32_t encoderVal[2];
+uint32_t encoderVal[4];
 
 // Global angle
 uint32_t modifier1=0;
 uint32_t last_motor_1_angle = 0;
 uint32_t modifier2=0;
 uint32_t last_motor_2_angle = 0;
-
-
-
 
 /*
  * This function does initialisation for all the default connections
@@ -468,7 +465,7 @@ void gpioInit(void){
  * TODO: check the delay
  */
 void encoderRead(void){
-    pui32DataTx2[0] = 0x74; // "t" return readhead temperature
+    pui32DataTx2[0] = 0x73; // "s" return readhead speed
     pui32DataTx2[1] = 0x00; // Sends empty data so that the encoder will complete sending data. (40 bits in total)
     pui32DataTx2[2] = 0x00;
     pui32DataTx2[3] = 0x00;
@@ -497,10 +494,15 @@ void encoderRead(void){
     }
 
     // The angle is the first 14 bits of the response.
+    // The speed is bit 16 - 32
     // TODO: check that the data RX2 is overwritten
-    int num = pui32DataRx2[0]<<6;
-    num = num | (pui32DataRx2[1]>>2);
+    int num = pui32DataRx2[0]<<6; // only use 8 bits of each value in array
+    num = num | (pui32DataRx2[1]>>2); // 8 - 2 = 6
     encoderVal[0] = num;
+    // reading speed in rev/s * 10
+    num = pui32DataRx2[2]<<8;
+    num = num | pui32DataRx2[3];
+    encoderVal[2] = num;
 
     // Read the other encoder
     while(SSIDataGetNonBlocking(SSI1_BASE, &pui32DataRx2[0]))
@@ -528,6 +530,10 @@ void encoderRead(void){
     num = pui32DataRx2[0]<<6;
     num = num | (pui32DataRx2[1]>>2);
     encoderVal[1] = num;
+    // reading speed in rev/s * 10, length of data is 16 bits
+    num = pui32DataRx2[2]<<8;
+    num = num | pui32DataRx2[3];
+    encoderVal[3] = num;
 }
 
 /*
@@ -697,7 +703,7 @@ int angleFix(int curr_angle){
  *
  * Uses globals:
  * modifier
- * last_motor_2_angle
+ * last_motor_1_angle
  *
  * TODO: CHANGE RANDOM 4000 value
  */
@@ -740,6 +746,14 @@ float readMotor1RadRelative(void){
 }
 float readMotor2RadRelative(void){
     return readMotor2RawRelative()/16383*2*3.14;
+}
+
+float readMotor2Speed(void){
+    return (float)((int16_t)encoderVal[3])/10.0;
+}
+
+float readMotor1Speed(void){
+    return (float)((int16_t)encoderVal[2])/10.0;
 }
 
 int readMotor2Raw(void){
