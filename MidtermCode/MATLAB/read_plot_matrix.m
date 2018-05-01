@@ -7,17 +7,37 @@ function data = read_plot_matrix(mySerial,ref1,ref2)
 % data(:,5) = control effort motor 1
 % data(:,6) = control effort motor 2
 
+
 nsamples = fscanf(mySerial,'%d');       % first get the number of samples being sent
 data = zeros(nsamples,6);               
-
-for i=1:nsamples
-    data(i,3:6) = fscanf(mySerial,'%d %d %f %f'); % read in data from Tiva
-end
-
-save('temp.mat','data');
-
+figure 
+hold on
+title('Live plot')
+h = animatedline('Color','r');
+r = animatedline('Color','y');
+axis([0,nsamples*10,0,360])
+%legend('reference angle','actual angle')
+x  = 10*(1:size(data,1));
 data(:,1) = ref1(1:size(data,1));
 data(:,2) = ref2(1:size(data,1));
+
+
+for i=1:nsamples
+    data(i,3:6) = fscanf(mySerial,'%d %d %f %f'); % read in data from Tiva (pos m1, pos m2, control eff 1, control eff 2)
+    
+    xvec=x(i);
+    yrvec = data(i,1)/16383*360;
+    yvec = data(i,3)/16383*360;
+    addpoints(r,xvec,yrvec)
+    addpoints(h,xvec,yvec)
+    drawnow limitrate
+    
+end
+hold off
+save('temp.mat','data');
+
+%data(:,1) = ref1(1:size(data,1));
+%data(:,2) = ref2(1:size(data,1));
 
 % Perform Conversions
 data(:,1:4) = data(:,1:4)/16383*360;    % convert counts to degrees
