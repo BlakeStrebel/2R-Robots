@@ -26,13 +26,14 @@ has_quit = false;
 % menu loop
 while ~has_quit
     % read the user's choice
+    clc
     disp('a: Read Absolute Angle  b: Read Relative Angle')
     disp('c: Set PWM              d: Read PWM')
     disp('e: Read Desired Angle   f: Set Desired Angle')
     disp('g: Set mode             h: Set PID gains')
     disp('j: Hold Position        k: Set trajectory')
-    disp('l: Run                  m: Move Arm')
-    disp('n: Load and Run Test    q: Quit')
+    disp('l: Run                  q: Quit')
+    disp('You last entered: ')
     selection = input('\nENTER COMMAND: ', 's');
    
     fprintf(Tiva_Serial,'%c\n',selection);  % send the command to the Tiva
@@ -111,22 +112,6 @@ while ~has_quit
             end
         case 'l'
             read_plot_matrix(Tiva_Serial, ref1(1:DECIMATION:end)', ref2(1:DECIMATION:end)');
-        case 'm'
-            lengthofTime = input('Time to run for (s): ');
-            fprintf(Tiva_Serial, '%3.2f %3.2f %3.2f\n',[0,0,0]); % sets gains to zero
-            ref1 = genRef([0,0;lengthofTime,0],'linear');
-            ref1 = round(ref1/360*16383);
-            ref2 = ref1;
-            fprintf(Tiva_Serial,'%d\n',size(ref1,2));   % Send number of samples to Tiva
-            for i = 1:size(ref1,2)                   % Send trajectory to Tiva
-               fprintf(Tiva_Serial,'%d\n',ref1(i)); 
-            end
-            
-            % Motor 2
-            fprintf(Tiva_Serial,'%d\n',size(ref2,2));   % Send number of samples to Tiva
-            for i = 1:size(ref2,2)                   % Send trajectory to Tiva
-               fprintf(Tiva_Serial,'%d\n',ref2(i)); 
-            end
         case 'q'
             has_quit = 1;
         otherwise

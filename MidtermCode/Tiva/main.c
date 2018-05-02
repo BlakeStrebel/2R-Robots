@@ -128,6 +128,13 @@ main(void)
                    send_data();
                    break;
                }
+               case 'm':
+               {
+                   set_position_gains();
+                   load_position_trajectory(1);
+                   load_position_trajectory(2);
+                   break;
+               }
                case 'q':    // Motor Off
                {
                    setMODE(IDLE);
