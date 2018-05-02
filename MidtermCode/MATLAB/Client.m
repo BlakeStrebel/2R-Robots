@@ -127,6 +127,28 @@ while ~has_quit
             for i = 1:size(ref2,2)                   % Send trajectory to Tiva
                fprintf(Tiva_Serial,'%d\n',ref2(i)); 
             end
+        case 'n'
+            fprintf(Tiva_Serial, '%3.2f %3.2f %3.2f\n',[5,0,0]);
+            fprintf('Gains Set to [5,0,0].');
+            pause(1);
+            ref1 = genRef([0,0;1,180;2,360;3.25,90;4,0;4.5,90;5,0],'cubic');
+            ref1 = round(ref1/360*16383);
+            ref2 = ref1;
+            %Motor 1
+            fprintf(Tiva_Serial,'%d\n',size(ref1,2));   % Send number of samples to Tiva
+            for i = 1:size(ref1,2)                   % Send trajectory to Tiva
+               fprintf(Tiva_Serial,'%d\n',ref1(i)); 
+            end
+            
+            % Motor 2
+            fprintf(Tiva_Serial,'%d\n',size(ref2,2));   % Send number of samples to Tiva
+            for i = 1:size(ref2,2)                   % Send trajectory to Tiva
+               fprintf(Tiva_Serial,'%d\n',ref2(i)); 
+            end
+            fprintf('Trajectory Sent');
+            pause(1)
+            read_plot_matrix(Tiva_Serial, ref1(1:DECIMATION:end)', ref2(1:DECIMATION:end)');
+            
         case 'q'
             has_quit = 1;
         otherwise

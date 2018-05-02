@@ -128,11 +128,20 @@ main(void)
                    send_data();
                    break;
                }
-               case 'm':
+               case 'm':   // free moving arm
                {
                    set_position_gains();
                    load_position_trajectory(1);
                    load_position_trajectory(2);
+                   break;
+               }
+               case 'n':   // Hello User test
+               {
+                   set_position_gains();
+                   load_position_trajectory(1);
+                   load_position_trajectory(2);
+                   setMODE(TRACK);
+                   send_data();
                    break;
                }
                case 'q':    // Motor Off
