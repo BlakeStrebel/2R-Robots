@@ -68,14 +68,22 @@ extern void motor1ControlPWM(int control);
 /**
  * @brief Sets the PWM value and direction to motor 2
  *
- * @param control The pwmValue ranges from -maximum pwm period to the positive period. The default pwm period is 320 SysClk cycles
+ * @param control The pwmValue ranges from -maximum pwm period to the positive period. The default pwm period is 9600 SysClk cycles
  * @return Void
  *
  */
 extern void motor2ControlPWM(int control);
 
-
-extern int motorError(void); // returns 50 on no error, 51 on motor 1 error, 52 on motor 2 error
+/**
+ * @brief Checks the error pins and returns a value based on the state of the pin
+ *
+ * Returns 0 on no error, 1 on motor 1 error, and 2 on motor 2 error
+ *
+ * @param Void 
+ * @return Void
+ *
+ */
+extern int motorError(void); // returns 50 on no error, 51 on motor 1 error, 52 on motor 2 error'
 
 
 

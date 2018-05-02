@@ -552,15 +552,15 @@ int motorError(void){
    if (motor1error==0){
        // brake motor 1
        GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_4,GPIO_PIN_4);
-       return 51;
+       return 1;
    }
    else if (motor2error==0){
        // brake motor 2
        GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_5,GPIO_PIN_5);
-       return 52;
+       return 2;
    }
    else{
-       return 50;
+       return 0;
    }
 }
 

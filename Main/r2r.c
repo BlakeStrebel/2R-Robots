@@ -980,8 +980,9 @@ void readDriverStatus(void){
 
 }
 
-/*
- * Not being implemented
+/** 
+ * @brief
+ * 
  */
 
 int motorError(void){
