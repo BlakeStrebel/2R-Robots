@@ -15,24 +15,28 @@ fprintf('Opening ports %s and %s....\n',Tiva_port);
 fopen(Tiva_Serial);
 
 % closes serial port when function exits
-clean1 = onCleanup(@()fclose(Tiva_Serial));
-
-% Get motors close to zero position
-fprintf(Tiva_Serial,'%c\n','f');
-fprintf(Tiva_Serial, '%d %d\n',0,0);
-fprintf(Tiva_Serial,'%c\n','j');
+%clean1 = onCleanup(@()fclose(Tiva_Serial));
 
 % Crank up the position gain
 fprintf(Tiva_Serial,'%c\n','h');
-fprintf(Tiva_Serial, '%3.2f %3.2f %3.2f\n',[10,0,0]); % might need to play with this value
+fprintf(Tiva_Serial, '%3.2f %3.2f %3.2f\n',[1,0,0]); % might need to play with this value
+
+% Get motors close to zero position
+fprintf(Tiva_Serial,'%c\n','f');
+fprintf(Tiva_Serial, '%d %d\n',[0,0]);
+
+
+fprintf(Tiva_Serial,'%c\n','j');
+
+pause(5);
 
 % Also might need to play with angle spacing
 i = 1;
-for angle = 0:5:360 % Forward direction
+for angle = 0:1:16383 % Forward direction
     % send to the new position
     fprintf(Tiva_Serial,'%c\n','f');
-    fprintf(Tiva_Serial, '%d %d\n',round(angle/360*163830),round(angle/360*163830));
-    pause(2); % wait for motor to settle
+    fprintf(Tiva_Serial, '%d %d\n',[angle,angle]);
+    pause(.1); % wait for motor to settle
    
     fprintf(Tiva_Serial,'%c\n','e'); % read desired angle
     desPos1(i) = fscanf(Tiva_Serial,'%d');
@@ -43,9 +47,11 @@ for angle = 0:5:360 % Forward direction
     absPos2(i) = fscanf(Tiva_Serial,'%d');
    
     fprintf(Tiva_Serial,'%c\n','d'); % read pwm duty cycle
-    pwm1 = fscanf(Tiva_Serial,'%d');
-    pwm2 = fscanf(Tiva_Serial,'%d');
+    pwm1(i) = fscanf(Tiva_Serial,'%d');
+    pwm2(i) = fscanf(Tiva_Serial,'%d');
 
+    clc;
+    fprintf('Current Angle: %d',angle);
     i = i + 1; 
 end
     
