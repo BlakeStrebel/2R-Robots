@@ -77,8 +77,22 @@ void reset_controller_error(void);                  // Reset the error on both c
 */
 void load_position_trajectory(int motor);                // Load desired position trajectory from client
 
-
+/**
+* @brief Returns the set pwm on a given motor
+*
+* @param motor the pwm on a given motor
+* @return Void
+*/
 int get_motor_pwm(int motor);
+
+/**
+* @brief Calculates pwm to send to the motor drivr
+*
+* @param reference the reference angle
+* @param actual the commanded angle
+* @param motor the specified get_motor_pwm
+* @return Void
+*/
 void PID_Controller(int reference, int actual, int motor);
 
 
