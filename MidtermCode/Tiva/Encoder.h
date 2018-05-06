@@ -24,6 +24,25 @@ extern void enoderSPIinit(void);
 extern void encoderRead(void);
 
 /**
+ * @brief Reads value of motor 1 encoders and sets the relative angle to zero
+ *
+ * @param Void
+ * @return Void
+ *
+ */
+extern void zeroMotor1RawRelative(void);
+
+/**
+ * @brief Reads value of motor 2 encoders and sets the relative angle to zero
+ *
+ * @param Void
+ * @return The angle as a float
+ *
+ */
+extern void zeroMotor2RawRelative (void);
+
+
+/**
  * @brief Reads value in encoderVal array for motor 1 and converts it to an angle
  *
  * @param Void
