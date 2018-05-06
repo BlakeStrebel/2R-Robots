@@ -83,7 +83,7 @@ extern void motor2ControlPWM(int control);
  * @return Void
  *
  */
-extern int motorError(void); // returns 50 on no error, 51 on motor 1 error, 52 on motor 2 error'
+extern int motorError(void); 
 
 
 

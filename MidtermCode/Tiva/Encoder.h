@@ -128,12 +128,6 @@ extern float readMotor1AngleRelative(void);
  */
 extern float readMotor2AngleRelative(void);
 
-/*
- * Control functions
- */
-extern void PIDUpdate(void);
-extern void PIDCurrUpdate(void);
-
 
 
 #endif /* ENCODER_H_ */
