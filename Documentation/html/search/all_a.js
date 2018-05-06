@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['uartinit',['uartInit',['../r2r_8c.html#a09a7a9ed4194733a7b753c3b795b1734',1,'uartInit(void):&#160;r2r.c'],['../r2r_8h.html#a09a7a9ed4194733a7b753c3b795b1734',1,'uartInit(void):&#160;r2r.c']]],
-  ['uartsend',['uartSend',['../r2r_8c.html#a498b580a06894f91127558eaf3ec31c4',1,'uartSend(const uint8_t *pui8Buffer, uint32_t ui32Count):&#160;r2r.c'],['../r2r_8h.html#a498b580a06894f91127558eaf3ec31c4',1,'uartSend(const uint8_t *pui8Buffer, uint32_t ui32Count):&#160;r2r.c']]]
+  ['pid_5fcontroller',['PID_Controller',['../_control_8h.html#a41cc73dbc9230f73ed722b4c97fb7366',1,'Control.c']]],
+  ['pwminit',['pwmInit',['../_motor_8h.html#a1c8ae46921c4ae7d57bd44dd994e10bd',1,'Motor.c']]]
 ];

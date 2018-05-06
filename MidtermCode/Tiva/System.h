@@ -1,3 +1,15 @@
+/**
+ * @file System.h
+ * @brief system header
+ *
+ * This file contains the uart, sysclk and general gpio functions
+ *
+ * @author Benjamen Lim
+ * @author Huan Weng
+ * @author Blake Strebel
+ *
+ */
+
 #ifndef SYSTEM_H_
 #define SYSTEM_H_
 

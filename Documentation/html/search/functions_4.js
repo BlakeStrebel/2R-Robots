@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['gpioinit',['gpioInit',['../r2r_8c.html#adab76f1253da89e657056817a3a9a11a',1,'gpioInit(void):&#160;r2r.c'],['../r2r_8h.html#adab76f1253da89e657056817a3a9a11a',1,'gpioInit(void):&#160;r2r.c']]]
+  ['load_5fposition_5ftrajectory',['load_position_trajectory',['../_control_8h.html#a23b819228a3ffc67fc85222e5b7a1053',1,'Control.c']]]
 ];

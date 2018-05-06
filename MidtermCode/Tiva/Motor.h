@@ -1,3 +1,15 @@
+/**
+ * @file Motor.h
+ * @brief utilities header
+ *
+ * This file contains the motor functions
+ *
+ * @author Benjamen Lim
+ * @author Huan Weng
+ * @author Blake Strebel
+ *
+ */
+
 #ifndef MOTOR_H_
 #define MOTOR_H_
 

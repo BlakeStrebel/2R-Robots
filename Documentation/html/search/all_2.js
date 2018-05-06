@@ -1,4 +1,6 @@
 var searchData=
 [
-  ['delayms',['delayMS',['../r2r_8c.html#ab0b86e69a6c13e01349840d66db0f1f3',1,'delayMS(int ms):&#160;r2r.c'],['../r2r_8h.html#ab0b86e69a6c13e01349840d66db0f1f3',1,'delayMS(int ms):&#160;r2r.c']]]
+  ['control_2eh',['Control.h',['../_control_8h.html',1,'']]],
+  ['control_5fdata_5ft',['control_data_t',['../structcontrol__data__t.html',1,'']]],
+  ['control_5ferror',['control_error',['../structcontrol__error.html',1,'']]]
 ];

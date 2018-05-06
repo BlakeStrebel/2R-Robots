@@ -1,0 +1,362 @@
+\hypertarget{_utilities_8h}{}\section{C\+:/\+Users/\+Ben/\+Documents/\+Git\+Hub/2\+R-\/\+Robots/\+Midterm\+Code/\+Tiva/\+Utilities.h File Reference}
+\label{_utilities_8h}\index{C\+:/\+Users/\+Ben/\+Documents/\+Git\+Hub/2\+R-\/\+Robots/\+Midterm\+Code/\+Tiva/\+Utilities.\+h@{C\+:/\+Users/\+Ben/\+Documents/\+Git\+Hub/2\+R-\/\+Robots/\+Midterm\+Code/\+Tiva/\+Utilities.\+h}}
+
+
+utilities header  
+
+
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structcontrol__data__t}{control\+\_\+data\+\_\+t}}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{_utilities_8h_a8b0b0ebd19cb978bcd825b842558c31a}\label{_utilities_8h_a8b0b0ebd19cb978bcd825b842558c31a}} 
+\#define {\bfseries D\+E\+C\+I\+M\+A\+T\+I\+ON}~10
+\item 
+\mbox{\Hypertarget{_utilities_8h_afdeaf9c0da96c91dfdf573f977d32e6b}\label{_utilities_8h_afdeaf9c0da96c91dfdf573f977d32e6b}} 
+\#define {\bfseries R\+E\+F\+E\+R\+E\+N\+C\+E\+\_\+\+D\+A\+TA}~10000
+\item 
+\mbox{\Hypertarget{_utilities_8h_ad974fe981249f5e84fbf1683b012c9f8}\label{_utilities_8h_ad974fe981249f5e84fbf1683b012c9f8}} 
+\#define {\bfseries B\+U\+F\+L\+EN}~1024
+\end{DoxyCompactItemize}
+\subsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{_utilities_8h_ad2e43f874bb463c5312c31e644fd4417}{mode}} \{ \mbox{\hyperlink{_utilities_8h_ad2e43f874bb463c5312c31e644fd4417afd6a0e4343048b10646dd2976cc5ad18}{I\+D\+LE}}, 
+\mbox{\hyperlink{_utilities_8h_ad2e43f874bb463c5312c31e644fd4417a9cfa27b414cab750fb14ec07cdf5cf6a}{H\+O\+LD}}, 
+\mbox{\hyperlink{_utilities_8h_ad2e43f874bb463c5312c31e644fd4417a203efac3b32c320b1246bf5583be1e8c}{T\+R\+A\+CK}}
+ \}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{_utilities_8h_ad2e43f874bb463c5312c31e644fd4417}{mode}} \mbox{\hyperlink{_utilities_8h_a19e5b0661a8f7acb8c2a975a4c84c0aa}{get\+M\+O\+DE}} ()
+\begin{DoxyCompactList}\small\item\em Return the Mode of the robot. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_utilities_8h_af4c5a7352334b805d0c36e3b495d0a16}{set\+M\+O\+DE}} (\mbox{\hyperlink{_utilities_8h_ad2e43f874bb463c5312c31e644fd4417}{mode}} new\+M\+O\+DE)
+\begin{DoxyCompactList}\small\item\em Sets the Mode of the robot. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_utilities_8h_acba07f8eaf5cdce3760657cfd53c35b8}{setN}} (void)
+\begin{DoxyCompactList}\small\item\em Receive number N of samples to save into data buffer. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{_utilities_8h_ad100531ac5483b0915dc7ebf2e6f3a3d}{getN}} (void)
+\begin{DoxyCompactList}\small\item\em Returns the number of samples. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_utilities_8h_aa16427d2f35904a0b015876ac52406c4}{write\+\_\+ref\+Pos}} (int position, int index, int motor)
+\begin{DoxyCompactList}\small\item\em Writes the reference position. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{_utilities_8h_a95d42f6612b70ed6839a907ccbee29e8}{get\+\_\+ref\+Pos}} (int index, int motor)
+\begin{DoxyCompactList}\small\item\em Gets the reference position. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{_utilities_8h_a7ee932fa1bdc8820ae0479fa64cf1e01}{buffer\+\_\+empty}} (void)
+\begin{DoxyCompactList}\small\item\em Returns true if the buffer is empty. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{_utilities_8h_ab06f20d652c9a1f51223495940f71ff0}{buffer\+\_\+full}} (void)
+\begin{DoxyCompactList}\small\item\em Returns true if the buffer is full. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{_utilities_8h_ae0cb004e50993ab70380c6217c2da0da}{buffer\+\_\+read\+\_\+position}} (void)
+\begin{DoxyCompactList}\small\item\em Reads position from the current buffer location. \end{DoxyCompactList}\item 
+float \mbox{\hyperlink{_utilities_8h_af11324c99da13561c6cab83b50575107}{buffer\+\_\+read\+\_\+u}} (void)
+\begin{DoxyCompactList}\small\item\em Reads current value from current buffer location. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_utilities_8h_a20cbe188c42de1a2849be3745a2c9e40}{buffer\+\_\+read\+\_\+increment}} (void)
+\begin{DoxyCompactList}\small\item\em Increments the buffer read index. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_utilities_8h_ab43eb9473b9b40d1b27d223c5b2f9448}{buffer\+\_\+write}} (int M1\+\_\+act\+Pos, int M2\+\_\+act\+Pos, float M1\+\_\+u, float M2\+\_\+u)
+\begin{DoxyCompactList}\small\item\em Write data to buffer. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_utilities_8h_aa8061654c0af0c3c3fac9e63ed7eaed6}{send\+\_\+data}} (void)
+\begin{DoxyCompactList}\small\item\em Send data to client when it becomes available. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+utilities header 
+
+This file contains the buffer and mode functions
+
+\begin{DoxyAuthor}{Author}
+Benjamen Lim 
+
+Huan Weng 
+
+Blake Strebel 
+\end{DoxyAuthor}
+
+
+\subsection{Enumeration Type Documentation}
+\mbox{\Hypertarget{_utilities_8h_ad2e43f874bb463c5312c31e644fd4417}\label{_utilities_8h_ad2e43f874bb463c5312c31e644fd4417}} 
+\index{Utilities.\+h@{Utilities.\+h}!mode@{mode}}
+\index{mode@{mode}!Utilities.\+h@{Utilities.\+h}}
+\subsubsection{\texorpdfstring{mode}{mode}}
+{\footnotesize\ttfamily enum elseif \mbox{\hyperlink{_utilities_8h_ad2e43f874bb463c5312c31e644fd4417}{mode}}}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}
+== 0
+                fprintf(\textcolor{stringliteral}{'The controller is in IDLE.\(\backslash\)n'})
+\end{DoxyCode}
+Data structure containing the modes of the system \begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{I\+D\+LE@{I\+D\+LE}!Utilities.\+h@{Utilities.\+h}}\index{Utilities.\+h@{Utilities.\+h}!I\+D\+LE@{I\+D\+LE}}}\mbox{\Hypertarget{_utilities_8h_ad2e43f874bb463c5312c31e644fd4417afd6a0e4343048b10646dd2976cc5ad18}\label{_utilities_8h_ad2e43f874bb463c5312c31e644fd4417afd6a0e4343048b10646dd2976cc5ad18}} 
+I\+D\+LE&Sets motor effort to 0 \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{H\+O\+LD@{H\+O\+LD}!Utilities.\+h@{Utilities.\+h}}\index{Utilities.\+h@{Utilities.\+h}!H\+O\+LD@{H\+O\+LD}}}\mbox{\Hypertarget{_utilities_8h_ad2e43f874bb463c5312c31e644fd4417a9cfa27b414cab750fb14ec07cdf5cf6a}\label{_utilities_8h_ad2e43f874bb463c5312c31e644fd4417a9cfa27b414cab750fb14ec07cdf5cf6a}} 
+H\+O\+LD&Sets motor effort to holding position \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{T\+R\+A\+CK@{T\+R\+A\+CK}!Utilities.\+h@{Utilities.\+h}}\index{Utilities.\+h@{Utilities.\+h}!T\+R\+A\+CK@{T\+R\+A\+CK}}}\mbox{\Hypertarget{_utilities_8h_ad2e43f874bb463c5312c31e644fd4417a203efac3b32c320b1246bf5583be1e8c}\label{_utilities_8h_ad2e43f874bb463c5312c31e644fd4417a203efac3b32c320b1246bf5583be1e8c}} 
+T\+R\+A\+CK&Sets motor effort to tracking mode \\
+\hline
+
+\end{DoxyEnumFields}
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{_utilities_8h_a7ee932fa1bdc8820ae0479fa64cf1e01}\label{_utilities_8h_a7ee932fa1bdc8820ae0479fa64cf1e01}} 
+\index{Utilities.\+h@{Utilities.\+h}!buffer\+\_\+empty@{buffer\+\_\+empty}}
+\index{buffer\+\_\+empty@{buffer\+\_\+empty}!Utilities.\+h@{Utilities.\+h}}
+\subsubsection{\texorpdfstring{buffer\+\_\+empty()}{buffer\_empty()}}
+{\footnotesize\ttfamily int buffer\+\_\+empty (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Returns true if the buffer is empty. 
+
+R\+E\+AD == W\+R\+I\+TE
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int true if buffer is empty 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_utilities_8h_ab06f20d652c9a1f51223495940f71ff0}\label{_utilities_8h_ab06f20d652c9a1f51223495940f71ff0}} 
+\index{Utilities.\+h@{Utilities.\+h}!buffer\+\_\+full@{buffer\+\_\+full}}
+\index{buffer\+\_\+full@{buffer\+\_\+full}!Utilities.\+h@{Utilities.\+h}}
+\subsubsection{\texorpdfstring{buffer\+\_\+full()}{buffer\_full()}}
+{\footnotesize\ttfamily int buffer\+\_\+full (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Returns true if the buffer is full. 
+
+(W\+R\+I\+TE + 1) \% B\+U\+F\+L\+EN == R\+E\+AD
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int true if buffer is full 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_utilities_8h_a20cbe188c42de1a2849be3745a2c9e40}\label{_utilities_8h_a20cbe188c42de1a2849be3745a2c9e40}} 
+\index{Utilities.\+h@{Utilities.\+h}!buffer\+\_\+read\+\_\+increment@{buffer\+\_\+read\+\_\+increment}}
+\index{buffer\+\_\+read\+\_\+increment@{buffer\+\_\+read\+\_\+increment}!Utilities.\+h@{Utilities.\+h}}
+\subsubsection{\texorpdfstring{buffer\+\_\+read\+\_\+increment()}{buffer\_read\_increment()}}
+{\footnotesize\ttfamily void buffer\+\_\+read\+\_\+increment (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Increments the buffer read index. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_utilities_8h_ae0cb004e50993ab70380c6217c2da0da}\label{_utilities_8h_ae0cb004e50993ab70380c6217c2da0da}} 
+\index{Utilities.\+h@{Utilities.\+h}!buffer\+\_\+read\+\_\+position@{buffer\+\_\+read\+\_\+position}}
+\index{buffer\+\_\+read\+\_\+position@{buffer\+\_\+read\+\_\+position}!Utilities.\+h@{Utilities.\+h}}
+\subsubsection{\texorpdfstring{buffer\+\_\+read\+\_\+position()}{buffer\_read\_position()}}
+{\footnotesize\ttfamily int buffer\+\_\+read\+\_\+position (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Reads position from the current buffer location. 
+
+This function assumes that buffer is not empty
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int position of the current buffer location 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_utilities_8h_af11324c99da13561c6cab83b50575107}\label{_utilities_8h_af11324c99da13561c6cab83b50575107}} 
+\index{Utilities.\+h@{Utilities.\+h}!buffer\+\_\+read\+\_\+u@{buffer\+\_\+read\+\_\+u}}
+\index{buffer\+\_\+read\+\_\+u@{buffer\+\_\+read\+\_\+u}!Utilities.\+h@{Utilities.\+h}}
+\subsubsection{\texorpdfstring{buffer\+\_\+read\+\_\+u()}{buffer\_read\_u()}}
+{\footnotesize\ttfamily float buffer\+\_\+read\+\_\+u (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Reads current value from current buffer location. 
+
+This function assumes that buffer is not empty
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+float current value in buffer 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_utilities_8h_ab43eb9473b9b40d1b27d223c5b2f9448}\label{_utilities_8h_ab43eb9473b9b40d1b27d223c5b2f9448}} 
+\index{Utilities.\+h@{Utilities.\+h}!buffer\+\_\+write@{buffer\+\_\+write}}
+\index{buffer\+\_\+write@{buffer\+\_\+write}!Utilities.\+h@{Utilities.\+h}}
+\subsubsection{\texorpdfstring{buffer\+\_\+write()}{buffer\_write()}}
+{\footnotesize\ttfamily void buffer\+\_\+write (\begin{DoxyParamCaption}\item[{int}]{M1\+\_\+act\+Pos,  }\item[{int}]{M2\+\_\+act\+Pos,  }\item[{float}]{M1\+\_\+u,  }\item[{float}]{M2\+\_\+u }\end{DoxyParamCaption})}
+
+
+
+Write data to buffer. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em int} & M1\+\_\+act\+Pos motor 1 position \\
+\hline
+{\em int} & M2\+\_\+act\+Pos motor 2 position \\
+\hline
+{\em float} & M1\+\_\+u motor 1 effort \\
+\hline
+{\em float} & M1\+\_\+u motor 2 effort \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_utilities_8h_a95d42f6612b70ed6839a907ccbee29e8}\label{_utilities_8h_a95d42f6612b70ed6839a907ccbee29e8}} 
+\index{Utilities.\+h@{Utilities.\+h}!get\+\_\+ref\+Pos@{get\+\_\+ref\+Pos}}
+\index{get\+\_\+ref\+Pos@{get\+\_\+ref\+Pos}!Utilities.\+h@{Utilities.\+h}}
+\subsubsection{\texorpdfstring{get\+\_\+ref\+Pos()}{get\_refPos()}}
+{\footnotesize\ttfamily int get\+\_\+ref\+Pos (\begin{DoxyParamCaption}\item[{int}]{index,  }\item[{int}]{motor }\end{DoxyParamCaption})}
+
+
+
+Gets the reference position. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em int} & index \\
+\hline
+{\em int} & motor \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int returns the reference position 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_utilities_8h_a19e5b0661a8f7acb8c2a975a4c84c0aa}\label{_utilities_8h_a19e5b0661a8f7acb8c2a975a4c84c0aa}} 
+\index{Utilities.\+h@{Utilities.\+h}!get\+M\+O\+DE@{get\+M\+O\+DE}}
+\index{get\+M\+O\+DE@{get\+M\+O\+DE}!Utilities.\+h@{Utilities.\+h}}
+\subsubsection{\texorpdfstring{get\+M\+O\+D\+E()}{getMODE()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{_utilities_8h_ad2e43f874bb463c5312c31e644fd4417}{mode}} get\+M\+O\+DE (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Return the Mode of the robot. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em mode} & operating mode of the robot \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_utilities_8h_ad100531ac5483b0915dc7ebf2e6f3a3d}\label{_utilities_8h_ad100531ac5483b0915dc7ebf2e6f3a3d}} 
+\index{Utilities.\+h@{Utilities.\+h}!getN@{getN}}
+\index{getN@{getN}!Utilities.\+h@{Utilities.\+h}}
+\subsubsection{\texorpdfstring{get\+N()}{getN()}}
+{\footnotesize\ttfamily int getN (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Returns the number of samples. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int the number of samples 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_utilities_8h_aa8061654c0af0c3c3fac9e63ed7eaed6}\label{_utilities_8h_aa8061654c0af0c3c3fac9e63ed7eaed6}} 
+\index{Utilities.\+h@{Utilities.\+h}!send\+\_\+data@{send\+\_\+data}}
+\index{send\+\_\+data@{send\+\_\+data}!Utilities.\+h@{Utilities.\+h}}
+\subsubsection{\texorpdfstring{send\+\_\+data()}{send\_data()}}
+{\footnotesize\ttfamily void send\+\_\+data (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Send data to client when it becomes available. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_utilities_8h_af4c5a7352334b805d0c36e3b495d0a16}\label{_utilities_8h_af4c5a7352334b805d0c36e3b495d0a16}} 
+\index{Utilities.\+h@{Utilities.\+h}!set\+M\+O\+DE@{set\+M\+O\+DE}}
+\index{set\+M\+O\+DE@{set\+M\+O\+DE}!Utilities.\+h@{Utilities.\+h}}
+\subsubsection{\texorpdfstring{set\+M\+O\+D\+E()}{setMODE()}}
+{\footnotesize\ttfamily void set\+M\+O\+DE (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{_utilities_8h_ad2e43f874bb463c5312c31e644fd4417}{mode}}}]{new\+M\+O\+DE }\end{DoxyParamCaption})}
+
+
+
+Sets the Mode of the robot. 
+
+The avaliable modes are I\+D\+LE, H\+O\+LD, T\+R\+A\+CK
+
+
+\begin{DoxyParams}{Parameters}
+{\em mode} & operating mode of the robot \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_utilities_8h_acba07f8eaf5cdce3760657cfd53c35b8}\label{_utilities_8h_acba07f8eaf5cdce3760657cfd53c35b8}} 
+\index{Utilities.\+h@{Utilities.\+h}!setN@{setN}}
+\index{setN@{setN}!Utilities.\+h@{Utilities.\+h}}
+\subsubsection{\texorpdfstring{set\+N()}{setN()}}
+{\footnotesize\ttfamily void setN (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Receive number N of samples to save into data buffer. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_utilities_8h_aa16427d2f35904a0b015876ac52406c4}\label{_utilities_8h_aa16427d2f35904a0b015876ac52406c4}} 
+\index{Utilities.\+h@{Utilities.\+h}!write\+\_\+ref\+Pos@{write\+\_\+ref\+Pos}}
+\index{write\+\_\+ref\+Pos@{write\+\_\+ref\+Pos}!Utilities.\+h@{Utilities.\+h}}
+\subsubsection{\texorpdfstring{write\+\_\+ref\+Pos()}{write\_refPos()}}
+{\footnotesize\ttfamily void write\+\_\+ref\+Pos (\begin{DoxyParamCaption}\item[{int}]{position,  }\item[{int}]{index,  }\item[{int}]{motor }\end{DoxyParamCaption})}
+
+
+
+Writes the reference position. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em int} & position \\
+\hline
+{\em int} & index \\
+\hline
+{\em int} & motor \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}

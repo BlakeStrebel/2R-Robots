@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['tempread1',['tempRead1',['../r2r_8c.html#a3f64aa234674df8aeb7332aa17941b75',1,'tempRead1(void):&#160;r2r.c'],['../r2r_8h.html#a3f64aa234674df8aeb7332aa17941b75',1,'tempRead1(void):&#160;r2r.c']]],
-  ['tempread2',['tempRead2',['../r2r_8c.html#a3cec2a038dd769dc059ca76a26954e4b',1,'tempRead2(void):&#160;r2r.c'],['../r2r_8h.html#a3cec2a038dd769dc059ca76a26954e4b',1,'tempRead2(void):&#160;r2r.c']]]
+  ['uart0read',['UART0read',['../_system_8h.html#acd1ca90dcd2d241c90316f670dfcc2eb',1,'System.c']]],
+  ['uart0write',['UART0write',['../_system_8h.html#aba58039e2e0b55260a188aedbc87d18b',1,'System.c']]],
+  ['uartinit',['uartInit',['../_system_8h.html#a09a7a9ed4194733a7b753c3b795b1734',1,'System.c']]]
 ];

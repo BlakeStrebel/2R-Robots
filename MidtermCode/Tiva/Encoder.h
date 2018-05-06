@@ -1,3 +1,15 @@
+/**
+ * @file Encoder.h
+ * @brief Encoder header
+ *
+ * This file contains the encoder functions
+ *
+ * @author Benjamen Lim
+ * @author Huan Weng
+ * @author Blake Strebel
+ *
+ */
+
 #ifndef ENCODER_H_
 #define ENCODER_H_
 

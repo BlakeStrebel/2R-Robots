@@ -1,9 +1,10 @@
 var searchData=
 [
-  ['motor1controlpwm',['motor1ControlPWM',['../r2r_8c.html#a8ab898affd7b6bbc1d359284e85c31c3',1,'motor1ControlPWM(int control):&#160;r2r.c'],['../r2r_8h.html#a8ab898affd7b6bbc1d359284e85c31c3',1,'motor1ControlPWM(int control):&#160;r2r.c']]],
-  ['motor1pwm',['motor1PWM',['../r2r_8c.html#a66eea06de5674ba28dc7473842af0b8f',1,'motor1PWM(int pwmValue):&#160;r2r.c'],['../r2r_8h.html#a66eea06de5674ba28dc7473842af0b8f',1,'motor1PWM(int pwmValue):&#160;r2r.c']]],
-  ['motor2controlpwm',['motor2ControlPWM',['../r2r_8c.html#aa3421fe96b22e90c356e013a0abef7d6',1,'motor2ControlPWM(int control):&#160;r2r.c'],['../r2r_8h.html#aa3421fe96b22e90c356e013a0abef7d6',1,'motor2ControlPWM(int control):&#160;r2r.c']]],
-  ['motor2pwm',['motor2PWM',['../r2r_8c.html#a17b8580b21da18028807be50e9c29020',1,'motor2PWM(int pwmValue):&#160;r2r.c'],['../r2r_8h.html#a17b8580b21da18028807be50e9c29020',1,'motor2PWM(int pwmValue):&#160;r2r.c']]],
-  ['motordriverinit',['motorDriverInit',['../r2r_8c.html#a4e7b27c5715df8d71dfe87a22ae0b004',1,'motorDriverInit(void):&#160;r2r.c'],['../r2r_8h.html#a4e7b27c5715df8d71dfe87a22ae0b004',1,'motorDriverInit(void):&#160;r2r.c']]],
-  ['motorinit',['motorInit',['../r2r_8c.html#aa29e2982047be0f7afbb10c8d6f3f5c3',1,'motorInit(void):&#160;r2r.c'],['../r2r_8h.html#aa29e2982047be0f7afbb10c8d6f3f5c3',1,'motorInit(void):&#160;r2r.c']]]
+  ['get_5fdesired_5fangle',['get_desired_angle',['../_control_8h.html#a5b86db5b678ee3f8de68b9d2d85a8e1e',1,'Control.c']]],
+  ['get_5fmotor_5fpwm',['get_motor_pwm',['../_control_8h.html#a7e15715f934ac02744e6af24bf61d696',1,'Control.c']]],
+  ['get_5fposition_5fgains',['get_position_gains',['../_control_8h.html#a881cd4b090a428bf27f7e3b4a88b6e80',1,'Control.c']]],
+  ['get_5frefpos',['get_refPos',['../_utilities_8h.html#a95d42f6612b70ed6839a907ccbee29e8',1,'Utilities.c']]],
+  ['getmode',['getMODE',['../_utilities_8h.html#a19e5b0661a8f7acb8c2a975a4c84c0aa',1,'Utilities.c']]],
+  ['getn',['getN',['../_utilities_8h.html#ad100531ac5483b0915dc7ebf2e6f3a3d',1,'Utilities.c']]],
+  ['gpioinit',['gpioInit',['../_system_8h.html#adab76f1253da89e657056817a3a9a11a',1,'System.c']]]
 ];

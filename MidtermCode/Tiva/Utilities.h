@@ -1,3 +1,15 @@
+/**
+ * @file Utilities.h
+ * @brief utilities header
+ *
+ * This file contains the buffer and mode functions
+ *
+ * @author Benjamen Lim
+ * @author Huan Weng
+ * @author Blake Strebel
+ *
+ */
+
 #ifndef UTILITIES_H_
 #define UTILITIES_H_
 
