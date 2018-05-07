@@ -12,7 +12,7 @@ end
 % configure ports
 Tiva_Serial = serial(Tiva_port, 'BaudRate', 115200, 'FlowControl', 'hardware','Timeout',15); 
 
-fprintf('Opening ports %s and %s....\n',Tiva_port);
+fprintf('Opening port %s....\n',Tiva_port);
 
 % opens serial connection
 fopen(Tiva_Serial);
@@ -30,9 +30,10 @@ while ~has_quit
     disp('c: Set PWM              d: Read PWM')
     disp('e: Read Desired Angle   f: Set Desired Angle')
     disp('g: Set mode             h: Set PID gains')
-    disp('j: Hold Position        k: Set trajectory')
-    disp('l: Run                  m: Move Arm')
-    disp('n: Load and Run Test    q: Quit')
+    disp('i: Get PID gains        j: Hold Position')
+    disp('k: Set trajectory       l: Execute Trajectory ')
+    disp('m: Move Arm             n: Load and Run Test')
+    disp('q: Quit')
     selection = input('\nENTER COMMAND: ', 's');
    
     fprintf(Tiva_Serial,'%c\n',selection);  % send the command to the Tiva
@@ -55,7 +56,7 @@ while ~has_quit
         case 'd'
             pwm1 = fscanf(Tiva_Serial,'%d');
             pwm2 = fscanf(Tiva_Serial,'%d');
-            fprintf('The  motor duty cycles are:\nMotor 1: %3.2f%\nMotor 2: %3.2f%\n',pwm1/9600*100, pwm2/9600*100);
+            fprintf('The  motor duty cycles are:\nMotor 1: %3.2f\nMotor 2: %3.2f\n',pwm1/9600*100, pwm2/9600*100);
         case 'e'
             desPos1 = fscanf(Tiva_Serial,'%d');
             desPos2 = fscanf(Tiva_Serial,'%d');
@@ -90,12 +91,33 @@ while ~has_quit
             error_check = 1;
             while (error_check)
                 fprintf('Motor 1:\n');
-                mode = input('    Enter mode (''linear'', ''cubic'', ''step'': ');
-                trajectory = input('Enter position trajectory, in sec and degrees [time1, pos1; time2, pos2; ...]:');
-                ref1 = genRef(trajectory,mode);
-                ref1 = round(ref1/360*16383);
-                ref2 = ref1;
-                error_check = 0;
+                mode = input('    Enter mode (''linear'', ''cubic'', ''step'', ''zero''): ');
+                if (strcmp(mode, 'zero'))
+                    time = input('Enter time in seconds: ');
+                    ref1 = zeros(time*1000,1)';
+                else
+                    trajectory = input('Enter position trajectory, in sec and degrees [time1, pos1; time2, pos2; ...]:');
+                    ref1 = genRef(trajectory,mode);
+                    ref1 = round(ref1/360*16383);
+                end
+               
+                fprintf('Motor 2:\n');
+                mode = input('    Enter mode (''linear'', ''cubic'', ''step'', ''zero''): ');
+                if (strcmp(mode,'zero'))
+                    time = input('Enter time in seconds: ');
+                    ref2 = zeros(time*1000,1)';
+                else
+                    trajectory = input('Enter position trajectory, in sec and degrees [time1, pos1; time2, pos2; ...]:');
+                    ref2 = genRef(trajectory,mode);
+                    ref2 = round(ref2/360*16383);
+                end
+                
+                if (size(ref1,2) == size(ref2,2))
+                    error_check = 0;
+                else
+                    fprintf('Your reference trajectories are different lengths, try again');
+                end
+                
             end
            
             % Motor 1

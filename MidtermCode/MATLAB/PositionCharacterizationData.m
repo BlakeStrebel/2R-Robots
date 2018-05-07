@@ -9,7 +9,7 @@ end
 % configure ports
 Tiva_Serial = serial(Tiva_port, 'BaudRate', 115200, 'FlowControl', 'hardware','Timeout',15); 
 
-fprintf('Opening ports %s and %s....\n',Tiva_port);
+fprintf('Opening ports %s\n',Tiva_port);
 
 % opens serial connection
 fopen(Tiva_Serial);
@@ -19,12 +19,11 @@ fopen(Tiva_Serial);
 
 % Crank up the position gain
 fprintf(Tiva_Serial,'%c\n','h');
-fprintf(Tiva_Serial, '%3.2f %3.2f %3.2f\n',[1,0,0]); % might need to play with this value
+fprintf(Tiva_Serial, '%3.2f %3.2f %3.2f\n',[.1,0,0]); % might need to play with this value
 
 % Get motors close to zero position
 fprintf(Tiva_Serial,'%c\n','f');
 fprintf(Tiva_Serial, '%d %d\n',[0,0]);
-
 
 fprintf(Tiva_Serial,'%c\n','j');
 
@@ -35,7 +34,7 @@ i = 1;
 for angle = 0:1:16383 % Forward direction
     % send to the new position
     fprintf(Tiva_Serial,'%c\n','f');
-    fprintf(Tiva_Serial, '%d %d\n',[angle,angle]);
+    fprintf(Tiva_Serial, '%d %d\n',[angle,0]);
     pause(.1); % wait for motor to settle
    
     fprintf(Tiva_Serial,'%c\n','e'); % read desired angle
