@@ -1,3 +1,15 @@
+/**
+ * @file Motor.h
+ * @brief utilities header
+ *
+ * This file contains the motor functions
+ *
+ * @author Benjamen Lim
+ * @author Huan Weng
+ * @author Blake Strebel
+ *
+ */
+
 #ifndef MOTOR_H_
 #define MOTOR_H_
 
@@ -83,7 +95,7 @@ extern void motor2ControlPWM(int control);
  * @return Void
  *
  */
-extern int motorError(void); // returns 50 on no error, 51 on motor 1 error, 52 on motor 2 error'
+extern int motorError(void); 
 
 
 

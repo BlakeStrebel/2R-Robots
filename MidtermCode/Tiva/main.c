@@ -144,6 +144,13 @@ main(void)
                    send_data();
                    break;
                }
+               case 'r': // zero encoders
+               {
+                   zeroMotor1RawRelative();
+                   zeroMotor2RawRelative();
+                   break;
+
+               }
                case 'q':    // Motor Off
                {
                    setMODE(IDLE);

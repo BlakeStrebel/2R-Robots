@@ -16,6 +16,8 @@ int modifier1=0;
 int last_motor_1_angle = 0;
 int modifier2=0;
 int last_motor_2_angle = 0;
+int zeroing1 = 0;
+int zeroing2 = 0;
 
 /*
  * This function initilizes the SPI on SSI0, using PA2 (CLK), PA3(SS), PA4(RX), PA5(TX)
@@ -171,6 +173,18 @@ int angleFix(int curr_angle){
 }
 
 
+void zeroMotor1RawRelative(void){
+    modifier1 = 0; // zero the modifier
+    zeroing1 = 0; // zero the previous zeroing, now it is just RAW angles, now relative should be synced up with absolute
+    zeroing1 = readMotor1Raw(); // read the absolute value and set it as zeroing modifier.
+}
+void zeroMotor2RawRelative(void){
+    modifier2 = 0; // zero the modifier
+    zeroing2 = 0; // zero the previous zeroing, now it is just RAW angles, now relative should be synced up with absolute
+    zeroing2 = readMotor2Raw();  // read the absolute value and set it as zeroing modifier.
+}
+
+
 /*
  * This function converts the absolute encoder into a relative encoder
  *
@@ -185,28 +199,28 @@ int angleFix(int curr_angle){
  */
 
 int readMotor1RawRelative(void){
-    int angle_gap = readMotor1Raw() - last_motor_1_angle;
-    if (angle_gap>8000){
+    int angle_gap = readMotor1Raw() - last_motor_1_angle; // difference in angles
+    if (angle_gap>8000){ // we crossed over a singularity
         modifier1 = modifier1 - 16383;
     }
     else if (angle_gap<-8000){
         modifier1 = modifier1 + 16383;
     }
-    int relative_angle = readMotor1Raw()+modifier1;
-    last_motor_1_angle = readMotor1Raw();
+    int relative_angle = readMotor1Raw()+modifier1-zeroing1; // add or - 360 from our relative angle - the zeroing, return the angle.
+    last_motor_1_angle = readMotor1Raw(); // save the last angle for comparision the next time
     return relative_angle;
 }
 
 int readMotor2RawRelative(void){
-    int angle_gap = readMotor2Raw() - last_motor_2_angle;
-    if (angle_gap>4000){
+    int angle_gap = readMotor2Raw() - last_motor_2_angle; // difference in angles
+    if (angle_gap>4000){ // we crossed over a singularity
         modifier2 = modifier2 - 16383;
     }
-    else if (angle_gap<-4000){
+    else if (angle_gap<-4000){ // crossed over in the opposite direction
         modifier2 = modifier2 + 16383;
     }
-    int relative_angle = readMotor2Raw()+modifier2;
-    last_motor_2_angle = readMotor2Raw();
+    int relative_angle = readMotor2Raw()+modifier2-zeroing2; // add or - 360 from our relative angle - the zeroing, return the angle.
+    last_motor_2_angle = readMotor2Raw(); // save the last angle for comparision the next time
     return relative_angle;
 }
 

@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['delayms',['delayMS',['../r2r_8c.html#ab0b86e69a6c13e01349840d66db0f1f3',1,'delayMS(int ms):&#160;r2r.c'],['../r2r_8h.html#ab0b86e69a6c13e01349840d66db0f1f3',1,'delayMS(int ms):&#160;r2r.c']]]
+  ['encoderread',['encoderRead',['../_encoder_8h.html#aa027163ba1e9951d437f3f4e260fd9bb',1,'Encoder.c']]],
+  ['enoderspiinit',['enoderSPIinit',['../_encoder_8h.html#ad2ecc69b99764f250fff9f6cc6cc55fb',1,'Encoder.c']]]
 ];

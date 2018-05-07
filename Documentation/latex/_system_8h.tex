@@ -1,0 +1,182 @@
+\hypertarget{_system_8h}{}\section{C\+:/\+Users/\+Ben/\+Documents/\+Git\+Hub/2\+R-\/\+Robots/\+Midterm\+Code/\+Tiva/\+System.h File Reference}
+\label{_system_8h}\index{C\+:/\+Users/\+Ben/\+Documents/\+Git\+Hub/2\+R-\/\+Robots/\+Midterm\+Code/\+Tiva/\+System.\+h@{C\+:/\+Users/\+Ben/\+Documents/\+Git\+Hub/2\+R-\/\+Robots/\+Midterm\+Code/\+Tiva/\+System.\+h}}
+
+
+system header  
+
+
+{\ttfamily \#include $<$stdbool.\+h$>$}\newline
+{\ttfamily \#include $<$stdint.\+h$>$}\newline
+{\ttfamily \#include $<$stdlib.\+h$>$}\newline
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include $<$stdarg.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}sensorlib/i2cm\+\_\+drv.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}sensorlib/hw\+\_\+mpu6050.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}sensorlib/mpu6050.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}inc/hw\+\_\+ints.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}inc/hw\+\_\+memmap.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}inc/hw\+\_\+sysctl.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}inc/hw\+\_\+types.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}inc/hw\+\_\+i2c.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}inc/hw\+\_\+gpio.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}driverlib/gpio.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}driverlib/pin\+\_\+map.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}driverlib/rom.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}driverlib/rom\+\_\+map.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}driverlib/debug.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}driverlib/interrupt.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}driverlib/i2c.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}driverlib/sysctl.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}driverlib/pwm.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}driverlib/timer.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}driverlib/uart.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}driverlib/ssi.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}utils/uartstdio.\+h\char`\"{}}\newline
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{_system_8h_a9708de954e135b89af84d9d82b552667}{sys\+Init}} (void)
+\begin{DoxyCompactList}\small\item\em Initializes the system clock and the master interrupts for the R2R project. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_system_8h_a09a7a9ed4194733a7b753c3b795b1734}{uart\+Init}} (void)
+\begin{DoxyCompactList}\small\item\em Initializes the U\+A\+RT for 115200 Baud Rate and 8-\/\+N-\/1 transfer rate. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_system_8h_acd1ca90dcd2d241c90316f670dfcc2eb}{U\+A\+R\+T0read}} (char $\ast$message, int max\+Length)
+\begin{DoxyCompactList}\small\item\em Reads input from U\+A\+RT. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_system_8h_aba58039e2e0b55260a188aedbc87d18b}{U\+A\+R\+T0write}} (const char $\ast$string)
+\begin{DoxyCompactList}\small\item\em Writes output from U\+A\+RT. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_system_8h_adab76f1253da89e657056817a3a9a11a}{gpio\+Init}} (void)
+\begin{DoxyCompactList}\small\item\em Initializes all unused G\+P\+IO pins in High-\/Z state. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_system_8h_ab0b86e69a6c13e01349840d66db0f1f3}{delay\+MS}} (int ms)
+\begin{DoxyCompactList}\small\item\em Stops the processor for a given amount of time. This is an approximate time. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{_system_8h_ad6e919663d1d5cf6bbc82ba890b46204}\label{_system_8h_ad6e919663d1d5cf6bbc82ba890b46204}} 
+uint32\+\_\+t {\bfseries ui32\+Sys\+Clock}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+system header 
+
+This file contains the uart, sysclk and general gpio functions
+
+\begin{DoxyAuthor}{Author}
+Benjamen Lim 
+
+Huan Weng 
+
+Blake Strebel 
+\end{DoxyAuthor}
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{_system_8h_ab0b86e69a6c13e01349840d66db0f1f3}\label{_system_8h_ab0b86e69a6c13e01349840d66db0f1f3}} 
+\index{System.\+h@{System.\+h}!delay\+MS@{delay\+MS}}
+\index{delay\+MS@{delay\+MS}!System.\+h@{System.\+h}}
+\subsubsection{\texorpdfstring{delay\+M\+S()}{delayMS()}}
+{\footnotesize\ttfamily void delay\+MS (\begin{DoxyParamCaption}\item[{int}]{ms }\end{DoxyParamCaption})}
+
+
+
+Stops the processor for a given amount of time. This is an approximate time. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em ms} & milliseconds \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_system_8h_adab76f1253da89e657056817a3a9a11a}\label{_system_8h_adab76f1253da89e657056817a3a9a11a}} 
+\index{System.\+h@{System.\+h}!gpio\+Init@{gpio\+Init}}
+\index{gpio\+Init@{gpio\+Init}!System.\+h@{System.\+h}}
+\subsubsection{\texorpdfstring{gpio\+Init()}{gpioInit()}}
+{\footnotesize\ttfamily void gpio\+Init (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Initializes all unused G\+P\+IO pins in High-\/Z state. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_system_8h_a9708de954e135b89af84d9d82b552667}\label{_system_8h_a9708de954e135b89af84d9d82b552667}} 
+\index{System.\+h@{System.\+h}!sys\+Init@{sys\+Init}}
+\index{sys\+Init@{sys\+Init}!System.\+h@{System.\+h}}
+\subsubsection{\texorpdfstring{sys\+Init()}{sysInit()}}
+{\footnotesize\ttfamily void sys\+Init (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Initializes the system clock and the master interrupts for the R2R project. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_system_8h_acd1ca90dcd2d241c90316f670dfcc2eb}\label{_system_8h_acd1ca90dcd2d241c90316f670dfcc2eb}} 
+\index{System.\+h@{System.\+h}!U\+A\+R\+T0read@{U\+A\+R\+T0read}}
+\index{U\+A\+R\+T0read@{U\+A\+R\+T0read}!System.\+h@{System.\+h}}
+\subsubsection{\texorpdfstring{U\+A\+R\+T0read()}{UART0read()}}
+{\footnotesize\ttfamily void U\+A\+R\+T0read (\begin{DoxyParamCaption}\item[{char $\ast$}]{message,  }\item[{int}]{max\+Length }\end{DoxyParamCaption})}
+
+
+
+Reads input from U\+A\+RT. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em char$\ast$} & message pointer to a buffer \\
+\hline
+{\em int} & max\+Length the maximum length of the buffer \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_system_8h_aba58039e2e0b55260a188aedbc87d18b}\label{_system_8h_aba58039e2e0b55260a188aedbc87d18b}} 
+\index{System.\+h@{System.\+h}!U\+A\+R\+T0write@{U\+A\+R\+T0write}}
+\index{U\+A\+R\+T0write@{U\+A\+R\+T0write}!System.\+h@{System.\+h}}
+\subsubsection{\texorpdfstring{U\+A\+R\+T0write()}{UART0write()}}
+{\footnotesize\ttfamily void U\+A\+R\+T0write (\begin{DoxyParamCaption}\item[{const char $\ast$}]{string }\end{DoxyParamCaption})}
+
+
+
+Writes output from U\+A\+RT. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em const} & char$\ast$ message pointer to a buffer \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_system_8h_a09a7a9ed4194733a7b753c3b795b1734}\label{_system_8h_a09a7a9ed4194733a7b753c3b795b1734}} 
+\index{System.\+h@{System.\+h}!uart\+Init@{uart\+Init}}
+\index{uart\+Init@{uart\+Init}!System.\+h@{System.\+h}}
+\subsubsection{\texorpdfstring{uart\+Init()}{uartInit()}}
+{\footnotesize\ttfamily void uart\+Init (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Initializes the U\+A\+RT for 115200 Baud Rate and 8-\/\+N-\/1 transfer rate. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}

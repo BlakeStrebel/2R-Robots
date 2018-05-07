@@ -1,3 +1,15 @@
+/**
+ * @file Control.h
+ * @brief control header
+ *
+ * This file contains the pwm functions
+ *
+ * @author Benjamen Lim
+ * @author Huan Weng
+ * @author Blake Strebel
+ *
+ */
+
 #ifndef CONTROL_H_
 #define CONTROL_H_
 
@@ -90,7 +102,7 @@ int get_motor_pwm(int motor);
 *
 * @param reference the reference angle
 * @param actual the commanded angle
-* @param motor the specified get_motor_pwm
+* @param motor the specified motor
 * @return Void
 */
 void PID_Controller(int reference, int actual, int motor);

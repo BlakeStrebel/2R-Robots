@@ -1,0 +1,215 @@
+\hypertarget{_motor_8h}{}\section{C\+:/\+Users/\+Ben/\+Documents/\+Git\+Hub/2\+R-\/\+Robots/\+Midterm\+Code/\+Tiva/\+Motor.h File Reference}
+\label{_motor_8h}\index{C\+:/\+Users/\+Ben/\+Documents/\+Git\+Hub/2\+R-\/\+Robots/\+Midterm\+Code/\+Tiva/\+Motor.\+h@{C\+:/\+Users/\+Ben/\+Documents/\+Git\+Hub/2\+R-\/\+Robots/\+Midterm\+Code/\+Tiva/\+Motor.\+h}}
+
+
+utilities header  
+
+
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{_motor_8h_af0b4940941d639d96fbc31924abf1664}{Motor\+S\+P\+Iinit}} (void)
+\begin{DoxyCompactList}\small\item\em Initializes the S\+PI channels for the motor drivers. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_motor_8h_aa29e2982047be0f7afbb10c8d6f3f5c3}{motor\+Init}} (void)
+\begin{DoxyCompactList}\small\item\em Initializes the G\+P\+IO pins for the motor. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_motor_8h_a4e7b27c5715df8d71dfe87a22ae0b004}{motor\+Driver\+Init}} (void)
+\begin{DoxyCompactList}\small\item\em Initializes the S\+PI commands to set the motor\textquotesingle{}s configuration for 1x P\+WM mode. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_motor_8h_a1c8ae46921c4ae7d57bd44dd994e10bd}{pwm\+Init}} (void)
+\begin{DoxyCompactList}\small\item\em Initializes P\+WM. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_motor_8h_a66eea06de5674ba28dc7473842af0b8f}{motor1\+P\+WM}} (int pwm\+Value)
+\begin{DoxyCompactList}\small\item\em Sets the P\+WM value to motor 1. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_motor_8h_a17b8580b21da18028807be50e9c29020}{motor2\+P\+WM}} (int pwm\+Value)
+\begin{DoxyCompactList}\small\item\em Sets the P\+WM value to motor 1. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_motor_8h_a8ab898affd7b6bbc1d359284e85c31c3}{motor1\+Control\+P\+WM}} (int control)
+\begin{DoxyCompactList}\small\item\em Sets the P\+WM value and direction to motor 1. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_motor_8h_aa3421fe96b22e90c356e013a0abef7d6}{motor2\+Control\+P\+WM}} (int control)
+\begin{DoxyCompactList}\small\item\em Sets the P\+WM value and direction to motor 2. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{_motor_8h_ad2fb0421114b988126b41428644453a3}{motor\+Error}} (void)
+\begin{DoxyCompactList}\small\item\em Checks the error pins and returns a value based on the state of the pin. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+utilities header 
+
+This file contains the motor functions
+
+\begin{DoxyAuthor}{Author}
+Benjamen Lim 
+
+Huan Weng 
+
+Blake Strebel 
+\end{DoxyAuthor}
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{_motor_8h_a8ab898affd7b6bbc1d359284e85c31c3}\label{_motor_8h_a8ab898affd7b6bbc1d359284e85c31c3}} 
+\index{Motor.\+h@{Motor.\+h}!motor1\+Control\+P\+WM@{motor1\+Control\+P\+WM}}
+\index{motor1\+Control\+P\+WM@{motor1\+Control\+P\+WM}!Motor.\+h@{Motor.\+h}}
+\subsubsection{\texorpdfstring{motor1\+Control\+P\+W\+M()}{motor1ControlPWM()}}
+{\footnotesize\ttfamily void motor1\+Control\+P\+WM (\begin{DoxyParamCaption}\item[{int}]{control }\end{DoxyParamCaption})}
+
+
+
+Sets the P\+WM value and direction to motor 1. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em control} & The pwm\+Value ranges from -\/maximum pwm period to the positive period. The default pwm period is 320 Sys\+Clk cycles \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_motor_8h_a66eea06de5674ba28dc7473842af0b8f}\label{_motor_8h_a66eea06de5674ba28dc7473842af0b8f}} 
+\index{Motor.\+h@{Motor.\+h}!motor1\+P\+WM@{motor1\+P\+WM}}
+\index{motor1\+P\+WM@{motor1\+P\+WM}!Motor.\+h@{Motor.\+h}}
+\subsubsection{\texorpdfstring{motor1\+P\+W\+M()}{motor1PWM()}}
+{\footnotesize\ttfamily void motor1\+P\+WM (\begin{DoxyParamCaption}\item[{int}]{pwm\+Value }\end{DoxyParamCaption})}
+
+
+
+Sets the P\+WM value to motor 1. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em pwm\+Value} & The pwm\+Value ranges from 0 to the pwm period. The default pwm period is 320 Sys\+Clk cycles \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_motor_8h_aa3421fe96b22e90c356e013a0abef7d6}\label{_motor_8h_aa3421fe96b22e90c356e013a0abef7d6}} 
+\index{Motor.\+h@{Motor.\+h}!motor2\+Control\+P\+WM@{motor2\+Control\+P\+WM}}
+\index{motor2\+Control\+P\+WM@{motor2\+Control\+P\+WM}!Motor.\+h@{Motor.\+h}}
+\subsubsection{\texorpdfstring{motor2\+Control\+P\+W\+M()}{motor2ControlPWM()}}
+{\footnotesize\ttfamily void motor2\+Control\+P\+WM (\begin{DoxyParamCaption}\item[{int}]{control }\end{DoxyParamCaption})}
+
+
+
+Sets the P\+WM value and direction to motor 2. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em control} & The pwm\+Value ranges from -\/maximum pwm period to the positive period. The default pwm period is 9600 Sys\+Clk cycles \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_motor_8h_a17b8580b21da18028807be50e9c29020}\label{_motor_8h_a17b8580b21da18028807be50e9c29020}} 
+\index{Motor.\+h@{Motor.\+h}!motor2\+P\+WM@{motor2\+P\+WM}}
+\index{motor2\+P\+WM@{motor2\+P\+WM}!Motor.\+h@{Motor.\+h}}
+\subsubsection{\texorpdfstring{motor2\+P\+W\+M()}{motor2PWM()}}
+{\footnotesize\ttfamily void motor2\+P\+WM (\begin{DoxyParamCaption}\item[{int}]{pwm\+Value }\end{DoxyParamCaption})}
+
+
+
+Sets the P\+WM value to motor 1. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em pwm\+Value} & The pwm\+Value ranges from 0 to the pwm period. The default pwm period is 320 Sys\+Clk cycles \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_motor_8h_a4e7b27c5715df8d71dfe87a22ae0b004}\label{_motor_8h_a4e7b27c5715df8d71dfe87a22ae0b004}} 
+\index{Motor.\+h@{Motor.\+h}!motor\+Driver\+Init@{motor\+Driver\+Init}}
+\index{motor\+Driver\+Init@{motor\+Driver\+Init}!Motor.\+h@{Motor.\+h}}
+\subsubsection{\texorpdfstring{motor\+Driver\+Init()}{motorDriverInit()}}
+{\footnotesize\ttfamily void motor\+Driver\+Init (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Initializes the S\+PI commands to set the motor\textquotesingle{}s configuration for 1x P\+WM mode. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_motor_8h_ad2fb0421114b988126b41428644453a3}\label{_motor_8h_ad2fb0421114b988126b41428644453a3}} 
+\index{Motor.\+h@{Motor.\+h}!motor\+Error@{motor\+Error}}
+\index{motor\+Error@{motor\+Error}!Motor.\+h@{Motor.\+h}}
+\subsubsection{\texorpdfstring{motor\+Error()}{motorError()}}
+{\footnotesize\ttfamily int motor\+Error (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Checks the error pins and returns a value based on the state of the pin. 
+
+Returns 0 on no error, 1 on motor 1 error, and 2 on motor 2 error
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_motor_8h_aa29e2982047be0f7afbb10c8d6f3f5c3}\label{_motor_8h_aa29e2982047be0f7afbb10c8d6f3f5c3}} 
+\index{Motor.\+h@{Motor.\+h}!motor\+Init@{motor\+Init}}
+\index{motor\+Init@{motor\+Init}!Motor.\+h@{Motor.\+h}}
+\subsubsection{\texorpdfstring{motor\+Init()}{motorInit()}}
+{\footnotesize\ttfamily void motor\+Init (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Initializes the G\+P\+IO pins for the motor. 
+
+Initializes the direction, brake, and halt pins for the motor in 1x P\+WM mode
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_motor_8h_af0b4940941d639d96fbc31924abf1664}\label{_motor_8h_af0b4940941d639d96fbc31924abf1664}} 
+\index{Motor.\+h@{Motor.\+h}!Motor\+S\+P\+Iinit@{Motor\+S\+P\+Iinit}}
+\index{Motor\+S\+P\+Iinit@{Motor\+S\+P\+Iinit}!Motor.\+h@{Motor.\+h}}
+\subsubsection{\texorpdfstring{Motor\+S\+P\+Iinit()}{MotorSPIinit()}}
+{\footnotesize\ttfamily void Motor\+S\+P\+Iinit (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Initializes the S\+PI channels for the motor drivers. 
+
+Initializes S\+S\+I1 $\sim$ 4 and their corresponding G\+P\+IO pins
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_motor_8h_a1c8ae46921c4ae7d57bd44dd994e10bd}\label{_motor_8h_a1c8ae46921c4ae7d57bd44dd994e10bd}} 
+\index{Motor.\+h@{Motor.\+h}!pwm\+Init@{pwm\+Init}}
+\index{pwm\+Init@{pwm\+Init}!Motor.\+h@{Motor.\+h}}
+\subsubsection{\texorpdfstring{pwm\+Init()}{pwmInit()}}
+{\footnotesize\ttfamily void pwm\+Init (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Initializes P\+WM. 
+
+Initialize P\+WM on P\+F0 (motor 1) and P\+G0 (motor 2), and the default period if 320 Sys\+Clk cycles.
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
