@@ -44,7 +44,7 @@
 #include "Motor.h"
 #include "Control.h"
 
-uint32_t adcArray[4]={0};
+uint32_t adcArray[8]={0};
 
 // TODO: motor driver 2 cs pin is actually motor driver 1's CS pin
 
@@ -62,7 +62,7 @@ void r2rDefaultInit(void){
     pwmInit(); // PWM OUT 4 and PWM OUT 6, PF0 and PF2
     motorInit(); // Set useful signal outputs.
     motorDriverInit(); // Send values to set up the motor for 1x PWM mode
-    //adcInit(); // Init for current and temperture
+    adcInit(); // Init for current and temperture
     //gpioInit(); // Init for general GPIO - set to input for safety
     timerIntInit();
 }
@@ -147,6 +147,7 @@ void adcInit(){
     // conversion.  Each ADC module has 4 programmable sequences, sequence 0
     // to sequence 3.  This example is arbitrarily using sequence 3.
     //
+    ADCSequenceDisable(ADC0_BASE, 0);
     ADCSequenceConfigure(ADC0_BASE, 0, ADC_TRIGGER_PROCESSOR, 0);
     ADCSequenceStepConfigure(ADC0_BASE,0,0, ADC_CTL_CH0);
     ADCSequenceStepConfigure(ADC0_BASE,0,1, ADC_CTL_CH1);
@@ -173,9 +174,9 @@ void adcRead(void){
     //
     // Wait for conversion to be completed.
     //
-    //while(!ADCIntStatus(ADC0_BASE, 3, false))
-    //{
-    //}
+    while(!ADCIntStatus(ADC0_BASE, 0, false))
+    {
+    }
     //
     // Clear the ADC interrupt flag.
     //
@@ -184,7 +185,7 @@ void adcRead(void){
     //
     // Read ADC Value.
     // You will get current 2, current 1, temp 2, temp 1 in that order
-    someint = ADCSequenceDataGet(ADC0_BASE, 0, adcArray);
+    ADCSequenceDataGet(ADC0_BASE, 0, adcArray);
 
 }
 
@@ -193,16 +194,16 @@ void adcRead(void){
  */
 
 uint32_t currentRead1(void){
-    return adcArray[1];
+    return adcArray[2];
 }
 uint32_t  currentRead2(void){
-    return adcArray[0];
-}
-uint32_t  tempRead1(void){
     return adcArray[3];
 }
+uint32_t  tempRead1(void){
+    return (uint32_t)(((float)adcArray[0]/4096.0*3.3-1.25)*200);
+}
 uint32_t  tempRead2(void){
-    return adcArray[2];
+    return (uint32_t)(((float)adcArray[1]/4096.0*3.3-1.25)*200);
 }
 
 
