@@ -176,12 +176,14 @@ int angleFix(int curr_angle){
 void zeroMotor1RawRelative(void){
     modifier1 = 0; // zero the modifier
     zeroing1 = 0; // zero the previous zeroing, now it is just RAW angles, now relative should be synced up with absolute
-    zeroing1 = readMotor1Raw(); // read the absolute value and set it as zeroing modifier.
+    last_motor_1_angle = 0;
+    zeroing1 = readMotor1RawRelative(); // read the absolute value and set it as zeroing modifier.
 }
 void zeroMotor2RawRelative(void){
     modifier2 = 0; // zero the modifier
     zeroing2 = 0; // zero the previous zeroing, now it is just RAW angles, now relative should be synced up with absolute
-    zeroing2 = readMotor2Raw();  // read the absolute value and set it as zeroing modifier.
+    last_motor_2_angle = 0;
+    zeroing2 = readMotor2RawRelative();  // read the absolute value and set it as zeroing modifier.
 }
 
 

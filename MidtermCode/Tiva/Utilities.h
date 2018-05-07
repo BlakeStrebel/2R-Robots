@@ -126,20 +126,20 @@ int buffer_full(void);
  * 
  * This function assumes that buffer is not empty
  *
- * @param Void 
+ * @param int motor the motor that is read from
  * @return int position of the current buffer location
  */
-int buffer_read_position(void);     
+int buffer_read_position(int motor);
 
 /**
  * @brief Reads current value from current buffer location
  * 
  * This function assumes that buffer is not empty
  *
- * @param Void 
+ * @param int motor motor that is read from
  * @return float current value in buffer
  */
-float buffer_read_u(void);    
+float buffer_read_u(int motor);
 
 /**
  * @brief Increments the buffer read index
