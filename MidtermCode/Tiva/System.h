@@ -1,15 +1,3 @@
-/**
- * @file System.h
- * @brief system header
- *
- * This file contains the uart, sysclk and general gpio functions
- *
- * @author Benjamen Lim
- * @author Huan Weng
- * @author Blake Strebel
- *
- */
-
 #ifndef SYSTEM_H_
 #define SYSTEM_H_
 
@@ -53,35 +41,8 @@ uint32_t ui32SysClock;
  */
 extern void sysInit(void);
 
-/**
- * @brief Initializes the UART for 115200 Baud Rate and 8-N-1 transfer rate.
- *
- *
- * @param Void
- * @return Void
- */
 extern void uartInit(void);
-
-/**
- * @brief Reads input from UART
- * 
- * 
- *
- * @param char* message pointer to a buffer
- * @param int maxLength the maximum length of the buffer
- * @return Void
- */
 extern void UART0read(char * message, int maxLength);
-
-
-/**
- * @brief Writes output from UART
- * 
- * 
- *
- * @param const char* message pointer to a buffer 
- * @return Void
- */
 extern void UART0write(const char * string);
 
 

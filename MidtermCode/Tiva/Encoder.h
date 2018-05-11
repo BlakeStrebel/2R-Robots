@@ -1,15 +1,3 @@
-/**
- * @file Encoder.h
- * @brief Encoder header
- *
- * This file contains the encoder functions
- *
- * @author Benjamen Lim
- * @author Huan Weng
- * @author Blake Strebel
- *
- */
-
 #ifndef ENCODER_H_
 #define ENCODER_H_
 
@@ -34,25 +22,6 @@ extern void enoderSPIinit(void);
  *
  */
 extern void encoderRead(void);
-
-/**
- * @brief Reads value of motor 1 encoders and sets the relative angle to zero
- *
- * @param Void
- * @return Void
- *
- */
-extern void zeroMotor1RawRelative(void);
-
-/**
- * @brief Reads value of motor 2 encoders and sets the relative angle to zero
- *
- * @param Void
- * @return The angle as a float
- *
- */
-extern void zeroMotor2RawRelative (void);
-
 
 /**
  * @brief Reads value in encoderVal array for motor 1 and converts it to an angle
@@ -139,6 +108,12 @@ extern float readMotor1AngleRelative(void);
  *
  */
 extern float readMotor2AngleRelative(void);
+
+/*
+ * Control functions
+ */
+extern void PIDUpdate(void);
+extern void PIDCurrUpdate(void);
 
 
 

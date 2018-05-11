@@ -1,6 +1,6 @@
 function Client()
 %   provides a menu for interfacing with hopper robot system
-Tiva_port = 'COM5'; % Tiva board serial port
+Tiva_port = 'COM4'; % Tiva board serial port
 DECIMATION = 10;
 
 % Opening COM connection
@@ -171,7 +171,9 @@ while ~has_quit
             fprintf('Trajectory Sent');
             
             read_plot_matrix(Tiva_Serial, ref1(1:DECIMATION:end)', ref2(1:DECIMATION:end)');
-            
+        case 'o'
+            decog = input('Turn decogging on (1) or off (0): ');
+            fprintf(Tiva_Serial,'%d\n',decog);
         case 'q'
             has_quit = 1;
         otherwise
