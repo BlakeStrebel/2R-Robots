@@ -1,3 +1,7 @@
+% PositionCharacterizationData.m is used to obtain data used to
+% characterize the position based torque variation in a BLDC motor as a
+% result of magnetic cogging forces.
+
 Tiva_port = 'COM5'; % Tiva board serial port
 
 % Opening COM connection
@@ -8,34 +12,30 @@ end
 
 % configure ports
 Tiva_Serial = serial(Tiva_port, 'BaudRate', 115200, 'FlowControl', 'hardware','Timeout',15); 
-
 fprintf('Opening ports %s\n',Tiva_port);
 
 % opens serial connection
 fopen(Tiva_Serial);
 
-% closes serial port when function exits
-%clean1 = onCleanup(@()fclose(Tiva_Serial));
-
-% Crank up the position gain
+% set the position gain
+Kp = 1;
 fprintf(Tiva_Serial,'%c\n','h');
-fprintf(Tiva_Serial, '%3.2f %3.2f %3.2f\n',[.1,0,0]); % might need to play with this value
+fprintf(Tiva_Serial, '%3.2f %3.2f %3.2f\n',[Kp,0,0]); % might need to play with this value
 
-% Get motors close to zero position
+% send motors to starting position
 fprintf(Tiva_Serial,'%c\n','f');
 fprintf(Tiva_Serial, '%d %d\n',[0,0]);
 
+% set mode to hold desired position
 fprintf(Tiva_Serial,'%c\n','j');
 
 pause(5);
 
-% Also might need to play with angle spacing
 i = 1;
-for angle = 0:1:16383 % Forward direction
-    % send to the new position
+for angle = 0:4:16383 % Forward direction
+    % update desired angle
     fprintf(Tiva_Serial,'%c\n','f');
-    fprintf(Tiva_Serial, '%d %d\n',[angle,0]);
-    pause(.1); % wait for motor to settle
+    fprintf(Tiva_Serial, '%d %d\n',[0,angle]);
    
     fprintf(Tiva_Serial,'%c\n','e'); % read desired angle
     desPos1(i) = fscanf(Tiva_Serial,'%d');
