@@ -98,6 +98,8 @@ void load_position_trajectory(int motor);                // Load desired positio
 */
 int get_motor_pwm(int motor);
 
+void set_motor_pwm(int motor, int value);
+
 /**
 * @brief Calculates pwm to send to the motor drivr
 *

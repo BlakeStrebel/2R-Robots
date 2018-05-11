@@ -129,6 +129,20 @@ int get_motor_pwm(int motor)
     return pwm;
 }
 
+void set_motor_pwm(int motor, int value)
+{
+    if (motor == 1)
+    {
+        motor1ControlPWM(value);
+        E1.u = value;
+    }
+    else if (motor == 2)
+    {
+        motor2ControlPWM(value);
+        E2.u = value;
+    }
+}
+
 void
 Timer1IntHandler(void)
 {
@@ -144,7 +158,6 @@ Timer1IntHandler(void)
     {
         case IDLE:
         {
-            // do nothing
             break;
         }
         case HOLD:
@@ -163,6 +176,8 @@ Timer1IntHandler(void)
             }
             else
             {
+                E1.desired = get_refPos(i, 1);
+                E2.desired = get_refPos(i, 2);
                 PID_Controller(E1.desired, E1.actual, 1);    // motor1 control
                 PID_Controller(E2.desired, E2.actual, 2);    // motor2 control
 
@@ -225,17 +240,7 @@ void PID_Controller(int reference, int actual, int motor)
         u = -9600;
     }
 
-    // Set new control effort
-    if (motor == 1)
-    {
-        motor1ControlPWM(u);
-        E1.u = u;
-    }
-    else if(motor == 2)
-    {
-        motor2ControlPWM(u);
-        E2.u = u;
-    }
+    set_motor_pwm(motor, u);
 }
 
 float decog_motor(int x, int motor)
