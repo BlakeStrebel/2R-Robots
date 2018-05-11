@@ -67,9 +67,9 @@ main(void)
                    int pwm1, pwm2;
                    pwm1 = get_motor_pwm(1);
                    pwm2 = get_motor_pwm(2);
-                   sprintf(buffer, '%d\r\n',pwm1);
+                   sprintf(buffer, "%d\r\n",pwm1);
                    UART0write(buffer);
-                   sprintf(buffer, '%d\r\n',pwm2);
+                   sprintf(buffer, "%d\r\n",pwm2);
                    UART0write(buffer);
                    break;
                }
@@ -175,6 +175,4 @@ main(void)
                }
            }
     }
-
-    return 0;
 }

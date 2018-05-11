@@ -75,9 +75,7 @@ void enoderSPIinit(void){
 }
 
 
-/*
- * This function reads both encoder counts and stores them in an array
- /*
+/**
  * This function reads both encoder counts and stores them in an array
  *
  * Comes after:

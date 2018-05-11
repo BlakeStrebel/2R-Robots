@@ -169,7 +169,6 @@ void adcInit(){
  * Reads the ADC, accepts a pointer to a uin32_t array and reads into it
  */
 void adcRead(void){
-    int someint = 0;
     ADCProcessorTrigger(ADC0_BASE, 0);
     //
     // Wait for conversion to be completed.

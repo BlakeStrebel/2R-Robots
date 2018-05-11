@@ -236,8 +236,6 @@ void PID_Controller(int reference, int actual, int motor)
         motor2ControlPWM(u);
         E2.u = u;
     }
-
-    return u;
 }
 
 float decog_motor(int x, int motor)
