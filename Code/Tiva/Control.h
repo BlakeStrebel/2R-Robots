@@ -21,6 +21,7 @@ typedef struct {                          // Define data structure containing co
     int Edot;
     int desired;
     int actual;
+    int raw;
     float u;
 } control_error;
 
@@ -106,6 +107,10 @@ int get_motor_pwm(int motor);
 * @return Void
 */
 void PID_Controller(int reference, int actual, int motor);
+
+float decog_motor(int x, int motor);
+void setDecogging(void);
+
 
 
 #endif /* CONTROL_H_ */

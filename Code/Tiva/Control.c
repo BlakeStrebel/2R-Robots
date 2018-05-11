@@ -3,6 +3,7 @@
 #include "Utilities.h"
 #include "Encoder.h"
 #include "Motor.h"
+#include <math.h>
 
 // PID gains
 static volatile float Kp = 2;
@@ -14,6 +15,9 @@ static volatile control_data_t M1;
 static volatile control_data_t M2;
 static volatile control_error E1;
 static volatile control_error E2;
+
+// Decogging state
+static volatile int DECOGGING = 0;
 
 /*
  * This function sets up the timer interrupt used for motor control
@@ -35,6 +39,9 @@ void timerIntInit(void){
     GPIOPinTypeGPIOOutput(GPIO_PORTN_BASE, GPIO_PIN_0); // LED PN0
     GPIOPinWrite(GPIO_PORTN_BASE,GPIO_PIN_0,GPIO_PIN_0); // Turn on the damn thing
     IntMasterEnable();
+
+    E1.u = 0;
+    E2.u = 0;
 }
 
 void get_position_gains(void)   // provide position control gains
@@ -129,6 +136,10 @@ Timer1IntHandler(void)
     static int i = 0;   // trajectory index
 
     encoderRead(); // update encoder values
+    E1.actual = readMotor1RawRelative(); // read positions
+    E2.actual = readMotor2RawRelative();
+    E1.raw = readMotor1Raw();
+    E2.raw = readMotor2Raw();
     switch(getMODE())
     {
         case IDLE:
@@ -138,8 +149,6 @@ Timer1IntHandler(void)
         }
         case HOLD:
         {
-            E1.actual = readMotor1RawRelative(); // read positions
-            E2.actual = readMotor2RawRelative();
             PID_Controller(E1.desired, E1.actual, 1);    // motor1 control
             PID_Controller(E2.desired, E2.actual, 2);    // motor2 control
             break;
@@ -154,10 +163,6 @@ Timer1IntHandler(void)
             }
             else
             {
-                E1.actual = readMotor1RawRelative(); // actual read positions
-                E2.actual = readMotor2RawRelative();
-                E1.desired = get_refPos(i, 1);
-                E2.desired = get_refPos(i, 2);
                 PID_Controller(E1.desired, E1.actual, 1);    // motor1 control
                 PID_Controller(E2.desired, E2.actual, 2);    // motor2 control
 
@@ -190,6 +195,11 @@ void PID_Controller(int reference, int actual, int motor)
         E1.Edot = E1.Enew - E1.Eold;                // Calculate derivative error
         E1.Eold = E1.Enew;                          // Update old error
         u = Kp*E1.Enew + Ki*E1.Eint + Kd*E1.Edot;   // Calculate effort
+
+        if (DECOGGING)                              // Add decogging control
+        {
+            u = u + decog_motor(E1.raw, 1);
+        }
     }
     else if (motor == 2)
     {
@@ -198,16 +208,21 @@ void PID_Controller(int reference, int actual, int motor)
         E2.Edot = E2.Enew - E2.Eold;                // Calculate derivative error
         E2.Eold = E2.Enew;                          // Update old error
         u = Kp*E2.Enew + Ki*E2.Eint + Kd*E2.Edot;   // Calculate effort
+
+        if (DECOGGING)                              // Add decogging control
+        {
+            u = u + decog_motor(E2.raw, 2);
+        }
     }
 
     // Max effort
-    if (u > 1800)
+    if (u > 9600)
     {
-        u = 1800;
+        u = 9600;
     }
-    else if (u < -1800)
+    else if (u < -9600)
     {
-        u = -1800;
+        u = -9600;
     }
 
     // Set new control effort
@@ -223,6 +238,28 @@ void PID_Controller(int reference, int actual, int motor)
     }
 
     return u;
+}
+
+float decog_motor(int x, int motor)
+{
+    float u = 0;
+    if (motor == 1)
+    {
+        u = 0;
+    }
+    else if (motor == 2)
+    {
+        u = 20.4732*cos(0.00921288*x - 2.68484) + 14.1249*cos(0.00460644*x - 1.3871) + 21.0256*cos(0.00307096*x - 2.93648); // + 66.7217
+    }
+
+    return u;
+}
+
+void setDecogging(void) // Turn motor decogging on/off
+{
+    char buffer[10]; int decog;
+    sscanf(buffer,"%d",&decog);
+    DECOGGING = decog;
 }
 
 

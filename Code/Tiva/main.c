@@ -144,6 +144,10 @@ main(void)
                    send_data();
                    break;
                }
+               case 'o':
+               {
+                   setDecogging();
+               }
                case 'r': // zero encoders
                {
                    zeroMotor1RawRelative();
