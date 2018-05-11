@@ -33,6 +33,7 @@ while ~has_quit
     disp('i: Get PID gains        j: Hold Position')
     disp('k: Set trajectory       l: Execute Trajectory ')
     disp('m: Move Arm             n: Load and Run Test')
+    disp('o: Set Decogging        r: Zero Encoders')
     disp('q: Quit')
     selection = input('\nENTER COMMAND: ', 's');
    
