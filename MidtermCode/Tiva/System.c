@@ -15,7 +15,7 @@ void sysInit(void){
     //
     // Set the clock to run directly from the crystal at 120MHz.
     //
-    ui32SysClock = SysCtlClockFreqSet((SYSCTL_OSC_INT |
+    ui32SysClock = SysCtlClockFreqSet((SYSCTL_XTAL_25MHZ |
                                              SYSCTL_OSC_MAIN |
                                              SYSCTL_USE_PLL |
                                              SYSCTL_CFG_VCO_480), 120000000); // Use 25Mhz crystal and use PLL to accelerate to 120MHz

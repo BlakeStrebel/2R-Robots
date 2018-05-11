@@ -80,7 +80,7 @@ extern void sensorUpdate(void); // Updates sensor data. Always call sensor updat
 /*
  * ADC functions
  */
-extern uint32_t adcArray[4]; // This variable is defined globally
+extern uint32_t adcArray[8]; // This variable is defined globally
 
 extern void adcInit(void);
 extern void adcRead(void);

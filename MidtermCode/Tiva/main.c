@@ -57,6 +57,7 @@ main(void)
                    int p1, p2;
                    UART0read(buffer,BUF_SIZE);
                    sscanf(buffer, "%d %d", &p1, &p2);
+
                    motor1ControlPWM(p1);
                    motor2ControlPWM(p2);
                    break;
@@ -66,9 +67,9 @@ main(void)
                    int pwm1, pwm2;
                    pwm1 = get_motor_pwm(1);
                    pwm2 = get_motor_pwm(2);
-                   sprintf(buffer, "%d\r\n", pwm1);
+                   sprintf(buffer, '%d\r\n',pwm1);
                    UART0write(buffer);
-                   sprintf(buffer, "%d\r\n", pwm2);
+                   sprintf(buffer, '%d\r\n',pwm2);
                    UART0write(buffer);
                    break;
                }
@@ -143,16 +144,18 @@ main(void)
                    send_data();
                    break;
                }
-               case 'o':
+               case 'r': // zero encoders
                {
-                   setDecogging();
+                   zeroMotor1RawRelative();
+                   zeroMotor2RawRelative();
+                   break;
+
                }
                case 'q':    // Motor Off
                {
                    setMODE(IDLE);
                    motor1ControlPWM(0);
                    motor2ControlPWM(0);
-                   break;
                }
                case '1':
                {
@@ -168,4 +171,6 @@ main(void)
                }
            }
     }
+
+    return 0;
 }
