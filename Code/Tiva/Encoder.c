@@ -9,7 +9,7 @@ uint32_t pui32DataRx2[NUM_SSI_DATA2];
 uint32_t ui32Index2;
 
 // Array to store encoder data
-uint32_t encoderVal[2];
+uint32_t encoderVal[4];
 
 // Global angle
 int modifier1=0;
@@ -87,7 +87,7 @@ void enoderSPIinit(void){
  * TODO: check the delay
  */
 void encoderRead(void){
-    pui32DataTx2[0] = 0x74; // "t" return readhead temperature
+    pui32DataTx2[0] = 0x73; // "t" return readhead temperature
     pui32DataTx2[1] = 0x00; // Sends empty data so that the encoder will complete sending data. (40 bits in total)
     pui32DataTx2[2] = 0x00;
     pui32DataTx2[3] = 0x00;
@@ -120,6 +120,10 @@ void encoderRead(void){
     int num = pui32DataRx2[0]<<6;
     num = num | (pui32DataRx2[1]>>2);
     encoderVal[0] = num;
+    // reading speed in rev/s * 10
+    num = pui32DataRx2[2]<<8;
+    num = num | pui32DataRx2[3];
+    encoderVal[2] = num;
 
     // Read the other encoder
     while(SSIDataGetNonBlocking(SSI1_BASE, &pui32DataRx2[0]))
@@ -147,6 +151,10 @@ void encoderRead(void){
     num = pui32DataRx2[0]<<6;
     num = num | (pui32DataRx2[1]>>2);
     encoderVal[1] = num;
+
+    num = pui32DataRx2[2]<<8;
+    num = num | pui32DataRx2[3];
+    encoderVal[3] = num;
 }
 
 
@@ -223,6 +231,16 @@ int readMotor2RawRelative(void){
     last_motor_2_angle = readMotor2Raw(); // save the last angle for comparision the next time
     return relative_angle;
 }
+
+float readMotor2Speed(void){
+    return (float)((int16_t)encoderVal[3])/10.0;
+}
+
+float readMotor1Speed(void){
+    return (float)((int16_t)encoderVal[2])/10.0;
+}
+
+
 
 float readMotor1AngleRelative(void){
     return ((float)readMotor1RawRelative()/16383.0)*360.0;
