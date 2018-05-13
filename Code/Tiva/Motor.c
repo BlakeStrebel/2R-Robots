@@ -8,6 +8,22 @@ uint32_t pui32DataTx[NUM_SSI_DATA];
 uint32_t pui32DataRx[NUM_SSI_DATA];
 uint32_t ui32Index;
 
+void shutdownNow(){
+    motor1ControlPWM(0);
+    motor2ControlPWM(0);
+}
+
+
+void motorSafetyCheck(){
+    int32_t vel1 =  readMotor1Speed();
+    int32_t vel2 = readMotor2Speed();
+    if(abs(vel1)>10||abs(vel2)>10){
+        shutdownNow();
+        error_state = MOTOR_SPINNING_TOO_FAST;
+    }
+
+}
+
 /*
  * This function initilizes the SPI on SSI0, using PA2 (CLK), PA3(SS), PA4(RX), PA5(TX)
  */

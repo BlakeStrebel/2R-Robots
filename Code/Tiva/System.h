@@ -43,6 +43,7 @@
 #include "utils/uartstdio.h"
 
 uint32_t ui32SysClock;
+int error_state = 0;
 
 /**
  * @brief Initializes the system clock and the master interrupts for the R2R project

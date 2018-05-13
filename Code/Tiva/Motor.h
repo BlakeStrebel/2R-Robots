@@ -13,6 +13,14 @@
 #ifndef MOTOR_H_
 #define MOTOR_H_
 
+#define MOTOR_SPINNING_TOO_FAST 10
+#define MOTOR_TOO_HOT 11
+
+
+extern int error_state;
+
+extern void motorSafetyCheck(void);
+
 /**
  * @brief Initializes the SPI channels for the motor drivers
  *
@@ -85,6 +93,7 @@ extern void motor1ControlPWM(int control);
  *
  */
 extern void motor2ControlPWM(int control);
+
 
 extern float readMotor2Speed(void);
 extern float readMotor1Speed(void);

@@ -158,7 +158,8 @@ void adcInit(){
     // M2 ADC: M2 MSP, M3 LSB
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOM);
     GPIOPinTypeGPIOOutput(GPIO_PORTM_BASE, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3);
-
+    setADCMux(1,1);
+    setADCMux(1,2);
 
 
     SysCtlPeripheralEnable(SYSCTL_PERIPH_ADC0);
