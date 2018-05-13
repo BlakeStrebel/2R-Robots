@@ -46,6 +46,35 @@
 
 uint32_t adcArray[8]={0};
 
+void setADCMux(int number,int motor){
+    switch(motor){
+    case 1:
+        switch(number){
+        case 1:
+            GPIOPinWrite(GPIO_PORTM_BASE,GPIO_PIN_0,0);
+            GPIOPinWrite(GPIO_PORTM_BASE,GPIO_PIN_1,0);
+        case 2:
+            GPIOPinWrite(GPIO_PORTM_BASE,GPIO_PIN_0,GPIO_PIN_0);
+            GPIOPinWrite(GPIO_PORTM_BASE,GPIO_PIN_1,0);
+        case 3:
+            GPIOPinWrite(GPIO_PORTM_BASE,GPIO_PIN_0,0);
+            GPIOPinWrite(GPIO_PORTM_BASE,GPIO_PIN_1,GPIO_PIN_1);
+        }
+    case 2:
+        switch(number){
+        case 1:
+            GPIOPinWrite(GPIO_PORTM_BASE,GPIO_PIN_2,0);
+            GPIOPinWrite(GPIO_PORTM_BASE,GPIO_PIN_3,0);
+        case 2:
+            GPIOPinWrite(GPIO_PORTM_BASE,GPIO_PIN_2,GPIO_PIN_0);
+            GPIOPinWrite(GPIO_PORTM_BASE,GPIO_PIN_3,0);
+        case 3:
+            GPIOPinWrite(GPIO_PORTM_BASE,GPIO_PIN_2,0);
+            GPIOPinWrite(GPIO_PORTM_BASE,GPIO_PIN_3,GPIO_PIN_1);
+        }
+    }
+}
+
 // TODO: motor driver 2 cs pin is actually motor driver 1's CS pin
 
 /*
@@ -123,11 +152,14 @@ void i2cInit(tI2CMInstance g_sI2CMSimpleInst){
  * This function enables the ADC unit on the TM4C
  */
 void adcInit(){
+
     // ADC MUX,
     // M1 ADC: M0 MSB, M1 LSB
     // M2 ADC: M2 MSP, M3 LSB
-    //SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOM);
-    //GPIOPinTypeGPIOOutput(GPIO_PORTM_BASE, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3);
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOM);
+    GPIOPinTypeGPIOOutput(GPIO_PORTM_BASE, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3);
+
+
 
     SysCtlPeripheralEnable(SYSCTL_PERIPH_ADC0);
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOE);

@@ -83,6 +83,7 @@ extern void sensorUpdate(void); // Updates sensor data. Always call sensor updat
 extern uint32_t adcArray[8]; // This variable is defined globally
 
 extern void adcInit(void);
+extern void setADCMux(int number,int motor);
 extern void adcRead(void);
 // Wrapper functions for reading current and temperature
 extern uint32_t currentRead1(void);
