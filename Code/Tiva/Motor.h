@@ -86,6 +86,10 @@ extern void motor1ControlPWM(int control);
  */
 extern void motor2ControlPWM(int control);
 
+extern float readMotor2Speed(void);
+extern float readMotor1Speed(void);
+
+
 /**
  * @brief Checks the error pins and returns a value based on the state of the pin
  *
