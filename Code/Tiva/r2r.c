@@ -231,11 +231,11 @@ uint32_t currentRead1(void){
 uint32_t  currentRead2(void){
     return adcArray[3];
 }
-uint32_t  tempRead1(void){
-    return (uint32_t)(((float)adcArray[0]/4096.0*3.3-1.25)*200);
+int32_t  tempRead1(void){
+    return (int32_t)(((float)adcArray[0]/4096.0*3.3)*200);
 }
-uint32_t  tempRead2(void){
-    return (uint32_t)(((float)adcArray[1]/4096.0*3.3-1.25)*200);
+int32_t  tempRead2(void){
+    return (int32_t)(((float)adcArray[1]/4096.0*3.3)*200);
 }
 
 
