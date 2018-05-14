@@ -8,6 +8,8 @@ uint32_t pui32DataTx[NUM_SSI_DATA];
 uint32_t pui32DataRx[NUM_SSI_DATA];
 uint32_t ui32Index;
 
+int error_state;
+
 void shutdownNow(){
     motor1ControlPWM(0);
     motor2ControlPWM(0);

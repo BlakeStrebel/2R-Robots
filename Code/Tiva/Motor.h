@@ -17,7 +17,7 @@
 #define MOTOR_TOO_HOT 11
 
 
-extern int error_state;
+
 
 extern void motorSafetyCheck(void);
 
