@@ -101,7 +101,7 @@ extern void adcInit(void);
  * @return Void
  *
  */
-extern void setADCMux(int number,int motor);
+extern void setADCMux(int motor,int number);
 
 /**
  * @brief Reads ADC values and stores them into an array for current and tempertature

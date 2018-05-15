@@ -46,31 +46,45 @@
 
 uint32_t adcArray[8]={0};
 
-void setADCMux(int number,int motor){
+void setADCMux(int motor,int number){
     switch(motor){
     case 1:
         switch(number){
         case 1:
             GPIOPinWrite(GPIO_PORTM_BASE,GPIO_PIN_0,0);
             GPIOPinWrite(GPIO_PORTM_BASE,GPIO_PIN_1,0);
+            break;
         case 2:
             GPIOPinWrite(GPIO_PORTM_BASE,GPIO_PIN_0,GPIO_PIN_0);
             GPIOPinWrite(GPIO_PORTM_BASE,GPIO_PIN_1,0);
+            break;
         case 3:
             GPIOPinWrite(GPIO_PORTM_BASE,GPIO_PIN_0,0);
             GPIOPinWrite(GPIO_PORTM_BASE,GPIO_PIN_1,GPIO_PIN_1);
+            break;
+        case 4:
+            GPIOPinWrite(GPIO_PORTM_BASE,GPIO_PIN_0,GPIO_PIN_0);
+            GPIOPinWrite(GPIO_PORTM_BASE,GPIO_PIN_1,GPIO_PIN_1);
+            break;
         }
     case 2:
         switch(number){
         case 1:
             GPIOPinWrite(GPIO_PORTM_BASE,GPIO_PIN_2,0);
             GPIOPinWrite(GPIO_PORTM_BASE,GPIO_PIN_3,0);
+            break;
         case 2:
-            GPIOPinWrite(GPIO_PORTM_BASE,GPIO_PIN_2,GPIO_PIN_0);
+            GPIOPinWrite(GPIO_PORTM_BASE,GPIO_PIN_2,GPIO_PIN_2);
             GPIOPinWrite(GPIO_PORTM_BASE,GPIO_PIN_3,0);
+            break;
         case 3:
             GPIOPinWrite(GPIO_PORTM_BASE,GPIO_PIN_2,0);
-            GPIOPinWrite(GPIO_PORTM_BASE,GPIO_PIN_3,GPIO_PIN_1);
+            GPIOPinWrite(GPIO_PORTM_BASE,GPIO_PIN_3,GPIO_PIN_3);
+            break;
+        case 4:
+            GPIOPinWrite(GPIO_PORTM_BASE,GPIO_PIN_2,GPIO_PIN_2);
+            GPIOPinWrite(GPIO_PORTM_BASE,GPIO_PIN_3,GPIO_PIN_3);
+            break;
         }
     }
 }
@@ -158,8 +172,8 @@ void adcInit(){
     // M2 ADC: M2 MSP, M3 LSB
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOM);
     GPIOPinTypeGPIOOutput(GPIO_PORTM_BASE, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3);
-    setADCMux(1,1);
-    setADCMux(1,2);
+    //setADCMux(1,1);
+    //setADCMux(1,2);
 
 
     SysCtlPeripheralEnable(SYSCTL_PERIPH_ADC0);
