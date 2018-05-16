@@ -178,6 +178,8 @@ void adcInit(){
 
     SysCtlPeripheralEnable(SYSCTL_PERIPH_ADC0);
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOE);
+    ADCClockConfigSet(ADC0_BASE,ADC_CLOCK_SRC_PLL | ADC_CLOCK_RATE_FULL, 24);
+
 
     //
     // Select the analog ADC function for these pins.
@@ -189,10 +191,10 @@ void adcInit(){
     GPIOPinTypeADC(GPIO_PORTE_BASE, GPIO_PIN_2); // Temp Sense 2
     GPIOPinTypeADC(GPIO_PORTE_BASE, GPIO_PIN_3); // Temp Sense 1
     //
-    // Enable sample sequence 3 with a processor signal trigger.  Sequence 3
+    // Enable sample sequence 3 with a processor signal trigger.  Sequence 1
     // will do a single sample when the processor sends a singal to start the
     // conversion.  Each ADC module has 4 programmable sequences, sequence 0
-    // to sequence 3.  This example is arbitrarily using sequence 3.
+    // to sequence 1.  This example is arbitrarily using sequence 1.
     //
     ADCSequenceDisable(ADC0_BASE, 0);
     ADCSequenceConfigure(ADC0_BASE, 0, ADC_TRIGGER_PROCESSOR, 0);
@@ -239,11 +241,11 @@ void adcRead(void){
  * Wrapper functions for current and temperature readings
  */
 
-uint32_t currentRead1(void){
-    return adcArray[2];
+float currentRead1(void){ // 1.6 = 0
+    return ((((float)adcArray[2]/4096.0*3.3)-1.6)*7.142857);
 }
-uint32_t  currentRead2(void){
-    return adcArray[3];
+float  currentRead2(void){
+    return ((((float)adcArray[3]/4096.0*3.3)-1.6)*7.142857);
 }
 int32_t  tempRead1(void){
     return (int32_t)(((float)adcArray[0]/4096.0*3.3)*200);
