@@ -21,7 +21,7 @@
  * @param Void
  * @return Void
  */
-extern void enoderSPIinit(void);
+extern void encoderSPIInit(void);
 
 /**
  * @brief Updates value in sensor array
