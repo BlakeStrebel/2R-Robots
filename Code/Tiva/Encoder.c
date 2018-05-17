@@ -22,7 +22,7 @@ int zeroing2 = 0;
 /*
  * This function initilizes the SPI on SSI0, using PA2 (CLK), PA3(SS), PA4(RX), PA5(TX)
  */
-void enoderSPIinit(void){
+void encoderSPIInit(void){
     // Enable SSI0 and SSI1 peripherals for use.
     SysCtlPeripheralEnable(SYSCTL_PERIPH_SSI0); // SSI0
     SysCtlPeripheralEnable(SYSCTL_PERIPH_SSI1); // SSI1
@@ -55,10 +55,11 @@ void enoderSPIinit(void){
     GPIOPinTypeGPIOOutput(GPIO_PORTL_BASE, GPIO_PIN_1); //CS
 
     // Configure and enable the SSI port for SPI master mode.
+    // Ideally the max bit rate is 2M, but there will be some error reading the value.
     SSIConfigSetExpClk(SSI0_BASE, ui32SysClock, SSI_FRF_MOTO_MODE_1,
-                                    SSI_MODE_MASTER, 1000000, 8); // 8 bits for encoder, note that we can't go above 16 bits using SPI Freescale mode
+                                    SSI_MODE_MASTER, 1500000, 8); // 8 bits for encoder, note that we can't go above 16 bits using SPI Freescale mode
     SSIConfigSetExpClk(SSI1_BASE, ui32SysClock, SSI_FRF_MOTO_MODE_1,
-                            SSI_MODE_MASTER, 1000000, 8); // 8 bits for encoder, note that we can't go above 16 bits using SPI Freescale mode
+                            SSI_MODE_MASTER, 1500000, 8); // 8 bits for encoder, note that we can't go above 16 bits using SPI Freescale mode
 
     // Configure the CS
     GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_1,GPIO_PIN_1); // Set CS to HIGH        //Is it necessary for L0?

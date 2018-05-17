@@ -162,6 +162,7 @@ void set_motor_pwm(int motor, int value)
 void
 Timer2IntHandler(void)
 {
+    adcRead();
     TimerIntClear(TIMER2_BASE, TIMER_TIMA_TIMEOUT);
 }
 

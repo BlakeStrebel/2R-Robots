@@ -100,7 +100,7 @@ void setADCMux(int motor,int number){
 void r2rDefaultInit(void){
     sysInit(); // Init system clock and Master interrupt
     uartInit();
-    enoderSPIinit();
+    encoderSPIInit();
     MotorSPIinit();
     pwmInit(); // PWM OUT 4 and PWM OUT 6, PF0 and PF2
     motorInit(); // Set useful signal outputs.
