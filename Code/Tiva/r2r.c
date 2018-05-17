@@ -46,6 +46,10 @@
 
 uint32_t adcArray[8]={0};
 
+float currentArray[6]={0};
+float filterArray[6]={0};
+
+
 void setADCMux(int motor,int number){
     switch(motor){
     case 1:
@@ -212,6 +216,35 @@ void adcInit(){
     // interrupt flag is cleared before we sample.
     //
     ADCIntClear(ADC0_BASE, 0);
+}
+
+
+void filterValues(){
+    int i;
+    float A = 0.6;
+    for(i=0;i<6;i++){
+        filterArray[i]= filterArray[i]*A+currentArray[i]*(1-A);
+    }
+}
+
+void adcCurrentRead(){
+    // yo
+    setADCMux(1,0);
+    setADCMux(2,0);
+    adcRead();
+    currentArray[0]=currentRead1();
+    currentArray[3]=currentRead2();
+    setADCMux(1,1);
+    setADCMux(2,1);
+    adcRead();
+    currentArray[1]=currentRead1();
+    currentArray[4]=currentRead2();
+    setADCMux(1,2);
+    setADCMux(2,2);
+    adcRead();
+    currentArray[2]=currentRead1();
+    currentArray[5]=currentRead2();
+
 }
 
 /*

@@ -104,6 +104,27 @@ extern void adcInit(void);
 extern void setADCMux(int motor,int number);
 
 /**
+ * @brief Filters ADC value
+ *
+ *
+ * @param Void
+ * @return Void
+ *
+ */
+extern void filterValues(void);
+
+/**
+ * @brief Reads ADC values for each current sensor, using a complementary filter for A = 0.6
+ *
+ *
+ *
+ * @param Void
+ * @return Void
+ *
+ */
+extern void adcCurrentRead(void);
+
+/**
  * @brief Reads ADC values and stores them into an array for current and tempertature
  *
  *
