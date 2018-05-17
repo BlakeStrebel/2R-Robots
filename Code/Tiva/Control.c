@@ -18,7 +18,6 @@ static volatile control_error E2;
 
 // Decogging state
 static volatile int DECOGGING = 0;
-
 /*
  * This function sets up the timer interrupt used for motor control
  *
@@ -28,17 +27,34 @@ static volatile int DECOGGING = 0;
 void timerIntInit(void){
     setMODE(IDLE);
     IntMasterDisable();
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_TIMER2); // Use timer 0
     SysCtlPeripheralEnable(SYSCTL_PERIPH_TIMER1); // Use timer 1
+    TimerConfigure(TIMER2_BASE, TIMER_CFG_PERIODIC);
     TimerConfigure(TIMER1_BASE, TIMER_CFG_PERIODIC);
-    TimerLoadSet(TIMER1_BASE, TIMER_A, ui32SysClock/1000); // Use timer B // activate every 1/2 of a second 120/120/2 = 0.5s
+    TimerLoadSet(TIMER2_BASE, TIMER_A, ui32SysClock/5000);
+    TimerLoadSet(TIMER1_BASE, TIMER_A, ui32SysClock/1000); // Use timer A // activate every 1/2 of a second 120/120/2 = 0.5s
+    IntEnable(INT_TIMER2A);
     IntEnable(INT_TIMER1A);
+    TimerIntEnable(TIMER2_BASE, TIMER_TIMA_TIMEOUT);
     TimerIntEnable(TIMER1_BASE, TIMER_TIMA_TIMEOUT);
+    TimerEnable(TIMER2_BASE, TIMER_A);
     TimerEnable(TIMER1_BASE, TIMER_A);
     // TODO: GPIO is just for blinking purposes on the EK-TM4C129
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPION);
-    GPIOPinTypeGPIOOutput(GPIO_PORTN_BASE, GPIO_PIN_0); // LED PN0
-    GPIOPinWrite(GPIO_PORTN_BASE,GPIO_PIN_0,GPIO_PIN_0); // Turn on the damn thing
+    GPIOPinTypeGPIOOutput(GPIO_PORTN_BASE, GPIO_PIN_1); // LED PN0
+    GPIOPinWrite(GPIO_PORTN_BASE,GPIO_PIN_1,GPIO_PIN_1); // Turn on the damn thing
     IntMasterEnable();
+
+    //
+    // Set the INT_TIMER0A interrupt priority to the lowest priority.
+    //
+    //IntPrioritySet(INT_TIMER3A, 0xE0);
+    //
+    // Set the INT_TIMER1A interrupt priority to the highest priority.
+    //
+    //IntPrioritySet(INT_TIMER1A, 0);
+
+
 
     E1.u = 0;
     E2.u = 0;
@@ -142,6 +158,13 @@ void set_motor_pwm(int motor, int value)
         E2.u = value;
     }
 }
+
+void
+Timer2IntHandler(void)
+{
+    TimerIntClear(TIMER2_BASE, TIMER_TIMA_TIMEOUT);
+}
+
 
 void
 Timer1IntHandler(void)

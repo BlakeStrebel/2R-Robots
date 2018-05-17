@@ -28,6 +28,7 @@ typedef struct {                          // Define data structure containing co
 
 extern void timerIntInit(void);
 
+extern void Timer2IntHandler(void);
 extern void Timer1IntHandler(void);
 
 
