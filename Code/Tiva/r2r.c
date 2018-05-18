@@ -112,6 +112,7 @@ void r2rDefaultInit(void){
     adcInit(); // Init for current and temperture
     //gpioInit(); // Init for general GPIO - set to input for safety
     timerIntInit();
+    timeInit();
 }
 
 /*
@@ -182,9 +183,8 @@ void adcInit(){
 
     SysCtlPeripheralEnable(SYSCTL_PERIPH_ADC0);
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOE);
-    ADCClockConfigSet(ADC0_BASE,ADC_CLOCK_SRC_PLL | ADC_CLOCK_RATE_FULL, 24);
-
-
+    ADCClockConfigSet(ADC0_BASE,ADC_CLOCK_SRC_PLL | ADC_CLOCK_RATE_FULL, 24); // set to 480 MHz / 24 = 20MHz sample rate
+    ADCHardwareOversampleConfigure(ADC0_BASE, 1);
     //
     // Select the analog ADC function for these pins.
     // Consult the data sheet to see which functions are allocated per pin.
@@ -200,13 +200,16 @@ void adcInit(){
     // conversion.  Each ADC module has 4 programmable sequences, sequence 0
     // to sequence 1.  This example is arbitrarily using sequence 1.
     //
+
     ADCSequenceDisable(ADC0_BASE, 0);
+    //ADCHardwareOversampleConfigure(ADC0_BASE,32); // oversample by 32 times, so 20/32 = 625ks/s
     ADCSequenceConfigure(ADC0_BASE, 0, ADC_TRIGGER_PROCESSOR, 0);
+    //ADCHardwareOversampleConfigure(ADC0_BASE,32);
     ADCSequenceStepConfigure(ADC0_BASE,0,0, ADC_CTL_CH0);
     ADCSequenceStepConfigure(ADC0_BASE,0,1, ADC_CTL_CH1);
     ADCSequenceStepConfigure(ADC0_BASE,0,2, ADC_CTL_CH2);
     ADCSequenceStepConfigure(ADC0_BASE, 0, 3, ADC_CTL_CH3 | ADC_CTL_IE |
-                                 ADC_CTL_END);
+                                 ADC_CTL_END); // takes 4 samples, so 156ks/s
     //
     // Since sample sequence 3 is now configured, it must be enabled.
     //

@@ -40,9 +40,11 @@
 #include "driverlib/timer.h"
 #include "driverlib/uart.h"
 #include "driverlib/ssi.h"
+#include "driverlib/systick.h"
 #include "utils/uartstdio.h"
 
 uint32_t ui32SysClock;
+uint32_t micros;
 
 //int error_state = 0;
 
@@ -103,6 +105,8 @@ extern void gpioInit(void); // inits all unused GPIO
  */
 extern void delayMS(int ms); // stops processor for a given amount of time in ms, this is approximate.
 
-
+extern void timeInit(void);
+extern uint32_t getTime(void);
+extern void timeInt(void);
 
 #endif /* SYSTEM_H_ */
