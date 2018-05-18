@@ -46,7 +46,7 @@
 
 uint32_t adcArray[8]={0};
 
-float currentArray[6]={0};
+uint32_t currentArray[6]={0};
 float filterArray[6]={0};
 
 
@@ -184,7 +184,7 @@ void adcInit(){
     SysCtlPeripheralEnable(SYSCTL_PERIPH_ADC0);
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOE);
     ADCClockConfigSet(ADC0_BASE,ADC_CLOCK_SRC_PLL | ADC_CLOCK_RATE_FULL, 24); // set to 480 MHz / 24 = 20MHz sample rate
-    ADCHardwareOversampleConfigure(ADC0_BASE, 1);
+    ADCHardwareOversampleConfigure(ADC0_BASE, 4);
     //
     // Select the analog ADC function for these pins.
     // Consult the data sheet to see which functions are allocated per pin.
@@ -228,6 +228,10 @@ void filterValues(){
     for(i=0;i<6;i++){
         filterArray[i]= filterArray[i]*A+currentArray[i]*(1-A);
     }
+}
+
+float convertCurrent(uint32_t current){
+    return((((float)current/4096.0*3.3)-1.6)*7.142857);
 }
 
 void adcCurrentRead(){
@@ -277,11 +281,11 @@ void adcRead(void){
  * Wrapper functions for current and temperature readings
  */
 
-float currentRead1(void){ // 1.6 = 0
-    return ((((float)adcArray[2]/4096.0*3.3)-1.6)*7.142857);
+uint32_t currentRead1(void){ // 1.6 = 0
+    return adcArray[2];
 }
-float  currentRead2(void){
-    return ((((float)adcArray[3]/4096.0*3.3)-1.6)*7.142857);
+uint32_t  currentRead2(void){
+    return adcArray[3];
 }
 int32_t  tempRead1(void){
     return (int32_t)(((float)adcArray[0]/4096.0*3.3)*200);

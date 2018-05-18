@@ -145,7 +145,7 @@ extern void adcRead(void);
  * @return uint32_t current
  *
  */
-extern float currentRead1(void);
+extern uint32_t currentRead1(void);
 
 /**
  * @brief Reads current from an array
@@ -156,7 +156,7 @@ extern float currentRead1(void);
  * @return uint32_t current
  *
  */
-extern float currentRead2(void);
+extern uint32_t currentRead2(void);
 
 /**
  * @brief Reads temperature from an array
