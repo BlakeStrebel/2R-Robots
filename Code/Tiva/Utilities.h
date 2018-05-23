@@ -22,6 +22,8 @@
  */
 typedef enum {
 	IDLE, /**< Sets motor effort to 0 */
+	PWM, /**< PWM directly set by user */
+	ITEST,
 	HOLD, /**< Sets motor effort to holding position */
 	TRACK /**< Sets motor effort to tracking mode */
 	} mode;    // define data structure containing modes

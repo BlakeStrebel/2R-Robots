@@ -1,6 +1,6 @@
 function Client()
 %   provides a menu for interfacing with hopper robot system
-Tiva_port = 'COM4'; % Tiva board serial port
+Tiva_port = 'COM5'; % Tiva board serial port
 DECIMATION = 10;
 
 % Opening COM connection

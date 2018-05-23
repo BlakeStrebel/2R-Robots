@@ -4,6 +4,7 @@
 #include "Motor.h"
 #include "Control.h"
 #include "Utilities.h"
+#include "Current.h"
 
 #define BUF_SIZE 50
 
@@ -57,6 +58,7 @@ main(void)
                    int p1, p2;
                    UART0read(buffer,BUF_SIZE);
                    sscanf(buffer, "%d %d", &p1, &p2);
+                   setMODE(PWM);
                    set_motor_pwm(1, p1);
                    set_motor_pwm(2, p2);
                    break;
@@ -72,7 +74,6 @@ main(void)
                    UART0write(buffer);
                    break;
                }
-
                case 'e':    // Get Desired Angle
                {
                    int d1, d2;
@@ -160,12 +161,22 @@ main(void)
                    set_motor_pwm(1, 0);
                    set_motor_pwm(2, 0);
                }
-               case '1':
+               case '1':    // Read Phase Currents in Counts
                {
+                   uint32_t adcArray[8];
+                   AD0_read(adcArray);
+                   //sprintf(buffer, "%d\r\n", adcArray[0]);
+                   //UART0write(buffer);
+                   //sprintf(buffer, "%d\r\n", adcArray[1]);
+                   //UART0write(buffer);
                    break;
                }
-               case '2':
+               case '2':    // Read Current in mA
                {
+                   int current;
+                   current = mA_read();
+                   sprintf(buffer, "%d\r\n", current);
+                   UART0write(buffer);
                    break;
                }
                default:

@@ -24,26 +24,22 @@ static volatile int DECOGGING = 0;
  * Comes after:
  * - sysInit()
  */
-void timerIntInit(void){
+void MotorTimerInit(void){
     setMODE(IDLE);
     IntMasterDisable();
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_TIMER2); // Use timer 0
     SysCtlPeripheralEnable(SYSCTL_PERIPH_TIMER1); // Use timer 1
-    TimerConfigure(TIMER2_BASE, TIMER_CFG_PERIODIC);
     TimerConfigure(TIMER1_BASE, TIMER_CFG_PERIODIC);
-    TimerLoadSet(TIMER2_BASE, TIMER_A, ui32SysClock/5000);
-    TimerLoadSet(TIMER1_BASE, TIMER_A, ui32SysClock/1000); // Use timer A // activate every 1/2 of a second 120/120/2 = 0.5s
-    IntEnable(INT_TIMER2A);
+    TimerLoadSet(TIMER1_BASE, TIMER_A, ui32SysClock/1000-1); // Use timer A // activate every 1/2 of a second 120/120/2 = 0.5s
     IntEnable(INT_TIMER1A);
-    TimerIntEnable(TIMER2_BASE, TIMER_TIMA_TIMEOUT);
     TimerIntEnable(TIMER1_BASE, TIMER_TIMA_TIMEOUT);
-    TimerEnable(TIMER2_BASE, TIMER_A);
     TimerEnable(TIMER1_BASE, TIMER_A);
-    // TODO: GPIO is just for blinking purposes on the EK-TM4C129
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPION);
-    GPIOPinTypeGPIOOutput(GPIO_PORTN_BASE, GPIO_PIN_1); // LED PN0
-    GPIOPinWrite(GPIO_PORTN_BASE,GPIO_PIN_1,GPIO_PIN_1); // Turn on the damn thing
     IntMasterEnable();
+
+
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPION);
+    GPIOPinTypeGPIOOutput(GPIO_PORTN_BASE, GPIO_PIN_1);
+    GPIOPinWrite(GPIO_PORTN_BASE,GPIO_PIN_1,GPIO_PIN_1);
+
 
     //
     // Set the INT_TIMER0A interrupt priority to the lowest priority.
@@ -159,17 +155,7 @@ void set_motor_pwm(int motor, int value)
     }
 }
 
-
-void
-Timer2IntHandler(void)
-{
-    //adcRead();
-    TimerIntClear(TIMER2_BASE, TIMER_TIMA_TIMEOUT);
-}
-
-
-void
-Timer1IntHandler(void)
+void Timer1IntHandler(void)
 {
     static int decctr = 0;  // counter for data decimation
     static int i = 0;   // trajectory index
@@ -182,6 +168,14 @@ Timer1IntHandler(void)
     switch(getMODE())
     {
         case IDLE:
+        {
+            break;
+        }
+        case PWM:
+        {
+            break;
+        }
+        case ITEST:
         {
             break;
         }

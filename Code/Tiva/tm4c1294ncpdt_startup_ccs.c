@@ -25,6 +25,7 @@
 #include <stdint.h>
 #include "Control.h"
 #include "System.h"
+#include "Current.h"
 
 //*****************************************************************************
 //
