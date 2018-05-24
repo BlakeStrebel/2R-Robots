@@ -248,9 +248,20 @@ void motorDriverInit(void){
    SysCtlDelay(1000);
 }
 
+
+void motor1Brake(void){
+    GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_0,GPIO_PIN_0);
+    GPIOPinWrite(GPIO_PORTP_BASE,GPIO_PIN_4,0); // Set brake pin to low, brake!
+}
+
+void motor2Brake(void){
+    GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_2,GPIO_PIN_2);
+    GPIOPinWrite(GPIO_PORTP_BASE,GPIO_PIN_5,0); // Set brake pin to low, brake!
+}
+
 /*
  * Wrapper function that takes in a control signal for the 1xPWM mode
- * if control is zero = brake!
+ * if control is zero = float!
  *      // Setting up motor driver pins,
        // Motor directions PK0:1, PK2:2
        // Motor enable pins, PK1: 1, PK3: 2
@@ -270,8 +281,9 @@ void motor1ControlPWM(int control){
         motor1PWM(-1*control);
     }
     else {
-        GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_0,GPIO_PIN_2);
-        GPIOPinWrite(GPIO_PORTP_BASE,GPIO_PIN_4,0); // Set brake pin to low, brake!
+        GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_0,GPIO_PIN_0);
+        GPIOPinWrite(GPIO_PORTP_BASE,GPIO_PIN_4,GPIO_PIN_4); // Set brake pin to low, brake!
+        motor1PWM(0);
     }
 }
 
@@ -294,7 +306,8 @@ void motor2ControlPWM(int control){
     }
     else {
         GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_2,GPIO_PIN_2);
-        GPIOPinWrite(GPIO_PORTP_BASE,GPIO_PIN_5,0); // Set brake pin to low, brake!
+        GPIOPinWrite(GPIO_PORTP_BASE,GPIO_PIN_5,GPIO_PIN_5);
+        motor2PWM(0);
     }
 }
 

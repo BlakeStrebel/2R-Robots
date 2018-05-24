@@ -88,7 +88,7 @@ void encoderSPIInit(void){
  * TODO: check the delay
  */
 void encoderRead(void){
-    pui32DataTx2[0] = 0x73; // "t" return readhead temperature
+    pui32DataTx2[0] = 0x73; // "s" return readhead temperature
     pui32DataTx2[1] = 0x00; // Sends empty data so that the encoder will complete sending data. (40 bits in total)
     pui32DataTx2[2] = 0x00;
     pui32DataTx2[3] = 0x00;

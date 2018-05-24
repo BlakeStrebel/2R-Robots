@@ -94,9 +94,22 @@ extern void motor1ControlPWM(int control);
  */
 extern void motor2ControlPWM(int control);
 
+/**
+ * @brief Brakes motor 1
+ *
+ * @param Void
+ * @return Void
+ */
+extern void motor1Brake(void);
 
-extern float readMotor2Speed(void);
-extern float readMotor1Speed(void);
+/**
+ * @brief Brakes motor 2
+ *
+ * @param Void
+ * @return Void
+ */
+extern void motor2Brake(void);
+
 
 
 /**

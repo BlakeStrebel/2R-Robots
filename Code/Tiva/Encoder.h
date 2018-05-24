@@ -140,6 +140,23 @@ extern float readMotor1AngleRelative(void);
  */
 extern float readMotor2AngleRelative(void);
 
+/**
+ * @brief Reads the motor 1's speed in terms of revolutions/sec from the encoder
+ *
+ * @param Void
+ * @return float the speed of the motor in rev/s
+ */
+extern float readMotor2Speed(void);
+
+/**
+ * @brief Reads the motor 2's speed in terms of revolutions/sec from the encoder
+ *
+ * @param Void
+ * @return float the speed of the motor in rev/s
+ */
+extern float readMotor1Speed(void);
+
+
 
 
 #endif /* ENCODER_H_ */
