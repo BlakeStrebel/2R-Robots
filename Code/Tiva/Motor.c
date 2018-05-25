@@ -14,7 +14,7 @@ void shutdownNow(){
     motor1ControlPWM(0); // turns off PWM
     motor2ControlPWM(0); // turns off PWM
     motor1Brake(); // shorts the output of the motor together
-    motor2Break(); // shorts the output of the motor together
+    motor2Brake(); // shorts the output of the motor together
 }
 
 
@@ -280,18 +280,18 @@ void motor1ControlPWM(int control){
         // Positive direction
         GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_0,GPIO_PIN_0); // Set to HIGH  - forward
         GPIOPinWrite(GPIO_PORTP_BASE,GPIO_PIN_4,GPIO_PIN_4); // Set to HIGH - no braking
-        motor1PWM(control);
+        motor1PWM(control); // set the pwm
     }
     else if (control<0) {
         // Negative direction
-        GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_0,0);
-        GPIOPinWrite(GPIO_PORTP_BASE,GPIO_PIN_4,GPIO_PIN_4);
-        motor1PWM(-1*control);
+        GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_0,0); // set to LOW - reverse
+        GPIOPinWrite(GPIO_PORTP_BASE,GPIO_PIN_4,GPIO_PIN_4); // no braking
+        motor1PWM(-1*control); // set the pwm, but since control is negative, flip the sign
     }
     else {
         GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_0,GPIO_PIN_0);
-        GPIOPinWrite(GPIO_PORTP_BASE,GPIO_PIN_4,GPIO_PIN_4); // Set brake pin to low, brake!
-        motor1PWM(0);
+        GPIOPinWrite(GPIO_PORTP_BASE,GPIO_PIN_4,GPIO_PIN_4); // Set brake pin to high, free to move.
+        motor1PWM(0); // ensure pwm is set to zero
     }
 }
 
@@ -308,14 +308,14 @@ void motor2ControlPWM(int control){
     }
     else if (control<0) {
         // Negative direction
-        GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_2,0);
-        GPIOPinWrite(GPIO_PORTP_BASE,GPIO_PIN_5,GPIO_PIN_5);
+        GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_2,0); // set to LOW - reverse
+        GPIOPinWrite(GPIO_PORTP_BASE,GPIO_PIN_5,GPIO_PIN_5); // Set to HIGH - no braking
         motor2PWM(-1*control);
     }
     else {
-        GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_2,GPIO_PIN_2);
-        GPIOPinWrite(GPIO_PORTP_BASE,GPIO_PIN_5,GPIO_PIN_5);
-        motor2PWM(0);
+        GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_2,GPIO_PIN_2); // Set to HIGH - forward
+        GPIOPinWrite(GPIO_PORTP_BASE,GPIO_PIN_5,GPIO_PIN_5); // Set to HIGH - no braking
+        motor2PWM(0); // free to turn
     }
 }
 
@@ -331,13 +331,13 @@ void motor2ControlPWM(int control){
 
 void motor1PWM(int pwmValue){
     // assuming PWM has been initialized.
-    PWMPulseWidthSet(PWM0_BASE, PWM_OUT_0,pwmValue);
+    PWMPulseWidthSet(PWM0_BASE, PWM_OUT_0,pwmValue); // set pwm
 
 }
 
 void motor2PWM(int pwmValue){
     // assuming PWM has been initialized.
-    PWMPulseWidthSet(PWM0_BASE, PWM_OUT_4,pwmValue);
+    PWMPulseWidthSet(PWM0_BASE, PWM_OUT_4,pwmValue);  // set pwm
 }
 
 
