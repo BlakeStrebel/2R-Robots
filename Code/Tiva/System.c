@@ -100,7 +100,7 @@ void gpioInit(void){
  */
 void delayMS(int ms) {
     //SysCtlDelay( (SysCtlClockGet()/(3*1000))*ms ) ;
-    SysCtlDelay( (ui32SysClock/(3*1000))*ms ) ;
+    SysCtlDelay( (ui32SysClock/(3*1000))*ms ) ; // 3 clock delays is 1us
 
 }
 
@@ -109,16 +109,16 @@ void delayMS(int ms) {
  */
 
 void timeInit(){
-    SysTickPeriodSet(120); // micro
-    SysTickIntRegister(timeInt);
-    SysTickIntEnable();
-    SysTickEnable();
+    SysTickPeriodSet(120); // micro seconds
+    SysTickIntRegister(timeInt); // set up the interrupt
+    SysTickIntEnable(); // enable the interrupt
+    SysTickEnable(); // enable the tick counter
 }
 
 void timeInt(){
-    micros++;
+    micros++; // update the counter
 }
 
 uint32_t getTime(){
-    return micros;
+    return micros; //return the counter
 }

@@ -11,17 +11,19 @@ uint32_t ui32Index;
 int error_state;
 
 void shutdownNow(){
-    motor1ControlPWM(0);
-    motor2ControlPWM(0);
+    motor1ControlPWM(0); // turns off PWM
+    motor2ControlPWM(0); // turns off PWM
+    motor1Brake(); // shorts the output of the motor together
+    motor2Break(); // shorts the output of the motor together
 }
 
 
 void motorSafetyCheck(){
-    int32_t vel1 =  readMotor1Speed();
-    int32_t vel2 = readMotor2Speed();
-    if(abs(vel1)>10||abs(vel2)>10){
-        shutdownNow();
-        error_state = MOTOR_SPINNING_TOO_FAST;
+    float vel1 =  readMotor1Speed(); // get the speed of the motor
+    float vel2 = readMotor2Speed(); //get the speed of the motor
+    if(abs(vel1)>10||abs(vel2)>10){ // if the speed is > 10 rev/s
+        shutdownNow(); // shuts off the motor and turns on the brakes
+        error_state = MOTOR_SPINNING_TOO_FAST; // set the error message
     }
 
 }
@@ -47,7 +49,7 @@ void MotorSPIinit(void){
 
     // Configure and enable the SSI port for SPI master mode.
     SSIConfigSetExpClk(SSI2_BASE, ui32SysClock, SSI_FRF_MOTO_MODE_1,
-                           SSI_MODE_MASTER, 1000000, 16); // 16 bits for motor
+                           SSI_MODE_MASTER, 1000000, 16); // 16 bits for motor, use 100kbps mode, use the system clock
 
     // Configure CS
     GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_3,GPIO_PIN_3); //Set CS to HIGH
@@ -110,7 +112,7 @@ void pwmInit(void){
                     PWM_GEN_MODE_NO_SYNC);
 
     //
-    // Set the PWM period to 250Hz.  To calculate the appropriate parameter
+    // Set the PWM period to 12500Hz.  To calculate the appropriate parameter
     // use the following equation: N = (1 / f) * SysClk.  Where N is the
     // function parameter, f is the desired frequency, and SysClk is the
     // system clock frequency.
@@ -156,17 +158,17 @@ void motorInit(void){
        // Motor directions PK0:1, PK2:2
        // Motor enable pins, PK1: 1, PK3: 2
        // Motor brake pins, PP4: 1, PP5: 2
-       SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOK);
-       SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOP);
+       SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOK); // set up GPIOs
+       SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOP); // set up GPIOs
 
-       GPIOPinTypeGPIOOutput(GPIO_PORTK_BASE, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3);
-       GPIOPinTypeGPIOOutput(GPIO_PORTP_BASE, GPIO_PIN_4 | GPIO_PIN_5);
+       GPIOPinTypeGPIOOutput(GPIO_PORTK_BASE, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3); //set up outputs
+       GPIOPinTypeGPIOOutput(GPIO_PORTP_BASE, GPIO_PIN_4 | GPIO_PIN_5); // set up output pins
 
        //set directions
        GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_0 | GPIO_PIN_2 , GPIO_PIN_0 + GPIO_PIN_2);
 
        // turn on
-       GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_1 |  GPIO_PIN_3 , GPIO_PIN_3 + GPIO_PIN_1);     //Why using +?
+       GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_1 |  GPIO_PIN_3 , GPIO_PIN_3 + GPIO_PIN_1);
 
        GPIOPinWrite(GPIO_PORTP_BASE,GPIO_PIN_4,GPIO_PIN_4); // brake for motor 1, set HIGH so no braking
        GPIOPinWrite(GPIO_PORTP_BASE,GPIO_PIN_5,GPIO_PIN_5); // brake for motor 2, set HIGH so no braking
@@ -248,14 +250,20 @@ void motorDriverInit(void){
    SysCtlDelay(1000);
 }
 
-
+/*
+ * Wrapper function that turns on the brakes for the motor and sets pwm to 0
+ */
 void motor1Brake(void){
-    GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_0,GPIO_PIN_0);
+    motor1ControlPWM(0);
+    GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_0,GPIO_PIN_0); // forward direction
     GPIOPinWrite(GPIO_PORTP_BASE,GPIO_PIN_4,0); // Set brake pin to low, brake!
 }
-
+/*
+ * Wrapper function that turns on the brakes for the motor and sets pwm to 0
+ */
 void motor2Brake(void){
-    GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_2,GPIO_PIN_2);
+    motor2ControlPWM(0);
+    GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_2,GPIO_PIN_2); // forward direction
     GPIOPinWrite(GPIO_PORTP_BASE,GPIO_PIN_5,0); // Set brake pin to low, brake!
 }
 
