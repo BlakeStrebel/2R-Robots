@@ -105,7 +105,7 @@ void r2rDefaultInit(void){
     sysInit(); // Init system clock and Master interrupt
     uartInit();
     encoderSPIInit();
-    MotorSPIinit();
+    MotorSPIInit();
     pwmInit(); // PWM OUT 4 and PWM OUT 6, PF0 and PF2
     motorInit(); // Set useful signal outputs.
     motorDriverInit(); // Send values to set up the motor for 1x PWM mode

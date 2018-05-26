@@ -31,7 +31,8 @@ void motorSafetyCheck(){
 /*
  * This function initilizes the SPI on SSI0, using PA2 (CLK), PA3(SS), PA4(RX), PA5(TX)
  */
-void MotorSPIinit(void){
+void MotorSPIInit(void)
+{
     // The SSI2 peripheral must be enabled for use.
     SysCtlPeripheralEnable(SYSCTL_PERIPH_SSI2); // SSI2
 
@@ -39,7 +40,7 @@ void MotorSPIinit(void){
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOD);
 
     // Configure Motor Pins
-    GPIOPinConfigure(GPIO_PD3_SSI2CLK);
+    GPIOPinConfigure(GPIO_PD3_SSI2CLK); //CLK
     GPIOPinConfigure(GPIO_PD1_SSI2XDAT0); // MOSI
     GPIOPinConfigure(GPIO_PD0_SSI2XDAT1); // MISO
 
@@ -48,11 +49,13 @@ void MotorSPIinit(void){
     GPIOPinTypeGPIOOutput(GPIO_PORTL_BASE,GPIO_PIN_2 | GPIO_PIN_3); // CS L2 for 1, L3 for 2
 
     // Configure and enable the SSI port for SPI master mode.
+    //TODO: Test if the bit rate can be the highest 5M.
     SSIConfigSetExpClk(SSI2_BASE, ui32SysClock, SSI_FRF_MOTO_MODE_1,
                            SSI_MODE_MASTER, 1000000, 16); // 16 bits for motor, use 100kbps mode, use the system clock
 
     // Configure CS
-    GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_3,GPIO_PIN_3); //Set CS to HIGH
+    GPIOPinWrite(GPIO_PORTL_BASE, GPIO_PIN_2, GPIO_PIN_2); //Set CS to HIGH
+    GPIOPinWrite(GPIO_PORTL_BASE, GPIO_PIN_3, GPIO_PIN_3); //Set CS to HIGH
 
     // Enable the SSI2 module.
     SSIEnable(SSI2_BASE);
@@ -62,50 +65,27 @@ void MotorSPIinit(void){
  * This function sets up the pwm on pins PF1,PF2,PF3 which are avaliable on the TM4C123 Launchpad as RGB outputs.
  * TODO: Change PWM output pins
  */
-void pwmInit(void){
-    //
+void pwmInit(void)
+{
     // Set the PWM clock to the system clock.
-    //
     SysCtlPWMClockSet(SYSCTL_PWMDIV_1);
 
-    //
     // The PWM peripheral must be enabled for use.
-    //
     SysCtlPeripheralEnable(SYSCTL_PERIPH_PWM0);
 
-    //
-    // For this example PWM0 is used with PortB Pins 6 and 7.  The actual port
-    // and pins used may be different on your part, consult the data sheet for
-    // more information.  GPIO port B needs to be enabled so these pins can be
-    // used.
-    // TODO: change this to whichever GPIO port you are using.
-    //
+    // Enable GPIO for PWM.
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOF);
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOG);
 
-    //
     // Configure the GPIO pin muxing to select PWM functions for these pins.
-    // This step selects which alternate function is available for these pins.
-    // This is necessary if your part supports GPIO pin function muxing.
-    // Consult the data sheet to see which functions are allocated per pin.
-    // TODO: change this to select the port/pin you are using.
-    //
     GPIOPinConfigure(GPIO_PF0_M0PWM0);
     GPIOPinConfigure(GPIO_PG0_M0PWM4);
 
-    //
-    // Configure the GPIO pad for PWM function on pins PB6 and PB7.  Consult
-    // the data sheet to see which functions are allocated per pin.
-    // TODO: change this to select the port/pin you are using.
-    //
+    // Configure the GPIO pad for PWM function on pins PF0 and PG0.
     GPIOPinTypePWM(GPIO_PORTF_BASE, GPIO_PIN_0);
     GPIOPinTypePWM(GPIO_PORTG_BASE, GPIO_PIN_0);
 
-    //
     // Configure the PWM0 to count up/down without synchronization.
-    // Note: Enabling the dead-band generator automatically couples the 2
-    // outputs from the PWM block so we don't use the PWM synchronization.
-    //
     PWMGenConfigure(PWM0_BASE, PWM_GEN_0, PWM_GEN_MODE_UP_DOWN |
                     PWM_GEN_MODE_NO_SYNC);
     PWMGenConfigure(PWM0_BASE, PWM_GEN_2, PWM_GEN_MODE_UP_DOWN |
@@ -118,29 +98,19 @@ void pwmInit(void){
     // system clock frequency.
     // In this case you get: (1 / 12500Hz) * 120MHz = 9600 cycles.  Note that
     // the maximum period you can set is 2^16 - 1.
-    // TODO: modify this calculation to use the clock frequency that you are
-    // using.
-    //
+    // TODO: Here is a tradeoff. Ideally should be larger than 1KHz.
     PWMGenPeriodSet(PWM0_BASE, PWM_GEN_0, 9600);
     PWMGenPeriodSet(PWM0_BASE, PWM_GEN_2, 9600);
 
-    //
-    // Set PWM0 PD0 to a duty cycle of 25%.  You set the duty cycle as a
-    // function of the period.  Since the period was set above, you can use the
-    // PWMGenPeriodGet() function.  For this example the PWM will be high for
-    // 25% of the time or 16000 clock cycles (64000 / 4).
-    //
-    PWMPulseWidthSet(PWM0_BASE, PWM_OUT_0,1);
-    PWMPulseWidthSet(PWM0_BASE, PWM_OUT_4,1);
+    // Set PWM0 PD0 to a duty cycle of 0.
+    //TODO: Test if this can be 0.
+    PWMPulseWidthSet(PWM0_BASE, PWM_OUT_0, 0);
+    PWMPulseWidthSet(PWM0_BASE, PWM_OUT_4, 0);
 
-    //
-    // Enable the PWM0 Bit 0 (PD0) and Bit 1 (PD1) output signals.
-    //
+    // Enable the PWM0 Bit 0 and Bit 4 output signals.
     PWMOutputState(PWM0_BASE, PWM_OUT_0_BIT | PWM_OUT_4_BIT, true);
 
-    //
     // Enables the counter for a PWM generator block.
-    //
     PWMGenEnable(PWM0_BASE, PWM_GEN_0);
     PWMGenEnable(PWM0_BASE, PWM_GEN_2);
 }

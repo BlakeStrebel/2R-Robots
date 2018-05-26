@@ -7,18 +7,18 @@
  * Comes after:
  * -
  */
-void sysInit(void){
+void sysInit(void)
+{
     // Enable and wait for the port to be ready for access
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPION);
-    while(!SysCtlPeripheralReady(SYSCTL_PERIPH_GPION)) {;}
+    while(!SysCtlPeripheralReady(SYSCTL_PERIPH_GPION)) {; }
 
-    //
     // Set the clock to run directly from the crystal at 120MHz.
-    //
-    ui32SysClock = SysCtlClockFreqSet((SYSCTL_OSC_INT |
-                                             SYSCTL_OSC_MAIN |
-                                             SYSCTL_USE_PLL |
-                                             SYSCTL_CFG_VCO_480), 120000000); // Use 25Mhz crystal and use PLL to accelerate to 120MHz
+    // TODO: Currently we are using internal oscillator and it is better to change to external crystal.
+    ui32SysClock = SysCtlClockFreqSet(SYSCTL_OSC_INT | SYSCTL_USE_PLL |
+                                      SYSCTL_CFG_VCO_480, 120000000);
+    // Use 25Mhz crystal and use PLL to accelerate to 120MHz
+    //ui32SysClock = ysCtlClockFreqSet(SYSCTL_XTAL_25MHZ | SYSCTL_OSC_MAIN | SYSCTL_USE_PLL | SYSCTL_CFG_VCO_480, 120000000);
 }
 
 /*
@@ -26,7 +26,8 @@ void sysInit(void){
  * It is set up for 115200 baud 8N1. To send numbers and characters use
  * UARTprintf.
  */
-void uartInit(void){
+void uartInit(void)
+{
     // Enable GPIO port A which is used for UART0 pins.
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOA);
 
@@ -40,9 +41,12 @@ void uartInit(void){
     // Select the alternate (UART) function for these pins.
     GPIOPinTypeUART(GPIO_PORTA_BASE, GPIO_PIN_0 | GPIO_PIN_1);
 
+
+    // Configure the UART for 115,200, 8-N-1 operation.
+    // TODO: Change the baud rate to the highest. 256000? 128000? as Matlab mentions?
     UARTConfigSetExpClk(UART0_BASE, ui32SysClock, 115200,
-                            (UART_CONFIG_WLEN_8 | UART_CONFIG_STOP_ONE |
-                             UART_CONFIG_PAR_NONE));
+                        UART_CONFIG_WLEN_8 | UART_CONFIG_STOP_ONE |
+                        UART_CONFIG_PAR_NONE);
 }
 
 void UART0read(char * message, int maxLength)
