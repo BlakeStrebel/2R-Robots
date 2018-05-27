@@ -123,7 +123,8 @@ void pwmInit(void)
  * sysInit()
  *
  */
-void motorInit(void){
+void motorInit(void)
+{
        // Setting up motor driver pins,
        // Motor directions PK0:1, PK2:2
        // Motor enable pins, PK1: 1, PK3: 2
@@ -135,19 +136,14 @@ void motorInit(void){
        GPIOPinTypeGPIOOutput(GPIO_PORTP_BASE, GPIO_PIN_4 | GPIO_PIN_5); // set up output pins
 
        //set directions
-       GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_0 | GPIO_PIN_2 , GPIO_PIN_0 + GPIO_PIN_2);
+       GPIOPinWrite(GPIO_PORTK_BASE, GPIO_PIN_0 | GPIO_PIN_2 , GPIO_PIN_0 + GPIO_PIN_2);
 
        // turn on
-       GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_1 |  GPIO_PIN_3 , GPIO_PIN_3 + GPIO_PIN_1);
+       GPIOPinWrite(GPIO_PORTK_BASE, GPIO_PIN_1 |  GPIO_PIN_3 , GPIO_PIN_3 + GPIO_PIN_1);
 
-       GPIOPinWrite(GPIO_PORTP_BASE,GPIO_PIN_4,GPIO_PIN_4); // brake for motor 1, set HIGH so no braking
-       GPIOPinWrite(GPIO_PORTP_BASE,GPIO_PIN_5,GPIO_PIN_5); // brake for motor 2, set HIGH so no braking
+       GPIOPinWrite(GPIO_PORTP_BASE, GPIO_PIN_4, GPIO_PIN_4); // brake for motor 1, set HIGH so no braking
+       GPIOPinWrite(GPIO_PORTP_BASE, GPIO_PIN_5, GPIO_PIN_5); // brake for motor 2, set HIGH so no braking
 
-       //GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_0,GPIO_PIN_0); // dir for motor 1, set to forward
-       //GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_2,GPIO_PIN_2); // dir for motor 2, set to forward
-       // Pulled low on motor fault PK6:1, PK7: 2
-       //GPIOPinTypeGPIOInput(GPIO_PORTK_BASE, GPIO_PIN_6 | GPIO_PIN_7);
-       //SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOJ);
        // TODO: Cal, short all amplifier inputs together (why?)
        //GPIOPinTypeGPIOOutput(GPIO_PORTJ_BASE, GPIO_PIN_0 | GPIO_PIN_1 );
 }
@@ -163,61 +159,31 @@ void motorInit(void){
  *
  * Note that the driver will NOT be set if motor power is not supplied because the driver will not be able to read the registers over SPI, even though it responds
  */
-void motorDriverInit(void){
-    while(SSIDataGetNonBlocking(SSI2_BASE, &pui32DataRx[0])){
-    }
+void motorDriverInit(void)
+{
+    pui32DataTx[0] = 0b0001000001000000; // set register 3, bit 6 and 5 to 10, option 3, 1x PWM mode
 
-    pui32DataTx[0] = 0b1001000000000000; // read register 3
-    pui32DataTx[1] = 0b0001000001000000; // set register 3, bit 6 and 5 to 10, option 3, 1x PWM mode
-    pui32DataTx[2]=  0b1001000000000000; // read register 3
-    pui32DataTx[3]=  0b1001000000000000; // read register 3 one more time
+    while(SSIDataGetNonBlocking(SSI2_BASE, &pui32DataRx[0])){}
 
-    GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_3,0x00);
-    SysCtlDelay(1);
-    for(ui32Index = 0; ui32Index < 4; ui32Index++){ // only reading and writing 3 times
-        GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_3,0x00); // Pull CS pin low
-        SysCtlDelay(1);
-        SSIDataPut(SSI2_BASE, pui32DataTx[ui32Index]); // Send data
-        SysCtlDelay(1000); // wait (at least 50ns)
-        GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_3,GPIO_PIN_3); // Being the CS pin high
-        SSIDataGet(SSI2_BASE, &pui32DataRx[ui32Index]); // Get the data
-    }
-    while(SSIBusy(SSI2_BASE)){
-    }
+    GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_3,0x00); // Pull CS pin low
+    SysCtlDelay(1000);
+    SSIDataPut(SSI2_BASE, pui32DataTx[0]); // Send data
+    SysCtlDelay(1000); // wait (at least 50ns)
+    GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_3,GPIO_PIN_3); // Being the CS pin high
+    SSIDataGet(SSI2_BASE, &pui32DataRx[0]); // Get the data
 
-    GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_3,GPIO_PIN_3); // Make sure the pin is high
+    while(SSIBusy(SSI2_BASE)){}
 
-    //SysCtlDelay(1000);
-    delayMS(1000);
+    while(SSIDataGetNonBlocking(SSI2_BASE, &pui32DataRx[0])){}
 
-   while(SSIDataGetNonBlocking(SSI2_BASE, &pui32DataRx[0])){
-   }
-   pui32DataTx[0] = 0b1001000000000000; // read register 3
-   pui32DataTx[1] = 0b0001000001000000; // set register 3, bit 6 and 5 to 10, option 3, 1x PWM mode
-   pui32DataTx[2]=  0b1001000000000000; // read register 3
-   pui32DataTx[3]=  0b1001000000000000; // read register 3 one more time
-   //
-   // Send 3 bytes of data.
-   //
+    GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_2,0x00); // Pull CS pin low
+    SysCtlDelay(1000);
+    SSIDataPut(SSI2_BASE, pui32DataTx[0]); // Send data
+    SysCtlDelay(1000); // wait (at least 50ns)
+    GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_2,GPIO_PIN_2); // Being the CS pin high
+    SSIDataGet(SSI2_BASE, &pui32DataRx[0]); // Get the data
 
-   // JUST FOR MOTOR 1
-
-   GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_2,0x00);
-   SysCtlDelay(1);
-   for(ui32Index = 0; ui32Index < 4; ui32Index++){ // only reading and writing 3 times
-       GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_2,0x00); // Pull CS pin low
-       SysCtlDelay(1);
-       SSIDataPut(SSI2_BASE, pui32DataTx[ui32Index]); // Send data
-       SysCtlDelay(1000); // wait (at least 50ns)
-       GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_2,GPIO_PIN_2); // Being the CS pin high
-       SSIDataGet(SSI2_BASE, &pui32DataRx[ui32Index]); // Get the data
-   }
-   while(SSIBusy(SSI2_BASE)){
-   }
-
-   GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_2,GPIO_PIN_2); // Make sure the pin is high
-   //SysCtlDelay(1000);
-   SysCtlDelay(1000);
+    while(SSIBusy(SSI2_BASE)){}
 }
 
 /*

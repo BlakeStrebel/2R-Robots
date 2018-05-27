@@ -101,7 +101,8 @@ void setADCMux(int motor,int number){
  * Comes after:
  * -
  */
-void r2rDefaultInit(void){
+void r2rDefaultInit(void)
+{
     sysInit(); // Init system clock and Master interrupt
     uartInit();
     encoderSPIInit();
@@ -112,7 +113,7 @@ void r2rDefaultInit(void){
     adcInit(); // Init for current and temperture
     //gpioInit(); // Init for general GPIO - set to input for safety
     timerIntInit();
-    timeInit();
+    //timeInit();
 }
 
 /*
@@ -170,8 +171,8 @@ void i2cInit(tI2CMInstance g_sI2CMSimpleInst){
 /*
  * This function enables the ADC unit on the TM4C
  */
-void adcInit(){
-
+void adcInit()
+{
     // ADC MUX,
     // M1 ADC: M0 MSB, M1 LSB
     // M2 ADC: M2 MSP, M3 LSB
@@ -179,8 +180,6 @@ void adcInit(){
     GPIOPinTypeGPIOOutput(GPIO_PORTM_BASE, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3);
     //setADCMux(1,1);
     //setADCMux(1,2);
-
-
     SysCtlPeripheralEnable(SYSCTL_PERIPH_ADC0);
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOE);
     ADCClockConfigSet(ADC0_BASE,ADC_CLOCK_SRC_PLL | ADC_CLOCK_RATE_FULL, 24); // set to 480 MHz / 24 = 20MHz sample rate

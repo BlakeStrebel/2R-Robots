@@ -11,7 +11,7 @@ void sysInit(void)
 {
     // Enable and wait for the port to be ready for access
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPION);
-    while(!SysCtlPeripheralReady(SYSCTL_PERIPH_GPION)) {; }
+    while(!SysCtlPeripheralReady(SYSCTL_PERIPH_GPION)) {}
 
     // Set the clock to run directly from the crystal at 120MHz.
     // TODO: Currently we are using internal oscillator and it is better to change to external crystal.
