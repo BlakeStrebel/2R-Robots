@@ -134,12 +134,10 @@ extern void adcCurrentRead(void);
  *
  */
 extern void adcRead(void);
-// Wrapper functions for reading current and temperature
+
 
 /**
  * @brief Reads current from an array
- *
- *
  *
  * @param Void
  * @return uint32_t current

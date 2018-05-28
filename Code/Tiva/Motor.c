@@ -1,5 +1,6 @@
 #include "System.h"
 #include "Motor.h"
+#include "r2r.h"
 
 
 #define NUM_SSI_DATA            8
@@ -21,9 +22,13 @@ void shutdownNow(){
 void motorSafetyCheck(){
     float vel1 =  readMotor1Speed(); // get the speed of the motor
     float vel2 = readMotor2Speed(); //get the speed of the motor
-    if(abs(vel1)>10||abs(vel2)>10){ // if the speed is > 10 rev/s
+    if(abs(vel1)>MAX_SPEED||abs(vel2)>MAX_SPEED){ // if the speed is > 10 rev/s
         shutdownNow(); // shuts off the motor and turns on the brakes
         error_state = MOTOR_SPINNING_TOO_FAST; // set the error message
+    }
+    if (tempRead1()>TEMP_LIMIT||tempRead2()>TEMP_LIMIT||){
+      shudownNow();// shuts off the motor and turns on the brakes
+      error_state = MOTOR_TOO_HOT;// set the error message
     }
 
 }

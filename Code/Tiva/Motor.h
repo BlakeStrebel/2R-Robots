@@ -1,8 +1,7 @@
 /**
  * @file Motor.h
- * @brief utilities header
  *
- * This file contains the motor functions
+ * This file contains all motor-related functions, such as initialization and setting speeds
  *
  * @author Benjamen Lim
  * @author Huan Weng
@@ -13,18 +12,38 @@
 #ifndef MOTOR_H_
 #define MOTOR_H_
 
+// error messages
 #define MOTOR_SPINNING_TOO_FAST 10
 #define MOTOR_TOO_HOT 11
 
+// limits
+#define TEMP_LIMIT 50 // in degrees C
+#define MAX_SPEED 10 // in rev/s
 
 
+/**
+ * Brakes the motor and kills the pwm signal by pulling down the enable line.
+ *
+ *
+ * @param Void
+ * @return Void
+ */
+extern void shutdownNow(void);
 
+/**
+ * Function to check for all safety limits and kills the motors if a fault is detected. 
+ * Function must be called each time
+ *
+ *
+ * @param Void
+ * @return Void
+ */
 extern void motorSafetyCheck(void);
 
 /**
  * @brief Initializes the SPI channels for the motor drivers
  *
- * Initializes SSI1 ~ 4 and their corresponding GPIO pins
+ * Initializes SSI1~2 and their corresponding GPIO pins
  *
  * @param Void
  * @return Void
@@ -52,8 +71,8 @@ extern void motorDriverInit(void);
 /**
  * @brief Initializes PWM
  *
- * Initialize PWM on PF0 (motor 1) and PG0 (motor 2), and the default period if 320 SysClk
- * cycles.
+ * Initialize PWM on PF0 (motor 1) and PG0 (motor 2), and the default period if 9600 SysClk
+ * cycles or 12500Hz
  *
  * @param Void
  * @return Void

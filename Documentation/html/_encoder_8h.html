@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.14"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>R2R Project: C:/Users/Ben/Documents/GitHub/2R-Robots/MidtermCode/Tiva/Encoder.h File Reference</title>
+<title>R2R: C:/Users/Ben/Documents/GitHub/2R-Robots/Code/Tiva/Encoder.h File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -21,7 +21,7 @@
  <tbody>
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">R2R Project
+   <div id="projectname">R2R
    </div>
   </td>
  </tr>
@@ -61,7 +61,7 @@ $(function() {
 
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="dir_4c73384e71d810f6f6f141802d924fce.html">MidtermCode</a></li><li class="navelem"><a class="el" href="dir_aee3de22fa7ca1d68048920d8ed0db79.html">Tiva</a></li>  </ul>
+<li class="navelem"><a class="el" href="dir_23fdee2f6995db16c755697cdf620cf4.html">Code</a></li><li class="navelem"><a class="el" href="dir_2ceb0fec70d4efbcdcc14db9c63f05fa.html">Tiva</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
@@ -79,9 +79,9 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ad2ecc69b99764f250fff9f6cc6cc55fb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_encoder_8h.html#ad2ecc69b99764f250fff9f6cc6cc55fb">enoderSPIinit</a> (void)</td></tr>
-<tr class="memdesc:ad2ecc69b99764f250fff9f6cc6cc55fb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the SPI channels for the motor drivers, encoders, and RAM.  <a href="#ad2ecc69b99764f250fff9f6cc6cc55fb">More...</a><br /></td></tr>
-<tr class="separator:ad2ecc69b99764f250fff9f6cc6cc55fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac31d94de099e13aa63766f6efe386aba"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_encoder_8h.html#ac31d94de099e13aa63766f6efe386aba">encoderSPIInit</a> (void)</td></tr>
+<tr class="memdesc:ac31d94de099e13aa63766f6efe386aba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the SPI channels for the motor drivers, encoders, and RAM.  <a href="#ac31d94de099e13aa63766f6efe386aba">More...</a><br /></td></tr>
+<tr class="separator:ac31d94de099e13aa63766f6efe386aba"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa027163ba1e9951d437f3f4e260fd9bb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_encoder_8h.html#aa027163ba1e9951d437f3f4e260fd9bb">encoderRead</a> (void)</td></tr>
 <tr class="memdesc:aa027163ba1e9951d437f3f4e260fd9bb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates value in sensor array.  <a href="#aa027163ba1e9951d437f3f4e260fd9bb">More...</a><br /></td></tr>
 <tr class="separator:aa027163ba1e9951d437f3f4e260fd9bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -115,6 +115,12 @@ Functions</h2></td></tr>
 <tr class="memitem:a8277b1c9a143a978685671b1a0c7f90d"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_encoder_8h.html#a8277b1c9a143a978685671b1a0c7f90d">readMotor2AngleRelative</a> (void)</td></tr>
 <tr class="memdesc:a8277b1c9a143a978685671b1a0c7f90d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads value in encoderVal array for motor 2 and keeps track of multiturn angles.  <a href="#a8277b1c9a143a978685671b1a0c7f90d">More...</a><br /></td></tr>
 <tr class="separator:a8277b1c9a143a978685671b1a0c7f90d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6391115b4eaa017554396e9c0bd81ac4"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_encoder_8h.html#a6391115b4eaa017554396e9c0bd81ac4">readMotor2Speed</a> (void)</td></tr>
+<tr class="memdesc:a6391115b4eaa017554396e9c0bd81ac4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads the motor 1's speed in terms of revolutions/sec from the encoder.  <a href="#a6391115b4eaa017554396e9c0bd81ac4">More...</a><br /></td></tr>
+<tr class="separator:a6391115b4eaa017554396e9c0bd81ac4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a32d76f5feb48e875eddaa9c1dbd19276"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_encoder_8h.html#a32d76f5feb48e875eddaa9c1dbd19276">readMotor1Speed</a> (void)</td></tr>
+<tr class="memdesc:a32d76f5feb48e875eddaa9c1dbd19276"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads the motor 2's speed in terms of revolutions/sec from the encoder.  <a href="#a32d76f5feb48e875eddaa9c1dbd19276">More...</a><br /></td></tr>
+<tr class="separator:a32d76f5feb48e875eddaa9c1dbd19276"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Encoder header. </p>
@@ -149,18 +155,22 @@ Blake Strebel </dd></dl>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Void </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Void</dd></dl>
+<p>This function reads both encoder counts and stores them in an array</p>
+<p>Comes after: spiInit();</p>
+<p>Writes to: encoderVal array</p>
+<p>TODO: check the delay </p>
 
 </div>
 </div>
-<a id="ad2ecc69b99764f250fff9f6cc6cc55fb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad2ecc69b99764f250fff9f6cc6cc55fb">&#9670;&nbsp;</a></span>enoderSPIinit()</h2>
+<a id="ac31d94de099e13aa63766f6efe386aba"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac31d94de099e13aa63766f6efe386aba">&#9670;&nbsp;</a></span>encoderSPIInit()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void enoderSPIinit </td>
+          <td class="memname">void encoderSPIInit </td>
           <td>(</td>
           <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
@@ -292,6 +302,33 @@ Blake Strebel </dd></dl>
 
 </div>
 </div>
+<a id="a32d76f5feb48e875eddaa9c1dbd19276"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a32d76f5feb48e875eddaa9c1dbd19276">&#9670;&nbsp;</a></span>readMotor1Speed()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float readMotor1Speed </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Reads the motor 2's speed in terms of revolutions/sec from the encoder. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">Void</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>float the speed of the motor in rev/s </dd></dl>
+
+</div>
+</div>
 <a id="acf5c46f542d35b78a92a1cefac802888"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#acf5c46f542d35b78a92a1cefac802888">&#9670;&nbsp;</a></span>readMotor2Angle()</h2>
 
@@ -400,6 +437,33 @@ Blake Strebel </dd></dl>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The counts as an int </dd></dl>
+
+</div>
+</div>
+<a id="a6391115b4eaa017554396e9c0bd81ac4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6391115b4eaa017554396e9c0bd81ac4">&#9670;&nbsp;</a></span>readMotor2Speed()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float readMotor2Speed </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Reads the motor 1's speed in terms of revolutions/sec from the encoder. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">Void</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>float the speed of the motor in rev/s </dd></dl>
 
 </div>
 </div>

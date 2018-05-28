@@ -1,5 +1,5 @@
-\hypertarget{_control_8h}{}\section{C\+:/\+Users/\+Ben/\+Documents/\+Git\+Hub/2\+R-\/\+Robots/\+Midterm\+Code/\+Tiva/\+Control.h File Reference}
-\label{_control_8h}\index{C\+:/\+Users/\+Ben/\+Documents/\+Git\+Hub/2\+R-\/\+Robots/\+Midterm\+Code/\+Tiva/\+Control.\+h@{C\+:/\+Users/\+Ben/\+Documents/\+Git\+Hub/2\+R-\/\+Robots/\+Midterm\+Code/\+Tiva/\+Control.\+h}}
+\hypertarget{_control_8h}{}\section{C\+:/\+Users/\+Ben/\+Documents/\+Git\+Hub/2\+R-\/\+Robots/\+Code/\+Tiva/\+Control.h File Reference}
+\label{_control_8h}\index{C\+:/\+Users/\+Ben/\+Documents/\+Git\+Hub/2\+R-\/\+Robots/\+Code/\+Tiva/\+Control.\+h@{C\+:/\+Users/\+Ben/\+Documents/\+Git\+Hub/2\+R-\/\+Robots/\+Code/\+Tiva/\+Control.\+h}}
 
 
 control header  
@@ -15,6 +15,9 @@ struct \mbox{\hyperlink{structcontrol__error}{control\+\_\+error}}
 \item 
 \mbox{\Hypertarget{_control_8h_a373f5edc40df48a516acb229a5795c4c}\label{_control_8h_a373f5edc40df48a516acb229a5795c4c}} 
 void {\bfseries timer\+Int\+Init} (void)
+\item 
+\mbox{\Hypertarget{_control_8h_adb0c04a7298555988122bbec98bfda7d}\label{_control_8h_adb0c04a7298555988122bbec98bfda7d}} 
+void {\bfseries Timer2\+Int\+Handler} (void)
 \item 
 \mbox{\Hypertarget{_control_8h_a65c79b40bb1ef0170ed09c5cd657f0f0}\label{_control_8h_a65c79b40bb1ef0170ed09c5cd657f0f0}} 
 void {\bfseries Timer1\+Int\+Handler} (void)
@@ -35,8 +38,17 @@ void \mbox{\hyperlink{_control_8h_a23b819228a3ffc67fc85222e5b7a1053}{load\+\_\+p
 \begin{DoxyCompactList}\small\item\em Loads position trajectory for a given motor over U\+A\+RT. \end{DoxyCompactList}\item 
 int \mbox{\hyperlink{_control_8h_a7e15715f934ac02744e6af24bf61d696}{get\+\_\+motor\+\_\+pwm}} (int motor)
 \begin{DoxyCompactList}\small\item\em Returns the set pwm on a given motor. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{_control_8h_a2ee9e8e44ffa875e1d7e2099c8539507}\label{_control_8h_a2ee9e8e44ffa875e1d7e2099c8539507}} 
+void {\bfseries set\+\_\+motor\+\_\+pwm} (int motor, int value)
+\item 
 void \mbox{\hyperlink{_control_8h_a41cc73dbc9230f73ed722b4c97fb7366}{P\+I\+D\+\_\+\+Controller}} (int reference, int actual, int motor)
-\begin{DoxyCompactList}\small\item\em Calculates pwm to send to the motor drivr. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Calculates pwm to send to the motor drivr. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{_control_8h_ad06a004f6638de88208f9ca1a31bf43c}\label{_control_8h_ad06a004f6638de88208f9ca1a31bf43c}} 
+float {\bfseries decog\+\_\+motor} (int x, int motor)
+\item 
+\mbox{\Hypertarget{_control_8h_aeca5028b3ba9d68e9a9ccccae98396cd}\label{_control_8h_aeca5028b3ba9d68e9a9ccccae98396cd}} 
+void {\bfseries set\+Decogging} (void)
+\end{DoxyCompactItemize}
 
 
 \subsection{Detailed Description}
@@ -142,7 +154,7 @@ Calculates pwm to send to the motor drivr.
 \hline
 {\em actual} & the commanded angle \\
 \hline
-{\em motor} & the specified get\+\_\+motor\+\_\+pwm \\
+{\em motor} & the specified motor \\
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
