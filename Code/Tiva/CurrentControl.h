@@ -1,13 +1,24 @@
-#ifndef CURRENT_H_
-#define CURRENT_H_
+#ifndef CURRENT_CONTROL_H_
+#define CURRENT_CONTROL_H_
 
 
+extern void CurrentControlIntHandler(void);
+
+void PI_controller(int motor, int reference, int actual);
+void setCurrent(int motor, int u);
+
+void get_mA(void);
+void get_counts(void);
+
+void get_current_gains(void);
+void set_current_gains(void);
+int getCounts(int motor, int phase);
+void reset_current_error(void);
+
+void counts_read(void);
 
 
-extern void Timer2IntHandler(void);
-
-int mA_read(void);
-void AD0_read(uint32_t * adcArray);
+void AD0_read(void);
 
 
 /**
@@ -31,15 +42,7 @@ extern void currentControlInit(void);
  */
 extern void setADCMux(int motor,int number);
 
-/**
- * @brief Filters ADC value
- *
- *
- * @param Void
- * @return Void
- *
- */
-extern void filterValues(void);
+
 
 /**
  * @brief Reads ADC values for each current sensor, using a complementary filter for A = 0.6
@@ -108,8 +111,7 @@ extern int32_t  tempRead1(void);
  */
 extern int32_t  tempRead2(void);
 
-extern void i2cInit(tI2CMInstance g_sI2CMSimpleInst);
-//extern void i2cIntHandler(void);
 
 
-#endif /* CURRENT_H_ */
+
+#endif /* CURRENT_CONTROL_H_ */

@@ -41,8 +41,8 @@
 #include "System.h"
 #include "Encoder.h"
 #include "Motor.h"
-#include "Control.h"
-#include "Current.h"
+#include "PositionControl.h"
+#include "CurrentControl.h"
 
 
 // TODO: motor driver 2 cs pin is actually motor driver 1's CS pin

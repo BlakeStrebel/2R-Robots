@@ -78,7 +78,8 @@ extern void safetyCheck(void); //explicit function to test for end conditions
  */
 extern void sensorUpdate(void); // Updates sensor data. Always call sensor update at beginning of loop!
 
-
+extern void i2cInit(tI2CMInstance g_sI2CMSimpleInst);
+//extern void i2cIntHandler(void);
 
 
 #endif /* R2R_H_ */

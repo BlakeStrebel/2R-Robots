@@ -2,9 +2,9 @@
 #include "System.h"
 #include "Encoder.h"
 #include "Motor.h"
-#include "Control.h"
+#include "PositionControl.h"
 #include "Utilities.h"
-#include "Current.h"
+#include "CurrentControl.h"
 
 #define BUF_SIZE 50
 
@@ -163,20 +163,28 @@ main(void)
                }
                case '1':    // Read Phase Currents in Counts
                {
-                   uint32_t adcArray[8];
-                   AD0_read(adcArray);
-                   //sprintf(buffer, "%d\r\n", adcArray[0]);
-                   //UART0write(buffer);
-                   //sprintf(buffer, "%d\r\n", adcArray[1]);
-                   //UART0write(buffer);
+                   get_counts();
                    break;
                }
                case '2':    // Read Current in mA
                {
-                   int current;
-                   current = mA_read();
-                   sprintf(buffer, "%d\r\n", current);
-                   UART0write(buffer);
+                   get_mA();
+                   break;
+               }
+               case '3':
+               {
+                   setMODE(ITEST);
+                   send_data();
+                   break;
+               }
+               case '4':
+               {
+                   set_current_gains();
+                   break;
+               }
+               case '5':
+               {
+                   get_current_gains();
                    break;
                }
                default:

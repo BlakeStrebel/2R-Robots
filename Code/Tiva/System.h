@@ -43,6 +43,9 @@
 #include "driverlib/systick.h"
 #include "utils/uartstdio.h"
 
+#define MOTOR1 1
+#define MOTOR2 2
+
 uint32_t ui32SysClock;
 uint32_t micros;
 

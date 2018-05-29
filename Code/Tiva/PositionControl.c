@@ -1,5 +1,6 @@
+#include "PositionControl.h"
 #include "System.h"
-#include "Control.h"
+#include "CurrentControl.h"
 #include "Utilities.h"
 #include "Encoder.h"
 #include "Motor.h"
@@ -30,6 +31,7 @@ void MotorTimerInit(void){
     SysCtlPeripheralEnable(SYSCTL_PERIPH_TIMER1); // Use timer 1
     TimerConfigure(TIMER1_BASE, TIMER_CFG_PERIODIC);
     TimerLoadSet(TIMER1_BASE, TIMER_A, ui32SysClock/1000-1); // Use timer A // activate every 1/2 of a second 120/120/2 = 0.5s
+    IntPrioritySet(INT_TIMER1A, 0x40); // Second highest priority
     IntEnable(INT_TIMER1A);
     TimerIntEnable(TIMER1_BASE, TIMER_TIMA_TIMEOUT);
     TimerEnable(TIMER1_BASE, TIMER_A);
@@ -39,18 +41,6 @@ void MotorTimerInit(void){
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPION);
     GPIOPinTypeGPIOOutput(GPIO_PORTN_BASE, GPIO_PIN_1);
     GPIOPinWrite(GPIO_PORTN_BASE,GPIO_PIN_1,GPIO_PIN_1);
-
-
-    //
-    // Set the INT_TIMER0A interrupt priority to the lowest priority.
-    //
-    //IntPrioritySet(INT_TIMER3A, 0xE0);
-    //
-    // Set the INT_TIMER1A interrupt priority to the highest priority.
-    //
-    //IntPrioritySet(INT_TIMER1A, 0);
-
-
 
     E1.u = 0;
     E2.u = 0;
@@ -160,6 +150,8 @@ void Timer1IntHandler(void)
     static int decctr = 0;  // counter for data decimation
     static int i = 0;   // trajectory index
 
+    TimerIntClear(TIMER1_BASE, TIMER_TIMA_TIMEOUT); // clear the interrupt flag
+
     encoderRead(); // update encoder values
     E1.actual = readMotor1RawRelative(); // read positions
     E2.actual = readMotor2RawRelative();
@@ -213,8 +205,6 @@ void Timer1IntHandler(void)
             break;
         }
     }
-
-    TimerIntClear(TIMER1_BASE, TIMER_TIMA_TIMEOUT); // clear the interrupt flag
 }
 
 // Calculate control effort and set pwm value to control motor

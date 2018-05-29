@@ -3,6 +3,7 @@
 
 
 #define NUM_SSI_DATA            8
+#define PWMPERIOD 4000
 // Data from motor driver 2
 uint32_t pui32DataTx[NUM_SSI_DATA];
 uint32_t pui32DataRx[NUM_SSI_DATA];
@@ -109,18 +110,13 @@ void pwmInit(void){
     PWMGenConfigure(PWM0_BASE, PWM_GEN_2, PWM_GEN_MODE_UP_DOWN |
                     PWM_GEN_MODE_NO_SYNC);
 
-    //
-    // Set the PWM period to 250Hz.  To calculate the appropriate parameter
-    // use the following equation: N = (1 / f) * SysClk.  Where N is the
-    // function parameter, f is the desired frequency, and SysClk is the
+    // Set the PWM frequency to 30000Hz
+    // To calculate the appropriate parameter use the following equation: N = (1 / f) * SysClk.
+    // Where N is the function parameter, f is the desired frequency, and SysClk is the
     // system clock frequency.
-    // In this case you get: (1 / 12500Hz) * 120MHz = 9600 cycles.  Note that
-    // the maximum period you can set is 2^16 - 1.
-    // TODO: modify this calculation to use the clock frequency that you are
-    // using.
-    //
-    PWMGenPeriodSet(PWM0_BASE, PWM_GEN_0, 9600);
-    PWMGenPeriodSet(PWM0_BASE, PWM_GEN_2, 9600);
+    // In this case you get: (1 / 30000Hz) * 120MHz = 4000 cycles
+    PWMGenPeriodSet(PWM0_BASE, PWM_GEN_0, PWMPERIOD);
+    PWMGenPeriodSet(PWM0_BASE, PWM_GEN_2, PWMPERIOD);
 
     //
     // Set PWM0 PD0 to a duty cycle of 25%.  You set the duty cycle as a
