@@ -11,17 +11,27 @@ static volatile unsigned int READ = 0, WRITE = 0; // circular buffer indexes
 
 void setMODE(mode newMODE) {  // Set mode
     MODE = newMODE;     // Update global MODE
+
+    if (MODE == ITEST)
+    {
+        setNclient(1000);
+    }
 }
 
 mode getMODE() {  // Return mode
     return MODE;
 }
 
-void setN(void)          // Recieve number of values to store in position data arrays from client
+void setN(void)          // Receive number of values to store in position data arrays from client
 {
     char buffer[10];            // Buffer holding number of samples
     UART0read(buffer,10);  // Read number of samples from client
     sscanf(buffer,"%d",&N);     // Update global N
+}
+
+void setNclient(int n)          // Receive number of values to store in position data arrays from client
+{
+    N = n;
 }
 
 int getN(void){
@@ -75,8 +85,8 @@ int buffer_read_position(int motor) {    // reads position from current buffer l
     return pos;
 }
 
-float buffer_read_u(int motor) {   // reads current from current buffer location; assumes buffer not empty
-    float u = 0;
+int buffer_read_u(int motor) {   // reads current from current buffer location; assumes buffer not empty
+    int u = 0;
     if (motor == 1)
     {
         u = M1.u[READ];
@@ -96,7 +106,7 @@ void buffer_read_increment() {  // increment the buffer read location
     }
 }
 
-void buffer_write(int M1_actPos, int M2_actPos, float M1_u, float M2_u) {   // write data to buffer
+void buffer_write(int M1_actPos, int M2_actPos, int M1_u, int M2_u) {   // write data to buffer
   if(!buffer_full()) {        // if the buffer is full the data is lost
     M1.actPos[WRITE] = M1_actPos;  // write motor position to buffer
     M2.actPos[WRITE] = M2_actPos;
@@ -118,9 +128,36 @@ void send_data(void)
 
     for(sent = 0; sent < (N/DECIMATION); ++sent) { // send the samples to the client
         while(buffer_empty()) { ; }                                             //wait for data to be in the queue
-        sprintf(msg,"%d %d %f %f\r\n",buffer_read_position(1), buffer_read_position(2), buffer_read_u(1), buffer_read_u(2));  // read from buffer
+        sprintf(msg,"%d %d %d %d\r\n",buffer_read_position(1), buffer_read_position(2), buffer_read_u(1), buffer_read_u(2));  // read from buffer
         UART0write(msg);                                                   // send data over uart
         buffer_read_increment();                                                // increment buffer read index
   }
 }
 
+int boundInt(int a, int n)
+{
+     if (a < -n)
+     {
+         a = -n;
+     }
+     else if (a > n)
+     {
+         a = n;
+     }
+
+     return a;
+}
+
+int maxInt(int a, int b)
+{
+    int max;
+    if (a > b)
+    {
+        max = a;
+    }
+    else
+    {
+        max = b;
+    }
+    return max;
+}

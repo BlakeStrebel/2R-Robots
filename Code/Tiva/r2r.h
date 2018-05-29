@@ -38,6 +38,7 @@
 #include "driverlib/pwm.h"
 #include "driverlib/timer.h"
 #include "driverlib/uart.h"
+#include "driverlib/adc.h"
 #include "utils/uartstdio.h"
 
 
@@ -77,6 +78,7 @@ extern void safetyCheck(void); //explicit function to test for end conditions
  */
 extern void sensorUpdate(void); // Updates sensor data. Always call sensor update at beginning of loop!
 
+<<<<<<< HEAD
 /*
  * ADC functions
  */
@@ -178,6 +180,8 @@ extern int32_t  tempRead1(void);
  */
 extern int32_t  tempRead2(void);
 
+=======
+>>>>>>> CurrentControl
 extern void i2cInit(tI2CMInstance g_sI2CMSimpleInst);
 //extern void i2cIntHandler(void);
 
