@@ -11,16 +11,16 @@ uint32_t ui32Index;
 int error_state;
 
 void shutdownNow(){
-    motor1ControlPWM(0); // turns off PWM
-    motor2ControlPWM(0); // turns off PWM
-    motor1Brake(); // shorts the output of the motor together
-    motor2Brake(); // shorts the output of the motor together
+    motorControlPWM(1, 0); // turns off PWM
+    motorControlPWM(2, 0); // turns off PWM
+    motorBrake(1); // shorts the output of the motor together
+    motorBrake(2); // shorts the output of the motor together
 }
 
 
 void motorSafetyCheck(){
-    float vel1 =  readMotor1Speed(); // get the speed of the motor
-    float vel2 = readMotor2Speed(); //get the speed of the motor
+    float vel1 = readMotorSpeed(1); // get the speed of the motor
+    float vel2 = readMotorSpeed(2); //get the speed of the motor
     if(abs(vel1)>10||abs(vel2)>10){ // if the speed is > 10 rev/s
         shutdownNow(); // shuts off the motor and turns on the brakes
         error_state = MOTOR_SPINNING_TOO_FAST; // set the error message
@@ -165,22 +165,24 @@ void motorDriverInit(void)
 
     while(SSIDataGetNonBlocking(SSI2_BASE, &pui32DataRx[0])){}
 
-    GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_3,0x00); // Pull CS pin low
+    GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_2,0x00); // Pull CS pin low
     SysCtlDelay(1000);
     SSIDataPut(SSI2_BASE, pui32DataTx[0]); // Send data
     SysCtlDelay(1000); // wait (at least 50ns)
-    GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_3,GPIO_PIN_3); // Being the CS pin high
+    GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_2,GPIO_PIN_2); // Being the CS pin high
+    SysCtlDelay(1000);
     SSIDataGet(SSI2_BASE, &pui32DataRx[0]); // Get the data
 
     while(SSIBusy(SSI2_BASE)){}
 
     while(SSIDataGetNonBlocking(SSI2_BASE, &pui32DataRx[0])){}
 
-    GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_2,0x00); // Pull CS pin low
+    GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_3,0x00); // Pull CS pin low
     SysCtlDelay(1000);
     SSIDataPut(SSI2_BASE, pui32DataTx[0]); // Send data
     SysCtlDelay(1000); // wait (at least 50ns)
-    GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_2,GPIO_PIN_2); // Being the CS pin high
+    GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_3,GPIO_PIN_3); // Being the CS pin high
+    SysCtlDelay(1000);
     SSIDataGet(SSI2_BASE, &pui32DataRx[0]); // Get the data
 
     while(SSIBusy(SSI2_BASE)){}
@@ -189,18 +191,20 @@ void motorDriverInit(void)
 /*
  * Wrapper function that turns on the brakes for the motor and sets pwm to 0
  */
-void motor1Brake(void){
-    motor1ControlPWM(0);
-    GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_0,GPIO_PIN_0); // forward direction
-    GPIOPinWrite(GPIO_PORTP_BASE,GPIO_PIN_4,0); // Set brake pin to low, brake!
-}
-/*
- * Wrapper function that turns on the brakes for the motor and sets pwm to 0
- */
-void motor2Brake(void){
-    motor2ControlPWM(0);
-    GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_2,GPIO_PIN_2); // forward direction
-    GPIOPinWrite(GPIO_PORTP_BASE,GPIO_PIN_5,0); // Set brake pin to low, brake!
+void motorBrake(int motor_number)
+{
+    motorControlPWM(motor_number, 0);
+    if (motor_number == 1)
+    {
+        GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_0,GPIO_PIN_0); // forward direction
+        GPIOPinWrite(GPIO_PORTP_BASE,GPIO_PIN_4,0); // Set brake pin to low, brake!
+    }
+    else
+    {
+        GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_2,GPIO_PIN_2); // forward direction
+        GPIOPinWrite(GPIO_PORTP_BASE,GPIO_PIN_5,0); // Set brake pin to low, brake!
+    }
+
 }
 
 /*
@@ -211,50 +215,41 @@ void motor2Brake(void){
        // Motor enable pins, PK1: 1, PK3: 2
        // Motor brake pins, PP4: 1, PP5: 2
  */
-void motor1ControlPWM(int control){
-    if (control>0){
-        // Positive direction
-        GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_0,GPIO_PIN_0); // Set to HIGH  - forward
-        GPIOPinWrite(GPIO_PORTP_BASE,GPIO_PIN_4,GPIO_PIN_4); // Set to HIGH - no braking
-        motor1PWM(control); // set the pwm
-    }
-    else if (control<0) {
-        // Negative direction
-        GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_0,0); // set to LOW - reverse
+void motorControlPWM(int motor_number, int control)
+{
+    if (motor_number == 1)
+    {
         GPIOPinWrite(GPIO_PORTP_BASE,GPIO_PIN_4,GPIO_PIN_4); // no braking
-        motor1PWM(-1*control); // set the pwm, but since control is negative, flip the sign
+        if (control >= 0)
+        {
+            // Positive direction
+            GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_0,GPIO_PIN_0); // Set to HIGH  - forward
+            motorPWM(1, control); // set the pwm
+        }
+        else
+        {
+            // Negative direction
+            GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_0,0); // set to LOW - reverse
+            motorPWM(1, -1*control); // set the pwm, but since control is negative, flip the sign
+        }
     }
-    else {
-        GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_0,GPIO_PIN_0);
-        GPIOPinWrite(GPIO_PORTP_BASE,GPIO_PIN_4,GPIO_PIN_4); // Set brake pin to high, free to move.
-        motor1PWM(0); // ensure pwm is set to zero
+    else
+    {
+        GPIOPinWrite(GPIO_PORTP_BASE,GPIO_PIN_5,GPIO_PIN_5); // Set to HIGH - no braking
+        if (control >= 0)
+        {
+            // Positive direction
+            GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_0,GPIO_PIN_0); // Set to HIGH  - forward
+            motorPWM(2, control); // set the pwm
+        }
+        else
+        {
+            // Negative direction
+            GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_0,0); // set to LOW - reverse
+            motorPWM(2, -1*control); // set the pwm, but since control is negative, flip the sign
+        }
     }
 }
-
-/*
- * Wrapper function that takes in a control signal for the 1xPWM mode
- * if control is zero = brake!
- */
-void motor2ControlPWM(int control){
-    if (control>0){
-        // Positive direction
-        GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_2,GPIO_PIN_2); // Set to HIGH  - forward
-        GPIOPinWrite(GPIO_PORTP_BASE,GPIO_PIN_5,GPIO_PIN_5); // Set to HIGH - no braking
-        motor2PWM(control);
-    }
-    else if (control<0) {
-        // Negative direction
-        GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_2,0); // set to LOW - reverse
-        GPIOPinWrite(GPIO_PORTP_BASE,GPIO_PIN_5,GPIO_PIN_5); // Set to HIGH - no braking
-        motor2PWM(-1*control);
-    }
-    else {
-        GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_2,GPIO_PIN_2); // Set to HIGH - forward
-        GPIOPinWrite(GPIO_PORTP_BASE,GPIO_PIN_5,GPIO_PIN_5); // Set to HIGH - no braking
-        motor2PWM(0); // free to turn
-    }
-}
-
 
 /*
  * Wrapper function to write a PWM value to the motor
@@ -265,17 +260,14 @@ void motor2ControlPWM(int control){
  * motorDriverInit()
  */
 
-void motor1PWM(int pwmValue){
+void motorPWM(int motor_number, int pwmValue)
+{
     // assuming PWM has been initialized.
-    PWMPulseWidthSet(PWM0_BASE, PWM_OUT_0,pwmValue); // set pwm
-
+    if (motor_number == 1)
+        PWMPulseWidthSet(PWM0_BASE, PWM_OUT_0,pwmValue); // set pwm
+    else
+        PWMPulseWidthSet(PWM0_BASE, PWM_OUT_4,pwmValue); // set pwm
 }
-
-void motor2PWM(int pwmValue){
-    // assuming PWM has been initialized.
-    PWMPulseWidthSet(PWM0_BASE, PWM_OUT_4,pwmValue);  // set pwm
-}
-
 
 /*
  * Reads the motor driver status over SPI

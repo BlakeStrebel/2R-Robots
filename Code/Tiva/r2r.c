@@ -130,7 +130,8 @@ void safetyCheck(void){
  */
 void sensorUpdate(void){
     //adcRead();
-    encoderRead();
+    encoderRead(1);
+    encoderRead(2);
 }
 
 /*

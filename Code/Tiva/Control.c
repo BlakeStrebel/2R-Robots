@@ -151,12 +151,12 @@ void set_motor_pwm(int motor, int value)
 {
     if (motor == 1)
     {
-        motor1ControlPWM(value);
+        motorControlPWM(1, value);
         E1.u = value;
     }
     else if (motor == 2)
     {
-        motor2ControlPWM(value);
+        motorControlPWM(2, value);
         E2.u = value;
     }
 }
@@ -176,11 +176,12 @@ Timer1IntHandler(void)
     static int decctr = 0;  // counter for data decimation
     static int i = 0;   // trajectory index
 
-    encoderRead(); // update encoder values
-    E1.actual = readMotor1RawRelative(); // read positions
-    E2.actual = readMotor2RawRelative();
-    E1.raw = readMotor1Raw();
-    E2.raw = readMotor2Raw();
+    encoderRead(1); // update encoder values
+    encoderRead(2); // update encoder values
+    E1.actual = readMotorRawRelative(1); // read positions
+    E2.actual = readMotorRawRelative(2);
+    E1.raw = readMotorRaw(1);
+    E2.raw = readMotorRaw(2);
     switch(getMODE())
     {
         case IDLE:

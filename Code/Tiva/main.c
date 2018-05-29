@@ -25,6 +25,44 @@ main(void)
 
     char buffer[BUF_SIZE];
 
+
+    /*
+    while(1)
+    {
+        while(UARTCharsAvail(UART0_BASE))
+        {
+            switch (UARTCharGet(UART0_BASE))
+            {
+                case 1:
+                    zeroEncoderCount();
+                    GPIOPinWrite(GPIO_PORTP_BASE,GPIO_PIN_5,0);
+                    break;
+                case 2:
+
+
+                case 99: // Rotate Motor 1
+
+                    motor1ControlPWM((int)(9600 * UARTFloatGet(UART0_BASE) / 100));
+                    break;
+                case 100: // Rotate Motor 2
+
+                    motor2ControlPWM((int)(9600 * UARTFloatGet(UART0_BASE) / 100));
+                    break;
+                case 101: // Rotate both motors
+
+                    motor1ControlPWM((int)(9600 * UARTFloatGet(UART0_BASE) / 100));
+                    motor2ControlPWM((int)(9600 * UARTFloatGet(UART0_BASE) / 100));
+                    break;
+                case 102: // Brake both motors
+
+                    break;
+
+            }
+        }
+    }
+
+*/
+
     // Loop Forever
     while(1)
     {
@@ -34,8 +72,8 @@ main(void)
                case 'a':    // Read Raw Encoder Values
                {
                    int a1, a2;
-                   a1 = readMotor1Raw();
-                   a2 = readMotor2Raw();
+                   a1 = readMotorRaw(1);
+                   a2 = readMotorRaw(2);
                    sprintf(buffer, "%d\r\n", a1);
                    UART0write(buffer);
                    sprintf(buffer, "%d\r\n", a2);
@@ -45,8 +83,8 @@ main(void)
                case 'b':    // Read Relative Encoder Angle
                {
                    int b1, b2;
-                   b1 = readMotor1RawRelative();
-                   b2 = readMotor2RawRelative();
+                   b1 = readMotorRawRelative(1);
+                   b2 = readMotorRawRelative(2);
                    sprintf(buffer, "%d\r\n", b1);
                    UART0write(buffer);
                    sprintf(buffer, "%d\r\n", b2);
@@ -150,8 +188,8 @@ main(void)
                }
                case 'r': // zero encoders
                {
-                   zeroMotor1RawRelative();
-                   zeroMotor2RawRelative();
+                   zeroMotorRawRelative(1);
+                   zeroMotorRawRelative(2);
                    break;
 
                }
@@ -175,4 +213,5 @@ main(void)
                }
            }
     }
+
 }

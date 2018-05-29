@@ -1,6 +1,6 @@
 function Client()
 %   provides a menu for interfacing with hopper robot system
-Tiva_port = 'COM4'; % Tiva board serial port
+Tiva_port = 'COM7'; % Tiva board serial port
 DECIMATION = 10;
 
 % Opening COM connection
@@ -11,6 +11,7 @@ end
 
 % configure ports
 Tiva_Serial = serial(Tiva_port, 'BaudRate', 115200, 'FlowControl', 'hardware','Timeout',15); 
+%Tiva_Serial = serial(Tiva_port, 'BaudRate', 115200, 'Timeout',15); 
 
 fprintf('Opening port %s....\n',Tiva_port);
 
@@ -45,6 +46,7 @@ while ~has_quit
             absPos1 = fscanf(Tiva_Serial,'%d');
             absPos2 = fscanf(Tiva_Serial,'%d');
             fprintf('The absolute motor angles are:\nMotor 1: %3.2f degrees Motor 2: %3.2f degrees\n',absPos1/16383*360,absPos2/16383*360);
+            %fprintf('The absolute motor angles are:\nMotor 1: %d degrees Motor 2: %d degrees\n',absPos1,absPos2);
         case 'b'
             relPos1 = fscanf(Tiva_Serial,'%d');
             relPos2 = fscanf(Tiva_Serial,'%d');
