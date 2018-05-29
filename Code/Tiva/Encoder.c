@@ -113,15 +113,15 @@ void encoderRead(void){
 
     for(ui32Index2 = 0; ui32Index2 < NUM_SSI_DATA2; ui32Index2++)
     {
-      pui32DataRx2[ui32Index2] &= 0x00FF; // ensure that the data is 8 bit
+      //pui32DataRx2[ui32Index2] &= 0x00FF; // ensure that the data is 8 bit
       SSIDataGet(SSI0_BASE, &pui32DataRx2[ui32Index2]); // get the data that was shifted in
     }
 
     // The angle is the first 14 bits of the response.
     // TODO: check that the data RX2 is overwritten
-    int num = pui32DataRx2[0]<<6; // 1 1 1 1 1 1 1 1 0 0 0 0 0 0, bit shift 6 to the left
+    int num = pui32DataRx2[0] << 6; // 1 1 1 1 1 1 1 1 0 0 0 0 0 0, bit shift 6 to the left
     num = num | (pui32DataRx2[1]>>2); // 1 1 1 1 1 1 1 1 0 0 0 0 0 0 | 0 0 1 1 1 1 1 1, or it with next value in array bit shifted right by 2 to get the 14 bit encoder data
-    encoderVal[0] = num;
+    encoderVal[0] = (pui32DataRx2[0] << 6) | (pui32DataRx2[1] >> 2);
     // reading speed in rev/s * 10
     num = pui32DataRx2[2]<<8; // bit shift 8 to the left
     num = num | pui32DataRx2[3]; // or it with the next value in array
