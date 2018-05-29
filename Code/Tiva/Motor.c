@@ -27,7 +27,7 @@ void motorSafetyCheck(){
         error_state = MOTOR_SPINNING_TOO_FAST; // set the error message
     }
     if (tempRead1()>TEMP_LIMIT||tempRead2()>TEMP_LIMIT){
-      shudownNow();// shuts off the motor and turns on the brakes
+      shutdownNow();// shuts off the motor and turns on the brakes
       error_state = MOTOR_TOO_HOT;// set the error message
     }
 

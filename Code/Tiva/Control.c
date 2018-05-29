@@ -160,16 +160,13 @@ void set_motor_pwm(int motor, int value)
 }
 
 
-void
-Timer2IntHandler(void)
+void Timer2IntHandler(void)
 {
     //adcRead();
     TimerIntClear(TIMER2_BASE, TIMER_TIMA_TIMEOUT);
 }
 
-
-void
-Timer1IntHandler(void)
+void Timer1IntHandler(void)
 {
     static int decctr = 0;  // counter for data decimation
     static int i = 0;   // trajectory index
@@ -289,7 +286,6 @@ void setDecogging(void) // Turn motor decogging on/off
     sscanf(buffer,"%d",&decog);
     DECOGGING = decog;
 }
-
 
 void load_position_trajectory(int motor)      // Load trajectory for tracking
 {
