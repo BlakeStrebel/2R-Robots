@@ -15,11 +15,11 @@
 
 
 typedef struct {
-    uint32_t position_count;
-    uint32_t velocity_count;
+    int position_count;
+    int velocity_count;
     int zero_count;
     int previous_count;
-    int round;
+    int continuous_count;
 } encoder_states;
 
 
@@ -110,7 +110,5 @@ extern float readMotorSpeed(int motor_number);
 extern float readMotorRadRelative(int motor_number);
 
 extern float readMotorRad(int motor_number);
-
-extern void zeroEncoderCount(int motor_number);
 
 #endif /* ENCODER_H_ */

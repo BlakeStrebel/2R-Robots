@@ -3,10 +3,10 @@
 
 
 // Data from encoder 2
-#define NUM_SSI_DATA2           5
-uint32_t pui32DataTx2[NUM_SSI_DATA2] = {0};
-uint32_t pui32DataRx2[NUM_SSI_DATA2];
-uint32_t ui32Index2;
+#define NUM_ENCODER_DATA           5
+uint32_t encoderDataTx[NUM_ENCODER_DATA] = {0};
+uint32_t encoderDataRx[NUM_ENCODER_DATA];
+uint32_t encoderMsgIndex;
 
 static volatile encoder_states encoder[3];
 
@@ -64,6 +64,8 @@ void encoderSPIInit(void)
     // Set the initial encoder values
     encoderRead(1);
     encoderRead(2);
+    zeroMotorRawRelative(1);
+    zeroMotorRawRelative(2);
     encoder[1].previous_count = readMotorRaw(1);
     encoder[2].previous_count = readMotorRaw(2);
 }
@@ -82,18 +84,18 @@ void encoderSPIInit(void)
  */
 void encoderRead(int motor_number)
 {
-    pui32DataTx2[0] = 0x73; // "s" return readhead temperature
-
+    encoderDataTx[0] = 0x73; // "s" return readhead temperature
+    encoder[motor_number].previous_count = encoder[motor_number].position_count; // save the last angle for comparision the next time.
     if (motor_number == 1)
     {
-        while(SSIDataGetNonBlocking(SSI0_BASE, &pui32DataRx2[0])){} // clear out the SSI buffer
+        while(SSIDataGetNonBlocking(SSI0_BASE, &encoderDataRx[0])){} // clear out the SSI buffer
 
         GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_0,0x00); // SSI enable pin pull low to start data transfer
 
         SysCtlDelay(10); // need to wait before we start sending data (spec sheet > 10ns)
 
-        for(ui32Index2 = 0; ui32Index2 < NUM_SSI_DATA2; ui32Index2++) // for the total length of the data
-            SSIDataPut(SSI0_BASE, pui32DataTx2[ui32Index2]); // put data into the buffer
+        for(encoderMsgIndex = 0; encoderMsgIndex < NUM_ENCODER_DATA; encoderMsgIndex++) // for the total length of the data
+            SSIDataPut(SSI0_BASE, encoderDataTx[encoderMsgIndex]); // put data into the buffer
 
         while(SSIBusy(SSI0_BASE)) {} // don't do anything while SSI is writing to the buffer
 
@@ -101,20 +103,20 @@ void encoderRead(int motor_number)
 
         SysCtlDelay(10);
 
-        for(ui32Index2 = 0; ui32Index2 < NUM_SSI_DATA2; ui32Index2++)
-            SSIDataGet(SSI0_BASE, &pui32DataRx2[ui32Index2]); // get the data that was shifted in
+        for(encoderMsgIndex = 0; encoderMsgIndex < NUM_ENCODER_DATA; encoderMsgIndex++)
+            SSIDataGet(SSI0_BASE, &encoderDataRx[encoderMsgIndex]); // get the data that was shifted in
     }
     else
     {
         // Read the other encoder
-        while(SSIDataGetNonBlocking(SSI1_BASE, &pui32DataRx2[0])) {}  // clear out the SSI buffer
+        while(SSIDataGetNonBlocking(SSI1_BASE, &encoderDataRx[0])) {}  // clear out the SSI buffer
 
         GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_1,0x00); // SSI enable pin pull low to start data transfer
 
         SysCtlDelay(10); // need to wait before we start sending data (spec sheet > 10ns)
 
-        for(ui32Index2 = 0; ui32Index2 < NUM_SSI_DATA2; ui32Index2++)// for the total length of the data
-            SSIDataPut(SSI1_BASE, pui32DataTx2[ui32Index2]); // put data into the buffer
+        for(encoderMsgIndex = 0; encoderMsgIndex < NUM_ENCODER_DATA; encoderMsgIndex++)// for the total length of the data
+            SSIDataPut(SSI1_BASE, encoderDataTx[encoderMsgIndex]); // put data into the buffer
 
         while(SSIBusy(SSI1_BASE)){} // don't do anything while SSI is writing to the buffer
 
@@ -122,22 +124,31 @@ void encoderRead(int motor_number)
 
         SysCtlDelay(10);
 
-        for(ui32Index2 = 0; ui32Index2 < NUM_SSI_DATA2; ui32Index2++)
-            SSIDataGet(SSI1_BASE, &pui32DataRx2[ui32Index2]);// get the data that was shifted in
+        for(encoderMsgIndex = 0; encoderMsgIndex < NUM_ENCODER_DATA; encoderMsgIndex++)
+            SSIDataGet(SSI1_BASE, &encoderDataRx[encoderMsgIndex]);// get the data that was shifted in
     }
     // TODO: check that the data RX2 is overwritten
     // The first element bit shift 6 to the left combining with the next element bit shifted right by 2 to get the 14 bits encoder data.
-    encoder[motor_number].position_count = (pui32DataRx2[0] << 6) | (pui32DataRx2[1] >> 2);
+    encoder[motor_number].position_count = (encoderDataRx[0] << 6) | (encoderDataRx[1] >> 2);
 
     // reading speed in rev/s * 10
     // bit shift 8 to the left and OR it with the next value in array
-    encoder[motor_number].velocity_count = (pui32DataRx2[2] << 8) | pui32DataRx2[3];
+    encoder[motor_number].velocity_count = (encoderDataRx[2] << 8) | encoderDataRx[3];
+
+    // Calculate the relative counts.
+    int angle_gap = encoder[motor_number].position_count - encoder[motor_number].previous_count; // difference in angles
+
+    if (angle_gap > 8000) // we crossed over a singularity, if greater than means that we went from 1 to 360, backwards, so take away counts
+        encoder[motor_number].continuous_count -= 16383; // 14 bits = 16383 counts
+    else if (angle_gap < -8000)// we crossed over a singularity, if less than means that we went from 360 to 1, forwards, so add counts
+        encoder[motor_number].continuous_count += 16383; // 14 bits = 16383 counts
+    encoder[motor_number].continuous_count += angle_gap; // add or - 360 from our relative angle - the zeroing, return the angle.
 }
 
 void zeroMotorRawRelative(int motor_number)
 {
-    encoder[motor_number].round = 0; // zero the modifier
-    encoder[motor_number].zero_count = readMotorRaw(motor_number); // read the absolute value and set it as zeroing modifier.
+    encoder[motor_number].continuous_count = 0; // zero the modifier
+    encoder[motor_number].zero_count = encoder[motor_number].position_count; // read the absolute value and set it as zeroing modifier.
 }
 
 /*
@@ -154,16 +165,10 @@ void zeroMotorRawRelative(int motor_number)
  */
 int readMotorRawRelative(int motor_number)
 {
-    int angle_gap = readMotorRaw(motor_number) - encoder[motor_number].previous_count; // difference in angles
-    if (angle_gap>8000){ // we crossed over a singularity, if greater than means that we went from 1 to 360, backwards, so take away counts
-        encoder[motor_number].round--; // 14 bits = 16383 counts
-    }
-    else if (angle_gap<-8000){// we crossed over a singularity, if less than means that we went from 360 to 1, forwards, so add counts
-        encoder[motor_number].round++;// 14 bits = 16383 counts
-    }
-    int relative_angle = readMotorRaw(motor_number)+encoder[motor_number].round*16383-encoder[motor_number].zero_count; // add or - 360 from our relative angle - the zeroing, return the angle.
-    encoder[motor_number].previous_count = readMotorRaw(motor_number); // save the last angle for comparision the next time
-    return relative_angle;
+    if (motor_number == 1)
+        return encoder[1].continuous_count;
+    else
+        return encoder[2].continuous_count - encoder[1].continuous_count;
 }
 
 float readMotorSpeed(int motor_number)
@@ -183,7 +188,12 @@ float readMotorRadRelative(int motor_number)
 
 int readMotorRaw(int motor_number)
 {
-    return encoder[motor_number].position_count; // read the raw encoder values
+    int zero = encoder[motor_number].zero_count;
+    int now = encoder[motor_number].position_count;
+    if (now >= zero)
+        return now - zero;
+    else
+        return 16383 - zero + now;
 }
 
 float readMotorAngle(int motor_number)
@@ -196,9 +206,3 @@ float readMotorRad(int motor_number)
 {
     return readMotorRaw(motor_number)/16383*2*3.14;
 }
-
-void zeroEncoderCount(int motor_number)
-{
-
-}
-

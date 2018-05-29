@@ -26,7 +26,7 @@ main(void)
     char buffer[BUF_SIZE];
 
 
-    /*
+/*
     while(1)
     {
         while(UARTCharsAvail(UART0_BASE))
@@ -34,7 +34,8 @@ main(void)
             switch (UARTCharGet(UART0_BASE))
             {
                 case 1:
-                    zeroEncoderCount();
+                    zeroEncoderCount(1);
+                    zeroEncoderCount(2);
                     GPIOPinWrite(GPIO_PORTP_BASE,GPIO_PIN_5,0);
                     break;
                 case 2:
@@ -42,16 +43,16 @@ main(void)
 
                 case 99: // Rotate Motor 1
 
-                    motor1ControlPWM((int)(9600 * UARTFloatGet(UART0_BASE) / 100));
+                    //motor1ControlPWM((int)(9600 * UARTFloatGet(UART0_BASE) / 100));
                     break;
                 case 100: // Rotate Motor 2
 
-                    motor2ControlPWM((int)(9600 * UARTFloatGet(UART0_BASE) / 100));
+                    //motor2ControlPWM((int)(9600 * UARTFloatGet(UART0_BASE) / 100));
                     break;
                 case 101: // Rotate both motors
 
-                    motor1ControlPWM((int)(9600 * UARTFloatGet(UART0_BASE) / 100));
-                    motor2ControlPWM((int)(9600 * UARTFloatGet(UART0_BASE) / 100));
+                    //motor1ControlPWM((int)(9600 * UARTFloatGet(UART0_BASE) / 100));
+                    //motor2ControlPWM((int)(9600 * UARTFloatGet(UART0_BASE) / 100));
                     break;
                 case 102: // Brake both motors
 
@@ -60,7 +61,6 @@ main(void)
             }
         }
     }
-
 */
 
     // Loop Forever
