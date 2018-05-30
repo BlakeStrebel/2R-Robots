@@ -4,6 +4,7 @@
 #include "Motor.h"
 #include "Control.h"
 #include "Utilities.h"
+#include "math.h"
 
 #define BUF_SIZE 50
 
@@ -24,9 +25,10 @@ main(void)
     r2rDefaultInit();
 
     char buffer[BUF_SIZE];
+    zeroMotorRawRelative(1);
+    zeroMotorRawRelative(2);
 
 
-/*
     while(1)
     {
         while(UARTCharsAvail(UART0_BASE))
@@ -34,35 +36,38 @@ main(void)
             switch (UARTCharGet(UART0_BASE))
             {
                 case 1:
-                    zeroEncoderCount(1);
-                    zeroEncoderCount(2);
-                    GPIOPinWrite(GPIO_PORTP_BASE,GPIO_PIN_5,0);
+                    zeroMotorRawRelative(1);
+                    zeroMotorRawRelative(2);
                     break;
                 case 2:
-
-
-                case 99: // Rotate Motor 1
-
-                    //motor1ControlPWM((int)(9600 * UARTFloatGet(UART0_BASE) / 100));
+                    UART0FloatPut(2 * M_PI * readMotorRawRelative(1) / 16383);
                     break;
-                case 100: // Rotate Motor 2
-
-                    //motor2ControlPWM((int)(9600 * UARTFloatGet(UART0_BASE) / 100));
+                case 3:
+                    UART0FloatPut(2 * M_PI * readMotorRawRelative(2) / 16383);
                     break;
-                case 101: // Rotate both motors
-
-                    //motor1ControlPWM((int)(9600 * UARTFloatGet(UART0_BASE) / 100));
-                    //motor2ControlPWM((int)(9600 * UARTFloatGet(UART0_BASE) / 100));
+                case 4:
+                    UART0FloatPut(2 * M_PI * readMotorRawRelative(1) / 16383);
+                    UART0FloatPut(2 * M_PI * readMotorRawRelative(2) / 16383);
                     break;
-                case 102: // Brake both motors
-
+                case 5: // Rotate Motor 1
+                    motorControlPWM(1, (int)(96 * UART0FloatGet()));
+                    motorControlPWM(2, 0);
                     break;
-
+                case 6: // Rotate Motor 2
+                    motorControlPWM(1, 0);
+                    motorControlPWM(2, (int)(96 * UART0FloatGet()));
+                    break;
+                case 7: // Rotate both motors
+                    motorControlPWM(1, (int)(96 * UART0FloatGet()));
+                    motorControlPWM(2, (int)(96 * UART0FloatGet()));
+                    break;
+                case 8:
+                    break;
             }
         }
     }
-*/
 
+/*
     // Loop Forever
     while(1)
     {
@@ -213,5 +218,5 @@ main(void)
                }
            }
     }
-
+*/
 }

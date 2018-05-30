@@ -126,3 +126,41 @@ void timeInt(){
 uint32_t getTime(){
     return micros; //return the counter
 }
+
+void UART0IntPut(int value)
+{
+    uint8_t *byte;
+    byte = &value;
+    int i;
+    for (i = 0; i < 4; i++)
+        UARTCharPut(UART0_BASE, *byte++);
+}
+
+void UART0FloatPut(float value)
+{
+    uint8_t *byte;
+    byte = &value;
+    int i;
+    for (i = 0; i < 4; i++)
+        UARTCharPut(UART0_BASE, *byte++);
+}
+
+void UART0ArrayPut(int number, float * value)
+{
+    uint8_t *byte;
+    byte = &value;
+    int i;
+    for (i = 0; i < number * 4; i++)
+        UARTCharPut(UART0_BASE, *byte++);
+}
+
+float UART0FloatGet()
+{
+    char recev[4];
+    float *getfloat;
+    int i;
+    for (i = 0; i < 4; i++)
+        recev[i] = UARTCharGet(UART0_BASE);
+    getfloat = &recev;
+    return *getfloat;
+}

@@ -1,4 +1,4 @@
 function statenew = timeSave(stateold, data)
 statenew = stateold;
-statenew.t = data(1);
+statenew.t = floor(data(1) * 1000);
 end

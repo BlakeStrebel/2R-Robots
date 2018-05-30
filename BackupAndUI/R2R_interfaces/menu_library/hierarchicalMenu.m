@@ -117,7 +117,7 @@ menu(id) = menu(1);
 menu(id).parent = 9;
 menu(id).titledata = true;
 menu(id).save = @timeSave;
-menu(id).process = @(state) timeSend;
+menu(id).process = @(state) timeSend(state.t, serial);
 menu(id).backup = @timeGet;
 menu(id).title = ['                            Reading time %9.4f s\n        ', ...    
                 ones(1, 64) * '-', '\n'];
@@ -131,7 +131,7 @@ menu(id).symbol = 's';
 menu(id).name = 'Start reading';
 menu(id).parent = 10;
 menu(id).save = @(state, data) trajectorySave(state, data, 1);
-menu(id).process = @(state) trajectoryPlot(state.t, 1);
+menu(id).process = @(state) trajectoryPlot(state.t, 1, serial);
 menu(id).title = ['                    Motor 1 position plotted in the figure\n          ', ...    
                 ones(1, 60) * '-', '\n'];
 menu(id).children = 12;
@@ -143,7 +143,7 @@ menu(id) = menu(1);
 menu(id).symbol = 'e';
 menu(id).name = 'Export trajectory';
 menu(id).parent = 11;
-menu(id).process = @(state) trajectoryExport(state, 1, 'o');
+menu(id).process = @(state) trajectoryExport(state.traj(:, 1));
 menu(id).title = ['                           Motor 1 trajectory saved\n            ', ...                                                
                 ones(1, 56) * '-', '\n'];
             
@@ -191,7 +191,7 @@ id = 18;
 menu(id) = menu(11);
 menu(id).parent = 17;
 menu(id).save = @(state, data) trajectorySave(state, data, 2);
-menu(id).process = @(state) trajectoryPlot(state, 2);
+menu(id).process = @(state) trajectoryPlot(state.t, 2, serial);
 menu(id).title = ['                    Motor 2 position plotted in the figure\n          ', ...    
                 ones(1, 60) * '-', '\n'];
 menu(id).children = 19;
@@ -201,7 +201,7 @@ menu(id).children = 19;
 id = 19;
 menu(id) = menu(12);
 menu(id).parent = 18;
-menu(id).process = @(state) trajectoryExport(state, 2, 'o');
+menu(id).process = @(state) trajectoryExport(state.traj(:, 2));
 menu(id).title = ['                           Motor 2 trajectory saved\n            ', ...                                                
                 ones(1, 56) * '-', '\n'];
                
@@ -250,7 +250,7 @@ id = 25;
 menu(id) = menu(11);
 menu(id).parent = 24;
 menu(id).save = @(state, data) trajectorySave(state, data, 3);
-menu(id).process = @(state) trajectoryPlot(state, 3);
+menu(id).process = @(state) trajectoryPlot(state.t, 3, serial);
 menu(id).title = ['                  Both motor positions plotted in the figure\n          ', ...                                       
                 ones(1, 60) * '-', '\n'];
 menu(id).children = 26;
@@ -260,7 +260,7 @@ menu(id).children = 26;
 id = 26;
 menu(id) = menu(12);
 menu(id).parent = 25;
-menu(id).process = @(state) trajectoryExport(state, 3, 'o');
+menu(id).process = @(state) trajectoryExport(state.traj);
 menu(id).title = ['                        Both motor trajectories saved\n            ', ...                                           
                 ones(1, 56) * '-', '\n'];
             
@@ -348,7 +348,8 @@ menu(id) = menu(12);
 menu(id).symbol = 'w';
 menu(id).name = 'Export trajectory with desired';
 menu(id).parent = 32;
-menu(id).process = @(state) trajectoryExport(state, 1, 'w');
+menu(id).process = @(state) trajectoryExport([state.traj(:, 1), ...
+                                              state.dtraj(:, 1)]);
 menu(id).title = ['               Desired and actual trajecotories of Motor 1 saved\n              ', ...                                                
                 ones(1, 52) * '-', '\n'];         
             
@@ -360,7 +361,7 @@ menu(id) = menu(12);
 menu(id).symbol = 'o';
 menu(id).name = 'Export trajectory without desired';
 menu(id).parent = 32;
-menu(id).process = @(state) trajectoryExport(state, 1, 'o');
+menu(id).process = @(state) trajectoryExport(state.traj(:, 1));
 menu(id).title = ['                        Motor 1 actual trajectory saved\n              ', ...                                                
                 ones(1, 52) * '-', '\n'];
             
@@ -449,7 +450,7 @@ menu(id).children = [44, 45];
 id = 44;
 menu(id) = menu(33);
 menu(id).parent = 43;
-menu(id).process = @(state) trajectoryExport(state, 2, 'w');
+menu(id).process = @(state) trajectoryExport([state.traj(:, 2), state.dtraj(:, 2)]);
 menu(id).title = ['               Desired and actual trajecotories of Motor 2 saved\n              ', ...                                                
                 ones(1, 52) * '-', '\n'];         
             
@@ -459,7 +460,7 @@ menu(id).title = ['               Desired and actual trajecotories of Motor 2 sa
 id = 45;
 menu(id) = menu(34);
 menu(id).parent = 43;
-menu(id).process = @(state) trajectoryExport(state, 2, 'o');
+menu(id).process = @(state) trajectoryExport(state.traj(:, 2));
 menu(id).title = ['                        Motor 2 actual trajectory saved\n              ', ...                                                
                 ones(1, 52) * '-', '\n'];
             
@@ -547,7 +548,7 @@ menu(id).children = [55, 56];
 id = 55;
 menu(id) = menu(33);
 menu(id).parent = 54;
-menu(id).process = @(state) trajectoryExport(state, 3, 'w');
+menu(id).process = @(state) trajectoryExport([state.traj, state.dtraj]);
 menu(id).title = ['             Desired and actual trajecotories of both motors saved\n              ', ...                                                
                 ones(1, 52) * '-', '\n'];         
             
@@ -557,7 +558,7 @@ menu(id).title = ['             Desired and actual trajecotories of both motors 
 id = 56;
 menu(id) = menu(34);
 menu(id).parent = 54;
-menu(id).process = @(state) trajectoryExport(state, 3, 'o');
+menu(id).process = @(state) trajectoryExport(state.traj);
 menu(id).title = ['                      Both motor actual trajectories saved\n              ', ...                                                
                 ones(1, 52) * '-', '\n'];
             

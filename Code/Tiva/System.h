@@ -109,4 +109,8 @@ extern void timeInit(void);
 extern uint32_t getTime(void);
 extern void timeInt(void);
 
+extern void UART0IntPut(int value);
+extern void UART0FloatPut(float value);
+extern float UART0FloatGet();
+
 #endif /* SYSTEM_H_ */
