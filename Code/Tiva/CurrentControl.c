@@ -35,9 +35,9 @@ void currentControlInit(void){
     SysCtlPeripheralEnable(SYSCTL_PERIPH_ADC0);
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOE);
     SysCtlPeripheralEnable(SYSCTL_PERIPH_TIMER2);
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPION);
-    GPIOPinTypeGPIOOutput(GPIO_PORTN_BASE, GPIO_PIN_0);
-    GPIOPinWrite(GPIO_PORTN_BASE, GPIO_PIN_0, GPIO_PIN_0);
+    //SysCtlPeripheralEnable(SYSCTL_PERIPH_GPION);
+    //GPIOPinTypeGPIOOutput(GPIO_PORTN_BASE, GPIO_PIN_0); Used to time ADC
+    //GPIOPinWrite(GPIO_PORTN_BASE, GPIO_PIN_0, GPIO_PIN_0);
 
     // Wait for the ADC0 module to be ready
     while(!SysCtlPeripheralReady(SYSCTL_PERIPH_ADC0)) {;}
@@ -86,17 +86,12 @@ void CurrentControlIntHandler(void)
 
     ADCIntClear(ADC0_BASE, 0); // Clear interrupt  flag
 
-    // verify interrupt
-    GPIOPinWrite(GPIO_PORTN_BASE, GPIO_PIN_0, GPIO_PIN_0);
-
     // Update Mux
     //updateMux();
 
     // Update Current Values
     AD0_read();
     counts_read();
-
-    GPIOPinWrite(GPIO_PORTN_BASE, GPIO_PIN_0, 0x00); //verify interrupt
 
     // Wait until we've muxed both phases
     if (ready)
@@ -188,7 +183,7 @@ void PI_controller(int motor, int reference, int actual)
         E1 = reference - actual;
         Eint1 = Eint1 + E1;
         PWM1 = Kp*E1 + Ki*Eint1;
-        PWM1 = boundInt(PWM1, PWMPERIOD);
+        PWM1 = boundInt(PWM1, PWMPERIOD-1);
         motor1ControlPWM(PWM1);
     }
     else if (motor == 2)
@@ -196,7 +191,7 @@ void PI_controller(int motor, int reference, int actual)
         E2 = reference - actual;
         Eint2 = Eint2 + E2;
         PWM2 = Kp*E2 + Ki*Eint2;
-        PWM2 = boundInt(PWM2, PWMPERIOD);
+        PWM2 = boundInt(PWM2, PWMPERIOD-1);
         motor2ControlPWM(PWM2);
     }
 }

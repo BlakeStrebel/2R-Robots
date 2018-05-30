@@ -21,6 +21,7 @@ int
 main(void)
 {
     // Init code
+    setMODE(PWM);
     r2rDefaultInit();
 
     char buffer[BUF_SIZE];

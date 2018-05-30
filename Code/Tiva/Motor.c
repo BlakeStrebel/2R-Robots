@@ -11,6 +11,222 @@ uint32_t ui32Index;
 
 int error_state;
 
+static volatile int32_t M1H_HALLS = 0, M2H_HALLS = 0; // Hall sensor data
+static volatile int32_t M1_DIR = 0, M2_DIR = 0; // Motor Direction (0 --> CCW, 1 --> CW)
+static volatile int M1_PWM = 0, M2_PWM = 0; // Motor PWM
+
+void motorInit()
+{
+    // Initialize INHx pins as PWM outputs
+    SysCtlPWMClockSet(SYSCTL_PWMDIV_1);
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_PWM0);
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOF);
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOG);
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOK);
+    GPIOPinConfigure(GPIO_PF0_M0PWM0);
+    GPIOPinConfigure(GPIO_PF1_M0PWM1);
+    GPIOPinConfigure(GPIO_PF2_M0PWM2);
+    GPIOPinConfigure(GPIO_PG0_M0PWM4);
+    GPIOPinConfigure(GPIO_PG1_M0PWM5);
+    GPIOPinConfigure(GPIO_PK4_M0PWM6);
+    GPIOPinTypePWM(GPIO_PORTF_BASE, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2);
+    GPIOPinTypePWM(GPIO_PORTG_BASE, GPIO_PIN_0 | GPIO_PIN_1);
+    GPIOPinTypePWM(GPIO_PORTK_BASE, GPIO_PIN_4);
+    PWMGenConfigure(PWM0_BASE, PWM_GEN_0, PWM_GEN_MODE_UP_DOWN | PWM_GEN_MODE_NO_SYNC);
+    PWMGenConfigure(PWM0_BASE, PWM_GEN_1, PWM_GEN_MODE_UP_DOWN | PWM_GEN_MODE_NO_SYNC);
+    PWMGenConfigure(PWM0_BASE, PWM_GEN_2, PWM_GEN_MODE_UP_DOWN | PWM_GEN_MODE_NO_SYNC);
+    PWMGenConfigure(PWM0_BASE, PWM_GEN_3, PWM_GEN_MODE_UP_DOWN | PWM_GEN_MODE_NO_SYNC);
+    PWMGenPeriodSet(PWM0_BASE, PWM_GEN_0, PWMPERIOD); // N = (1 / f) * SysClk --> (1 / 30000Hz) * 120MHz = 4000 cycles
+    PWMGenPeriodSet(PWM0_BASE, PWM_GEN_1, PWMPERIOD); // N = (1 / f) * SysClk --> (1 / 30000Hz) * 120MHz = 4000 cycles
+    PWMGenPeriodSet(PWM0_BASE, PWM_GEN_2, PWMPERIOD); // N = (1 / f) * SysClk --> (1 / 30000Hz) * 120MHz = 4000 cycles
+    PWMGenPeriodSet(PWM0_BASE, PWM_GEN_3, PWMPERIOD); // N = (1 / f) * SysClk --> (1 / 30000Hz) * 120MHz = 4000 cycles
+    PWMGenEnable(PWM0_BASE, PWM_GEN_0);
+    PWMGenEnable(PWM0_BASE, PWM_GEN_1);
+    PWMGenEnable(PWM0_BASE, PWM_GEN_2);
+    PWMGenEnable(PWM0_BASE, PWM_GEN_3);
+    PWMOutputState(PWM0_BASE, PWM_OUT_0_BIT | PWM_OUT_1_BIT | PWM_OUT_2_BIT | PWM_OUT_4_BIT | PWM_OUT_5_BIT | PWM_OUT_6_BIT, true);
+    PWMPulseWidthSet(PWM0_BASE, PWM_OUT_0, 0);
+    PWMPulseWidthSet(PWM0_BASE, PWM_OUT_1, 0);
+    PWMPulseWidthSet(PWM0_BASE, PWM_OUT_2, 0);
+    PWMPulseWidthSet(PWM0_BASE, PWM_OUT_4, 0);
+    PWMPulseWidthSet(PWM0_BASE, PWM_OUT_5, 0);
+    PWMPulseWidthSet(PWM0_BASE, PWM_OUT_6, 0);
+
+    // Initialize INLx pins as outputs
+    SysCtlPeripheralEnable(M1_INL_PERIPH);
+    SysCtlPeripheralEnable(M2_INL_PERIPH);
+    GPIOPinTypeGPIOOutput(M1_INL_PORT, M1_INL_PINS);
+    GPIOPinTypeGPIOOutput(M2_INL_PORT, M2_INL_PINS);
+    GPIOPinWrite(M1_INL_PORT, M1_INL_PINS, M1_INL_BREAK);   // Break motors on startup by default
+    GPIOPinWrite(M2_INL_PORT, M2_INL_PINS, M2_INL_BREAK);
+
+
+    // Configure hall inputs to generate interrupts on state change
+    SysCtlPeripheralEnable(M1H_PERIPH);
+    SysCtlPeripheralEnable(M2H_PERIPH);
+    GPIOIntRegister(M1H_PORT, M1HIntHandler);
+    GPIOIntRegister(M2H_PORT, M2HIntHandler);
+    GPIOPinTypeGPIOInput(M1H_PORT, M1H_PINS);
+    GPIOPinTypeGPIOInput(M2H_PORT, M2H_PINS);
+    GPIOIntTypeSet(M1H_PORT, M1H_PINS, GPIO_BOTH_EDGES);
+    GPIOIntTypeSet(M2H_PORT, M2H_PINS, GPIO_BOTH_EDGES);
+    GPIOIntEnable(M1H_PORT, M1H_PINS);
+    GPIOIntEnable(M2H_PORT, M2H_PINS);
+
+    // Initialize hall sensor values
+    int32_t i32Val;
+    i32Val = GPIOPinRead(M1H_PORT, M1H_PINS);
+    M1H_HALLS = i32Val && M1H_PINS;
+    i32Val = GPIOPinRead(M2H_PORT, M2H_PINS);
+    M2H_HALLS = i32Val && M2H_PINS;
+}
+
+void M1HIntHandler(void)
+{
+    GPIOIntClear(M1H_PORT, M1H_PINS);
+
+    // Update Hall States
+    M1H_HALLS = GPIOPinRead(M1H_PORT, M1H_PINS);
+
+    // Update PWM outputs
+    //motor1ControlPWM(M1_PWM);
+}
+
+void M2HIntHandler(void)
+{
+    GPIOIntClear(M2H_PORT, M2H_PINS);
+
+    // Update Hall States
+    M2H_HALLS = GPIOPinRead(M2H_PORT, M2H_PINS);
+
+    // Update PWM outputs
+    //motor2ControlPWM(M2_PWM);
+}
+
+void motor1ControlPWM(int control)
+{
+    /*
+    IntMasterDisable();
+    M1_PWM = control; // Update global variable containing PWM value
+    IntMasterEnable();
+
+    control = abs(control); // PWM must be positive
+
+    if (M1_PWM > 0) // CCW
+    {
+        switch (M1H_HALLS)
+        {
+            case M1_HALLSTATE_0:
+            {
+                GPIOPinWrite(M1_INL_PORT, M1_INL_PINS, M1_INL_OUTPUT_0);
+                motor1PWM(0, control, 0);
+                break;
+            }
+            case M1_HALLSTATE_1:
+            {
+                GPIOPinWrite(M1_INL_PORT, M1_INL_PINS, M1_INL_OUTPUT_1);
+                motor1PWM(control, 0, 0);
+                break;
+            }
+            case M1_HALLSTATE_2:
+            {
+                GPIOPinWrite(M1_INL_PORT, M1_INL_PINS, M1_INL_OUTPUT_2);
+                motor1PWM(control, 0, 0);
+                break;
+            }
+            case M1_HALLSTATE_3:
+            {
+                GPIOPinWrite(M1_INL_PORT, M1_INL_PINS, M1_INL_OUTPUT_0);
+                motor1PWM(0, 0, control);
+                break;
+            }
+            case M1_HALLSTATE_4:
+            {
+                GPIOPinWrite(M1_INL_PORT, M1_INL_PINS, M1_INL_OUTPUT_1);
+                motor1PWM(0, 0, control);
+                break;
+            }
+            case M1_HALLSTATE_5:
+            {
+                GPIOPinWrite(M1_INL_PORT, M1_INL_PINS, M1_INL_OUTPUT_2);
+                motor1PWM(0, control, 0);
+                break;
+            }
+        }
+    }
+    else if (M1_PWM < 0) // CW
+    {
+        switch (M1H_HALLS)
+        {
+            case M1_HALLSTATE_3:
+            {
+                GPIOPinWrite(M1_INL_PORT, M1_INL_PINS, M1_INL_OUTPUT_0);
+                motor1PWM(0, control, 0);
+                break;
+            }
+            case M1_HALLSTATE_4:
+            {
+                GPIOPinWrite(M1_INL_PORT, M1_INL_PINS, M1_INL_OUTPUT_1);
+                motor1PWM(control, 0, 0);
+                break;
+            }
+            case M1_HALLSTATE_5:
+            {
+                GPIOPinWrite(M1_INL_PORT, M1_INL_PINS, M1_INL_OUTPUT_2);
+                motor1PWM(control, 0, 0);
+                break;
+            }
+            case M1_HALLSTATE_0:
+            {
+                GPIOPinWrite(M1_INL_PORT, M1_INL_PINS, M1_INL_OUTPUT_0);
+                motor1PWM(0, 0, control);
+                break;
+            }
+            case M1_HALLSTATE_1:
+            {
+                GPIOPinWrite(M1_INL_PORT, M1_INL_PINS, M1_INL_OUTPUT_1);
+                motor1PWM(0, 0, control);
+                break;
+            }
+            case M1_HALLSTATE_2:
+            {
+                GPIOPinWrite(M1_INL_PORT, M1_INL_PINS, M1_INL_OUTPUT_2);
+                motor1PWM(0, control, 0);
+                break;
+            }
+        }
+    }
+    else
+    {
+        motor1PWM(0, 0, 0); // Apply zero current, Alternatively, break using M1_INL_BREAK
+    }
+    */
+}
+
+void motor1PWM(int pwm1, int pwm2, int pwm3)
+{
+    PWMPulseWidthSet(PWM0_BASE, PWM_OUT_0, pwm1);
+    PWMPulseWidthSet(PWM0_BASE, PWM_OUT_1, pwm2);
+    PWMPulseWidthSet(PWM0_BASE, PWM_OUT_2, pwm3);
+}
+
+
+void motor2ControlPWM(int control)
+{
+
+}
+
+void motor2PWM(int pwm1, int pwm2, int pwm3)
+{
+    PWMPulseWidthSet(PWM0_BASE, PWM_OUT_4, pwm1);
+    PWMPulseWidthSet(PWM0_BASE, PWM_OUT_5, pwm2);
+    PWMPulseWidthSet(PWM0_BASE, PWM_OUT_6, pwm3);
+}
+
+
+
+
+
 void shutdownNow(){
     motor1ControlPWM(0);
     motor2ControlPWM(0);
@@ -28,7 +244,7 @@ void motorSafetyCheck(){
 }
 
 /*
- * This function initilizes the SPI on SSI0, using PA2 (CLK), PA3(SS), PA4(RX), PA5(TX)
+ * This function initializes the SPI on SSI0, using PA2 (CLK), PA3(SS), PA4(RX), PA5(TX)
  */
 void MotorSPIinit(void){
     // The SSI2 peripheral must be enabled for use.
@@ -57,124 +273,9 @@ void MotorSPIinit(void){
     SSIEnable(SSI2_BASE);
 }
 
-/*
- * This function sets up the pwm on pins PF1,PF2,PF3 which are avaliable on the TM4C123 Launchpad as RGB outputs.
- * TODO: Change PWM output pins
- */
-void pwmInit(void){
-    //
-    // Set the PWM clock to the system clock.
-    //
-    SysCtlPWMClockSet(SYSCTL_PWMDIV_1);
 
-    //
-    // The PWM peripheral must be enabled for use.
-    //
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_PWM0);
 
-    //
-    // For this example PWM0 is used with PortB Pins 6 and 7.  The actual port
-    // and pins used may be different on your part, consult the data sheet for
-    // more information.  GPIO port B needs to be enabled so these pins can be
-    // used.
-    // TODO: change this to whichever GPIO port you are using.
-    //
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOF);
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOG);
 
-    //
-    // Configure the GPIO pin muxing to select PWM functions for these pins.
-    // This step selects which alternate function is available for these pins.
-    // This is necessary if your part supports GPIO pin function muxing.
-    // Consult the data sheet to see which functions are allocated per pin.
-    // TODO: change this to select the port/pin you are using.
-    //
-    GPIOPinConfigure(GPIO_PF0_M0PWM0);
-    GPIOPinConfigure(GPIO_PG0_M0PWM4);
-
-    //
-    // Configure the GPIO pad for PWM function on pins PB6 and PB7.  Consult
-    // the data sheet to see which functions are allocated per pin.
-    // TODO: change this to select the port/pin you are using.
-    //
-    GPIOPinTypePWM(GPIO_PORTF_BASE, GPIO_PIN_0);
-    GPIOPinTypePWM(GPIO_PORTG_BASE, GPIO_PIN_0);
-
-    //
-    // Configure the PWM0 to count up/down without synchronization.
-    // Note: Enabling the dead-band generator automatically couples the 2
-    // outputs from the PWM block so we don't use the PWM synchronization.
-    //
-    PWMGenConfigure(PWM0_BASE, PWM_GEN_0, PWM_GEN_MODE_UP_DOWN |
-                    PWM_GEN_MODE_NO_SYNC);
-    PWMGenConfigure(PWM0_BASE, PWM_GEN_2, PWM_GEN_MODE_UP_DOWN |
-                    PWM_GEN_MODE_NO_SYNC);
-
-    // Set the PWM frequency to 30000Hz
-    // To calculate the appropriate parameter use the following equation: N = (1 / f) * SysClk.
-    // Where N is the function parameter, f is the desired frequency, and SysClk is the
-    // system clock frequency.
-    // In this case you get: (1 / 30000Hz) * 120MHz = 4000 cycles
-    PWMGenPeriodSet(PWM0_BASE, PWM_GEN_0, PWMPERIOD);
-    PWMGenPeriodSet(PWM0_BASE, PWM_GEN_2, PWMPERIOD);
-
-    //
-    // Set PWM0 PD0 to a duty cycle of 25%.  You set the duty cycle as a
-    // function of the period.  Since the period was set above, you can use the
-    // PWMGenPeriodGet() function.  For this example the PWM will be high for
-    // 25% of the time or 16000 clock cycles (64000 / 4).
-    //
-    PWMPulseWidthSet(PWM0_BASE, PWM_OUT_0,1);
-    PWMPulseWidthSet(PWM0_BASE, PWM_OUT_4,1);
-
-    //
-    // Enable the PWM0 Bit 0 (PD0) and Bit 1 (PD1) output signals.
-    //
-    PWMOutputState(PWM0_BASE, PWM_OUT_0_BIT | PWM_OUT_4_BIT, true);
-
-    //
-    // Enables the counter for a PWM generator block.
-    //
-    PWMGenEnable(PWM0_BASE, PWM_GEN_0);
-    PWMGenEnable(PWM0_BASE, PWM_GEN_2);
-}
-
-/*
- * This function sets up all the PWM pins and the gpio pins for the motor, may also optionally call SPI pins
- *
- * Comes after:
- * pwmInit()
- * sysInit()
- *
- */
-void motorInit(void){
-       // Setting up motor driver pins,
-       // Motor directions PK0:1, PK2:2
-       // Motor enable pins, PK1: 1, PK3: 2
-       // Motor brake pins, PP4: 1, PP5: 2
-       SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOK);
-       SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOP);
-
-       GPIOPinTypeGPIOOutput(GPIO_PORTK_BASE, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3);
-       GPIOPinTypeGPIOOutput(GPIO_PORTP_BASE, GPIO_PIN_4 | GPIO_PIN_5);
-
-       //set directions
-       GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_0 | GPIO_PIN_2 , GPIO_PIN_0 + GPIO_PIN_2);
-
-       // turn on
-       GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_1 |  GPIO_PIN_3 , GPIO_PIN_3 + GPIO_PIN_1);     //Why using +?
-
-       GPIOPinWrite(GPIO_PORTP_BASE,GPIO_PIN_4,GPIO_PIN_4); // brake for motor 1, set HIGH so no braking
-       GPIOPinWrite(GPIO_PORTP_BASE,GPIO_PIN_5,GPIO_PIN_5); // brake for motor 2, set HIGH so no braking
-
-       //GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_0,GPIO_PIN_0); // dir for motor 1, set to forward
-       //GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_2,GPIO_PIN_2); // dir for motor 2, set to forward
-       // Pulled low on motor fault PK6:1, PK7: 2
-       //GPIOPinTypeGPIOInput(GPIO_PORTK_BASE, GPIO_PIN_6 | GPIO_PIN_7);
-       //SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOJ);
-       // TODO: Cal, short all amplifier inputs together (why?)
-       //GPIOPinTypeGPIOOutput(GPIO_PORTJ_BASE, GPIO_PIN_0 | GPIO_PIN_1 );
-}
 
 
 
@@ -192,7 +293,9 @@ void motorDriverInit(void){
     }
 
     pui32DataTx[0] = 0b1001000000000000; // read register 3
-    pui32DataTx[1] = 0b0001000001000000; // set register 3, bit 6 and 5 to 10, option 3, 1x PWM mode
+  //pui32DataTx[1] = 0b0001000001000000; // set register 3, bit 6 and 5 to 10, option 3, 1x PWM mode
+    pui32DataTx[1] = 0b0001000000100000; // set register 3, bit 6-5 to 10b, 3x PWM mode
+
     pui32DataTx[2]=  0b1001000000000000; // read register 3
     pui32DataTx[3]=  0b1001000000000000; // read register 3 one more time
 
@@ -217,7 +320,8 @@ void motorDriverInit(void){
    while(SSIDataGetNonBlocking(SSI2_BASE, &pui32DataRx[0])){
    }
    pui32DataTx[0] = 0b1001000000000000; // read register 3
-   pui32DataTx[1] = 0b0001000001000000; // set register 3, bit 6 and 5 to 10, option 3, 1x PWM mode
+ //pui32DataTx[1] = 0b0001000001000000; // set register 3, bit 6 and 5 to 10, option 3, 1x PWM mode
+   pui32DataTx[1] = 0b0001000000100000; // set register 3, bit 6 and 5 to 10, option 3, 1x PWM mode
    pui32DataTx[2]=  0b1001000000000000; // read register 3
    pui32DataTx[3]=  0b1001000000000000; // read register 3 one more time
    //
@@ -240,80 +344,37 @@ void motorDriverInit(void){
    }
 
    GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_2,GPIO_PIN_2); // Make sure the pin is high
-   //SysCtlDelay(1000);
    SysCtlDelay(1000);
 }
 
-/*
- * Wrapper function that takes in a control signal for the 1xPWM mode
- * if control is zero = brake!
- *      // Setting up motor driver pins,
-       // Motor directions PK0:1, PK2:2
-       // Motor enable pins, PK1: 1, PK3: 2
-       // Motor brake pins, PP4: 1, PP5: 2
- */
-void motor1ControlPWM(int control){
-    if (control>0){
-        // Positive direction
-        GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_0,GPIO_PIN_0); // Set to HIGH  - forward
-        GPIOPinWrite(GPIO_PORTP_BASE,GPIO_PIN_4,GPIO_PIN_4); // Set to HIGH - no braking
-        motor1PWM(control);
-    }
-    else if (control<0) {
-        // Negative direction
-        GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_0,0);
-        GPIOPinWrite(GPIO_PORTP_BASE,GPIO_PIN_4,GPIO_PIN_4);
-        motor1PWM(-1*control);
-    }
-    else {
-        GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_0,GPIO_PIN_2);
-        GPIOPinWrite(GPIO_PORTP_BASE,GPIO_PIN_4,0); // Set brake pin to low, brake!
-    }
-}
-
-/*
- * Wrapper function that takes in a control signal for the 1xPWM mode
- * if control is zero = brake!
- */
-void motor2ControlPWM(int control){
-    if (control>0){
-        // Positive direction
-        GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_2,GPIO_PIN_2); // Set to HIGH  - forward
-        GPIOPinWrite(GPIO_PORTP_BASE,GPIO_PIN_5,GPIO_PIN_5); // Set to HIGH - no braking
-        motor2PWM(control);
-    }
-    else if (control<0) {
-        // Negative direction
-        GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_2,0);
-        GPIOPinWrite(GPIO_PORTP_BASE,GPIO_PIN_5,GPIO_PIN_5);
-        motor2PWM(-1*control);
-    }
-    else {
-        GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_2,GPIO_PIN_2);
-        GPIOPinWrite(GPIO_PORTP_BASE,GPIO_PIN_5,0); // Set brake pin to low, brake!
-    }
-}
 
 
-/*
- * Wrapper function to write a PWM value to the motor
- *
- * Comes after:
- * motorInit()
- * spiInit()
- * motorDriverInit()
- */
 
-void motor1PWM(int pwmValue){
-    // assuming PWM has been initialized.
-    PWMPulseWidthSet(PWM0_BASE, PWM_OUT_0,pwmValue);
 
-}
 
-void motor2PWM(int pwmValue){
-    // assuming PWM has been initialized.
-    PWMPulseWidthSet(PWM0_BASE, PWM_OUT_4,pwmValue);
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 /*
