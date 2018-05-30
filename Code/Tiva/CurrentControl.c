@@ -54,8 +54,8 @@ void currentControlInit(void){
     GPIOPinTypeADC(GPIO_PORTE_BASE, GPIO_PIN_4); // AIN9
 
 
-    // Configure the ADC to use 4x hardware averaging of ADC samples (we can't sample fast enough for this)
-    //ADCHardwareOversampleConfigure(ADC0_BASE, 2);
+    // Configure the ADC to use 8x hardware averaging of ADC samples (we can't sample fast enough for this)
+    ADCHardwareOversampleConfigure(ADC0_BASE, 4);
 
     // Configure the ADC to trigger at timer2 frequency
     ADCSequenceConfigure(ADC0_BASE, 0, ADC_TRIGGER_TIMER, 0);
@@ -78,9 +78,6 @@ void currentControlInit(void){
     ADCIntEnable(ADC0_BASE, 0x00); // First priority
     IntEnable(INT_ADC0SS0);
     IntMasterEnable();
-
-    //IntEnable(INT_TIMER2A);
-    //TimerIntEnable(TIMER2_BASE, TIMER_TIMA_TIMEOUT);
 }
 
 void CurrentControlIntHandler(void)
@@ -145,7 +142,7 @@ void CurrentControlIntHandler(void)
                 else
                 {
                     PI_controller(MOTOR1, MOTOR1REF, MOTOR1CURRENT); // Track reference signal
-                    PI_controller(MOTOR2, MOTOR2REF, MOTOR2CURRENT);
+                    //PI_controller(MOTOR2, MOTOR2REF, MOTOR2CURRENT);
 
                     i++; //increment data
 
@@ -153,8 +150,9 @@ void CurrentControlIntHandler(void)
                     decctr++;
                     if (decctr == DECIMATION)
                     {
-                        buffer_write(MOTOR1REF, MOTOR2REF, MOTOR1CURRENT, MOTOR2CURRENT);   // Write current values to buffer
+                        buffer_write(MOTOR1REF, MOTOR1REF, MOTOR1CURRENT, MOTOR1CURRENT);   // Write current values to buffer
                         //buffer_write(COUNTS[0] - 2047 + C1A, COUNTS[1] - 2047 + C1B, COUNTS[2] - 2047 + C2A, COUNTS[3] - 2047 + C2B);
+                        //buffer_write(COUNTS[0] - 2047 + C1A, COUNTS[1] - 2047 + C1B, COUNTS[0] - 2047 + C1A, COUNTS[1] - 2047 + C1B);
                         decctr = 0; // reset decimation counter
                     }
 
