@@ -54,11 +54,21 @@ void motorInit()
 
     // Initialize INLx pins as outputs
     SysCtlPeripheralEnable(M1_INL_PERIPH);
-    SysCtlPeripheralEnable(M2_INL_PERIPH);
+    //SysCtlPeripheralEnable(M2_INL_PERIPH);
     GPIOPinTypeGPIOOutput(M1_INL_PORT, M1_INL_PINS);
-    GPIOPinTypeGPIOOutput(M2_INL_PORT, M2_INL_PINS);
+    //GPIOPinTypeGPIOOutput(M2_INL_PORT, M2_INL_PINS);
     GPIOPinWrite(M1_INL_PORT, M1_INL_PINS, M1_INL_BREAK);   // Break motors on startup by default
-    GPIOPinWrite(M2_INL_PORT, M2_INL_PINS, M2_INL_BREAK);
+    //GPIOPinWrite(M2_INL_PORT, M2_INL_PINS, M2_INL_BREAK);
+
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOD);
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOP);
+
+    GPIOPinTypeGPIOOutput(GPIO_PORTD_BASE, GPIO_PIN_5 | GPIO_PIN_6);
+    GPIOPinTypeGPIOOutput(GPIO_PORTP_BASE, GPIO_PIN_1);
+
+    GPIOPinWrite(M1_INL_PORT, M1_INL_PINS, M1_INL_OUTPUT_0);   // Break motors on startup by default
+    GPIOPinWrite(GPIO_PORTP_BASE, GPIO_PIN_1, GPIO_PIN_1);   // Break motors on startup by default
+    GPIOPinWrite(GPIO_PORTD_BASE, GPIO_PIN_5 | GPIO_PIN_6, 0);   // Break motors on startup by default
 
 
     // Configure hall inputs to generate interrupts on state change
