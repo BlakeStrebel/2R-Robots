@@ -64,7 +64,7 @@ void r2rDefaultInit(void){
     currentControlInit();
 
     //gpioInit(); // Init for general GPIO - set to input for safety
-    MotorTimerInit();
+    //MotorTimerInit();
     timeInit();
 }
 

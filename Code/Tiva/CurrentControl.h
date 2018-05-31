@@ -98,7 +98,7 @@ extern uint32_t currentRead2(void);
  * @return uint32_t temperature
  *
  */
-extern int32_t  tempRead1(void);
+//extern int32_t  tempRead1(void);
 
 /**
  * @brief Reads temperature from an array
@@ -109,7 +109,7 @@ extern int32_t  tempRead1(void);
  * @return uint32_t temperature
  *
  */
-extern int32_t  tempRead2(void);
+//extern int32_t  tempRead2(void);
 
 
 
