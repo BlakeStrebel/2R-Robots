@@ -146,12 +146,9 @@ void set_motor_pwm(int motor, int value)
 }
 
 
-<<<<<<< HEAD:Code/Tiva/PositionControl.c
-<<<<<<< HEAD:Code/Tiva/PositionControl.c
-void Timer1IntHandler(void)
-=======
-=======
->>>>>>> parent of 5f2cae6... update:Code/Tiva/Control.c
+
+
+
 void
 Timer2IntHandler(void)
 {
@@ -162,10 +159,7 @@ Timer2IntHandler(void)
 
 void
 Timer1IntHandler(void)
-<<<<<<< HEAD:Code/Tiva/PositionControl.c
->>>>>>> parent of 5f2cae6... update:Code/Tiva/Control.c
-=======
->>>>>>> parent of 5f2cae6... update:Code/Tiva/Control.c
+
 {
     static int decctr = 0;  // counter for data decimation
     static int i = 0;   // trajectory index

@@ -4,6 +4,7 @@
 #include "PositionControl.h"
 #include "Motor.h"
 #include "Utilities.h"
+#include "Adc.h"
 #include <stdio.h>
 
 #define C1A 20
@@ -49,9 +50,11 @@ void currentControlInit(void){
     // Configure ADC pins
     GPIOPinTypeADC(GPIO_PORTE_BASE, GPIO_PIN_0); // AIN3
     GPIOPinTypeADC(GPIO_PORTE_BASE, GPIO_PIN_1); // AIN2
-    //GPIOPinTypeADC(GPIO_PORTE_BASE, GPIO_PIN_2); // AIN1
+    GPIOPinTypeADC(GPIO_PORTE_BASE, GPIO_PIN_2); // AIN1
     GPIOPinTypeADC(GPIO_PORTE_BASE, GPIO_PIN_3); // AIN0
     GPIOPinTypeADC(GPIO_PORTE_BASE, GPIO_PIN_4); // AIN9
+
+
 
 
     // Configure the ADC to use 4x hardware averaging of ADC samples (we can't sample fast enough for this)
@@ -340,46 +343,3 @@ void get_counts(void)
     UART0write(buffer);
 }
 
-// Mux being used to read current values
-void setADCMux(int motor,int number){
-    switch(motor){
-    case 1:
-        switch(number){
-        case 1:
-            GPIOPinWrite(GPIO_PORTM_BASE,GPIO_PIN_0,0);
-            GPIOPinWrite(GPIO_PORTM_BASE,GPIO_PIN_1,0);
-            break;
-        case 2:
-            GPIOPinWrite(GPIO_PORTM_BASE,GPIO_PIN_0,GPIO_PIN_0);
-            GPIOPinWrite(GPIO_PORTM_BASE,GPIO_PIN_1,0);
-            break;
-        case 3:
-            GPIOPinWrite(GPIO_PORTM_BASE,GPIO_PIN_0,0);
-            GPIOPinWrite(GPIO_PORTM_BASE,GPIO_PIN_1,GPIO_PIN_1);
-            break;
-        case 4:
-            GPIOPinWrite(GPIO_PORTM_BASE,GPIO_PIN_0,GPIO_PIN_0);
-            GPIOPinWrite(GPIO_PORTM_BASE,GPIO_PIN_1,GPIO_PIN_1);
-            break;
-        }
-    case 2:
-        switch(number){
-        case 1:
-            GPIOPinWrite(GPIO_PORTM_BASE,GPIO_PIN_2,0);
-            GPIOPinWrite(GPIO_PORTM_BASE,GPIO_PIN_3,0);
-            break;
-        case 2:
-            GPIOPinWrite(GPIO_PORTM_BASE,GPIO_PIN_2,GPIO_PIN_2);
-            GPIOPinWrite(GPIO_PORTM_BASE,GPIO_PIN_3,0);
-            break;
-        case 3:
-            GPIOPinWrite(GPIO_PORTM_BASE,GPIO_PIN_2,0);
-            GPIOPinWrite(GPIO_PORTM_BASE,GPIO_PIN_3,GPIO_PIN_3);
-            break;
-        case 4:
-            GPIOPinWrite(GPIO_PORTM_BASE,GPIO_PIN_2,GPIO_PIN_2);
-            GPIOPinWrite(GPIO_PORTM_BASE,GPIO_PIN_3,GPIO_PIN_3);
-            break;
-        }
-    }
-}

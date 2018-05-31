@@ -107,7 +107,6 @@ void delayMS(int ms) {
 /*
  * Sets up a sysTICK timer to count time, used mainly as a prototype tool to test speed of code
  */
-
 void timeInit(){
     SysTickPeriodSet(120); // micro seconds
     SysTickIntRegister(timeInt); // set up the interrupt
