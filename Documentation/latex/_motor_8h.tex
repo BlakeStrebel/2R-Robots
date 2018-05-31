@@ -1,12 +1,31 @@
-\hypertarget{_motor_8h}{}\section{C\+:/\+Users/\+Ben/\+Documents/\+Git\+Hub/2\+R-\/\+Robots/\+Midterm\+Code/\+Tiva/\+Motor.h File Reference}
-\label{_motor_8h}\index{C\+:/\+Users/\+Ben/\+Documents/\+Git\+Hub/2\+R-\/\+Robots/\+Midterm\+Code/\+Tiva/\+Motor.\+h@{C\+:/\+Users/\+Ben/\+Documents/\+Git\+Hub/2\+R-\/\+Robots/\+Midterm\+Code/\+Tiva/\+Motor.\+h}}
+\hypertarget{_motor_8h}{}\section{C\+:/\+Users/\+Ben/\+Documents/\+Git\+Hub/2\+R-\/\+Robots/\+Code/\+Tiva/\+Motor.h File Reference}
+\label{_motor_8h}\index{C\+:/\+Users/\+Ben/\+Documents/\+Git\+Hub/2\+R-\/\+Robots/\+Code/\+Tiva/\+Motor.\+h@{C\+:/\+Users/\+Ben/\+Documents/\+Git\+Hub/2\+R-\/\+Robots/\+Code/\+Tiva/\+Motor.\+h}}
 
 
 utilities header  
 
 
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{_motor_8h_ac74f8c68914ccbed931b7f574e3a5aac}\label{_motor_8h_ac74f8c68914ccbed931b7f574e3a5aac}} 
+\#define {\bfseries M\+O\+T\+O\+R\+\_\+\+S\+P\+I\+N\+N\+I\+N\+G\+\_\+\+T\+O\+O\+\_\+\+F\+A\+ST}~10
+\item 
+\mbox{\Hypertarget{_motor_8h_ad64fae190046cdb074d482949c6850c1}\label{_motor_8h_ad64fae190046cdb074d482949c6850c1}} 
+\#define {\bfseries M\+O\+T\+O\+R\+\_\+\+T\+O\+O\+\_\+\+H\+OT}~11
+\item 
+\mbox{\Hypertarget{_motor_8h_af45cb50513e7287788a19cd43fef2c46}\label{_motor_8h_af45cb50513e7287788a19cd43fef2c46}} 
+\#define {\bfseries T\+E\+M\+P\+\_\+\+L\+I\+M\+IT}~50
+\item 
+\mbox{\Hypertarget{_motor_8h_ac2cd96d53dd3ba6407db6766c3d92b26}\label{_motor_8h_ac2cd96d53dd3ba6407db6766c3d92b26}} 
+\#define {\bfseries M\+A\+X\+\_\+\+S\+P\+E\+ED}~10
+\end{DoxyCompactItemize}
 \subsection*{Functions}
 \begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{_motor_8h_a3736cf7b742152f2787804fad1c999e2}{shutdown\+Now}} (void)
+\item 
+void \mbox{\hyperlink{_motor_8h_ab59ffbd33a12b2f672648d85a5466798}{motor\+Safety\+Check}} (void)
 \item 
 void \mbox{\hyperlink{_motor_8h_af0b4940941d639d96fbc31924abf1664}{Motor\+S\+P\+Iinit}} (void)
 \begin{DoxyCompactList}\small\item\em Initializes the S\+PI channels for the motor drivers. \end{DoxyCompactList}\item 
@@ -24,6 +43,10 @@ void \mbox{\hyperlink{_motor_8h_a8ab898affd7b6bbc1d359284e85c31c3}{motor1\+Contr
 \begin{DoxyCompactList}\small\item\em Sets the P\+WM value and direction to motor 1. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{_motor_8h_aa3421fe96b22e90c356e013a0abef7d6}{motor2\+Control\+P\+WM}} (int control)
 \begin{DoxyCompactList}\small\item\em Sets the P\+WM value and direction to motor 2. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_motor_8h_aea6e9daf04c89835b507bf4bbf477841}{motor1\+Brake}} (void)
+\begin{DoxyCompactList}\small\item\em Brakes motor 1. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_motor_8h_abeb06d04160b25625c36d1a07e111033}{motor2\+Brake}} (void)
+\begin{DoxyCompactList}\small\item\em Brakes motor 2. \end{DoxyCompactList}\item 
 int \mbox{\hyperlink{_motor_8h_ad2fb0421114b988126b41428644453a3}{motor\+Error}} (void)
 \begin{DoxyCompactList}\small\item\em Checks the error pins and returns a value based on the state of the pin. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
@@ -43,6 +66,24 @@ Blake Strebel
 
 
 \subsection{Function Documentation}
+\mbox{\Hypertarget{_motor_8h_aea6e9daf04c89835b507bf4bbf477841}\label{_motor_8h_aea6e9daf04c89835b507bf4bbf477841}} 
+\index{Motor.\+h@{Motor.\+h}!motor1\+Brake@{motor1\+Brake}}
+\index{motor1\+Brake@{motor1\+Brake}!Motor.\+h@{Motor.\+h}}
+\subsubsection{\texorpdfstring{motor1\+Brake()}{motor1Brake()}}
+{\footnotesize\ttfamily void motor1\+Brake (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Brakes motor 1. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
 \mbox{\Hypertarget{_motor_8h_a8ab898affd7b6bbc1d359284e85c31c3}\label{_motor_8h_a8ab898affd7b6bbc1d359284e85c31c3}} 
 \index{Motor.\+h@{Motor.\+h}!motor1\+Control\+P\+WM@{motor1\+Control\+P\+WM}}
 \index{motor1\+Control\+P\+WM@{motor1\+Control\+P\+WM}!Motor.\+h@{Motor.\+h}}
@@ -74,6 +115,24 @@ Sets the P\+WM value to motor 1.
 
 \begin{DoxyParams}{Parameters}
 {\em pwm\+Value} & The pwm\+Value ranges from 0 to the pwm period. The default pwm period is 320 Sys\+Clk cycles \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_motor_8h_abeb06d04160b25625c36d1a07e111033}\label{_motor_8h_abeb06d04160b25625c36d1a07e111033}} 
+\index{Motor.\+h@{Motor.\+h}!motor2\+Brake@{motor2\+Brake}}
+\index{motor2\+Brake@{motor2\+Brake}!Motor.\+h@{Motor.\+h}}
+\subsubsection{\texorpdfstring{motor2\+Brake()}{motor2Brake()}}
+{\footnotesize\ttfamily void motor2\+Brake (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Brakes motor 2. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
@@ -173,6 +232,22 @@ Initializes the direction, brake, and halt pins for the motor in 1x P\+WM mode
 \begin{DoxyReturn}{Returns}
 Void 
 \end{DoxyReturn}
+\mbox{\Hypertarget{_motor_8h_ab59ffbd33a12b2f672648d85a5466798}\label{_motor_8h_ab59ffbd33a12b2f672648d85a5466798}} 
+\index{Motor.\+h@{Motor.\+h}!motor\+Safety\+Check@{motor\+Safety\+Check}}
+\index{motor\+Safety\+Check@{motor\+Safety\+Check}!Motor.\+h@{Motor.\+h}}
+\subsubsection{\texorpdfstring{motor\+Safety\+Check()}{motorSafetyCheck()}}
+{\footnotesize\ttfamily void motor\+Safety\+Check (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+Function to check for all safety limits and kills the motors if a fault is detected. Function must be called each time
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
 \mbox{\Hypertarget{_motor_8h_af0b4940941d639d96fbc31924abf1664}\label{_motor_8h_af0b4940941d639d96fbc31924abf1664}} 
 \index{Motor.\+h@{Motor.\+h}!Motor\+S\+P\+Iinit@{Motor\+S\+P\+Iinit}}
 \index{Motor\+S\+P\+Iinit@{Motor\+S\+P\+Iinit}!Motor.\+h@{Motor.\+h}}
@@ -183,7 +258,7 @@ Void
 
 Initializes the S\+PI channels for the motor drivers. 
 
-Initializes S\+S\+I1 $\sim$ 4 and their corresponding G\+P\+IO pins
+Initializes S\+S\+I1$\sim$2 and their corresponding G\+P\+IO pins
 
 
 \begin{DoxyParams}{Parameters}
@@ -203,7 +278,23 @@ Void
 
 Initializes P\+WM. 
 
-Initialize P\+WM on P\+F0 (motor 1) and P\+G0 (motor 2), and the default period if 320 Sys\+Clk cycles.
+Initialize P\+WM on P\+F0 (motor 1) and P\+G0 (motor 2), and the default period if 9600 Sys\+Clk cycles or 12500\+Hz
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_motor_8h_a3736cf7b742152f2787804fad1c999e2}\label{_motor_8h_a3736cf7b742152f2787804fad1c999e2}} 
+\index{Motor.\+h@{Motor.\+h}!shutdown\+Now@{shutdown\+Now}}
+\index{shutdown\+Now@{shutdown\+Now}!Motor.\+h@{Motor.\+h}}
+\subsubsection{\texorpdfstring{shutdown\+Now()}{shutdownNow()}}
+{\footnotesize\ttfamily void shutdown\+Now (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+Brakes the motor and kills the pwm signal by pulling down the enable line.
 
 
 \begin{DoxyParams}{Parameters}

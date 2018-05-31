@@ -1,55 +1,19 @@
 /**
  * @file r2r.c
- * @brief Main R2R library
+ * @brief
  *
- * This file contains all the functions for the R2R Project
+ * This file contains the main function that calls all other initialization functions
  *
  * @author Benjamen Lim
  * @author Huan Weng
  *
  */
 
-#include <stdbool.h>
-#include <stdint.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <stdarg.h>
-#include <math.h>
-#include "inc/hw_ints.h"
-#include "inc/hw_memmap.h"
-#include "inc/hw_sysctl.h"
-#include "inc/hw_types.h"
-#include "inc/hw_i2c.h"
-#include "inc/hw_types.h"
-#include "inc/hw_gpio.h"
-#include "driverlib/fpu.h"
-#include "driverlib/adc.h"
-#include "driverlib/ssi.h"
-#include "driverlib/pwm.h"
-#include "driverlib/gpio.h"
-#include "driverlib/pin_map.h"
-#include "driverlib/rom.h"
-#include "driverlib/rom_map.h"
-#include "driverlib/debug.h"
-#include "driverlib/timer.h"
-#include "driverlib/interrupt.h"
-#include "driverlib/i2c.h"
-#include "driverlib/uart.h"
-#include "driverlib/sysctl.h"
-
 
 #include "r2r.h"
-#include "System.h"
-#include "Encoder.h"
-#include "Motor.h"
-#include "Control.h"
-
-uint32_t adcArray[8]={0};
-
-uint32_t currentArray[6]={0};
-float filterArray[6]={0};
 
 
+<<<<<<< HEAD
 void setADCMux(int motor,int number){
     switch(motor){
     case 1:
@@ -220,175 +184,30 @@ void adcInit()
     ADCIntClear(ADC0_BASE, 0);
 }
 
+=======
+void r2rDefaultInit(void){
+    sysInit(); // initialize System Clock and master interrupt
+    uartInit(); // initialize UART
+    encoderSPIInit(); // initialize SPI for encoder
+    MotorSPIinit(); // initialize SPI for motor
+    pwmInit();
+    motorInit(); // Set pins for motor driver
+    motorDriverInit(); // Send values to set up the motor for 1x PWM mode
+    //currentControlInit();
+    adcInit();
+    timeInit();
+>>>>>>> ben
 
-void filterValues(){
-    int i;
-    float A = 0.6;
-    for(i=0;i<6;i++){
-        filterArray[i]= filterArray[i]*A+currentArray[i]*(1-A);
-    }
-}
-
-float convertCurrent(uint32_t current){
-    return((((float)current/4096.0*3.3)-1.6)*7.142857);
-}
-
-void adcCurrentRead(){
-    // yo
-    setADCMux(1,0);
-    setADCMux(2,0);
-    adcRead();
-    currentArray[0]=currentRead1();
-    currentArray[3]=currentRead2();
-    setADCMux(1,1);
-    setADCMux(2,1);
-    adcRead();
-    currentArray[1]=currentRead1();
-    currentArray[4]=currentRead2();
-    setADCMux(1,2);
-    setADCMux(2,2);
-    adcRead();
-    currentArray[2]=currentRead1();
-    currentArray[5]=currentRead2();
+    //gpioInit(); // Init for general GPIO - set to input for safety
+    //MotorTimerInit();
 
 }
 
-/*
- * Reads the ADC, accepts a pointer to a uin32_t array and reads into it
- */
-void adcRead(void){
-    ADCProcessorTrigger(ADC0_BASE, 0);
-    //
-    // Wait for conversion to be completed.
-    //
-    while(!ADCIntStatus(ADC0_BASE, 0, false))
-    {
-    }
-    //
-    // Clear the ADC interrupt flag.
-    //
-    ADCIntClear(ADC0_BASE, 0);
-
-    //
-    // Read ADC Value.
-    // You will get current 2, current 1, temp 2, temp 1 in that order
-    ADCSequenceDataGet(ADC0_BASE, 0, adcArray);
-
-}
-
-/*
- * Wrapper functions for current and temperature readings
- */
-
-uint32_t currentRead1(void){ // 1.6 = 0
-    return adcArray[2];
-}
-uint32_t  currentRead2(void){
-    return adcArray[3];
-}
-int32_t  tempRead1(void){
-    return (int32_t)(((float)adcArray[0]/4096.0*3.3)*200);
-}
-int32_t  tempRead2(void){
-    return (int32_t)(((float)adcArray[1]/4096.0*3.3)*200);
-}
-
-
-void MCP9600init(){
-    // See https://ncd.io/k-type-thermocouple-mcp9600-with-arduino/
-    // Operations:
-    // Set thermo config
-    // write 0x05
-    // write 0x00
-    // Set device config
-    // write 0x06
-    // write 0x00
-    //I2CMwrite(i2cints,0x64,0x00,1,data,count,callback,write)
-}
-
-void MCP9600ready(){
-    // Write 0x04
-    // wait
-    // check if slave busy, if not read
-    // return int
-}
-
-void MCP9600read(){
-    // write 0x00
-    // read to long int = 1
-    // read to long int = 2
-    // if 1 &0x80 == 0x80
-    // 1 = 1& 0x7F
-    //temp  = 1024 - (1 *16/ + 2/16)
-}
-/*********************************************** CURRENTLY NOT BEING IMPLEMENTED ********************************************/
 
 
 
 
 
-/*
- * Reads the temperature
- */
-uint32_t tempRead(void){
-    uint32_t pui32ADC0Value[4];
-    // uint32_t ui32TempValueC;
-    //
-    // Trigger the ADC conversion.
-    //
-    ADCProcessorTrigger(ADC0_BASE, 3);
 
-    //
-    // Wait for conversion to be completed.
-    //
-    while(!ADCIntStatus(ADC0_BASE, 3, false))
-    {
-    }
-    //
-    // Clear the ADC interrupt flag.
-    //
-    ADCIntClear(ADC0_BASE, 3);
-
-    //
-    // Read ADC Value.
-    //
-    ADCSequenceDataGet(ADC0_BASE, 3, pui32ADC0Value);
-    //
-    // Use non-calibrated conversion provided in the data sheet.  Make
-    // sure you divide last to avoid dropout.
-    //
-    // Read internal processor temperature
-    //ui32TempValueC = ((1475 * 1023) - (2250 * pui32ADC0Value[0])) / 10230;
-
-    return 1;
-}
-
-
-
-uint32_t currRead(void){
-   uint32_t pui32ADC0Value[4];
-   //
-   // Trigger the ADC conversion.
-   //
-   ADCProcessorTrigger(ADC0_BASE, 3);
-
-   //
-   // Wait for conversion to be completed.
-   //
-   while(!ADCIntStatus(ADC0_BASE, 3, false))
-   {
-   }
-
-   //
-   // Clear the ADC interrupt flag.
-   //
-   ADCIntClear(ADC0_BASE, 3);
-
-   //
-   // Read ADC Value.
-   //
-   ADCSequenceDataGet(ADC0_BASE, 3, pui32ADC0Value);
-   return 1;
-}
 
 

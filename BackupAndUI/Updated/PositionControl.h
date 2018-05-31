@@ -10,8 +10,8 @@
  *
  */
 
-#ifndef CONTROL_H_
-#define CONTROL_H_
+#ifndef POSITION_CONTROL_H_
+#define POSITION_CONTROL_H_
 
 // TODO in setup set these to zero
 typedef struct {                          // Define data structure containing control data
@@ -26,9 +26,8 @@ typedef struct {                          // Define data structure containing co
 } control_error;
 
 
-extern void timerIntInit(void);
+extern void MotorTimerInit(void);
 
-extern void Timer2IntHandler(void);
 extern void Timer1IntHandler(void);
 
 
@@ -112,8 +111,7 @@ void set_motor_pwm(int motor, int value);
 void PID_Controller(int reference, int actual, int motor);
 
 float decog_motor(int x, int motor);
+
 void setDecogging(void);
 
-
-
-#endif /* CONTROL_H_ */
+#endif /* POSITION_CONTROL_H_ */

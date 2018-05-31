@@ -2,8 +2,9 @@
 #include "System.h"
 #include "Encoder.h"
 #include "Motor.h"
-#include "Control.h"
+#include "PositionControl.h"
 #include "Utilities.h"
+#include "CurrentControl.h"
 
 #define BUF_SIZE 50
 
@@ -58,6 +59,7 @@ main(void)
                    int p1, p2;
                    UART0read(buffer,BUF_SIZE);
                    sscanf(buffer, "%d %d", &p1, &p2);
+                   setMODE(PWM);
                    set_motor_pwm(1, p1);
                    set_motor_pwm(2, p2);
                    break;
@@ -73,7 +75,6 @@ main(void)
                    UART0write(buffer);
                    break;
                }
-
                case 'e':    // Get Desired Angle
                {
                    int d1, d2;
@@ -161,12 +162,30 @@ main(void)
                    set_motor_pwm(1, 0);
                    set_motor_pwm(2, 0);
                }
-               case '1':
+               case '1':    // Read Phase Currents in Counts
                {
+                   get_counts();
                    break;
                }
-               case '2':
+               case '2':    // Read Current in mA
                {
+                   get_mA();
+                   break;
+               }
+               case '3':
+               {
+                   setMODE(ITEST);
+                   send_data();
+                   break;
+               }
+               case '4':
+               {
+                   set_current_gains();
+                   break;
+               }
+               case '5':
+               {
+                   get_current_gains();
                    break;
                }
                default:

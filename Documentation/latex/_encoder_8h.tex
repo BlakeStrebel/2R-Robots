@@ -1,5 +1,5 @@
-\hypertarget{_encoder_8h}{}\section{C\+:/\+Users/\+Ben/\+Documents/\+Git\+Hub/2\+R-\/\+Robots/\+Midterm\+Code/\+Tiva/\+Encoder.h File Reference}
-\label{_encoder_8h}\index{C\+:/\+Users/\+Ben/\+Documents/\+Git\+Hub/2\+R-\/\+Robots/\+Midterm\+Code/\+Tiva/\+Encoder.\+h@{C\+:/\+Users/\+Ben/\+Documents/\+Git\+Hub/2\+R-\/\+Robots/\+Midterm\+Code/\+Tiva/\+Encoder.\+h}}
+\hypertarget{_encoder_8h}{}\section{C\+:/\+Users/\+Ben/\+Documents/\+Git\+Hub/2\+R-\/\+Robots/\+Code/\+Tiva/\+Encoder.h File Reference}
+\label{_encoder_8h}\index{C\+:/\+Users/\+Ben/\+Documents/\+Git\+Hub/2\+R-\/\+Robots/\+Code/\+Tiva/\+Encoder.\+h@{C\+:/\+Users/\+Ben/\+Documents/\+Git\+Hub/2\+R-\/\+Robots/\+Code/\+Tiva/\+Encoder.\+h}}
 
 
 Encoder header.  
@@ -8,7 +8,7 @@ Encoder header.
 \subsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
-void \mbox{\hyperlink{_encoder_8h_ad2ecc69b99764f250fff9f6cc6cc55fb}{enoder\+S\+P\+Iinit}} (void)
+void \mbox{\hyperlink{_encoder_8h_ac31d94de099e13aa63766f6efe386aba}{encoder\+S\+P\+I\+Init}} (void)
 \begin{DoxyCompactList}\small\item\em Initializes the S\+PI channels for the motor drivers, encoders, and R\+AM. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{_encoder_8h_aa027163ba1e9951d437f3f4e260fd9bb}{encoder\+Read}} (void)
 \begin{DoxyCompactList}\small\item\em Updates value in sensor array. \end{DoxyCompactList}\item 
@@ -31,7 +31,11 @@ int \mbox{\hyperlink{_encoder_8h_a64bdccf53dabc69d335d5e7d53e5b31a}{read\+Motor2
 float \mbox{\hyperlink{_encoder_8h_adadde057f0a039eba73600bd55a68048}{read\+Motor1\+Angle\+Relative}} (void)
 \begin{DoxyCompactList}\small\item\em Reads value in encoder\+Val array for motor 1 and keeps track of multiturn angles. \end{DoxyCompactList}\item 
 float \mbox{\hyperlink{_encoder_8h_a8277b1c9a143a978685671b1a0c7f90d}{read\+Motor2\+Angle\+Relative}} (void)
-\begin{DoxyCompactList}\small\item\em Reads value in encoder\+Val array for motor 2 and keeps track of multiturn angles. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Reads value in encoder\+Val array for motor 2 and keeps track of multiturn angles. \end{DoxyCompactList}\item 
+float \mbox{\hyperlink{_encoder_8h_a6391115b4eaa017554396e9c0bd81ac4}{read\+Motor2\+Speed}} (void)
+\begin{DoxyCompactList}\small\item\em Reads the motor 1\textquotesingle{}s speed in terms of revolutions/sec from the encoder. \end{DoxyCompactList}\item 
+float \mbox{\hyperlink{_encoder_8h_a32d76f5feb48e875eddaa9c1dbd19276}{read\+Motor1\+Speed}} (void)
+\begin{DoxyCompactList}\small\item\em Reads the motor 2\textquotesingle{}s speed in terms of revolutions/sec from the encoder. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \subsection{Detailed Description}
@@ -67,13 +71,19 @@ This function sends a \textquotesingle{}t\textquotesingle{} and 40 pulses via S\
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
-Void 
+Void
 \end{DoxyReturn}
-\mbox{\Hypertarget{_encoder_8h_ad2ecc69b99764f250fff9f6cc6cc55fb}\label{_encoder_8h_ad2ecc69b99764f250fff9f6cc6cc55fb}} 
-\index{Encoder.\+h@{Encoder.\+h}!enoder\+S\+P\+Iinit@{enoder\+S\+P\+Iinit}}
-\index{enoder\+S\+P\+Iinit@{enoder\+S\+P\+Iinit}!Encoder.\+h@{Encoder.\+h}}
-\subsubsection{\texorpdfstring{enoder\+S\+P\+Iinit()}{enoderSPIinit()}}
-{\footnotesize\ttfamily void enoder\+S\+P\+Iinit (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+This function reads both encoder counts and stores them in an array
+
+Comes after\+: spi\+Init();
+
+Writes to\+: encoder\+Val array
+
+T\+O\+DO\+: check the delay \mbox{\Hypertarget{_encoder_8h_ac31d94de099e13aa63766f6efe386aba}\label{_encoder_8h_ac31d94de099e13aa63766f6efe386aba}} 
+\index{Encoder.\+h@{Encoder.\+h}!encoder\+S\+P\+I\+Init@{encoder\+S\+P\+I\+Init}}
+\index{encoder\+S\+P\+I\+Init@{encoder\+S\+P\+I\+Init}!Encoder.\+h@{Encoder.\+h}}
+\subsubsection{\texorpdfstring{encoder\+S\+P\+I\+Init()}{encoderSPIInit()}}
+{\footnotesize\ttfamily void encoder\+S\+P\+I\+Init (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
 
 
 
@@ -167,6 +177,24 @@ This function reads out the angle and keeps track of it for multiple turns. The 
 \begin{DoxyReturn}{Returns}
 The counts as an int 
 \end{DoxyReturn}
+\mbox{\Hypertarget{_encoder_8h_a32d76f5feb48e875eddaa9c1dbd19276}\label{_encoder_8h_a32d76f5feb48e875eddaa9c1dbd19276}} 
+\index{Encoder.\+h@{Encoder.\+h}!read\+Motor1\+Speed@{read\+Motor1\+Speed}}
+\index{read\+Motor1\+Speed@{read\+Motor1\+Speed}!Encoder.\+h@{Encoder.\+h}}
+\subsubsection{\texorpdfstring{read\+Motor1\+Speed()}{readMotor1Speed()}}
+{\footnotesize\ttfamily float read\+Motor1\+Speed (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Reads the motor 2\textquotesingle{}s speed in terms of revolutions/sec from the encoder. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+float the speed of the motor in rev/s 
+\end{DoxyReturn}
 \mbox{\Hypertarget{_encoder_8h_acf5c46f542d35b78a92a1cefac802888}\label{_encoder_8h_acf5c46f542d35b78a92a1cefac802888}} 
 \index{Encoder.\+h@{Encoder.\+h}!read\+Motor2\+Angle@{read\+Motor2\+Angle}}
 \index{read\+Motor2\+Angle@{read\+Motor2\+Angle}!Encoder.\+h@{Encoder.\+h}}
@@ -244,6 +272,24 @@ This function reads out the angle and keeps track of it for multiple turns. The 
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
 The counts as an int 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_encoder_8h_a6391115b4eaa017554396e9c0bd81ac4}\label{_encoder_8h_a6391115b4eaa017554396e9c0bd81ac4}} 
+\index{Encoder.\+h@{Encoder.\+h}!read\+Motor2\+Speed@{read\+Motor2\+Speed}}
+\index{read\+Motor2\+Speed@{read\+Motor2\+Speed}!Encoder.\+h@{Encoder.\+h}}
+\subsubsection{\texorpdfstring{read\+Motor2\+Speed()}{readMotor2Speed()}}
+{\footnotesize\ttfamily float read\+Motor2\+Speed (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Reads the motor 1\textquotesingle{}s speed in terms of revolutions/sec from the encoder. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+float the speed of the motor in rev/s 
 \end{DoxyReturn}
 \mbox{\Hypertarget{_encoder_8h_a7b6b3e45ebeda6eaf3c33f3f382c75d9}\label{_encoder_8h_a7b6b3e45ebeda6eaf3c33f3f382c75d9}} 
 \index{Encoder.\+h@{Encoder.\+h}!zero\+Motor1\+Raw\+Relative@{zero\+Motor1\+Raw\+Relative}}

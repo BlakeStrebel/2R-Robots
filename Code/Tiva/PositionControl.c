@@ -1,5 +1,6 @@
+#include "PositionControl.h"
 #include "System.h"
-#include "Control.h"
+#include "CurrentControl.h"
 #include "Utilities.h"
 #include "Encoder.h"
 #include "Motor.h"
@@ -24,39 +25,22 @@ static volatile int DECOGGING = 0;
  * Comes after:
  * - sysInit()
  */
-void timerIntInit(void)
-{
+void MotorTimerInit(void){
     setMODE(IDLE);
     IntMasterDisable();
-
-    // Enable the Timer0 peripheral.
     SysCtlPeripheralEnable(SYSCTL_PERIPH_TIMER1); // Use timer 1
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_TIMER2); // Use timer 2
-
-    // Configure Timer1A and Timer2A
     TimerConfigure(TIMER1_BASE, TIMER_CFG_PERIODIC);
-    TimerConfigure(TIMER2_BASE, TIMER_CFG_PERIODIC);
-
-    // Set the count time for timers
-    TimerLoadSet(TIMER1_BASE, TIMER_A, ui32SysClock / 1000); // Use timer 1A 1KHz.
-    TimerLoadSet(TIMER2_BASE, TIMER_A, ui32SysClock / 5000); // Use timer 2A 5KHz.
-
-    // Setup the interrupts for the timer timeouts.
+    TimerLoadSet(TIMER1_BASE, TIMER_A, ui32SysClock/1000-1); // Use timer A // activate every 1/2 of a second 120/120/2 = 0.5s
+    IntPrioritySet(INT_TIMER1A, 0x40); // Second highest priority
     IntEnable(INT_TIMER1A);
-    IntEnable(INT_TIMER2A);
     TimerIntEnable(TIMER1_BASE, TIMER_TIMA_TIMEOUT);
-    TimerIntEnable(TIMER2_BASE, TIMER_TIMA_TIMEOUT);
-
-    // Enable the timers.
     TimerEnable(TIMER1_BASE, TIMER_A);
-    TimerEnable(TIMER2_BASE, TIMER_A);
-
     IntMasterEnable();
 
-    // Set the INT_TIMER1A interrupt priority to the lowest priority.
-    IntPrioritySet(INT_TIMER1A, 0xE0);
-    // Set the INT_TIMER2A interrupt priority to the highest priority.
-    IntPrioritySet(INT_TIMER2A, 0);
+
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPION);
+    GPIOPinTypeGPIOOutput(GPIO_PORTN_BASE, GPIO_PIN_1);
+    GPIOPinWrite(GPIO_PORTN_BASE,GPIO_PIN_1,GPIO_PIN_1);
 
     E1.u = 0;
     E2.u = 0;
@@ -162,19 +146,12 @@ void set_motor_pwm(int motor, int value)
 }
 
 
-void
-Timer2IntHandler(void)
-{
-    //adcRead();
-    TimerIntClear(TIMER2_BASE, TIMER_TIMA_TIMEOUT);
-}
-
-
-void
-Timer1IntHandler(void)
+void Timer1IntHandler(void)
 {
     static int decctr = 0;  // counter for data decimation
     static int i = 0;   // trajectory index
+
+    TimerIntClear(TIMER1_BASE, TIMER_TIMA_TIMEOUT); // clear the interrupt flag
 
     encoderRead(); // update encoder values
     E1.actual = readMotor1RawRelative(); // read positions
@@ -184,6 +161,14 @@ Timer1IntHandler(void)
     switch(getMODE())
     {
         case IDLE:
+        {
+            break;
+        }
+        case PWM:
+        {
+            break;
+        }
+        case ITEST:
         {
             break;
         }
@@ -221,8 +206,6 @@ Timer1IntHandler(void)
             break;
         }
     }
-
-    TimerIntClear(TIMER1_BASE, TIMER_TIMA_TIMEOUT); // clear the interrupt flag
 }
 
 // Calculate control effort and set pwm value to control motor
@@ -291,7 +274,6 @@ void setDecogging(void) // Turn motor decogging on/off
     sscanf(buffer,"%d",&decog);
     DECOGGING = decog;
 }
-
 
 void load_position_trajectory(int motor)      // Load trajectory for tracking
 {

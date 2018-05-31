@@ -1,8 +1,11 @@
 #include "System.h"
 #include "Motor.h"
+#include "Encoder.h"
+#include "r2r.h"
 
 
 #define NUM_SSI_DATA            8
+#define PWMPERIOD 4000
 // Data from motor driver 2
 uint32_t pui32DataTx[NUM_SSI_DATA];
 uint32_t pui32DataRx[NUM_SSI_DATA];
@@ -21,9 +24,13 @@ void shutdownNow(){
 void motorSafetyCheck(){
     float vel1 =  readMotor1Speed(); // get the speed of the motor
     float vel2 = readMotor2Speed(); //get the speed of the motor
-    if(abs(vel1)>10||abs(vel2)>10){ // if the speed is > 10 rev/s
+    if(abs(vel1)>MAX_SPEED||abs(vel2)>MAX_SPEED){ // if the speed is > 10 rev/s
         shutdownNow(); // shuts off the motor and turns on the brakes
         error_state = MOTOR_SPINNING_TOO_FAST; // set the error message
+    }
+    if (tempRead1()>TEMP_LIMIT||tempRead2()>TEMP_LIMIT){
+      shutdownNow();// shuts off the motor and turns on the brakes
+      error_state = MOTOR_TOO_HOT;// set the error message
     }
 
 }
@@ -91,16 +98,22 @@ void pwmInit(void)
     PWMGenConfigure(PWM0_BASE, PWM_GEN_2, PWM_GEN_MODE_UP_DOWN |
                     PWM_GEN_MODE_NO_SYNC);
 
-    //
-    // Set the PWM period to 12500Hz.  To calculate the appropriate parameter
-    // use the following equation: N = (1 / f) * SysClk.  Where N is the
-    // function parameter, f is the desired frequency, and SysClk is the
+
+    // Set the PWM frequency to 30000Hz
+    // To calculate the appropriate parameter use the following equation: N = (1 / f) * SysClk.
+    // Where N is the function parameter, f is the desired frequency, and SysClk is the
     // system clock frequency.
+<<<<<<< HEAD
     // In this case you get: (1 / 12500Hz) * 120MHz = 9600 cycles.  Note that
     // the maximum period you can set is 2^16 - 1.
     // TODO: Here is a tradeoff. Ideally should be larger than 1KHz.
     PWMGenPeriodSet(PWM0_BASE, PWM_GEN_0, 9600);
     PWMGenPeriodSet(PWM0_BASE, PWM_GEN_2, 9600);
+=======
+    // In this case you get: (1 / 30000Hz) * 120MHz = 4000 cycles
+    PWMGenPeriodSet(PWM0_BASE, PWM_GEN_0, PWMPERIOD);
+    PWMGenPeriodSet(PWM0_BASE, PWM_GEN_2, PWMPERIOD);
+>>>>>>> ben
 
     // Set PWM0 PD0 to a duty cycle of 0.
     //TODO: Test if this can be 0.
@@ -163,7 +176,29 @@ void motorDriverInit(void)
 {
     pui32DataTx[0] = 0b0001000001000000; // set register 3, bit 6 and 5 to 10, option 3, 1x PWM mode
 
+<<<<<<< HEAD
     while(SSIDataGetNonBlocking(SSI2_BASE, &pui32DataRx[0])){}
+=======
+   
+
+    pui32DataTx[0] = 0b1001000000000000; // read register 3 // important for debugging
+    pui32DataTx[1] = 0b0001000001000000; // set register 3, bit 6 and 5 to 10, option 3, 1x PWM mode
+    pui32DataTx[2]=  0b1001000000000000; // read register 3
+    pui32DataTx[3]=  0b1001000000000000; // read register 3 one more time
+
+    GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_3,0x00);
+    SysCtlDelay(1);
+    for(ui32Index = 0; ui32Index < 4; ui32Index++){ // only reading and writing 3 times
+        GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_3,0x00); // Pull CS pin low
+        SysCtlDelay(1);
+        SSIDataPut(SSI2_BASE, pui32DataTx[ui32Index]); // Send data
+        SysCtlDelay(1000); // wait (at least 50ns)
+        GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_3,GPIO_PIN_3); // Being the CS pin high
+        SSIDataGet(SSI2_BASE, &pui32DataRx[ui32Index]); // Get the data
+    }
+    while(SSIBusy(SSI2_BASE)){
+    }
+>>>>>>> ben
 
     GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_3,0x00); // Pull CS pin low
     SysCtlDelay(1000);

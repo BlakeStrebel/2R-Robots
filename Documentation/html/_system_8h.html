@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.14"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>R2R Project: C:/Users/Ben/Documents/GitHub/2R-Robots/MidtermCode/Tiva/System.h File Reference</title>
+<title>R2R: C:/Users/Ben/Documents/GitHub/2R-Robots/Code/Tiva/System.h File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -21,7 +21,7 @@
  <tbody>
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">R2R Project
+   <div id="projectname">R2R
    </div>
   </td>
  </tr>
@@ -61,7 +61,7 @@ $(function() {
 
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="dir_4c73384e71d810f6f6f141802d924fce.html">MidtermCode</a></li><li class="navelem"><a class="el" href="dir_aee3de22fa7ca1d68048920d8ed0db79.html">Tiva</a></li>  </ul>
+<li class="navelem"><a class="el" href="dir_23fdee2f6995db16c755697cdf620cf4.html">Code</a></li><li class="navelem"><a class="el" href="dir_2ceb0fec70d4efbcdcc14db9c63f05fa.html">Tiva</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
@@ -101,6 +101,7 @@ $(function() {
 <code>#include &quot;driverlib/timer.h&quot;</code><br />
 <code>#include &quot;driverlib/uart.h&quot;</code><br />
 <code>#include &quot;driverlib/ssi.h&quot;</code><br />
+<code>#include &quot;driverlib/systick.h&quot;</code><br />
 <code>#include &quot;utils/uartstdio.h&quot;</code><br />
 </div>
 <p><a href="_system_8h_source.html">Go to the source code of this file.</a></p>
@@ -125,12 +126,24 @@ Functions</h2></td></tr>
 <tr class="memitem:ab0b86e69a6c13e01349840d66db0f1f3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_system_8h.html#ab0b86e69a6c13e01349840d66db0f1f3">delayMS</a> (int ms)</td></tr>
 <tr class="memdesc:ab0b86e69a6c13e01349840d66db0f1f3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stops the processor for a given amount of time. This is an approximate time.  <a href="#ab0b86e69a6c13e01349840d66db0f1f3">More...</a><br /></td></tr>
 <tr class="separator:ab0b86e69a6c13e01349840d66db0f1f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9539b63f71e1a1c8b7cc5142560b189c"><td class="memItemLeft" align="right" valign="top"><a id="a9539b63f71e1a1c8b7cc5142560b189c"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>timeInit</b> (void)</td></tr>
+<tr class="separator:a9539b63f71e1a1c8b7cc5142560b189c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a606dc97cf5056886cfd30122ce54709c"><td class="memItemLeft" align="right" valign="top"><a id="a606dc97cf5056886cfd30122ce54709c"></a>
+uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>getTime</b> (void)</td></tr>
+<tr class="separator:a606dc97cf5056886cfd30122ce54709c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3ef2d72f5373681a06978ab3f437bd63"><td class="memItemLeft" align="right" valign="top"><a id="a3ef2d72f5373681a06978ab3f437bd63"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>timeInt</b> (void)</td></tr>
+<tr class="separator:a3ef2d72f5373681a06978ab3f437bd63"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
 <tr class="memitem:ad6e919663d1d5cf6bbc82ba890b46204"><td class="memItemLeft" align="right" valign="top"><a id="ad6e919663d1d5cf6bbc82ba890b46204"></a>
 uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>ui32SysClock</b></td></tr>
 <tr class="separator:ad6e919663d1d5cf6bbc82ba890b46204"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a71e8f3ccee9af507cf000744058a8983"><td class="memItemLeft" align="right" valign="top"><a id="a71e8f3ccee9af507cf000744058a8983"></a>
+uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>micros</b></td></tr>
+<tr class="separator:a71e8f3ccee9af507cf000744058a8983"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>system header </p>

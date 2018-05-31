@@ -1,6 +1,6 @@
 function Client()
 %   provides a menu for interfacing with hopper robot system
-Tiva_port = 'COM4'; % Tiva board serial port
+Tiva_port = 'COM5'; % Tiva board serial port
 DECIMATION = 10;
 
 % Opening COM connection
@@ -176,6 +176,22 @@ while ~has_quit
             fprintf('Encoders zeroed\n');
         case 'q'
             has_quit = 1;
+        case '1'
+            counts(1:4) = fscanf(Tiva_Serial, '%d %d %d %d');
+            fprintf('Motor 1 A: %d, B: %d\nMotor2 A: %d, B: %d\n',counts(1), counts(2), counts(3), counts(4)); 
+        case '2'
+            mA(1:4) = fscanf(Tiva_Serial, '%d %d %d %d');
+            fprintf('Motor 1 A: %d, B: %d\nMotor2 A: %d, B: %d\n',mA(1), mA(2), mA(3), mA(4)); 
+        case '3'
+           read_plot_matrix_current(Tiva_Serial);
+        case '4'
+            Kp = input('Enter your desired Kp position gain: ');
+            Ki = input('Enter your desired Ki position gain: ');
+            fprintf(Tiva_Serial, '%3.2f %3.2f\n',[Kp,Ki]);
+        case '5'
+            Kp = fscanf(Tiva_Serial, '%f');    
+            Ki = fscanf(Tiva_Serial, '%f');     
+            fprintf('The controller is using Kp = %3.2f and Ki = %3.2f\n',[Kp,Ki]);
         otherwise
             fprintf('Invalid Command, try again...\n');
     end
