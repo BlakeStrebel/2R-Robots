@@ -233,10 +233,6 @@ void motor2PWM(int pwm1, int pwm2, int pwm3)
     PWMPulseWidthSet(PWM0_BASE, PWM_OUT_6, pwm3);
 }
 
-
-
-
-
 void shutdownNow(){
     motor1ControlPWM(0);
     motor2ControlPWM(0);
@@ -264,7 +260,7 @@ void MotorSPIinit(void){
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOD);
 
     // Configure Motor Pins
-    GPIOPinConfigure(GPIO_PD3_SSI2CLK);
+    GPIOPinConfigure(GPIO_PD3_SSI2CLK); //CLK
     GPIOPinConfigure(GPIO_PD1_SSI2XDAT0); // MOSI
     GPIOPinConfigure(GPIO_PD0_SSI2XDAT1); // MISO
 
@@ -273,21 +269,17 @@ void MotorSPIinit(void){
     GPIOPinTypeGPIOOutput(GPIO_PORTL_BASE,GPIO_PIN_2 | GPIO_PIN_3); // CS L2 for 1, L3 for 2
 
     // Configure and enable the SSI port for SPI master mode.
+    //TODO: Test if the bit rate can be the highest 5M.
     SSIConfigSetExpClk(SSI2_BASE, ui32SysClock, SSI_FRF_MOTO_MODE_1,
-                           SSI_MODE_MASTER, 1000000, 16); // 16 bits for motor
+                           SSI_MODE_MASTER, 1000000, 16); // 16 bits for motor, use 100kbps mode, use the system clock
 
     // Configure CS
-    GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_3,GPIO_PIN_3); //Set CS to HIGH
+    GPIOPinWrite(GPIO_PORTL_BASE, GPIO_PIN_2, GPIO_PIN_2); //Set CS to HIGH
+    GPIOPinWrite(GPIO_PORTL_BASE, GPIO_PIN_3, GPIO_PIN_3); //Set CS to HIGH
 
     // Enable the SSI2 module.
     SSIEnable(SSI2_BASE);
 }
-
-
-
-
-
-
 
 /*
  * This function sends SPI data over to the motor driver to setup the driver for 1x PWM mode

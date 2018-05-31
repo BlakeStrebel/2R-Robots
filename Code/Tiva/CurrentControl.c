@@ -145,7 +145,7 @@ void CurrentControlIntHandler(void)
                     decctr++;
                     if (decctr == DECIMATION)
                     {
-                        buffer_write(MOTOR1REF, MOTOR1REF, MOTOR1CURRENT, MOTOR1CURRENT);   // Write current values to buffer
+                        //buffer_write(MOTOR1REF, MOTOR2REF, MOTOR1CURRENT, MOTOR2CURRENT);   // Write current values to buffer
                         //buffer_write(COUNTS[0] - 2047 + C1A, COUNTS[1] - 2047 + C1B, COUNTS[2] - 2047 + C2A, COUNTS[3] - 2047 + C2B);
                         //buffer_write(COUNTS[0] - 2047 + C1A, COUNTS[1] - 2047 + C1B, COUNTS[0] - 2047 + C1A, COUNTS[1] - 2047 + C1B);
                         decctr = 0; // reset decimation counter

@@ -57,9 +57,9 @@ void r2rDefaultInit(void){
     sysInit(); // Init system clock and Master interrupt
     uartInit();
     //encoderSPIInit();
-    //MotorSPIinit();
+    MotorSPIinit();
     motorInit(); // Set useful signal outputs.
-    //motorDriverInit(); // Send values to set up the motor for 1x PWM mode
+    motorDriverInit(); // Send values to set up the motor for 3x PWM mode
     //currentControlInit();
 
     //gpioInit(); // Init for general GPIO - set to input for safety
