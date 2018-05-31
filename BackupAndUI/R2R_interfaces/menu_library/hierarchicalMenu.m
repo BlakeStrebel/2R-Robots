@@ -130,7 +130,7 @@ menu(id) = menu(1);
 menu(id).symbol = 's';
 menu(id).name = 'Start reading';
 menu(id).parent = 10;
-menu(id).save = @(state, data) trajectorySave(state, data, 1);
+menu(id).save = @(state, data) trajectorySave(state, data, 1, 0);
 menu(id).process = @(state) trajectoryPlot(state.t, 1, serial);
 menu(id).title = ['                    Motor 1 position plotted in the figure\n          ', ...    
                 ones(1, 60) * '-', '\n'];
@@ -190,7 +190,7 @@ menu(id).children = 18;
 id = 18;
 menu(id) = menu(11);
 menu(id).parent = 17;
-menu(id).save = @(state, data) trajectorySave(state, data, 2);
+menu(id).save = @(state, data) trajectorySave(state, data, 2, 0);
 menu(id).process = @(state) trajectoryPlot(state.t, 2, serial);
 menu(id).title = ['                    Motor 2 position plotted in the figure\n          ', ...    
                 ones(1, 60) * '-', '\n'];
@@ -249,7 +249,7 @@ menu(id).children = 25;
 id = 25;
 menu(id) = menu(11);
 menu(id).parent = 24;
-menu(id).save = @(state, data) trajectorySave(state, data, 3);
+menu(id).save = @(state, data) trajectorySave(state, data, 3, 0);
 menu(id).process = @(state) trajectoryPlot(state.t, 3, serial);
 menu(id).title = ['                  Both motor positions plotted in the figure\n          ', ...                                       
                 ones(1, 60) * '-', '\n'];
@@ -283,6 +283,7 @@ menu(id) = menu(1);
 menu(id).parent = 27;
 menu(id).titledata = true;
 menu(id).save = @(state, data) positionSave(state, [data(1), 0 , data(2), 0], 3);
+menu(id).process = @(state) initialPositionSend(state.p, serial);
 menu(id).backup = @(state) positionGet(state, 3);
 menu(id).title = ['                   Motor 1 initial position: %9.4f rad(s)\n', ... 
                   '                   Motor 2 initial position: %9.4f rad(s)\n    ', ...
@@ -306,8 +307,8 @@ menu(id) = menu(1);
 menu(id).symbol = 'd';
 menu(id).name = 'Default desired trajectory (step)';
 menu(id).parent = 29;
-menu(id).save = @(state, data) trajectoryDefault(state);
-menu(id).process = @(state) trajectorySend(state, 1);
+menu(id).save = @(state, data) trajectorySave(state, data, 1, 1);
+menu(id).process = @(state) trajectorySend(trajectoryDefault(), 1, serial);
 menu(id).title = ['               Default desire trajectory (pi / 3 * varepsilon(t))\n        ', ...     
                   ones(1, 64) * '-', '\n'];
 menu(id).question = 'Set PID gains in the format of [Kp, Ki, Kd]:\n';
@@ -321,7 +322,7 @@ menu(id) = menu(1);
 menu(id).parent = 30;
 menu(id).titledata = true;
 menu(id).save = @(state, data) PIDSave(state, data, 1);
-menu(id).process = @(state) PIDSend(state, 1);
+menu(id).process = @(state) PIDSend([state.Kp, state.Ki, state.Kd], 1, serial);
 menu(id).backup = @(state) PIDGet(state, 1);
 menu(id).title = ['                               Motor 1 PID gain: \n', ...
                   '                 Kp = %9.4f, Ki = %9.4f, Kd = %9.4f\n          ', ...  
@@ -335,8 +336,8 @@ menu(id) = menu(1);
 menu(id).symbol = 's';
 menu(id).name = 'Start running';
 menu(id).parent = 31;
-menu(id).save = @(state, data) trajectorySave(state, data, 1);
-menu(id).process = @(state) trajectoryTracking(state, 1);
+menu(id).save = @(state, data) trajectorySave(state, data, 1, 0);
+menu(id).process = @(state) trajectoryTracking(state, 1, serial);
 menu(id).title = ['                    Motor 1 trajectory plotted in the figure\n            ', ...  
                   ones(1, 56) * '-', '\n'];
 menu(id).children = [33, 34];
@@ -371,7 +372,7 @@ id = 35;
 menu(id) = menu(30);
 menu(id).symbol = 'c';
 menu(id).name = 'Costumed trajectory';
-menu(id).save = @(state, data) trajectoryCostumed(state);
+menu(id).process = @(state) trajectorySend(trajectoryCostumed(), 1, serial);
 menu(id).title = ['                           Costumed desire trajectory\n        ', ...    
                   ones(1, 64) * '-', '\n'];
 menu(id).children = 36;
@@ -418,7 +419,8 @@ menu(id).children = [41, 46];
 id = 41;
 menu(id) = menu(30);
 menu(id).parent = 40;
-menu(id).process = @(state) trajectorySend(state, 2);
+menu(id).save = @(state, data) trajectorySave(state, data, 2, 1);
+menu(id).process = @(state) trajectorySend(trajectoryDefault(), 2, serial);
 menu(id).children = 42;
 
 % Main menu -> PID tuning -> Position inputs -> Motor 2 -> Default
@@ -427,7 +429,7 @@ id = 42;
 menu(id) = menu(31);
 menu(id).parent = 41;
 menu(id).save = @(state, data) PIDSave(state, data, 2);
-menu(id).process = @(state) PIDSend(state, 2);
+menu(id).process = @(state) PIDSend([state.Kp, state.Ki, state.Kd], 2, serial);
 menu(id).backup = @(state) PIDGet(state, 2);
 menu(id).title = ['                               Motor 2 PID gain: \n', ...
                   '                 Kp = %9.4f, Ki = %9.4f, Kd = %9.4f\n          ', ...  
@@ -439,8 +441,8 @@ menu(id).children = 43;
 id = 43;
 menu(id) = menu(32);
 menu(id).parent = 42;
-menu(id).save = @(state, data) trajectorySave(state, data, 2);
-menu(id).process = @(state) trajectoryTracking(state, 2);
+menu(id).save = @(state, data) trajectorySave(state, data, 2, 0);
+menu(id).process = @(state) trajectoryTracking(state, 2, serial);
 menu(id).title = ['                    Motor 2 trajectory plotted in the figure\n            ', ...  
                   ones(1, 56) * '-', '\n'];
 menu(id).children = [44, 45];
@@ -468,6 +470,8 @@ menu(id).title = ['                        Motor 2 actual trajectory saved\n    
 % trajectory
 id = 46;
 menu(id) = menu(35);
+menu(id).save = @(state, data) trajectorySave(state, data, 2, 1);
+menu(id).process = @(state) trajectorySend(trajectoryCostumed(), 2, serial);
 menu(id).children = 47;
 
 % Main menu -> PID tuning -> Position inputs -> Motor 2 -> Costumed
@@ -511,7 +515,8 @@ menu(id).children = [52, 57];
 id = 52;
 menu(id) = menu(30);
 menu(id).parent = 51;
-menu(id).process = @(state) trajectorySend(state, 3);
+menu(id).save = @(state, data) trajectorySave(state, data, 3, 1);
+menu(id).process = @(state) trajectorySend(trajectoryDefault(), 3, serial);
 menu(id).title = ['              Default desire trajectories (pi / 3 * varepsilon(t))\n        ', ...     
                   ones(1, 64) * '-', '\n'];
 menu(id).question = 'Set PID gains in the format of [Kp1, Ki1, Kd1, Kp2, Ki2, Kd2]:\n';
@@ -523,7 +528,7 @@ id = 53;
 menu(id) = menu(31);
 menu(id).parent = 52;
 menu(id).save = @(state, data) PIDSave(state, data, 3);
-menu(id).process = @(state) PIDSend(state, 3);
+menu(id).process = @(state) PIDSend([state.Kp, state.Ki, state.Kd], 3, serial);
 menu(id).backup = @(state) PIDGet(state, 3);
 menu(id).title = ['                               Motor 1 PID gain: \n', ...
                   '                 Kp = %9.4f, Ki = %9.4f, Kd = %9.4f\n', ...  
@@ -537,8 +542,8 @@ menu(id).children = 54;
 id = 54;
 menu(id) = menu(32);
 menu(id).parent = 53;
-menu(id).save = @(state, data) trajectorySave(state, data, 3);
-menu(id).process = @(state) trajectoryTracking(state, 3);
+menu(id).save = @(state, data) trajectorySave(state, data, 3, 0);
+menu(id).process = @(state) trajectoryTracking(state, 3, serial);
 menu(id).title = ['                 Both motor trajectories plotted in the figure\n            ', ...            
                   ones(1, 56) * '-', '\n'];
 menu(id).children = [55, 56];
@@ -569,7 +574,7 @@ menu(id) = menu(52);
 menu(id).parent = 51;
 menu(id).symbol = 'c';
 menu(id).name = 'Costumed trajectories';
-menu(id).save = @(state, data) trajectoryCostumed(state);
+menu(id).process = @(state) trajectorySend(trajectoryCostumed(), 3, serial);
 menu(id).title = ['                          Costumed desire trajectories\n        ', ...    
                   ones(1, 64) * '-', '\n'];
 menu(id).children = 58;
