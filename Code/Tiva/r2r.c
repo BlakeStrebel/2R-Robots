@@ -21,8 +21,9 @@ void r2rDefaultInit(void){
     pwmInit();
     motorInit(); // Set pins for motor driver
     motorDriverInit(); // Send values to set up the motor for 1x PWM mode
-    //currentControlInit();
     adcInit();
+    currentControlInit();
+
     timeInit();
 
     //gpioInit(); // Init for general GPIO - set to input for safety
