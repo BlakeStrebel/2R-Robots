@@ -2,21 +2,16 @@
  * @file r2r.c
  * @brief
  *
- * This file contains the default initialisation function
+ * This file contains the main function that calls all other initialization functions
  *
  * @author Benjamen Lim
  * @author Huan Weng
  *
  */
 
-#include "includes.h"
+
 #include "r2r.h"
-#include "System.h"
-#include "Encoder.h"
-#include "Motor.h"
-#include "PositionControl.h"
-#include "CurrentControl.h"
-#include "Adc.h"
+
 
 void r2rDefaultInit(void){
     sysInit(); // initialize System Clock and master interrupt

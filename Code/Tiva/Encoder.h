@@ -13,6 +13,9 @@
 #ifndef ENCODER_H_
 #define ENCODER_H_
 
+#include "includes.h"
+#include "System.h"
+
 /**
  * @brief Initializes the SPI channels for the motor drivers, encoders, and RAM.
  *
