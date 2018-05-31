@@ -29,7 +29,7 @@ void motorSafetyCheck(){
     }
     /* Not working because tempRead has changed. Don't know where to get the ADC values.
     if (tempRead1()>TEMP_LIMIT||tempRead2()>TEMP_LIMIT){
-      shutdownNow();// shuts off the motor and turns on the brakes
+      shudownNow();// shuts off the motor and turns on the brakes
       error_state = MOTOR_TOO_HOT;// set the error message
     }
     */

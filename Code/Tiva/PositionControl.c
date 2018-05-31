@@ -146,7 +146,20 @@ void set_motor_pwm(int motor, int value)
 }
 
 
+<<<<<<< HEAD:Code/Tiva/PositionControl.c
 void Timer1IntHandler(void)
+=======
+void
+Timer2IntHandler(void)
+{
+    //adcRead();
+    TimerIntClear(TIMER2_BASE, TIMER_TIMA_TIMEOUT);
+}
+
+
+void
+Timer1IntHandler(void)
+>>>>>>> parent of 5f2cae6... update:Code/Tiva/Control.c
 {
     static int decctr = 0;  // counter for data decimation
     static int i = 0;   // trajectory index
@@ -274,6 +287,7 @@ void setDecogging(void) // Turn motor decogging on/off
     sscanf(buffer,"%d",&decog);
     DECOGGING = decog;
 }
+
 
 void load_position_trajectory(int motor)      // Load trajectory for tracking
 {
