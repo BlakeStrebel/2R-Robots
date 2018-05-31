@@ -121,7 +121,7 @@ void encoderRead(void){
     // TODO: check that the data RX2 is overwritten
     int num = pui32DataRx2[0] << 6; // 1 1 1 1 1 1 1 1 0 0 0 0 0 0, bit shift 6 to the left
     num = num | (pui32DataRx2[1]>>2); // 1 1 1 1 1 1 1 1 0 0 0 0 0 0 | 0 0 1 1 1 1 1 1, or it with next value in array bit shifted right by 2 to get the 14 bit encoder data
-    encoderVal[0] = (pui32DataRx2[0] << 6) | (pui32DataRx2[1] >> 2);
+    encoderVal[0] = num;
     // reading speed in rev/s * 10
     num = pui32DataRx2[2]<<8; // bit shift 8 to the left
     num = num | pui32DataRx2[3]; // or it with the next value in array

@@ -22,19 +22,42 @@ static volatile int DECOGGING = 0;
 /*
  * This function sets up the timer interrupt used for motor control
  *
+ *
  * Comes after:
  * - sysInit()
  */
 void MotorTimerInit(void){
     setMODE(IDLE);
     IntMasterDisable();
+
+    // Enable the Timer0 peripheral.
     SysCtlPeripheralEnable(SYSCTL_PERIPH_TIMER1); // Use timer 1
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_TIMER2); // Use timer 2
+
+    // Configure Timer1A and Timer2A
     TimerConfigure(TIMER1_BASE, TIMER_CFG_PERIODIC);
-    TimerLoadSet(TIMER1_BASE, TIMER_A, ui32SysClock/1000-1); // Use timer A // activate every 1/2 of a second 120/120/2 = 0.5s
-    IntPrioritySet(INT_TIMER1A, 0x40); // Second highest priority
+    TimerConfigure(TIMER2_BASE, TIMER_CFG_PERIODIC);
+
+    // Set the count time for timers
+    TimerLoadSet(TIMER1_BASE, TIMER_A, ui32SysClock / 1000-1); // Use timer 1A 1KHz.
+    TimerLoadSet(TIMER2_BASE, TIMER_A, ui32SysClock / 5000); // Use timer 2A 5KHz.
+
+    // Setup the interrupts for the timer timeouts.
     IntEnable(INT_TIMER1A);
+    IntEnable(INT_TIMER2A);
     TimerIntEnable(TIMER1_BASE, TIMER_TIMA_TIMEOUT);
+    TimerIntEnable(TIMER2_BASE, TIMER_TIMA_TIMEOUT);
+
+    // Enable the timers.
     TimerEnable(TIMER1_BASE, TIMER_A);
+    TimerEnable(TIMER2_BASE, TIMER_A);
+
+  
+    // Set the INT_TIMER1A interrupt priority to the lowest priority.
+    IntPrioritySet(INT_TIMER1A, 0x40);
+    // Set the INT_TIMER2A interrupt priority to the highest priority.
+    IntPrioritySet(INT_TIMER2A, 0);
+
     IntMasterEnable();
 
 

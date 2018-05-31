@@ -49,7 +49,7 @@ extern void motorSafetyCheck(void);
  * @param Void
  * @return Void
  */
-extern void MotorSPIinit(void);
+extern void MotorSPIInit(void);
 
 /**
 * @brief Initializes the GPIO pins for the motor

@@ -103,17 +103,11 @@ void pwmInit(void)
     // To calculate the appropriate parameter use the following equation: N = (1 / f) * SysClk.
     // Where N is the function parameter, f is the desired frequency, and SysClk is the
     // system clock frequency.
-<<<<<<< HEAD
-    // In this case you get: (1 / 12500Hz) * 120MHz = 9600 cycles.  Note that
-    // the maximum period you can set is 2^16 - 1.
-    // TODO: Here is a tradeoff. Ideally should be larger than 1KHz.
-    PWMGenPeriodSet(PWM0_BASE, PWM_GEN_0, 9600);
-    PWMGenPeriodSet(PWM0_BASE, PWM_GEN_2, 9600);
-=======
+
+
     // In this case you get: (1 / 30000Hz) * 120MHz = 4000 cycles
     PWMGenPeriodSet(PWM0_BASE, PWM_GEN_0, PWMPERIOD);
     PWMGenPeriodSet(PWM0_BASE, PWM_GEN_2, PWMPERIOD);
->>>>>>> ben
 
     // Set PWM0 PD0 to a duty cycle of 0.
     //TODO: Test if this can be 0.
@@ -172,22 +166,23 @@ void motorInit(void)
  *
  * Note that the driver will NOT be set if motor power is not supplied because the driver will not be able to read the registers over SPI, even though it responds
  */
-void motorDriverInit(void)
-{
-    pui32DataTx[0] = 0b0001000001000000; // set register 3, bit 6 and 5 to 10, option 3, 1x PWM mode
+void motorDriverInit(void){
+    while(SSIDataGetNonBlocking(SSI2_BASE, &pui32DataRx[0])){
+    }
 
-<<<<<<< HEAD
-    while(SSIDataGetNonBlocking(SSI2_BASE, &pui32DataRx[0])){}
-=======
-   
-
+    // debugging
     pui32DataTx[0] = 0b1001000000000000; // read register 3 // important for debugging
     pui32DataTx[1] = 0b0001000001000000; // set register 3, bit 6 and 5 to 10, option 3, 1x PWM mode
     pui32DataTx[2]=  0b1001000000000000; // read register 3
     pui32DataTx[3]=  0b1001000000000000; // read register 3 one more time
 
+
+    // Pull CS pin low, not necessary but nice to ensure that it is low
+
     GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_3,0x00);
-    SysCtlDelay(1);
+    SysCtlDelay(1); 
+
+
     for(ui32Index = 0; ui32Index < 4; ui32Index++){ // only reading and writing 3 times
         GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_3,0x00); // Pull CS pin low
         SysCtlDelay(1);
@@ -196,29 +191,45 @@ void motorDriverInit(void)
         GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_3,GPIO_PIN_3); // Being the CS pin high
         SSIDataGet(SSI2_BASE, &pui32DataRx[ui32Index]); // Get the data
     }
-    while(SSIBusy(SSI2_BASE)){
-    }
->>>>>>> ben
 
-    GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_3,0x00); // Pull CS pin low
-    SysCtlDelay(1000);
-    SSIDataPut(SSI2_BASE, pui32DataTx[0]); // Send data
-    SysCtlDelay(1000); // wait (at least 50ns)
-    GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_3,GPIO_PIN_3); // Being the CS pin high
-    SSIDataGet(SSI2_BASE, &pui32DataRx[0]); // Get the data
+    while(SSIBusy(SSI2_BASE)){ // let SSI finish processing
+    } 
 
-    while(SSIBusy(SSI2_BASE)){}
+    GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_3,GPIO_PIN_3); // Make sure the pin is high
 
-    while(SSIDataGetNonBlocking(SSI2_BASE, &pui32DataRx[0])){}
+    // long delay to ensure that pin is high before switching, caused issues in the past 
+    // where the delay was not long enough
+    delayMS(1000); 
 
-    GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_2,0x00); // Pull CS pin low
-    SysCtlDelay(1000);
-    SSIDataPut(SSI2_BASE, pui32DataTx[0]); // Send data
-    SysCtlDelay(1000); // wait (at least 50ns)
-    GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_2,GPIO_PIN_2); // Being the CS pin high
-    SSIDataGet(SSI2_BASE, &pui32DataRx[0]); // Get the data
+   while(SSIDataGetNonBlocking(SSI2_BASE, &pui32DataRx[0])){
+   }
 
-    while(SSIBusy(SSI2_BASE)){}
+   // debugging
+   pui32DataTx[0] = 0b1001000000000000; // read register 3
+   pui32DataTx[1] = 0b0001000001000000; // set register 3, bit 6 and 5 to 10, option 3, 1x PWM mode
+   pui32DataTx[2]=  0b1001000000000000; // read register 3
+   pui32DataTx[3]=  0b1001000000000000; // read register 3 one more time
+   //
+   // Send 4 bytes of data.
+   //
+
+
+   GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_2,0x00);
+   SysCtlDelay(1);
+   for(ui32Index = 0; ui32Index < 4; ui32Index++){ // only reading and writing 3 times
+       GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_2,0x00); // Pull CS pin low
+       SysCtlDelay(1);
+       SSIDataPut(SSI2_BASE, pui32DataTx[ui32Index]); // Send data
+       SysCtlDelay(1000); // wait (at least 50ns)
+       GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_2,GPIO_PIN_2); // Being the CS pin high
+       SSIDataGet(SSI2_BASE, &pui32DataRx[ui32Index]); // Get the data
+   }
+   while(SSIBusy(SSI2_BASE)){
+   }
+
+   GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_2,GPIO_PIN_2); // Make sure the pin is high
+   //SysCtlDelay(1000);
+   SysCtlDelay(1000);
 }
 
 /*

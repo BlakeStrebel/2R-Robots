@@ -22,12 +22,11 @@ static volatile int DECOGGING = 0;
 /*
  * This function sets up the timer interrupt used for motor control
  *
+ *
  * Comes after:
  * - sysInit()
  */
-<<<<<<< HEAD:Code/Tiva/Control.c
-void timerIntInit(void)
-{
+void MotorTimerInit(void){
     setMODE(IDLE);
     IntMasterDisable();
 
@@ -40,7 +39,7 @@ void timerIntInit(void)
     TimerConfigure(TIMER2_BASE, TIMER_CFG_PERIODIC);
 
     // Set the count time for timers
-    TimerLoadSet(TIMER1_BASE, TIMER_A, ui32SysClock / 1000); // Use timer 1A 1KHz.
+    TimerLoadSet(TIMER1_BASE, TIMER_A, ui32SysClock / 1000-1); // Use timer 1A 1KHz.
     TimerLoadSet(TIMER2_BASE, TIMER_A, ui32SysClock / 5000); // Use timer 2A 5KHz.
 
     // Setup the interrupts for the timer timeouts.
@@ -53,30 +52,18 @@ void timerIntInit(void)
     TimerEnable(TIMER1_BASE, TIMER_A);
     TimerEnable(TIMER2_BASE, TIMER_A);
 
-    IntMasterEnable();
-
+  
     // Set the INT_TIMER1A interrupt priority to the lowest priority.
-    IntPrioritySet(INT_TIMER1A, 0xE0);
+    IntPrioritySet(INT_TIMER1A, 0x40);
     // Set the INT_TIMER2A interrupt priority to the highest priority.
     IntPrioritySet(INT_TIMER2A, 0);
-=======
-void MotorTimerInit(void){
-    setMODE(IDLE);
-    IntMasterDisable();
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_TIMER1); // Use timer 1
-    TimerConfigure(TIMER1_BASE, TIMER_CFG_PERIODIC);
-    TimerLoadSet(TIMER1_BASE, TIMER_A, ui32SysClock/1000-1); // Use timer A // activate every 1/2 of a second 120/120/2 = 0.5s
-    IntPrioritySet(INT_TIMER1A, 0x40); // Second highest priority
-    IntEnable(INT_TIMER1A);
-    TimerIntEnable(TIMER1_BASE, TIMER_TIMA_TIMEOUT);
-    TimerEnable(TIMER1_BASE, TIMER_A);
+
     IntMasterEnable();
 
 
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPION);
     GPIOPinTypeGPIOOutput(GPIO_PORTN_BASE, GPIO_PIN_1);
     GPIOPinWrite(GPIO_PORTN_BASE,GPIO_PIN_1,GPIO_PIN_1);
->>>>>>> ben:BackupAndUI/Updated/PositionControl.c
 
     E1.u = 0;
     E2.u = 0;
