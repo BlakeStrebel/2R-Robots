@@ -17,7 +17,7 @@ void r2rDefaultInit(void){
     sysInit(); // initialize System Clock and master interrupt
     uartInit(); // initialize UART
     encoderSPIInit(); // initialize SPI for encoder
-    MotorSPIinit(); // initialize SPI for motor
+    MotorSPIInit(); // initialize SPI for motor
     pwmInit();
     motorInit(); // Set pins for motor driver
     motorDriverInit(); // Send values to set up the motor for 1x PWM mode

@@ -2,7 +2,7 @@
  * @file includes.h
  * @brief
  *
- * This file contains the standard array of initializations to simplify the .h files
+ * This file contains the standard array of initializations.
  *
  * @author Benjamen Lim
  * @author Huan Weng
@@ -23,8 +23,6 @@
 #include "inc/hw_memmap.h"
 #include "inc/hw_sysctl.h"
 #include "inc/hw_types.h"
-#include "inc/hw_i2c.h"
-#include "inc/hw_types.h"
 #include "inc/hw_gpio.h"
 #include "driverlib/fpu.h"
 #include "driverlib/ssi.h"
@@ -36,7 +34,6 @@
 #include "driverlib/debug.h"
 #include "driverlib/timer.h"
 #include "driverlib/interrupt.h"
-#include "driverlib/i2c.h"
 #include "driverlib/uart.h"
 #include "driverlib/sysctl.h"
 #include "driverlib/adc.h"
