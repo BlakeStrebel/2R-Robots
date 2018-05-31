@@ -1,5 +1,6 @@
 #include "System.h"
 #include "Motor.h"
+#include "Utilities.h"
 
 
 #define NUM_SSI_DATA            8
@@ -53,23 +54,20 @@ void motorInit()
     PWMPulseWidthSet(PWM0_BASE, PWM_OUT_6, 0);
 
     // Initialize INLx pins as outputs
-    SysCtlPeripheralEnable(M1_INL_PERIPH);
-    //SysCtlPeripheralEnable(M2_INL_PERIPH);
-    GPIOPinTypeGPIOOutput(M1_INL_PORT, M1_INL_PINS);
-    //GPIOPinTypeGPIOOutput(M2_INL_PORT, M2_INL_PINS);
-    GPIOPinWrite(M1_INL_PORT, M1_INL_PINS, M1_INL_BREAK);   // Break motors on startup by default
-    //GPIOPinWrite(M2_INL_PORT, M2_INL_PINS, M2_INL_BREAK);
-
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOD);
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOP);
-
-    GPIOPinTypeGPIOOutput(GPIO_PORTD_BASE, GPIO_PIN_5 | GPIO_PIN_6);
-    GPIOPinTypeGPIOOutput(GPIO_PORTP_BASE, GPIO_PIN_1);
-
-    GPIOPinWrite(M1_INL_PORT, M1_INL_PINS, M1_INL_OUTPUT_0);   // Break motors on startup by default
-    GPIOPinWrite(GPIO_PORTP_BASE, GPIO_PIN_1, GPIO_PIN_1);   // Break motors on startup by default
-    GPIOPinWrite(GPIO_PORTD_BASE, GPIO_PIN_5 | GPIO_PIN_6, 0);   // Break motors on startup by default
-
+    SysCtlPeripheralEnable(M1_INL_PERIPH_A);
+    SysCtlPeripheralEnable(M1_INL_PERIPH_B);
+    SysCtlPeripheralEnable(M1_INL_PERIPH_C);
+    SysCtlPeripheralEnable(M2_INL_PERIPH_A);
+    SysCtlPeripheralEnable(M2_INL_PERIPH_B);
+    SysCtlPeripheralEnable(M2_INL_PERIPH_C);
+    GPIOPinTypeGPIOOutput(M1_INL_PORT_A, M1_INL_PIN_A);
+    GPIOPinTypeGPIOOutput(M1_INL_PORT_B, M1_INL_PIN_B);
+    GPIOPinTypeGPIOOutput(M1_INL_PORT_C, M1_INL_PIN_C);
+    GPIOPinTypeGPIOOutput(M2_INL_PORT_A, M2_INL_PIN_A);
+    GPIOPinTypeGPIOOutput(M2_INL_PORT_B, M2_INL_PIN_B);
+    GPIOPinTypeGPIOOutput(M2_INL_PORT_C, M2_INL_PIN_C);
+    M1_INL_WRITE(0, 0, 0);  // Break motors on startup by default
+    M2_INL_WRITE(0, 0, 0);
 
     // Configure hall inputs to generate interrupts on state change
     SysCtlPeripheralEnable(M1H_PERIPH);
@@ -99,7 +97,7 @@ void M1HIntHandler(void)
     M1H_HALLS = GPIOPinRead(M1H_PORT, M1H_PINS);
 
     // Update PWM outputs
-    //motor1ControlPWM(M1_PWM);
+    motor1ControlPWM(M1_PWM);
 }
 
 void M2HIntHandler(void)
@@ -115,7 +113,6 @@ void M2HIntHandler(void)
 
 void motor1ControlPWM(int control)
 {
-    /*
     IntMasterDisable();
     M1_PWM = control; // Update global variable containing PWM value
     IntMasterEnable();
@@ -128,39 +125,43 @@ void motor1ControlPWM(int control)
         {
             case M1_HALLSTATE_0:
             {
-                GPIOPinWrite(M1_INL_PORT, M1_INL_PINS, M1_INL_OUTPUT_0);
+                M1_INL_WRITE(0, 1, 1);
                 motor1PWM(0, control, 0);
                 break;
             }
             case M1_HALLSTATE_1:
             {
-                GPIOPinWrite(M1_INL_PORT, M1_INL_PINS, M1_INL_OUTPUT_1);
+                M1_INL_WRITE(1, 0, 1);
                 motor1PWM(control, 0, 0);
                 break;
             }
             case M1_HALLSTATE_2:
             {
-                GPIOPinWrite(M1_INL_PORT, M1_INL_PINS, M1_INL_OUTPUT_2);
+                M1_INL_WRITE(1, 1, 0);
                 motor1PWM(control, 0, 0);
                 break;
             }
             case M1_HALLSTATE_3:
             {
-                GPIOPinWrite(M1_INL_PORT, M1_INL_PINS, M1_INL_OUTPUT_0);
+                M1_INL_WRITE(0, 1, 1);
                 motor1PWM(0, 0, control);
                 break;
             }
             case M1_HALLSTATE_4:
             {
-                GPIOPinWrite(M1_INL_PORT, M1_INL_PINS, M1_INL_OUTPUT_1);
+                M1_INL_WRITE(1, 0, 1);
                 motor1PWM(0, 0, control);
                 break;
             }
             case M1_HALLSTATE_5:
             {
-                GPIOPinWrite(M1_INL_PORT, M1_INL_PINS, M1_INL_OUTPUT_2);
+                M1_INL_WRITE(1, 1, 0);
                 motor1PWM(0, control, 0);
                 break;
+            }
+            default :
+            {
+                // You should not end up here, check hall wiring
             }
         }
     }
@@ -170,39 +171,43 @@ void motor1ControlPWM(int control)
         {
             case M1_HALLSTATE_3:
             {
-                GPIOPinWrite(M1_INL_PORT, M1_INL_PINS, M1_INL_OUTPUT_0);
+                M1_INL_WRITE(0, 1, 1);
                 motor1PWM(0, control, 0);
                 break;
             }
             case M1_HALLSTATE_4:
             {
-                GPIOPinWrite(M1_INL_PORT, M1_INL_PINS, M1_INL_OUTPUT_1);
+                M1_INL_WRITE(1, 0, 1);
                 motor1PWM(control, 0, 0);
                 break;
             }
             case M1_HALLSTATE_5:
             {
-                GPIOPinWrite(M1_INL_PORT, M1_INL_PINS, M1_INL_OUTPUT_2);
+                M1_INL_WRITE(1, 1, 0);
                 motor1PWM(control, 0, 0);
                 break;
             }
             case M1_HALLSTATE_0:
             {
-                GPIOPinWrite(M1_INL_PORT, M1_INL_PINS, M1_INL_OUTPUT_0);
+                M1_INL_WRITE(0, 1, 1);
                 motor1PWM(0, 0, control);
                 break;
             }
             case M1_HALLSTATE_1:
             {
-                GPIOPinWrite(M1_INL_PORT, M1_INL_PINS, M1_INL_OUTPUT_1);
+                M1_INL_WRITE(1, 0, 1);
                 motor1PWM(0, 0, control);
                 break;
             }
             case M1_HALLSTATE_2:
             {
-                GPIOPinWrite(M1_INL_PORT, M1_INL_PINS, M1_INL_OUTPUT_2);
+                M1_INL_WRITE(1, 1, 0);
                 motor1PWM(0, control, 0);
                 break;
+            }
+            default :
+            {
+                // You should not end up here, check hall wiring
             }
         }
     }
@@ -210,7 +215,6 @@ void motor1ControlPWM(int control)
     {
         motor1PWM(0, 0, 0); // Apply zero current, Alternatively, break using M1_INL_BREAK
     }
-    */
 }
 
 void motor1PWM(int pwm1, int pwm2, int pwm3)
@@ -258,6 +262,7 @@ void MotorSPIinit(void){
 
     // Enable GPIO for SPI2
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOD);
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOL);
 
     // Configure Motor Pins
     GPIOPinConfigure(GPIO_PD3_SSI2CLK); //CLK
@@ -291,11 +296,13 @@ void MotorSPIinit(void){
  * Note that the driver will NOT be set if motor power is not supplied because the driver will not be able to read the registers over SPI, even though it responds
  */
 void motorDriverInit(void){
+    char buffer[50];
+
     while(SSIDataGetNonBlocking(SSI2_BASE, &pui32DataRx[0])){
     }
 
     pui32DataTx[0] = 0b1001000000000000; // read register 3
-  //pui32DataTx[1] = 0b0001000001000000; // set register 3, bit 6 and 5 to 10, option 3, 1x PWM mode
+    //pui32DataTx[1] = 0b0001000001000000; // set register 3, bit 6 and 5 to 10, option 3, 1x PWM mode
     pui32DataTx[1] = 0b0001000000100000; // set register 3, bit 6-5 to 10b, 3x PWM mode
 
     pui32DataTx[2]=  0b1001000000000000; // read register 3
@@ -310,6 +317,10 @@ void motorDriverInit(void){
         SysCtlDelay(1000); // wait (at least 50ns)
         GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_3,GPIO_PIN_3); // Being the CS pin high
         SSIDataGet(SSI2_BASE, &pui32DataRx[ui32Index]); // Get the data
+
+        sprintf(buffer, "%X\r\n",pui32DataRx[ui32Index]);
+        UART0write(buffer);
+
     }
     while(SSIBusy(SSI2_BASE)){
     }
@@ -351,6 +362,66 @@ void motorDriverInit(void){
 
 
 
+
+void M1_INL_WRITE(int a, int b, int c)
+{
+    if (a)
+    {
+        GPIOPinWrite(M1_INL_PORT_A, M1_INL_PIN_A, M1_INL_PIN_A);
+    }
+    else
+    {
+        GPIOPinWrite(M1_INL_PORT_A, M1_INL_PIN_A, 0);
+    }
+
+    if (b)
+    {
+        GPIOPinWrite(M1_INL_PORT_B, M1_INL_PIN_B, M1_INL_PIN_B);
+    }
+    else
+    {
+        GPIOPinWrite(M1_INL_PORT_B, M1_INL_PIN_B, 0);
+    }
+
+    if (c)
+    {
+        GPIOPinWrite(M1_INL_PORT_C, M1_INL_PIN_C, M1_INL_PIN_C);
+    }
+    else
+    {
+        GPIOPinWrite(M1_INL_PORT_C, M1_INL_PIN_C, 0);
+    }
+}
+
+void M2_INL_WRITE(int a, int b, int c)
+{
+    if (a)
+    {
+        GPIOPinWrite(M2_INL_PORT_A, M2_INL_PIN_A, M2_INL_PIN_A);
+    }
+    else
+    {
+        GPIOPinWrite(M2_INL_PORT_A, M2_INL_PIN_A, 0);
+    }
+
+    if (b)
+    {
+        GPIOPinWrite(M2_INL_PORT_B, M2_INL_PIN_B, M2_INL_PIN_B);
+    }
+    else
+    {
+        GPIOPinWrite(M2_INL_PORT_B, M2_INL_PIN_B, 0);
+    }
+
+    if (c)
+    {
+        GPIOPinWrite(M2_INL_PORT_C, M2_INL_PIN_C, M2_INL_PIN_C);
+    }
+    else
+    {
+        GPIOPinWrite(M2_INL_PORT_C, M2_INL_PIN_C, 0);
+    }
+}
 
 
 
