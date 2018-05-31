@@ -173,8 +173,8 @@ void motorDriverInit(void){
     // debugging
     pui32DataTx[0] = 0b1001000000000000; // read register 3 // important for debugging
     pui32DataTx[1] = 0b0001000001000000; // set register 3, bit 6 and 5 to 10, option 3, 1x PWM mode
-    pui32DataTx[2]=  0b1001000000000000; // read register 3
-    pui32DataTx[3]=  0b1001000000000000; // read register 3 one more time
+    pui32DataTx[2]=  0b1001100000000000; // read register 3
+    pui32DataTx[3]=  0b1001100000000000; // read register 3 one more time
 
 
     // Pull CS pin low, not necessary but nice to ensure that it is low
