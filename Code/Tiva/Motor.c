@@ -38,7 +38,8 @@ void motorSafetyCheck(){
 /*
  * This function initilizes the SPI on SSI0, using PA2 (CLK), PA3(SS), PA4(RX), PA5(TX)
  */
-void MotorSPIinit(void){
+void MotorSPIInit(void)
+{
     // The SSI2 peripheral must be enabled for use.
     SysCtlPeripheralEnable(SYSCTL_PERIPH_SSI2); // SSI2
 
@@ -46,7 +47,7 @@ void MotorSPIinit(void){
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOD);
 
     // Configure Motor Pins
-    GPIOPinConfigure(GPIO_PD3_SSI2CLK);
+    GPIOPinConfigure(GPIO_PD3_SSI2CLK); //CLK
     GPIOPinConfigure(GPIO_PD1_SSI2XDAT0); // MOSI
     GPIOPinConfigure(GPIO_PD0_SSI2XDAT1); // MISO
 
@@ -55,11 +56,13 @@ void MotorSPIinit(void){
     GPIOPinTypeGPIOOutput(GPIO_PORTL_BASE,GPIO_PIN_2 | GPIO_PIN_3); // CS L2 for 1, L3 for 2
 
     // Configure and enable the SSI port for SPI master mode.
+    //TODO: Test if the bit rate can be the highest 5M.
     SSIConfigSetExpClk(SSI2_BASE, ui32SysClock, SSI_FRF_MOTO_MODE_1,
                            SSI_MODE_MASTER, 1000000, 16); // 16 bits for motor, use 100kbps mode, use the system clock
 
     // Configure CS
-    GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_3,GPIO_PIN_3); //Set CS to HIGH
+    GPIOPinWrite(GPIO_PORTL_BASE, GPIO_PIN_2, GPIO_PIN_2); //Set CS to HIGH
+    GPIOPinWrite(GPIO_PORTL_BASE, GPIO_PIN_3, GPIO_PIN_3); //Set CS to HIGH
 
     // Enable the SSI2 module.
     SSIEnable(SSI2_BASE);
@@ -69,50 +72,27 @@ void MotorSPIinit(void){
  * This function sets up the pwm on pins PF1,PF2,PF3 which are avaliable on the TM4C123 Launchpad as RGB outputs.
  * TODO: Change PWM output pins
  */
-void pwmInit(void){
-    //
+void pwmInit(void)
+{
     // Set the PWM clock to the system clock.
-    //
     SysCtlPWMClockSet(SYSCTL_PWMDIV_1);
 
-    //
     // The PWM peripheral must be enabled for use.
-    //
     SysCtlPeripheralEnable(SYSCTL_PERIPH_PWM0);
 
-    //
-    // For this example PWM0 is used with PortB Pins 6 and 7.  The actual port
-    // and pins used may be different on your part, consult the data sheet for
-    // more information.  GPIO port B needs to be enabled so these pins can be
-    // used.
-    // TODO: change this to whichever GPIO port you are using.
-    //
+    // Enable GPIO for PWM.
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOF);
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOG);
 
-    //
     // Configure the GPIO pin muxing to select PWM functions for these pins.
-    // This step selects which alternate function is available for these pins.
-    // This is necessary if your part supports GPIO pin function muxing.
-    // Consult the data sheet to see which functions are allocated per pin.
-    // TODO: change this to select the port/pin you are using.
-    //
     GPIOPinConfigure(GPIO_PF0_M0PWM0);
     GPIOPinConfigure(GPIO_PG0_M0PWM4);
 
-    //
-    // Configure the GPIO pad for PWM function on pins PB6 and PB7.  Consult
-    // the data sheet to see which functions are allocated per pin.
-    // TODO: change this to select the port/pin you are using.
-    //
+    // Configure the GPIO pad for PWM function on pins PF0 and PG0.
     GPIOPinTypePWM(GPIO_PORTF_BASE, GPIO_PIN_0);
     GPIOPinTypePWM(GPIO_PORTG_BASE, GPIO_PIN_0);
 
-    //
     // Configure the PWM0 to count up/down without synchronization.
-    // Note: Enabling the dead-band generator automatically couples the 2
-    // outputs from the PWM block so we don't use the PWM synchronization.
-    //
     PWMGenConfigure(PWM0_BASE, PWM_GEN_0, PWM_GEN_MODE_UP_DOWN |
                     PWM_GEN_MODE_NO_SYNC);
     PWMGenConfigure(PWM0_BASE, PWM_GEN_2, PWM_GEN_MODE_UP_DOWN |
@@ -123,27 +103,21 @@ void pwmInit(void){
     // To calculate the appropriate parameter use the following equation: N = (1 / f) * SysClk.
     // Where N is the function parameter, f is the desired frequency, and SysClk is the
     // system clock frequency.
+
+
     // In this case you get: (1 / 30000Hz) * 120MHz = 4000 cycles
     PWMGenPeriodSet(PWM0_BASE, PWM_GEN_0, PWMPERIOD);
     PWMGenPeriodSet(PWM0_BASE, PWM_GEN_2, PWMPERIOD);
 
-    //
-    // Set PWM0 PD0 to a duty cycle of 25%.  You set the duty cycle as a
-    // function of the period.  Since the period was set above, you can use the
-    // PWMGenPeriodGet() function.  For this example the PWM will be high for
-    // 25% of the time or 16000 clock cycles (64000 / 4).
-    //
-    PWMPulseWidthSet(PWM0_BASE, PWM_OUT_0,1);
-    PWMPulseWidthSet(PWM0_BASE, PWM_OUT_4,1);
+    // Set PWM0 PD0 to a duty cycle of 0.
+    //TODO: Test if this can be 0.
+    PWMPulseWidthSet(PWM0_BASE, PWM_OUT_0, 0);
+    PWMPulseWidthSet(PWM0_BASE, PWM_OUT_4, 0);
 
-    //
-    // Enable the PWM0 Bit 0 (PD0) and Bit 1 (PD1) output signals.
-    //
+    // Enable the PWM0 Bit 0 and Bit 4 output signals.
     PWMOutputState(PWM0_BASE, PWM_OUT_0_BIT | PWM_OUT_4_BIT, true);
 
-    //
     // Enables the counter for a PWM generator block.
-    //
     PWMGenEnable(PWM0_BASE, PWM_GEN_0);
     PWMGenEnable(PWM0_BASE, PWM_GEN_2);
 }
@@ -156,7 +130,8 @@ void pwmInit(void){
  * sysInit()
  *
  */
-void motorInit(void){
+void motorInit(void)
+{
        // Setting up motor driver pins,
        // Motor directions PK0:1, PK2:2
        // Motor enable pins, PK1: 1, PK3: 2
@@ -168,19 +143,14 @@ void motorInit(void){
        GPIOPinTypeGPIOOutput(GPIO_PORTP_BASE, GPIO_PIN_4 | GPIO_PIN_5); // set up output pins
 
        //set directions
-       GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_0 | GPIO_PIN_2 , GPIO_PIN_0 + GPIO_PIN_2);
+       GPIOPinWrite(GPIO_PORTK_BASE, GPIO_PIN_0 | GPIO_PIN_2 , GPIO_PIN_0 + GPIO_PIN_2);
 
        // turn on
-       GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_1 |  GPIO_PIN_3 , GPIO_PIN_3 + GPIO_PIN_1);
+       GPIOPinWrite(GPIO_PORTK_BASE, GPIO_PIN_1 |  GPIO_PIN_3 , GPIO_PIN_3 + GPIO_PIN_1);
 
-       GPIOPinWrite(GPIO_PORTP_BASE,GPIO_PIN_4,GPIO_PIN_4); // brake for motor 1, set HIGH so no braking
-       GPIOPinWrite(GPIO_PORTP_BASE,GPIO_PIN_5,GPIO_PIN_5); // brake for motor 2, set HIGH so no braking
+       GPIOPinWrite(GPIO_PORTP_BASE, GPIO_PIN_4, GPIO_PIN_4); // brake for motor 1, set HIGH so no braking
+       GPIOPinWrite(GPIO_PORTP_BASE, GPIO_PIN_5, GPIO_PIN_5); // brake for motor 2, set HIGH so no braking
 
-       //GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_0,GPIO_PIN_0); // dir for motor 1, set to forward
-       //GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_2,GPIO_PIN_2); // dir for motor 2, set to forward
-       // Pulled low on motor fault PK6:1, PK7: 2
-       //GPIOPinTypeGPIOInput(GPIO_PORTK_BASE, GPIO_PIN_6 | GPIO_PIN_7);
-       //SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOJ);
        // TODO: Cal, short all amplifier inputs together (why?)
        //GPIOPinTypeGPIOOutput(GPIO_PORTJ_BASE, GPIO_PIN_0 | GPIO_PIN_1 );
 }
@@ -200,15 +170,19 @@ void motorDriverInit(void){
     while(SSIDataGetNonBlocking(SSI2_BASE, &pui32DataRx[0])){
     }
 
-   
-
+    // debugging
     pui32DataTx[0] = 0b1001000000000000; // read register 3 // important for debugging
     pui32DataTx[1] = 0b0001000001000000; // set register 3, bit 6 and 5 to 10, option 3, 1x PWM mode
     pui32DataTx[2]=  0b1001000000000000; // read register 3
     pui32DataTx[3]=  0b1001000000000000; // read register 3 one more time
 
+
+    // Pull CS pin low, not necessary but nice to ensure that it is low
+
     GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_3,0x00);
-    SysCtlDelay(1);
+    SysCtlDelay(1); 
+
+
     for(ui32Index = 0; ui32Index < 4; ui32Index++){ // only reading and writing 3 times
         GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_3,0x00); // Pull CS pin low
         SysCtlDelay(1);
@@ -217,25 +191,28 @@ void motorDriverInit(void){
         GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_3,GPIO_PIN_3); // Being the CS pin high
         SSIDataGet(SSI2_BASE, &pui32DataRx[ui32Index]); // Get the data
     }
-    while(SSIBusy(SSI2_BASE)){
-    }
+
+    while(SSIBusy(SSI2_BASE)){ // let SSI finish processing
+    } 
 
     GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_3,GPIO_PIN_3); // Make sure the pin is high
 
-    //SysCtlDelay(1000);
-    delayMS(1000);
+    // long delay to ensure that pin is high before switching, caused issues in the past 
+    // where the delay was not long enough
+    delayMS(1000); 
 
    while(SSIDataGetNonBlocking(SSI2_BASE, &pui32DataRx[0])){
    }
+
+   // debugging
    pui32DataTx[0] = 0b1001000000000000; // read register 3
    pui32DataTx[1] = 0b0001000001000000; // set register 3, bit 6 and 5 to 10, option 3, 1x PWM mode
    pui32DataTx[2]=  0b1001000000000000; // read register 3
    pui32DataTx[3]=  0b1001000000000000; // read register 3 one more time
    //
-   // Send 3 bytes of data.
+   // Send 4 bytes of data.
    //
 
-   // JUST FOR MOTOR 1
 
    GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_2,0x00);
    SysCtlDelay(1);

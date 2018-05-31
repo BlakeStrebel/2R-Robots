@@ -22,7 +22,8 @@ int zeroing2 = 0;
 /*
  * This function initilizes the SPI on SSI0, using PA2 (CLK), PA3(SS), PA4(RX), PA5(TX)
  */
-void encoderSPIInit(void){
+void encoderSPIInit(void)
+{
     // Enable SSI0 and SSI1 peripherals for use.
     SysCtlPeripheralEnable(SYSCTL_PERIPH_SSI0); // SSI0
     SysCtlPeripheralEnable(SYSCTL_PERIPH_SSI1); // SSI1
@@ -55,15 +56,15 @@ void encoderSPIInit(void){
     GPIOPinTypeGPIOOutput(GPIO_PORTL_BASE, GPIO_PIN_1); //CS
 
     // Configure and enable the SSI port for SPI master mode.
-    // Ideally the max bit rate is 2M, but there will be some error reading the value.
+    // TODO: Ideally the max bit rate is 2M, but there will be some error reading the value.
     SSIConfigSetExpClk(SSI0_BASE, ui32SysClock, SSI_FRF_MOTO_MODE_1,
                                     SSI_MODE_MASTER, 1500000, 8); // 8 bits for encoder, note that we can't go above 16 bits using SPI Freescale mode
     SSIConfigSetExpClk(SSI1_BASE, ui32SysClock, SSI_FRF_MOTO_MODE_1,
                             SSI_MODE_MASTER, 1500000, 8); // 8 bits for encoder, note that we can't go above 16 bits using SPI Freescale mode
 
     // Configure the CS
-    GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_1,GPIO_PIN_1); // Set CS to HIGH        //Is it necessary for L0?
-    GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_2,GPIO_PIN_2); //Set CS to HIGH
+    GPIOPinWrite(GPIO_PORTL_BASE, GPIO_PIN_0, GPIO_PIN_0); // Set CS to HIGH        //Is it necessary for L0?
+    GPIOPinWrite(GPIO_PORTL_BASE, GPIO_PIN_1, GPIO_PIN_1); //Set CS to HIGH
 
     // Enable the SSI0 and SSI1 modules
     SSIEnable(SSI0_BASE);
@@ -112,13 +113,13 @@ void encoderRead(void){
 
     for(ui32Index2 = 0; ui32Index2 < NUM_SSI_DATA2; ui32Index2++)
     {
-      pui32DataRx2[ui32Index2] &= 0x00FF; // ensure that the data is 8 bit
+      //pui32DataRx2[ui32Index2] &= 0x00FF; // ensure that the data is 8 bit
       SSIDataGet(SSI0_BASE, &pui32DataRx2[ui32Index2]); // get the data that was shifted in
     }
 
     // The angle is the first 14 bits of the response.
     // TODO: check that the data RX2 is overwritten
-    int num = pui32DataRx2[0]<<6; // 1 1 1 1 1 1 1 1 0 0 0 0 0 0, bit shift 6 to the left
+    int num = pui32DataRx2[0] << 6; // 1 1 1 1 1 1 1 1 0 0 0 0 0 0, bit shift 6 to the left
     num = num | (pui32DataRx2[1]>>2); // 1 1 1 1 1 1 1 1 0 0 0 0 0 0 | 0 0 1 1 1 1 1 1, or it with next value in array bit shifted right by 2 to get the 14 bit encoder data
     encoderVal[0] = num;
     // reading speed in rev/s * 10
