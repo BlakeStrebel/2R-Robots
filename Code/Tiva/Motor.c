@@ -200,7 +200,9 @@ void motorDriverInit(void){
     while(SSIDataGetNonBlocking(SSI2_BASE, &pui32DataRx[0])){
     }
 
-    pui32DataTx[0] = 0b1001000000000000; // read register 3
+   
+
+    pui32DataTx[0] = 0b1001000000000000; // read register 3 // important for debugging
     pui32DataTx[1] = 0b0001000001000000; // set register 3, bit 6 and 5 to 10, option 3, 1x PWM mode
     pui32DataTx[2]=  0b1001000000000000; // read register 3
     pui32DataTx[3]=  0b1001000000000000; // read register 3 one more time
