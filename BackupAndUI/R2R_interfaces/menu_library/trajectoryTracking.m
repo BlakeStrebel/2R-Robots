@@ -29,7 +29,6 @@ if motor == 3
     value = [0, 0];
     fwrite(serial, 22);
     for i = 1: state.t / 10
-        i
         value(1) = readFloat(serial);
         value(2) = readFloat(serial);
         data(i, :) = value;
@@ -56,10 +55,10 @@ else
     legend('Desired', 'Actual');
     data = zeros(state.t, 1);
     if motor == 1
-        fwrite(serial, 10);
+        fwrite(serial, 20);
         title('Motor 1 position');
     else
-        fwrite(serial, 11);
+        fwrite(serial, 21);
         title('Motor 2 position');
     end
     for i = 1: state.t / 10

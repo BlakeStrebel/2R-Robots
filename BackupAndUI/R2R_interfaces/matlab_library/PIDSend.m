@@ -11,17 +11,7 @@ elseif motor == 2
     fwrite(serial, PID(6), 'float32');
 else
     fwrite(serial, 19);
-    for i = 1: 6
-        fwrite(serial, PID(i)', 'float32');
-    end
+    fwrite(serial, PID', 'float32');
 end
-
-
-
-
-
-
-
-
 success = [];
 end

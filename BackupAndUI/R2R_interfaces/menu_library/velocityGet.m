@@ -1,4 +1,4 @@
-function data = positionGet(state, motor)
+function data = velocityGet(state, motor)
 if motor == 1
     data = state.v(1);
 elseif motor == 2

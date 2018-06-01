@@ -632,7 +632,7 @@ menu(id).parent = 62;
 menu(id).title = ['               Motor 2 will be controlled, Motor 1 will be braked\n    ', ...  
                   ones(1, 72) * '-', '\n'];
 menu(id).question = 'Set velocity as percentage (%%), positive for cw and negative for ccw:\n';
-menu(id).children = [];
+menu(id).children = 67;
 menu(id).data = true;
 
 % Main menu -> Rotation -> Both motors
@@ -642,7 +642,7 @@ menu(id).parent = 62;
 menu(id).title = ['                         Both motors will be controlled\n    ', ...  
                   ones(1, 72) * '-', '\n'];
 menu(id).question = 'Set velocities as percentages in the form of [p1, p2]:\n';
-menu(id).children = [];
+menu(id).children = 68;
 menu(id).data = true;
 
 % Main menu -> Rotation -> Motor 1 -> Velocity inputs

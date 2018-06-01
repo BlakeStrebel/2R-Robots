@@ -2,5 +2,5 @@ function userserial = serialConfig(com)
 
 userserial = serial(com, 'BaudRate', 115200, 'DataBits', 8, 'StopBits', ...
                     1, 'Parity', 'none', 'Terminator', 'CR', 'timeout', ...
-                    1);
+                    1, 'InputBufferSize', 1024);
 end
