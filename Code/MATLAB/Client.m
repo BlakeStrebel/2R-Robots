@@ -1,7 +1,8 @@
 function Client()
 %   provides a menu for interfacing with hopper robot system
-Tiva_port = 'COM7'; % Tiva board serial port
+Tiva_port = 'COM5'; % Tiva board serial port
 DECIMATION = 1;
+PWMPERIOD = 4000;
 
 % Opening COM connection
 if ~isempty(instrfind)
@@ -52,12 +53,12 @@ while ~has_quit
         case 'c'
             PWM1 = input('Enter your desired motor1 PWM [-100,100]:  ');
             PWM2 = input('Enter your desired motor2 PWM [-100,100]:  ');
-            fprintf(Tiva_Serial, '%d %d\n',[PWM1/100*9600, PWM2/100*9600]);
+            fprintf(Tiva_Serial, '%d %d\n',[PWM1/100*(PWMPERIOD), PWM2/100*(PWMPERIOD)]);
             fprintf('PWM1 set to %3.2f\nPWM2 set to %3.2f\n',PWM1,PWM2);
         case 'd'
             pwm1 = fscanf(Tiva_Serial,'%d');
             pwm2 = fscanf(Tiva_Serial,'%d');
-            fprintf('The  motor duty cycles are:\nMotor 1: %3.2f\nMotor 2: %3.2f\n',pwm1/9600*100, pwm2/9600*100);
+            fprintf('The  motor duty cycles are:\nMotor 1: %3.2f\nMotor 2: %3.2f\n',pwm1/(PWMPERIOD)*100, pwm2/(PWMPERIOD)*100);
         case 'e'
             desPos1 = fscanf(Tiva_Serial,'%d');
             desPos2 = fscanf(Tiva_Serial,'%d');

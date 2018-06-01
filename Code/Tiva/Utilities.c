@@ -11,11 +11,6 @@ static volatile unsigned int READ = 0, WRITE = 0; // circular buffer indexes
 
 void setMODE(mode newMODE) {  // Set mode
     MODE = newMODE;     // Update global MODE
-
-    if (MODE == ITEST)
-    {
-        setNclient(1000);
-    }
 }
 
 mode getMODE() {  // Return mode

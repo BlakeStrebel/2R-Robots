@@ -6,15 +6,14 @@
 #include "Utilities.h"
 #include <stdio.h>
 
-#define C1A 20
-#define C1B 50
+#define C1A 40
+#define C1B 6
 #define C2A 50
 #define C2B 20
 
 static volatile uint32_t COUNTS[8]={0};
 static volatile int MOTOR1CURRENT = 0, MOTOR1REF = 0;
 static volatile int MOTOR2CURRENT = 0, MOTOR2REF = 0;
-
 
 static volatile int E1 = 0, Eint1 = 0, E2 = 0, Eint2 = 0, PWM1 = 0, PWM2 = 0;
 static volatile float Kp = 2, Ki = 0.1;
@@ -60,10 +59,10 @@ void currentControlInit(void){
     // Configure the ADC to trigger at timer2 frequency
     ADCSequenceConfigure(ADC0_BASE, 0, ADC_TRIGGER_TIMER, 0);
     //ADCSequenceStepConfigure(ADC0_BASE,0,0, ADC_CTL_CH1);
-    ADCSequenceStepConfigure(ADC0_BASE,0,0, ADC_CTL_CH2);
-    ADCSequenceStepConfigure(ADC0_BASE,0,1, ADC_CTL_CH3);
-    ADCSequenceStepConfigure(ADC0_BASE,0,2, ADC_CTL_CH0);
-    ADCSequenceStepConfigure(ADC0_BASE, 0, 3, ADC_CTL_CH9 | ADC_CTL_IE | ADC_CTL_END);
+    ADCSequenceStepConfigure(ADC0_BASE, 0, 0, ADC_CTL_CH0);
+    ADCSequenceStepConfigure(ADC0_BASE, 0, 1, ADC_CTL_CH9);
+    ADCSequenceStepConfigure(ADC0_BASE, 0, 2, ADC_CTL_CH2);
+    ADCSequenceStepConfigure(ADC0_BASE, 0, 3, ADC_CTL_CH3| ADC_CTL_IE | ADC_CTL_END);
     ADCSequenceEnable(ADC0_BASE, 0);
     IntPrioritySet(INT_ADC0SS0, 0x00);   // Set ADC interrupt to highest priority
 
@@ -82,7 +81,7 @@ void currentControlInit(void){
 
 void CurrentControlIntHandler(void)
 {
-    static int i = 0, decctr = DECIMATION-1, ready = 1;
+    static int i = 0, decctr = 0, ready = 1;
 
     ADCIntClear(ADC0_BASE, 0); // Clear interrupt  flag
 
@@ -102,8 +101,8 @@ void CurrentControlIntHandler(void)
             case IDLE:
             {
                 // Zero control effort
-                set_motor_pwm(MOTOR1, 0);
-                set_motor_pwm(MOTOR2, 0);
+                //set_motor_pwm(MOTOR1, 0);
+                //set_motor_pwm(MOTOR2, 0);
                 break;
             }
             case PWM:
@@ -136,7 +135,7 @@ void CurrentControlIntHandler(void)
                 }
                 else
                 {
-                    PI_controller(MOTOR1, MOTOR1REF, MOTOR1CURRENT); // Track reference signal
+                    //PI_controller(MOTOR1, MOTOR1REF, MOTOR1CURRENT); // Track reference signal
                     //PI_controller(MOTOR2, MOTOR2REF, MOTOR2CURRENT);
 
                     i++; //increment data
@@ -145,9 +144,9 @@ void CurrentControlIntHandler(void)
                     decctr++;
                     if (decctr == DECIMATION)
                     {
-                        //buffer_write(MOTOR1REF, MOTOR2REF, MOTOR1CURRENT, MOTOR2CURRENT);   // Write current values to buffer
-                        //buffer_write(COUNTS[0] - 2047 + C1A, COUNTS[1] - 2047 + C1B, COUNTS[2] - 2047 + C2A, COUNTS[3] - 2047 + C2B);
-                        //buffer_write(COUNTS[0] - 2047 + C1A, COUNTS[1] - 2047 + C1B, COUNTS[0] - 2047 + C1A, COUNTS[1] - 2047 + C1B);
+                        buffer_write(COUNTS[0]- 2047 + C1A , COUNTS[1] - 2047 + C1B, MOTOR1CURRENT, MOTOR2CURRENT);   // Write current values to buffer
+                        //buffer_write(COUNTS[0] - 2047 , COUNTS[1] - 2047, COUNTS[2] - 2047, COUNTS[3] - 2047);
+                        //buffer_write(COUNTS[0] - 2047 + C1A, COUNTS[1] - 2047 + C1B, getmotor1HALLS(), 0);
                         decctr = 0; // reset decimation counter
                     }
 
@@ -239,42 +238,99 @@ void reset_current_error(void)
 void counts_read(void)
 {
     static int Motor1_A, Motor1_B, Motor2_A, Motor2_B;
+    static int32_t hallstate1 = 0, hallstate2 = 0;
+    //static char buffer[10];
 
-    // Determine phase currents
+    // Shift phase currents to be centered at zero
     IntMasterDisable();
-    Motor1_A = abs(COUNTS[0] - 2047 + C1A);
-    Motor1_B = abs(COUNTS[1] - 2047 + C1B);
-    Motor2_A = abs(COUNTS[2] - 2047 + C2A);
-    Motor2_B = abs(COUNTS[3] - 2047 + C2B);
+    Motor1_A = (int)COUNTS[0] - 2047 + C1A;
+    Motor1_B = (int)COUNTS[1] - 2047 + C1B;
+    Motor2_A = (int)COUNTS[2] - 2047 + C2A;
+    Motor2_B = (int)COUNTS[3] - 2047 + C2B;
     IntMasterEnable();
 
-    // Update current value and direction
-    if (PWM1 >= 0)
-    {
-        MOTOR1CURRENT = maxInt(Motor1_A, Motor1_B);
-    }
-    else if (PWM1 < 0)
-    {
-        MOTOR1CURRENT = -1*maxInt(Motor1_A, Motor1_B);
-    }
-    else    // If there is no PWM, ignore reading and set current to 0
-    {
-        MOTOR1CURRENT = 0;
-    }
 
-    if (PWM2 >= 0)
+    // Update motor 1 current and direction
+    hallstate1 = getmotor1HALLS();
+    if (hallstate1 == M1_HALLSTATE_0 || hallstate1 == M1_HALLSTATE_1 || hallstate1 == M1_HALLSTATE_5)
     {
-        MOTOR2CURRENT = maxInt(Motor2_A, Motor2_B);
-    }
-    else if (PWM2 < 0)
-    {
-        MOTOR2CURRENT = -1*maxInt(Motor2_A, Motor2_B);
+        if (Motor1_A > Motor1_B)
+        {
+            MOTOR1CURRENT = maxInt(abs(Motor1_A),abs(Motor1_B));    // Positive current (CW)
+
+        }
+        else
+        {
+            MOTOR1CURRENT = -1*maxInt(abs(Motor1_A),abs(Motor1_B)); // Negative current (CCW)
+        }
     }
     else
     {
-        MOTOR2CURRENT = 0;
+        if (Motor1_A > Motor1_B)
+        {
+            MOTOR1CURRENT = -1*maxInt(abs(Motor1_A),abs(Motor1_B)); // Negative current (CCW)
+        }
+        else
+        {
+            MOTOR1CURRENT = maxInt(abs(Motor1_A),abs(Motor1_B));    // Positive current (CW)
+        }
     }
 }
+    /*
+    switch (hallstate1)
+    {
+        case M1_HALLSTATE_0:
+        {
+            sprintf(buffer, "%d %d\r\n", 0, MOTOR1CURRENT);
+            break;
+        }
+        case M1_HALLSTATE_1:
+        {
+            sprintf(buffer, "%d %d\r\n", 1, MOTOR1CURRENT);
+            break;
+        }
+        case M1_HALLSTATE_2:
+        {
+            sprintf(buffer, "%d %d\r\n", 2, MOTOR1CURRENT);
+            break;
+        }
+        case M1_HALLSTATE_3:
+        {
+            sprintf(buffer, "%d %d\r\n", 3, MOTOR1CURRENT);
+            break;
+        }
+        case M1_HALLSTATE_4:
+        {
+            sprintf(buffer, "%d %d\r\n", 4, MOTOR1CURRENT);
+            break;
+        }
+        case M1_HALLSTATE_5:
+        {
+            sprintf(buffer, "%d %d\r\n", 5, MOTOR1CURRENT);
+            break;
+        }
+        default :
+        {
+            // You should not end up here, check hall wiring
+        }
+    }
+
+    UART0write(buffer);
+
+}
+
+
+    // Update motor 2 current and direction
+    hallstate2 = getmotor2HALLS();
+    if (hallstate2 == M2_HALLSTATE_0 || hallstate2 == M2_HALLSTATE_1 || hallstate2 == M2_HALLSTATE_5)
+    {
+        MOTOR2CURRENT = maxInt(abs(Motor2_A),abs(Motor2_B));    // Positive current (CW)
+    }
+    else
+    {
+        MOTOR2CURRENT = -1*maxInt(abs(Motor2_A),abs(Motor2_B)); // Negative current (CCW)
+    }
+    */
 
 // Read AD0
 void AD0_read(void)

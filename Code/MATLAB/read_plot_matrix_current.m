@@ -12,7 +12,7 @@ nsamples = fscanf(mySerial,'%d');       % first get the number of samples being 
 data = zeros(nsamples,4);               
  
 for i=1:nsamples
-    data(i,1:4) = fscanf(mySerial,'%d %d %f %f'); % read in data from Tiva (pos m1, pos m2, control eff 1, control eff 2)   
+    data(i,1:4) = fscanf(mySerial,'%d %d %d %d'); % read in data from Tiva (pos m1, pos m2, control eff 1, control eff 2)   
 end
 hold off
 save('temp.mat','data');
@@ -24,7 +24,7 @@ save('temp.mat','data');
 
 if nsamples > 1						        
     figure;
-    plot(data(:,1:4));
+    plot(data(:,[1, 2, 3]));
 else
     fprintf('Only 1 sample received\n')
     disp(data);

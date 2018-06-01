@@ -60,7 +60,7 @@ void r2rDefaultInit(void){
     MotorSPIinit();
     motorInit(); // Set useful signal outputs.
     motorDriverInit(); // Send values to set up the motor for 3x PWM mode
-    //currentControlInit();
+    currentControlInit();
 
     //gpioInit(); // Init for general GPIO - set to input for safety
     //MotorTimerInit();
