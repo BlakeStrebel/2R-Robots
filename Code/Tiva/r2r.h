@@ -25,12 +25,42 @@
  * @brief Initializes the default connections for the R2R project
  *
  * This function initializes all peripherals and GPIO pins.
- * This function only needs to be called in main.c once
+ * This function only needs to be called in main once.
+ *
+ * Example:
+ *
+ *     int main() {
+ *			r2rDefaultInit();
+ *     }
  *
  * @param Void
  * @return Void
  */
 extern void r2rDefaultInit(void);
+
+/**
+ * @brief Custom timer 6
+ *
+ * This function executes at the rate set by TIMER_6_FREQ set in r2r.c
+ * This function does not have to be called anywhere. 
+ *
+ *
+ * @param Void
+ * @return Void
+ */
+
+extern void TIMER6IntHandler(void);
+
+/**
+ * @brief Custom timer 7
+ *
+ * This function executes at the rate set by TIMER_6_FREQ set in r2r.c
+ * This function does not have to be called anywhere. 
+ *
+ * @param Void
+ * @return Void
+ */
+extern void TIMER7IntHandler(void);
 
 
 

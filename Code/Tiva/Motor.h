@@ -15,11 +15,14 @@
 // error messages
 #define MOTOR_SPINNING_TOO_FAST 10
 #define MOTOR_TOO_HOT 11
-#define PWMPERIOD 4000
 
 // limits
 #define TEMP_LIMIT 50 // in degrees C
 #define MAX_SPEED 10 // in rev/s
+
+
+#define PWMPERIOD 4000
+
 
 /* MOTOR 1 HALL SENSOR PINS */
 #define M1H_PERIPH SYSCTL_PERIPH_GPIOL

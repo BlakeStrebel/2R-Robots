@@ -1,10 +1,5 @@
 \hypertarget{_motor_8h}{}\section{C\+:/\+Users/\+Ben/\+Documents/\+Git\+Hub/2\+R-\/\+Robots/\+Code/\+Tiva/\+Motor.h File Reference}
 \label{_motor_8h}\index{C\+:/\+Users/\+Ben/\+Documents/\+Git\+Hub/2\+R-\/\+Robots/\+Code/\+Tiva/\+Motor.\+h@{C\+:/\+Users/\+Ben/\+Documents/\+Git\+Hub/2\+R-\/\+Robots/\+Code/\+Tiva/\+Motor.\+h}}
-
-
-utilities header  
-
-
 \subsection*{Macros}
 \begin{DoxyCompactItemize}
 \item 
@@ -19,30 +14,183 @@ utilities header
 \item 
 \mbox{\Hypertarget{_motor_8h_ac2cd96d53dd3ba6407db6766c3d92b26}\label{_motor_8h_ac2cd96d53dd3ba6407db6766c3d92b26}} 
 \#define {\bfseries M\+A\+X\+\_\+\+S\+P\+E\+ED}~10
+\item 
+\mbox{\Hypertarget{_motor_8h_a96e506808fe48663a74abcafdcbfdc7e}\label{_motor_8h_a96e506808fe48663a74abcafdcbfdc7e}} 
+\#define {\bfseries P\+W\+M\+P\+E\+R\+I\+OD}~4000
+\item 
+\mbox{\Hypertarget{_motor_8h_aad15108f5019325075e752c11faf9ad7}\label{_motor_8h_aad15108f5019325075e752c11faf9ad7}} 
+\#define {\bfseries M1\+H\+\_\+\+P\+E\+R\+I\+PH}~S\+Y\+S\+C\+T\+L\+\_\+\+P\+E\+R\+I\+P\+H\+\_\+\+G\+P\+I\+OL
+\item 
+\mbox{\Hypertarget{_motor_8h_a2e91546edf01d805da8101c10d549e16}\label{_motor_8h_a2e91546edf01d805da8101c10d549e16}} 
+\#define {\bfseries M1\+H\+\_\+\+P\+O\+RT}~G\+P\+I\+O\+\_\+\+P\+O\+R\+T\+L\+\_\+\+B\+A\+SE
+\item 
+\mbox{\Hypertarget{_motor_8h_a46f9c161e9b6d159f735a6923e18322a}\label{_motor_8h_a46f9c161e9b6d159f735a6923e18322a}} 
+\#define {\bfseries M1\+H\+\_\+\+P\+I\+N\+\_\+A}~G\+P\+I\+O\+\_\+\+P\+I\+N\+\_\+0
+\item 
+\mbox{\Hypertarget{_motor_8h_a233dfc0abe3f7442512c559cba9659a1}\label{_motor_8h_a233dfc0abe3f7442512c559cba9659a1}} 
+\#define {\bfseries M1\+H\+\_\+\+P\+I\+N\+\_\+B}~G\+P\+I\+O\+\_\+\+P\+I\+N\+\_\+1
+\item 
+\mbox{\Hypertarget{_motor_8h_a60004f74cd89841f7df79536e4c2ccd5}\label{_motor_8h_a60004f74cd89841f7df79536e4c2ccd5}} 
+\#define {\bfseries M1\+H\+\_\+\+P\+I\+N\+\_\+C}~G\+P\+I\+O\+\_\+\+P\+I\+N\+\_\+2
+\item 
+\mbox{\Hypertarget{_motor_8h_a83ec82cbffa1c2e05e28f9516a4b2d88}\label{_motor_8h_a83ec82cbffa1c2e05e28f9516a4b2d88}} 
+\#define {\bfseries M1\+H\+\_\+\+P\+I\+NS}~(M1\+H\+\_\+\+P\+I\+N\+\_\+A $\vert$ M1\+H\+\_\+\+P\+I\+N\+\_\+B $\vert$ M1\+H\+\_\+\+P\+I\+N\+\_\+C)
+\item 
+\mbox{\Hypertarget{_motor_8h_aef8fd50c3349e8485fa6005e1b7ebf35}\label{_motor_8h_aef8fd50c3349e8485fa6005e1b7ebf35}} 
+\#define {\bfseries M1\+\_\+\+I\+N\+L\+\_\+\+P\+E\+R\+I\+P\+H\+\_\+A}~S\+Y\+S\+C\+T\+L\+\_\+\+P\+E\+R\+I\+P\+H\+\_\+\+G\+P\+I\+OP
+\item 
+\mbox{\Hypertarget{_motor_8h_a9d7812cd886acea05ec8c18cbb6b3bc0}\label{_motor_8h_a9d7812cd886acea05ec8c18cbb6b3bc0}} 
+\#define {\bfseries M1\+\_\+\+I\+N\+L\+\_\+\+P\+O\+R\+T\+\_\+A}~G\+P\+I\+O\+\_\+\+P\+O\+R\+T\+P\+\_\+\+B\+A\+SE
+\item 
+\mbox{\Hypertarget{_motor_8h_a8d0e01d9ccf9d1ee49a8dd69caa3fee3}\label{_motor_8h_a8d0e01d9ccf9d1ee49a8dd69caa3fee3}} 
+\#define {\bfseries M1\+\_\+\+I\+N\+L\+\_\+\+P\+I\+N\+\_\+A}~G\+P\+I\+O\+\_\+\+P\+I\+N\+\_\+0
+\item 
+\mbox{\Hypertarget{_motor_8h_aab32e0461cfe544d4a14304a85d67576}\label{_motor_8h_aab32e0461cfe544d4a14304a85d67576}} 
+\#define {\bfseries M1\+\_\+\+I\+N\+L\+\_\+\+P\+E\+R\+I\+P\+H\+\_\+B}~S\+Y\+S\+C\+T\+L\+\_\+\+P\+E\+R\+I\+P\+H\+\_\+\+G\+P\+I\+OP
+\item 
+\mbox{\Hypertarget{_motor_8h_a900efee34b222b2ea819204794c5b1d5}\label{_motor_8h_a900efee34b222b2ea819204794c5b1d5}} 
+\#define {\bfseries M1\+\_\+\+I\+N\+L\+\_\+\+P\+O\+R\+T\+\_\+B}~G\+P\+I\+O\+\_\+\+P\+O\+R\+T\+P\+\_\+\+B\+A\+SE
+\item 
+\mbox{\Hypertarget{_motor_8h_a6ab60a1749ade558ccc75173c08a53ae}\label{_motor_8h_a6ab60a1749ade558ccc75173c08a53ae}} 
+\#define {\bfseries M1\+\_\+\+I\+N\+L\+\_\+\+P\+I\+N\+\_\+B}~G\+P\+I\+O\+\_\+\+P\+I\+N\+\_\+1
+\item 
+\mbox{\Hypertarget{_motor_8h_a8552d5601988cc44560dc4218f29f3aa}\label{_motor_8h_a8552d5601988cc44560dc4218f29f3aa}} 
+\#define {\bfseries M1\+\_\+\+I\+N\+L\+\_\+\+P\+E\+R\+I\+P\+H\+\_\+C}~S\+Y\+S\+C\+T\+L\+\_\+\+P\+E\+R\+I\+P\+H\+\_\+\+G\+P\+I\+OP
+\item 
+\mbox{\Hypertarget{_motor_8h_a5b79aeb955902e6678992ab11151a0cd}\label{_motor_8h_a5b79aeb955902e6678992ab11151a0cd}} 
+\#define {\bfseries M1\+\_\+\+I\+N\+L\+\_\+\+P\+O\+R\+T\+\_\+C}~G\+P\+I\+O\+\_\+\+P\+O\+R\+T\+P\+\_\+\+B\+A\+SE
+\item 
+\mbox{\Hypertarget{_motor_8h_ac53932a7b76b0d45c31f69ed7c3689a0}\label{_motor_8h_ac53932a7b76b0d45c31f69ed7c3689a0}} 
+\#define {\bfseries M1\+\_\+\+I\+N\+L\+\_\+\+P\+I\+N\+\_\+C}~G\+P\+I\+O\+\_\+\+P\+I\+N\+\_\+2
+\item 
+\mbox{\Hypertarget{_motor_8h_a25d27e0fe47c1a1eb49d765c558c46f9}\label{_motor_8h_a25d27e0fe47c1a1eb49d765c558c46f9}} 
+\#define {\bfseries M1\+\_\+\+H\+A\+L\+L\+S\+T\+A\+T\+E\+\_\+0}~(M1\+H\+\_\+\+P\+I\+N\+\_\+A $\vert$ M1\+H\+\_\+\+P\+I\+N\+\_\+B)
+\item 
+\mbox{\Hypertarget{_motor_8h_ae710ee21e081e991d44443d2fd177ca0}\label{_motor_8h_ae710ee21e081e991d44443d2fd177ca0}} 
+\#define {\bfseries M1\+\_\+\+H\+A\+L\+L\+S\+T\+A\+T\+E\+\_\+1}~M1\+H\+\_\+\+P\+I\+N\+\_\+A
+\item 
+\mbox{\Hypertarget{_motor_8h_ad6a27a28e2129141037cdd388a50fdad}\label{_motor_8h_ad6a27a28e2129141037cdd388a50fdad}} 
+\#define {\bfseries M1\+\_\+\+H\+A\+L\+L\+S\+T\+A\+T\+E\+\_\+2}~(M1\+H\+\_\+\+P\+I\+N\+\_\+A $\vert$ M1\+H\+\_\+\+P\+I\+N\+\_\+C)
+\item 
+\mbox{\Hypertarget{_motor_8h_a36f23ec24878c6eb560e19b4f6bc08b8}\label{_motor_8h_a36f23ec24878c6eb560e19b4f6bc08b8}} 
+\#define {\bfseries M1\+\_\+\+H\+A\+L\+L\+S\+T\+A\+T\+E\+\_\+3}~M1\+H\+\_\+\+P\+I\+N\+\_\+C
+\item 
+\mbox{\Hypertarget{_motor_8h_abb4e4d7ef70729ff3a6046b0e0350c5d}\label{_motor_8h_abb4e4d7ef70729ff3a6046b0e0350c5d}} 
+\#define {\bfseries M1\+\_\+\+H\+A\+L\+L\+S\+T\+A\+T\+E\+\_\+4}~(M1\+H\+\_\+\+P\+I\+N\+\_\+B $\vert$ M1\+H\+\_\+\+P\+I\+N\+\_\+C)
+\item 
+\mbox{\Hypertarget{_motor_8h_a4f54f97b5308298e830b9afe8ed6cef8}\label{_motor_8h_a4f54f97b5308298e830b9afe8ed6cef8}} 
+\#define {\bfseries M1\+\_\+\+H\+A\+L\+L\+S\+T\+A\+T\+E\+\_\+5}~M1\+H\+\_\+\+P\+I\+N\+\_\+B
+\item 
+\mbox{\Hypertarget{_motor_8h_a2675058c7b778b01e087e1fd6b724d43}\label{_motor_8h_a2675058c7b778b01e087e1fd6b724d43}} 
+\#define {\bfseries M2\+H\+\_\+\+P\+E\+R\+I\+PH}~S\+Y\+S\+C\+T\+L\+\_\+\+P\+E\+R\+I\+P\+H\+\_\+\+G\+P\+I\+ON
+\item 
+\mbox{\Hypertarget{_motor_8h_a63de8de458427220b8325c99e1022fe9}\label{_motor_8h_a63de8de458427220b8325c99e1022fe9}} 
+\#define {\bfseries M2\+H\+\_\+\+P\+O\+RT}~G\+P\+I\+O\+\_\+\+P\+O\+R\+T\+N\+\_\+\+B\+A\+SE
+\item 
+\mbox{\Hypertarget{_motor_8h_a93973e64ff531de9c993cf530f945abf}\label{_motor_8h_a93973e64ff531de9c993cf530f945abf}} 
+\#define {\bfseries M2\+H\+\_\+\+P\+I\+N\+\_\+A}~G\+P\+I\+O\+\_\+\+P\+I\+N\+\_\+0
+\item 
+\mbox{\Hypertarget{_motor_8h_a078dad8456be8ae88abad44997550b59}\label{_motor_8h_a078dad8456be8ae88abad44997550b59}} 
+\#define {\bfseries M2\+H\+\_\+\+P\+I\+N\+\_\+B}~G\+P\+I\+O\+\_\+\+P\+I\+N\+\_\+1
+\item 
+\mbox{\Hypertarget{_motor_8h_a9e99f23a60970ddfdab05548706b7d55}\label{_motor_8h_a9e99f23a60970ddfdab05548706b7d55}} 
+\#define {\bfseries M2\+H\+\_\+\+P\+I\+N\+\_\+C}~G\+P\+I\+O\+\_\+\+P\+I\+N\+\_\+2
+\item 
+\mbox{\Hypertarget{_motor_8h_a39f1cde6760223ab4858a3792ff7b4f3}\label{_motor_8h_a39f1cde6760223ab4858a3792ff7b4f3}} 
+\#define {\bfseries M2\+H\+\_\+\+P\+I\+NS}~(M2\+H\+\_\+\+P\+I\+N\+\_\+A $\vert$ M2\+H\+\_\+\+P\+I\+N\+\_\+B $\vert$ M2\+H\+\_\+\+P\+I\+N\+\_\+C)
+\item 
+\mbox{\Hypertarget{_motor_8h_ad6a50613bd4d08b81e1b6c9fbe5c10b9}\label{_motor_8h_ad6a50613bd4d08b81e1b6c9fbe5c10b9}} 
+\#define {\bfseries M2\+\_\+\+I\+N\+L\+\_\+\+P\+E\+R\+I\+P\+H\+\_\+A}~S\+Y\+S\+C\+T\+L\+\_\+\+P\+E\+R\+I\+P\+H\+\_\+\+G\+P\+I\+OP
+\item 
+\mbox{\Hypertarget{_motor_8h_ad2d98add34e3b74ae4af15a070a77e91}\label{_motor_8h_ad2d98add34e3b74ae4af15a070a77e91}} 
+\#define {\bfseries M2\+\_\+\+I\+N\+L\+\_\+\+P\+O\+R\+T\+\_\+A}~G\+P\+I\+O\+\_\+\+P\+O\+R\+T\+P\+\_\+\+B\+A\+SE
+\item 
+\mbox{\Hypertarget{_motor_8h_a37cb64e9ef0265a7fe39a0ce886993fb}\label{_motor_8h_a37cb64e9ef0265a7fe39a0ce886993fb}} 
+\#define {\bfseries M2\+\_\+\+I\+N\+L\+\_\+\+P\+I\+N\+\_\+A}~G\+P\+I\+O\+\_\+\+P\+I\+N\+\_\+1
+\item 
+\mbox{\Hypertarget{_motor_8h_a967067d65a292e82aaf53e5de6b5cf18}\label{_motor_8h_a967067d65a292e82aaf53e5de6b5cf18}} 
+\#define {\bfseries M2\+\_\+\+I\+N\+L\+\_\+\+P\+E\+R\+I\+P\+H\+\_\+B}~S\+Y\+S\+C\+T\+L\+\_\+\+P\+E\+R\+I\+P\+H\+\_\+\+G\+P\+I\+OD
+\item 
+\mbox{\Hypertarget{_motor_8h_a2f6640058dd8630c0b4ace41b656a2e5}\label{_motor_8h_a2f6640058dd8630c0b4ace41b656a2e5}} 
+\#define {\bfseries M2\+\_\+\+I\+N\+L\+\_\+\+P\+O\+R\+T\+\_\+B}~G\+P\+I\+O\+\_\+\+P\+O\+R\+T\+D\+\_\+\+B\+A\+SE
+\item 
+\mbox{\Hypertarget{_motor_8h_ae89b46907972b20162b63001f2ccdc79}\label{_motor_8h_ae89b46907972b20162b63001f2ccdc79}} 
+\#define {\bfseries M2\+\_\+\+I\+N\+L\+\_\+\+P\+I\+N\+\_\+B}~G\+P\+I\+O\+\_\+\+P\+I\+N\+\_\+5
+\item 
+\mbox{\Hypertarget{_motor_8h_a79b4c7dd78d05943222976822ba56941}\label{_motor_8h_a79b4c7dd78d05943222976822ba56941}} 
+\#define {\bfseries M2\+\_\+\+I\+N\+L\+\_\+\+P\+E\+R\+I\+P\+H\+\_\+C}~S\+Y\+S\+C\+T\+L\+\_\+\+P\+E\+R\+I\+P\+H\+\_\+\+G\+P\+I\+OD
+\item 
+\mbox{\Hypertarget{_motor_8h_acf723cfb7beb5323b21303c73fa562fd}\label{_motor_8h_acf723cfb7beb5323b21303c73fa562fd}} 
+\#define {\bfseries M2\+\_\+\+I\+N\+L\+\_\+\+P\+O\+R\+T\+\_\+C}~G\+P\+I\+O\+\_\+\+P\+O\+R\+T\+D\+\_\+\+B\+A\+SE
+\item 
+\mbox{\Hypertarget{_motor_8h_ac067d4dc3db7eee140ecc5b8a49668b8}\label{_motor_8h_ac067d4dc3db7eee140ecc5b8a49668b8}} 
+\#define {\bfseries M2\+\_\+\+I\+N\+L\+\_\+\+P\+I\+N\+\_\+C}~G\+P\+I\+O\+\_\+\+P\+I\+N\+\_\+6
+\item 
+\mbox{\Hypertarget{_motor_8h_aa4f4e876db151f4c335e2d23e4bc7c66}\label{_motor_8h_aa4f4e876db151f4c335e2d23e4bc7c66}} 
+\#define {\bfseries M2\+\_\+\+H\+A\+L\+L\+S\+T\+A\+T\+E\+\_\+0}~(M2\+\_\+\+P\+I\+N\+\_\+A $\vert$ M2\+\_\+\+P\+I\+N\+\_\+B)
+\item 
+\mbox{\Hypertarget{_motor_8h_af70db6bf417910659c4ce92cedad8244}\label{_motor_8h_af70db6bf417910659c4ce92cedad8244}} 
+\#define {\bfseries M2\+\_\+\+H\+A\+L\+L\+S\+T\+A\+T\+E\+\_\+1}~M2\+\_\+\+P\+I\+N\+\_\+A
+\item 
+\mbox{\Hypertarget{_motor_8h_a5aef4d280d52faeaaaa6c20d59c6d61c}\label{_motor_8h_a5aef4d280d52faeaaaa6c20d59c6d61c}} 
+\#define {\bfseries M2\+\_\+\+H\+A\+L\+L\+S\+T\+A\+T\+E\+\_\+2}~(M2\+\_\+\+P\+I\+N\+\_\+A $\vert$ M2\+\_\+\+P\+I\+N\+\_\+C)
+\item 
+\mbox{\Hypertarget{_motor_8h_a881a3b369b72ed8a492455e91b5c1a14}\label{_motor_8h_a881a3b369b72ed8a492455e91b5c1a14}} 
+\#define {\bfseries M2\+\_\+\+H\+A\+L\+L\+S\+T\+A\+T\+E\+\_\+3}~M2\+\_\+\+P\+I\+N\+\_\+C
+\item 
+\mbox{\Hypertarget{_motor_8h_a2d0c344932de3db65456520a0a0409a3}\label{_motor_8h_a2d0c344932de3db65456520a0a0409a3}} 
+\#define {\bfseries M2\+\_\+\+H\+A\+L\+L\+S\+T\+A\+T\+E\+\_\+4}~(M2\+\_\+\+P\+I\+N\+\_\+B $\vert$ M2\+\_\+\+P\+I\+N\+\_\+C)
+\item 
+\mbox{\Hypertarget{_motor_8h_ab71bc42d55333c53a6e432c02e6598a3}\label{_motor_8h_ab71bc42d55333c53a6e432c02e6598a3}} 
+\#define {\bfseries M2\+\_\+\+H\+A\+L\+L\+S\+T\+A\+T\+E\+\_\+5}~M2\+\_\+\+P\+I\+N\+\_\+B
 \end{DoxyCompactItemize}
 \subsection*{Functions}
 \begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{_motor_8h_a879b94540bd8b5d2e5217c749029e12b}\label{_motor_8h_a879b94540bd8b5d2e5217c749029e12b}} 
+void {\bfseries M1\+H\+Int\+Handler} (void)
+\item 
+\mbox{\Hypertarget{_motor_8h_afde750f7e2ef4ebb04f36c81089c832d}\label{_motor_8h_afde750f7e2ef4ebb04f36c81089c832d}} 
+void {\bfseries M2\+H\+Int\+Handler} (void)
+\item 
+void \mbox{\hyperlink{_motor_8h_a40e064ce1ed8e8fe099904717d9c7e46}{motor1\+P\+WM}} (int pwm1, int pwm2, int pwm3)
+\begin{DoxyCompactList}\small\item\em Sets the P\+WM value to motor 1. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_motor_8h_a8d3950b6912f5a60d2ceded0e0ed502b}{motor2\+P\+WM}} (int pwm1, int pwm2, int pwm3)
+\begin{DoxyCompactList}\small\item\em Sets the P\+WM value to motor 2. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_motor_8h_a8ab898affd7b6bbc1d359284e85c31c3}{motor1\+Control\+P\+WM}} (int control)
+\begin{DoxyCompactList}\small\item\em Sets the P\+WM value and direction to motor 1. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_motor_8h_aa3421fe96b22e90c356e013a0abef7d6}{motor2\+Control\+P\+WM}} (int control)
+\begin{DoxyCompactList}\small\item\em Sets the P\+WM value and direction to motor 2. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_motor_8h_aa29e2982047be0f7afbb10c8d6f3f5c3}{motor\+Init}} (void)
+\begin{DoxyCompactList}\small\item\em Initializes the G\+P\+IO pins for the motor. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{_motor_8h_a418a9beb64e4f3d3563917d05a5a3544}\label{_motor_8h_a418a9beb64e4f3d3563917d05a5a3544}} 
+void {\bfseries M1\+\_\+\+I\+N\+L\+\_\+\+W\+R\+I\+TE} (int a, int b, int c)
+\item 
+\mbox{\Hypertarget{_motor_8h_ac9edbc13c57419de1647c90a69bcfae0}\label{_motor_8h_ac9edbc13c57419de1647c90a69bcfae0}} 
+void {\bfseries M2\+\_\+\+I\+N\+L\+\_\+\+W\+R\+I\+TE} (int a, int b, int c)
+\item 
+\mbox{\Hypertarget{_motor_8h_aa2c42019652e402afdfa5330e84a917e}\label{_motor_8h_aa2c42019652e402afdfa5330e84a917e}} 
+int {\bfseries getmotor1\+P\+WM} (void)
+\item 
+\mbox{\Hypertarget{_motor_8h_a25d33861bd682d093b24c60f2cbabf20}\label{_motor_8h_a25d33861bd682d093b24c60f2cbabf20}} 
+int {\bfseries getmotor2\+P\+WM} (void)
+\item 
+\mbox{\Hypertarget{_motor_8h_a0b350d90bf46d3ae9e0c2678db6ab0b2}\label{_motor_8h_a0b350d90bf46d3ae9e0c2678db6ab0b2}} 
+int32\+\_\+t {\bfseries getmotor1\+H\+A\+L\+LS} (void)
+\item 
+\mbox{\Hypertarget{_motor_8h_a53f843252b562efc951e13b6db10ef22}\label{_motor_8h_a53f843252b562efc951e13b6db10ef22}} 
+int32\+\_\+t {\bfseries getmotor2\+H\+A\+L\+LS} (void)
 \item 
 void \mbox{\hyperlink{_motor_8h_a3736cf7b742152f2787804fad1c999e2}{shutdown\+Now}} (void)
 \item 
 void \mbox{\hyperlink{_motor_8h_ab59ffbd33a12b2f672648d85a5466798}{motor\+Safety\+Check}} (void)
 \item 
-void \mbox{\hyperlink{_motor_8h_af0b4940941d639d96fbc31924abf1664}{Motor\+S\+P\+Iinit}} (void)
+void \mbox{\hyperlink{_motor_8h_a45846f2d47f8db7242ebf6026fbf51d3}{Motor\+S\+P\+I\+Init}} (void)
 \begin{DoxyCompactList}\small\item\em Initializes the S\+PI channels for the motor drivers. \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{_motor_8h_aa29e2982047be0f7afbb10c8d6f3f5c3}{motor\+Init}} (void)
-\begin{DoxyCompactList}\small\item\em Initializes the G\+P\+IO pins for the motor. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{_motor_8h_a4e7b27c5715df8d71dfe87a22ae0b004}{motor\+Driver\+Init}} (void)
 \begin{DoxyCompactList}\small\item\em Initializes the S\+PI commands to set the motor\textquotesingle{}s configuration for 1x P\+WM mode. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{_motor_8h_a1c8ae46921c4ae7d57bd44dd994e10bd}{pwm\+Init}} (void)
 \begin{DoxyCompactList}\small\item\em Initializes P\+WM. \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{_motor_8h_a66eea06de5674ba28dc7473842af0b8f}{motor1\+P\+WM}} (int pwm\+Value)
-\begin{DoxyCompactList}\small\item\em Sets the P\+WM value to motor 1. \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{_motor_8h_a17b8580b21da18028807be50e9c29020}{motor2\+P\+WM}} (int pwm\+Value)
-\begin{DoxyCompactList}\small\item\em Sets the P\+WM value to motor 1. \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{_motor_8h_a8ab898affd7b6bbc1d359284e85c31c3}{motor1\+Control\+P\+WM}} (int control)
-\begin{DoxyCompactList}\small\item\em Sets the P\+WM value and direction to motor 1. \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{_motor_8h_aa3421fe96b22e90c356e013a0abef7d6}{motor2\+Control\+P\+WM}} (int control)
-\begin{DoxyCompactList}\small\item\em Sets the P\+WM value and direction to motor 2. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{_motor_8h_aea6e9daf04c89835b507bf4bbf477841}{motor1\+Brake}} (void)
 \begin{DoxyCompactList}\small\item\em Brakes motor 1. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{_motor_8h_abeb06d04160b25625c36d1a07e111033}{motor2\+Brake}} (void)
@@ -52,9 +200,7 @@ int \mbox{\hyperlink{_motor_8h_ad2fb0421114b988126b41428644453a3}{motor\+Error}}
 
 
 \subsection{Detailed Description}
-utilities header 
-
-This file contains the motor functions
+This file contains all motor-\/related functions, such as initialization and setting speeds
 
 \begin{DoxyAuthor}{Author}
 Benjamen Lim 
@@ -102,11 +248,11 @@ Sets the P\+WM value and direction to motor 1.
 \begin{DoxyReturn}{Returns}
 Void 
 \end{DoxyReturn}
-\mbox{\Hypertarget{_motor_8h_a66eea06de5674ba28dc7473842af0b8f}\label{_motor_8h_a66eea06de5674ba28dc7473842af0b8f}} 
+\mbox{\Hypertarget{_motor_8h_a40e064ce1ed8e8fe099904717d9c7e46}\label{_motor_8h_a40e064ce1ed8e8fe099904717d9c7e46}} 
 \index{Motor.\+h@{Motor.\+h}!motor1\+P\+WM@{motor1\+P\+WM}}
 \index{motor1\+P\+WM@{motor1\+P\+WM}!Motor.\+h@{Motor.\+h}}
 \subsubsection{\texorpdfstring{motor1\+P\+W\+M()}{motor1PWM()}}
-{\footnotesize\ttfamily void motor1\+P\+WM (\begin{DoxyParamCaption}\item[{int}]{pwm\+Value }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily void motor1\+P\+WM (\begin{DoxyParamCaption}\item[{int}]{pwm1,  }\item[{int}]{pwm2,  }\item[{int}]{pwm3 }\end{DoxyParamCaption})}
 
 
 
@@ -114,7 +260,7 @@ Sets the P\+WM value to motor 1.
 
 
 \begin{DoxyParams}{Parameters}
-{\em pwm\+Value} & The pwm\+Value ranges from 0 to the pwm period. The default pwm period is 320 Sys\+Clk cycles \\
+{\em pwm\+Value} & The pwm\+Value ranges from 0 to the pwm period. \\
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
@@ -150,25 +296,25 @@ Sets the P\+WM value and direction to motor 2.
 
 
 \begin{DoxyParams}{Parameters}
-{\em control} & The pwm\+Value ranges from -\/maximum pwm period to the positive period. The default pwm period is 9600 Sys\+Clk cycles \\
+{\em control} & The pwm\+Value ranges from -\/maximum pwm period to the positive period. The default pwm period is 320 Sys\+Clk cycles \\
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
 Void 
 \end{DoxyReturn}
-\mbox{\Hypertarget{_motor_8h_a17b8580b21da18028807be50e9c29020}\label{_motor_8h_a17b8580b21da18028807be50e9c29020}} 
+\mbox{\Hypertarget{_motor_8h_a8d3950b6912f5a60d2ceded0e0ed502b}\label{_motor_8h_a8d3950b6912f5a60d2ceded0e0ed502b}} 
 \index{Motor.\+h@{Motor.\+h}!motor2\+P\+WM@{motor2\+P\+WM}}
 \index{motor2\+P\+WM@{motor2\+P\+WM}!Motor.\+h@{Motor.\+h}}
 \subsubsection{\texorpdfstring{motor2\+P\+W\+M()}{motor2PWM()}}
-{\footnotesize\ttfamily void motor2\+P\+WM (\begin{DoxyParamCaption}\item[{int}]{pwm\+Value }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily void motor2\+P\+WM (\begin{DoxyParamCaption}\item[{int}]{pwm1,  }\item[{int}]{pwm2,  }\item[{int}]{pwm3 }\end{DoxyParamCaption})}
 
 
 
-Sets the P\+WM value to motor 1. 
+Sets the P\+WM value to motor 2. 
 
 
 \begin{DoxyParams}{Parameters}
-{\em pwm\+Value} & The pwm\+Value ranges from 0 to the pwm period. The default pwm period is 320 Sys\+Clk cycles \\
+{\em pwm\+Value} & The pwm\+Value ranges from 0 to the pwm period. \\
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
@@ -248,11 +394,11 @@ Function to check for all safety limits and kills the motors if a fault is detec
 \begin{DoxyReturn}{Returns}
 Void 
 \end{DoxyReturn}
-\mbox{\Hypertarget{_motor_8h_af0b4940941d639d96fbc31924abf1664}\label{_motor_8h_af0b4940941d639d96fbc31924abf1664}} 
-\index{Motor.\+h@{Motor.\+h}!Motor\+S\+P\+Iinit@{Motor\+S\+P\+Iinit}}
-\index{Motor\+S\+P\+Iinit@{Motor\+S\+P\+Iinit}!Motor.\+h@{Motor.\+h}}
-\subsubsection{\texorpdfstring{Motor\+S\+P\+Iinit()}{MotorSPIinit()}}
-{\footnotesize\ttfamily void Motor\+S\+P\+Iinit (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+\mbox{\Hypertarget{_motor_8h_a45846f2d47f8db7242ebf6026fbf51d3}\label{_motor_8h_a45846f2d47f8db7242ebf6026fbf51d3}} 
+\index{Motor.\+h@{Motor.\+h}!Motor\+S\+P\+I\+Init@{Motor\+S\+P\+I\+Init}}
+\index{Motor\+S\+P\+I\+Init@{Motor\+S\+P\+I\+Init}!Motor.\+h@{Motor.\+h}}
+\subsubsection{\texorpdfstring{Motor\+S\+P\+I\+Init()}{MotorSPIInit()}}
+{\footnotesize\ttfamily void Motor\+S\+P\+I\+Init (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
 
 
 

@@ -1,0 +1,35 @@
+/*! \mainpage Main Page for R2R software documentation
+ *
+ * \section intro_sec Introduction
+ *
+ * Start at `Files > Files List` to view functions and their documentaion
+ *
+ * \section Writing Custom Code
+ *
+ *	Two timers (Timer 6 and Timer 7) are set up in the code and can execute at user-set frequencies in `r2r.c`. The intention is that the user will either write code in r2r.c or create a header and source file. Here, an simple example will be set out to compute simple position control over motor 1 in r2r.c at 5kHz.
+ *	
+ *
+ *
+ * In `r2r.c`, update frequency:
+ * 
+ * 		#define TIMER_6_FREQUENCY 5000
+ *
+ *
+ * Under `TIMER6IntHandler()`:
+ *
+ *		void TIMER6IntHandler(){
+ *			float kp = 0.5;
+ *	 		float ki = 1;
+ *			float kd = 0;
+ *			desired_position = 60; //degrees
+ *			encoderRead(); // update the encoder
+ *			int actual = readMotor1RawRelative(); // read counts set to relative
+ *		    int raw = readMotor1Raw(); // read counts absolute
+ *		    int error = angles2Counts(desired_position) - actual;
+ *		    int u = kp*error+kd*prev_error+ki*int_error;
+ *		    motor1ControlPWM(u);
+ *		 }	
+ *  	
+ *
+ * 
+ */

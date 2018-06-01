@@ -1,8 +1,8 @@
 /**
- * @file Control.h
+ * @file PositionControl.h
  * @brief control header
  *
- * This file contains the pwm functions
+ * This file contains position control functions
  *
  * @author Benjamen Lim
  * @author Huan Weng
@@ -13,7 +13,9 @@
 #ifndef POSITION_CONTROL_H_
 #define POSITION_CONTROL_H_
 
-// TODO in setup set these to zero
+/**
+* This struct contains the PID data
+*/
 typedef struct {                          // Define data structure containing control data
     int Enew;
     int Eold;
@@ -23,6 +25,7 @@ typedef struct {                          // Define data structure containing co
     int actual;
     int raw;
     float u;
+    int motor_number;
 } control_error;
 
 
@@ -98,10 +101,18 @@ void load_position_trajectory(int motor);                // Load desired positio
 */
 int get_motor_pwm(int motor);
 
+/**
+* @brief Sets the pwm on a given motor
+*
+* @param motor motor to select
+* @param value the pwm on a given motor
+* @return Void
+*/
+
 void set_motor_pwm(int motor, int value);
 
 /**
-* @brief Calculates pwm to send to the motor drivr
+* @brief Calculates pwm to send to the motor driver
 *
 * @param reference the reference angle
 * @param actual the commanded angle
@@ -110,8 +121,30 @@ void set_motor_pwm(int motor, int value);
 */
 void PID_Controller(int reference, int actual, int motor);
 
+/**
+* @brief Motor decogging to smooth output of motor
+*
+* Motor decogging function that smooths out the output from the motor by adding a 
+* term to the control signal to compensate for the cogging in the BLDC motor. 
+* Values are hardcoded to default r2r motors.
+*
+* Example:
+*
+*     u = u + decog_motor(current_Angle_Radians, MOTOR_1);
+*
+* @param x current angle in radians
+* @param motor the motor to decog
+* @return the modified control signal
+*/
 float decog_motor(int x, int motor);
 
+/**
+* @brief Turns on motor decogging
+*
+*   
+* @param Void
+* @return Void
+*/
 void setDecogging(void);
 
 #endif /* POSITION_CONTROL_H_ */

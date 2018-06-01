@@ -14,19 +14,23 @@ struct \mbox{\hyperlink{structcontrol__data__t}{control\+\_\+data\+\_\+t}}
 \begin{DoxyCompactItemize}
 \item 
 \mbox{\Hypertarget{_utilities_8h_a8b0b0ebd19cb978bcd825b842558c31a}\label{_utilities_8h_a8b0b0ebd19cb978bcd825b842558c31a}} 
-\#define {\bfseries D\+E\+C\+I\+M\+A\+T\+I\+ON}~10
+\#define {\bfseries D\+E\+C\+I\+M\+A\+T\+I\+ON}~1
 \item 
 \mbox{\Hypertarget{_utilities_8h_afdeaf9c0da96c91dfdf573f977d32e6b}\label{_utilities_8h_afdeaf9c0da96c91dfdf573f977d32e6b}} 
 \#define {\bfseries R\+E\+F\+E\+R\+E\+N\+C\+E\+\_\+\+D\+A\+TA}~10000
 \item 
 \mbox{\Hypertarget{_utilities_8h_ad974fe981249f5e84fbf1683b012c9f8}\label{_utilities_8h_ad974fe981249f5e84fbf1683b012c9f8}} 
-\#define {\bfseries B\+U\+F\+L\+EN}~1024
+\#define {\bfseries B\+U\+F\+L\+EN}~1000
 \end{DoxyCompactItemize}
 \subsection*{Enumerations}
 \begin{DoxyCompactItemize}
 \item 
-enum \mbox{\hyperlink{_utilities_8h_a1a6b6fb557d8d37d59700faf4e4c9167}{mode}} \{ \mbox{\hyperlink{_utilities_8h_a1a6b6fb557d8d37d59700faf4e4c9167afd6a0e4343048b10646dd2976cc5ad18}{I\+D\+LE}}, 
+enum \mbox{\hyperlink{_utilities_8h_a1a6b6fb557d8d37d59700faf4e4c9167}{mode}} \{ \newline
+\mbox{\hyperlink{_utilities_8h_a1a6b6fb557d8d37d59700faf4e4c9167afd6a0e4343048b10646dd2976cc5ad18}{I\+D\+LE}}, 
+\mbox{\hyperlink{_utilities_8h_a1a6b6fb557d8d37d59700faf4e4c9167aef99a276e1f3b62b5df98acc27b38028}{P\+WM}}, 
+{\bfseries I\+T\+E\+ST}, 
 \mbox{\hyperlink{_utilities_8h_a1a6b6fb557d8d37d59700faf4e4c9167a9cfa27b414cab750fb14ec07cdf5cf6a}{H\+O\+LD}}, 
+\newline
 \mbox{\hyperlink{_utilities_8h_a1a6b6fb557d8d37d59700faf4e4c9167a203efac3b32c320b1246bf5583be1e8c}{T\+R\+A\+CK}}
  \}
 \end{DoxyCompactItemize}
@@ -51,14 +55,26 @@ int \mbox{\hyperlink{_utilities_8h_ab06f20d652c9a1f51223495940f71ff0}{buffer\+\_
 \begin{DoxyCompactList}\small\item\em Returns true if the buffer is full. \end{DoxyCompactList}\item 
 int \mbox{\hyperlink{_utilities_8h_a8c8c25ea6e552a6e3bd8c550bf8f4732}{buffer\+\_\+read\+\_\+position}} (int motor)
 \begin{DoxyCompactList}\small\item\em Reads position from the current buffer location. \end{DoxyCompactList}\item 
-float \mbox{\hyperlink{_utilities_8h_a9077ef5958a68d7b8ef5b23e3e6f7437}{buffer\+\_\+read\+\_\+u}} (int motor)
+int \mbox{\hyperlink{_utilities_8h_a96d145a44e951f2b6213830490bb45c5}{buffer\+\_\+read\+\_\+u}} (int motor)
 \begin{DoxyCompactList}\small\item\em Reads current value from current buffer location. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{_utilities_8h_a20cbe188c42de1a2849be3745a2c9e40}{buffer\+\_\+read\+\_\+increment}} (void)
 \begin{DoxyCompactList}\small\item\em Increments the buffer read index. \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{_utilities_8h_ab43eb9473b9b40d1b27d223c5b2f9448}{buffer\+\_\+write}} (int M1\+\_\+act\+Pos, int M2\+\_\+act\+Pos, float M1\+\_\+u, float M2\+\_\+u)
+void \mbox{\hyperlink{_utilities_8h_a0391465d79feefe5cce4385fe8385e6a}{buffer\+\_\+write}} (int M1\+\_\+act\+Pos, int M2\+\_\+act\+Pos, int M1\+\_\+u, int M2\+\_\+u)
 \begin{DoxyCompactList}\small\item\em Write data to buffer. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{_utilities_8h_aa8061654c0af0c3c3fac9e63ed7eaed6}{send\+\_\+data}} (void)
-\begin{DoxyCompactList}\small\item\em Send data to client when it becomes available. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Send data to client when it becomes available. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{_utilities_8h_a28222caa228cb42e3dd503f611a431ff}\label{_utilities_8h_a28222caa228cb42e3dd503f611a431ff}} 
+void {\bfseries set\+Nclient} (int n)
+\item 
+\mbox{\Hypertarget{_utilities_8h_a88ade88617e9bae6f82653ec6d6470a1}\label{_utilities_8h_a88ade88617e9bae6f82653ec6d6470a1}} 
+int {\bfseries bound\+Int} (int a, int n)
+\item 
+\mbox{\Hypertarget{_utilities_8h_acec61ed867597bb5d25a00b0e33d4476}\label{_utilities_8h_acec61ed867597bb5d25a00b0e33d4476}} 
+int {\bfseries max\+Int} (int a, int b)
+\item 
+\mbox{\Hypertarget{_utilities_8h_a9e427f3b5834b74b7302b7f36745c7b1}\label{_utilities_8h_a9e427f3b5834b74b7302b7f36745c7b1}} 
+int {\bfseries angles\+To\+Counts} (float angle)
+\end{DoxyCompactItemize}
 
 
 \subsection{Detailed Description}
@@ -85,6 +101,10 @@ Blake Strebel
 Data structure containing the modes of the system \begin{DoxyEnumFields}{Enumerator}
 \raisebox{\heightof{T}}[0pt][0pt]{\index{I\+D\+LE@{I\+D\+LE}!Utilities.\+h@{Utilities.\+h}}\index{Utilities.\+h@{Utilities.\+h}!I\+D\+LE@{I\+D\+LE}}}\mbox{\Hypertarget{_utilities_8h_a1a6b6fb557d8d37d59700faf4e4c9167afd6a0e4343048b10646dd2976cc5ad18}\label{_utilities_8h_a1a6b6fb557d8d37d59700faf4e4c9167afd6a0e4343048b10646dd2976cc5ad18}} 
 I\+D\+LE&Sets motor effort to 0 \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{P\+WM@{P\+WM}!Utilities.\+h@{Utilities.\+h}}\index{Utilities.\+h@{Utilities.\+h}!P\+WM@{P\+WM}}}\mbox{\Hypertarget{_utilities_8h_a1a6b6fb557d8d37d59700faf4e4c9167aef99a276e1f3b62b5df98acc27b38028}\label{_utilities_8h_a1a6b6fb557d8d37d59700faf4e4c9167aef99a276e1f3b62b5df98acc27b38028}} 
+P\+WM&P\+WM directly set by user \\
 \hline
 
 \raisebox{\heightof{T}}[0pt][0pt]{\index{H\+O\+LD@{H\+O\+LD}!Utilities.\+h@{Utilities.\+h}}\index{Utilities.\+h@{Utilities.\+h}!H\+O\+LD@{H\+O\+LD}}}\mbox{\Hypertarget{_utilities_8h_a1a6b6fb557d8d37d59700faf4e4c9167a9cfa27b414cab750fb14ec07cdf5cf6a}\label{_utilities_8h_a1a6b6fb557d8d37d59700faf4e4c9167a9cfa27b414cab750fb14ec07cdf5cf6a}} 
@@ -177,11 +197,11 @@ This function assumes that buffer is not empty
 \begin{DoxyReturn}{Returns}
 int position of the current buffer location 
 \end{DoxyReturn}
-\mbox{\Hypertarget{_utilities_8h_a9077ef5958a68d7b8ef5b23e3e6f7437}\label{_utilities_8h_a9077ef5958a68d7b8ef5b23e3e6f7437}} 
+\mbox{\Hypertarget{_utilities_8h_a96d145a44e951f2b6213830490bb45c5}\label{_utilities_8h_a96d145a44e951f2b6213830490bb45c5}} 
 \index{Utilities.\+h@{Utilities.\+h}!buffer\+\_\+read\+\_\+u@{buffer\+\_\+read\+\_\+u}}
 \index{buffer\+\_\+read\+\_\+u@{buffer\+\_\+read\+\_\+u}!Utilities.\+h@{Utilities.\+h}}
 \subsubsection{\texorpdfstring{buffer\+\_\+read\+\_\+u()}{buffer\_read\_u()}}
-{\footnotesize\ttfamily float buffer\+\_\+read\+\_\+u (\begin{DoxyParamCaption}\item[{int}]{motor }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily int buffer\+\_\+read\+\_\+u (\begin{DoxyParamCaption}\item[{int}]{motor }\end{DoxyParamCaption})}
 
 
 
@@ -195,13 +215,13 @@ This function assumes that buffer is not empty
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
-float current value in buffer 
+int current value in buffer 
 \end{DoxyReturn}
-\mbox{\Hypertarget{_utilities_8h_ab43eb9473b9b40d1b27d223c5b2f9448}\label{_utilities_8h_ab43eb9473b9b40d1b27d223c5b2f9448}} 
+\mbox{\Hypertarget{_utilities_8h_a0391465d79feefe5cce4385fe8385e6a}\label{_utilities_8h_a0391465d79feefe5cce4385fe8385e6a}} 
 \index{Utilities.\+h@{Utilities.\+h}!buffer\+\_\+write@{buffer\+\_\+write}}
 \index{buffer\+\_\+write@{buffer\+\_\+write}!Utilities.\+h@{Utilities.\+h}}
 \subsubsection{\texorpdfstring{buffer\+\_\+write()}{buffer\_write()}}
-{\footnotesize\ttfamily void buffer\+\_\+write (\begin{DoxyParamCaption}\item[{int}]{M1\+\_\+act\+Pos,  }\item[{int}]{M2\+\_\+act\+Pos,  }\item[{float}]{M1\+\_\+u,  }\item[{float}]{M2\+\_\+u }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily void buffer\+\_\+write (\begin{DoxyParamCaption}\item[{int}]{M1\+\_\+act\+Pos,  }\item[{int}]{M2\+\_\+act\+Pos,  }\item[{int}]{M1\+\_\+u,  }\item[{int}]{M2\+\_\+u }\end{DoxyParamCaption})}
 
 
 

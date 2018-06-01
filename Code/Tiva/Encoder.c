@@ -257,3 +257,7 @@ float readMotor2Rad(void){
     return readMotor2Raw()/16383*2*3.14;
 }
 
+
+int anglesToCounts(float angle){
+    return angle/360*16383;
+}

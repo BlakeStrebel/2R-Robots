@@ -74,7 +74,9 @@ $(function() {
 
 <p>Encoder header.  
 <a href="#details">More...</a></p>
-
+<div class="textblock"><code>#include &quot;<a class="el" href="includes_8h_source.html">includes.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="_system_8h_source.html">System.h</a>&quot;</code><br />
+</div>
 <p><a href="_encoder_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
@@ -121,6 +123,9 @@ Functions</h2></td></tr>
 <tr class="memitem:a32d76f5feb48e875eddaa9c1dbd19276"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_encoder_8h.html#a32d76f5feb48e875eddaa9c1dbd19276">readMotor1Speed</a> (void)</td></tr>
 <tr class="memdesc:a32d76f5feb48e875eddaa9c1dbd19276"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads the motor 2's speed in terms of revolutions/sec from the encoder.  <a href="#a32d76f5feb48e875eddaa9c1dbd19276">More...</a><br /></td></tr>
 <tr class="separator:a32d76f5feb48e875eddaa9c1dbd19276"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9e427f3b5834b74b7302b7f36745c7b1"><td class="memItemLeft" align="right" valign="top"><a id="a9e427f3b5834b74b7302b7f36745c7b1"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>anglesToCounts</b> (float angle)</td></tr>
+<tr class="separator:a9e427f3b5834b74b7302b7f36745c7b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Encoder header. </p>
@@ -148,7 +153,7 @@ Blake Strebel </dd></dl>
 </div><div class="memdoc">
 
 <p>Updates value in sensor array. </p>
-<p>This function sends a 't' and 40 pulses via SPI to the encoder and reads out the encoder's reply to the encoderVal array</p>
+<p>This function sends a 's' and 40 pulses via SPI to the encoder and reads out the encoder's reply to the encoderVal array.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">Void</td><td></td></tr>
@@ -264,7 +269,9 @@ Blake Strebel </dd></dl>
 
 <p>Reads value in encoderVal array for motor 1. </p>
 <p>The range for the read angle is 0 to 16383</p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Example: </p><pre class="fragment">encoderRead();
+int current_position = readMotor1Raw();
+</pre><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">Void</td><td></td></tr>
   </table>

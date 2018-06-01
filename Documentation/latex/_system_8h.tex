@@ -5,34 +5,16 @@
 system header  
 
 
-{\ttfamily \#include $<$stdbool.\+h$>$}\newline
-{\ttfamily \#include $<$stdint.\+h$>$}\newline
-{\ttfamily \#include $<$stdlib.\+h$>$}\newline
-{\ttfamily \#include $<$stdio.\+h$>$}\newline
-{\ttfamily \#include $<$stdarg.\+h$>$}\newline
-{\ttfamily \#include \char`\"{}sensorlib/i2cm\+\_\+drv.\+h\char`\"{}}\newline
-{\ttfamily \#include \char`\"{}sensorlib/hw\+\_\+mpu6050.\+h\char`\"{}}\newline
-{\ttfamily \#include \char`\"{}sensorlib/mpu6050.\+h\char`\"{}}\newline
-{\ttfamily \#include \char`\"{}inc/hw\+\_\+ints.\+h\char`\"{}}\newline
-{\ttfamily \#include \char`\"{}inc/hw\+\_\+memmap.\+h\char`\"{}}\newline
-{\ttfamily \#include \char`\"{}inc/hw\+\_\+sysctl.\+h\char`\"{}}\newline
-{\ttfamily \#include \char`\"{}inc/hw\+\_\+types.\+h\char`\"{}}\newline
-{\ttfamily \#include \char`\"{}inc/hw\+\_\+i2c.\+h\char`\"{}}\newline
-{\ttfamily \#include \char`\"{}inc/hw\+\_\+gpio.\+h\char`\"{}}\newline
-{\ttfamily \#include \char`\"{}driverlib/gpio.\+h\char`\"{}}\newline
-{\ttfamily \#include \char`\"{}driverlib/pin\+\_\+map.\+h\char`\"{}}\newline
-{\ttfamily \#include \char`\"{}driverlib/rom.\+h\char`\"{}}\newline
-{\ttfamily \#include \char`\"{}driverlib/rom\+\_\+map.\+h\char`\"{}}\newline
-{\ttfamily \#include \char`\"{}driverlib/debug.\+h\char`\"{}}\newline
-{\ttfamily \#include \char`\"{}driverlib/interrupt.\+h\char`\"{}}\newline
-{\ttfamily \#include \char`\"{}driverlib/i2c.\+h\char`\"{}}\newline
-{\ttfamily \#include \char`\"{}driverlib/sysctl.\+h\char`\"{}}\newline
-{\ttfamily \#include \char`\"{}driverlib/pwm.\+h\char`\"{}}\newline
-{\ttfamily \#include \char`\"{}driverlib/timer.\+h\char`\"{}}\newline
-{\ttfamily \#include \char`\"{}driverlib/uart.\+h\char`\"{}}\newline
-{\ttfamily \#include \char`\"{}driverlib/ssi.\+h\char`\"{}}\newline
-{\ttfamily \#include \char`\"{}driverlib/systick.\+h\char`\"{}}\newline
-{\ttfamily \#include \char`\"{}utils/uartstdio.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}includes.\+h\char`\"{}}\newline
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{_system_8h_a98c7a97e19fc2cfa019bbd2d7e818f58}\label{_system_8h_a98c7a97e19fc2cfa019bbd2d7e818f58}} 
+\#define {\bfseries M\+O\+T\+O\+R1}~1
+\item 
+\mbox{\Hypertarget{_system_8h_a9dd61fc755020c90dbfb072e2f0492e8}\label{_system_8h_a9dd61fc755020c90dbfb072e2f0492e8}} 
+\#define {\bfseries M\+O\+T\+O\+R2}~2
+\end{DoxyCompactItemize}
 \subsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
@@ -43,20 +25,17 @@ void \mbox{\hyperlink{_system_8h_a09a7a9ed4194733a7b753c3b795b1734}{uart\+Init}}
 void \mbox{\hyperlink{_system_8h_acd1ca90dcd2d241c90316f670dfcc2eb}{U\+A\+R\+T0read}} (char $\ast$message, int max\+Length)
 \begin{DoxyCompactList}\small\item\em Reads input from U\+A\+RT. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{_system_8h_aba58039e2e0b55260a188aedbc87d18b}{U\+A\+R\+T0write}} (const char $\ast$string)
-\begin{DoxyCompactList}\small\item\em Writes output from U\+A\+RT. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em Writes output to U\+A\+RT. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{_system_8h_adab76f1253da89e657056817a3a9a11a}{gpio\+Init}} (void)
 \begin{DoxyCompactList}\small\item\em Initializes all unused G\+P\+IO pins in High-\/Z state. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{_system_8h_ab0b86e69a6c13e01349840d66db0f1f3}{delay\+MS}} (int ms)
 \begin{DoxyCompactList}\small\item\em Stops the processor for a given amount of time. This is an approximate time. \end{DoxyCompactList}\item 
-\mbox{\Hypertarget{_system_8h_a9539b63f71e1a1c8b7cc5142560b189c}\label{_system_8h_a9539b63f71e1a1c8b7cc5142560b189c}} 
-void {\bfseries time\+Init} (void)
-\item 
-\mbox{\Hypertarget{_system_8h_a606dc97cf5056886cfd30122ce54709c}\label{_system_8h_a606dc97cf5056886cfd30122ce54709c}} 
-uint32\+\_\+t {\bfseries get\+Time} (void)
-\item 
-\mbox{\Hypertarget{_system_8h_a3ef2d72f5373681a06978ab3f437bd63}\label{_system_8h_a3ef2d72f5373681a06978ab3f437bd63}} 
-void {\bfseries time\+Int} (void)
-\end{DoxyCompactItemize}
+void \mbox{\hyperlink{_system_8h_a9539b63f71e1a1c8b7cc5142560b189c}{time\+Init}} (void)
+\begin{DoxyCompactList}\small\item\em Initializes the general purpose systick timer. \end{DoxyCompactList}\item 
+uint32\+\_\+t \mbox{\hyperlink{_system_8h_a606dc97cf5056886cfd30122ce54709c}{get\+Time}} (void)
+\begin{DoxyCompactList}\small\item\em Returns the time in microseconds. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_system_8h_a3ef2d72f5373681a06978ab3f437bd63}{time\+Int}} (void)
+\begin{DoxyCompactList}\small\item\em The general purpose timer interrupt function. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \subsection*{Variables}
 \begin{DoxyCompactItemize}
 \item 
@@ -101,6 +80,32 @@ Stops the processor for a given amount of time. This is an approximate time.
 \begin{DoxyReturn}{Returns}
 Void 
 \end{DoxyReturn}
+\mbox{\Hypertarget{_system_8h_a606dc97cf5056886cfd30122ce54709c}\label{_system_8h_a606dc97cf5056886cfd30122ce54709c}} 
+\index{System.\+h@{System.\+h}!get\+Time@{get\+Time}}
+\index{get\+Time@{get\+Time}!System.\+h@{System.\+h}}
+\subsubsection{\texorpdfstring{get\+Time()}{getTime()}}
+{\footnotesize\ttfamily uint32\+\_\+t get\+Time (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Returns the time in microseconds. 
+
+This function can be used for delays as an alternative to \mbox{\hyperlink{_system_8h_ab0b86e69a6c13e01349840d66db0f1f3}{delay\+M\+S()}} because it is interrupt-\/based.
+
+Example\+: \begin{DoxyVerb}    uint32_t curr_time = getTime();
+...
+uint32_t time_taken = getTime()-curr_time;
+\end{DoxyVerb}
+
+
+
+\begin{DoxyParams}{Parameters}
+{\em us} & microseconds \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
 \mbox{\Hypertarget{_system_8h_adab76f1253da89e657056817a3a9a11a}\label{_system_8h_adab76f1253da89e657056817a3a9a11a}} 
 \index{System.\+h@{System.\+h}!gpio\+Init@{gpio\+Init}}
 \index{gpio\+Init@{gpio\+Init}!System.\+h@{System.\+h}}
@@ -137,6 +142,44 @@ Initializes the system clock and the master interrupts for the R2R project.
 \begin{DoxyReturn}{Returns}
 Void 
 \end{DoxyReturn}
+\mbox{\Hypertarget{_system_8h_a9539b63f71e1a1c8b7cc5142560b189c}\label{_system_8h_a9539b63f71e1a1c8b7cc5142560b189c}} 
+\index{System.\+h@{System.\+h}!time\+Init@{time\+Init}}
+\index{time\+Init@{time\+Init}!System.\+h@{System.\+h}}
+\subsubsection{\texorpdfstring{time\+Init()}{timeInit()}}
+{\footnotesize\ttfamily void time\+Init (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Initializes the general purpose systick timer. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_system_8h_a3ef2d72f5373681a06978ab3f437bd63}\label{_system_8h_a3ef2d72f5373681a06978ab3f437bd63}} 
+\index{System.\+h@{System.\+h}!time\+Int@{time\+Int}}
+\index{time\+Int@{time\+Int}!System.\+h@{System.\+h}}
+\subsubsection{\texorpdfstring{time\+Int()}{timeInt()}}
+{\footnotesize\ttfamily void time\+Int (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+The general purpose timer interrupt function. 
+
+This function is called every microsecond and updates a counter.
+
+
+\begin{DoxyParams}{Parameters}
+{\em ms} & milliseconds \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
 \mbox{\Hypertarget{_system_8h_acd1ca90dcd2d241c90316f670dfcc2eb}\label{_system_8h_acd1ca90dcd2d241c90316f670dfcc2eb}} 
 \index{System.\+h@{System.\+h}!U\+A\+R\+T0read@{U\+A\+R\+T0read}}
 \index{U\+A\+R\+T0read@{U\+A\+R\+T0read}!System.\+h@{System.\+h}}
@@ -146,6 +189,16 @@ Void
 
 
 Reads input from U\+A\+RT. 
+
+Combine this function with a char buffer to process inputs from U\+A\+RT
+
+Example\+: \begin{DoxyVerb}int max_length = 50;
+float kp, ki, kd;
+char buffer[max_length];
+UART0read(buffer,max_length);
+sscanf(buffer, "%f %f %f", kp, ki, kd); // get P, I, D values from user
+\end{DoxyVerb}
+
 
 
 \begin{DoxyParams}{Parameters}
@@ -165,7 +218,16 @@ Void
 
 
 
-Writes output from U\+A\+RT. 
+Writes output to U\+A\+RT. 
+
+This function will write until it reaches the end of the char buffer \textquotesingle{}\textbackslash{}0\textquotesingle{}.
+
+Example\+: \begin{DoxyVerb}int max_length = 50;
+char buffer[max_length];
+sprintf(buffer,"kp: %f, ki: %f, kd: %f",kp, ki, kd);
+UART0write(buffer,max_length);
+\end{DoxyVerb}
+
 
 
 \begin{DoxyParams}{Parameters}

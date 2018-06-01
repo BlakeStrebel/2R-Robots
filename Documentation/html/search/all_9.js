@@ -1,4 +1,17 @@
 var searchData=
 [
-  ['load_5fposition_5ftrajectory',['load_position_trajectory',['../_control_8h.html#a23b819228a3ffc67fc85222e5b7a1053',1,'Control.c']]]
+  ['main_20page_20for_20r2r_20software_20documentation',['Main Page for R2R software documentation',['../index.html',1,'']]],
+  ['mode',['mode',['../_utilities_8h.html#a1a6b6fb557d8d37d59700faf4e4c9167',1,'Utilities.h']]],
+  ['motor_2eh',['Motor.h',['../_motor_8h.html',1,'']]],
+  ['motor1brake',['motor1Brake',['../_motor_8h.html#aea6e9daf04c89835b507bf4bbf477841',1,'Motor.c']]],
+  ['motor1controlpwm',['motor1ControlPWM',['../_motor_8h.html#a8ab898affd7b6bbc1d359284e85c31c3',1,'Motor.c']]],
+  ['motor1pwm',['motor1PWM',['../_motor_8h.html#a40e064ce1ed8e8fe099904717d9c7e46',1,'Motor.c']]],
+  ['motor2brake',['motor2Brake',['../_motor_8h.html#abeb06d04160b25625c36d1a07e111033',1,'Motor.c']]],
+  ['motor2controlpwm',['motor2ControlPWM',['../_motor_8h.html#aa3421fe96b22e90c356e013a0abef7d6',1,'Motor.c']]],
+  ['motor2pwm',['motor2PWM',['../_motor_8h.html#a8d3950b6912f5a60d2ceded0e0ed502b',1,'Motor.c']]],
+  ['motordriverinit',['motorDriverInit',['../_motor_8h.html#a4e7b27c5715df8d71dfe87a22ae0b004',1,'Motor.c']]],
+  ['motorerror',['motorError',['../_motor_8h.html#ad2fb0421114b988126b41428644453a3',1,'Motor.c']]],
+  ['motorinit',['motorInit',['../_motor_8h.html#aa29e2982047be0f7afbb10c8d6f3f5c3',1,'Motor.c']]],
+  ['motorsafetycheck',['motorSafetyCheck',['../_motor_8h.html#ab59ffbd33a12b2f672648d85a5466798',1,'Motor.c']]],
+  ['motorspiinit',['MotorSPIInit',['../_motor_8h.html#a45846f2d47f8db7242ebf6026fbf51d3',1,'Motor.c']]]
 ];

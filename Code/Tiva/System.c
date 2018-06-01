@@ -1,3 +1,5 @@
+
+
 #include "System.h"
 
 /*
@@ -119,7 +121,7 @@ void timeInit(){
 }
 
 void timeInt(){
-    micros++; // update the counter
+    micros++; // update the counter when the interrupt is called
 }
 
 uint32_t getTime(){

@@ -29,8 +29,8 @@ extern void encoderSPIInit(void);
 /**
  * @brief Updates value in sensor array
  *
- * This function sends a 't' and 40 pulses via SPI to the encoder and reads out the encoder's reply to
- * the encoderVal array
+ * This function sends a 's' and 40 pulses via SPI to the encoder and reads out the encoder's reply to
+ * the encoderVal array.
  *
  * @param Void
  * @return Void
@@ -79,6 +79,11 @@ extern float readMotor2Angle(void);
  * @brief Reads value in encoderVal array for motor 1
  *
  * The range for the read angle is 0 to 16383
+ *
+ * Example:
+ *
+ *		encoderRead();
+ *		int current_position = readMotor1Raw();
  *
  * @param Void
  * @return The angle as an int
@@ -160,6 +165,7 @@ extern float readMotor2Speed(void);
 extern float readMotor1Speed(void);
 
 
+int anglesToCounts(float angle);
 
 
 #endif /* ENCODER_H_ */

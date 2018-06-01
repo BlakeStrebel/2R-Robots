@@ -5,6 +5,8 @@
 Encoder header.  
 
 
+{\ttfamily \#include \char`\"{}includes.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}System.\+h\char`\"{}}\newline
 \subsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
@@ -35,7 +37,10 @@ float \mbox{\hyperlink{_encoder_8h_a8277b1c9a143a978685671b1a0c7f90d}{read\+Moto
 float \mbox{\hyperlink{_encoder_8h_a6391115b4eaa017554396e9c0bd81ac4}{read\+Motor2\+Speed}} (void)
 \begin{DoxyCompactList}\small\item\em Reads the motor 1\textquotesingle{}s speed in terms of revolutions/sec from the encoder. \end{DoxyCompactList}\item 
 float \mbox{\hyperlink{_encoder_8h_a32d76f5feb48e875eddaa9c1dbd19276}{read\+Motor1\+Speed}} (void)
-\begin{DoxyCompactList}\small\item\em Reads the motor 2\textquotesingle{}s speed in terms of revolutions/sec from the encoder. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Reads the motor 2\textquotesingle{}s speed in terms of revolutions/sec from the encoder. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{_encoder_8h_a9e427f3b5834b74b7302b7f36745c7b1}\label{_encoder_8h_a9e427f3b5834b74b7302b7f36745c7b1}} 
+int {\bfseries angles\+To\+Counts} (float angle)
+\end{DoxyCompactItemize}
 
 
 \subsection{Detailed Description}
@@ -63,7 +68,7 @@ Blake Strebel
 
 Updates value in sensor array. 
 
-This function sends a \textquotesingle{}t\textquotesingle{} and 40 pulses via S\+PI to the encoder and reads out the encoder\textquotesingle{}s reply to the encoder\+Val array
+This function sends a \textquotesingle{}s\textquotesingle{} and 40 pulses via S\+PI to the encoder and reads out the encoder\textquotesingle{}s reply to the encoder\+Val array.
 
 
 \begin{DoxyParams}{Parameters}
@@ -148,6 +153,11 @@ The angle as an int
 Reads value in encoder\+Val array for motor 1. 
 
 The range for the read angle is 0 to 16383
+
+Example\+: \begin{DoxyVerb}encoderRead();
+int current_position = readMotor1Raw();
+\end{DoxyVerb}
+
 
 
 \begin{DoxyParams}{Parameters}

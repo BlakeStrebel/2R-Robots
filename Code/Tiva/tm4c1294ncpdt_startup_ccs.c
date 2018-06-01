@@ -27,6 +27,7 @@
 #include "System.h"
 #include "CurrentControl.h"
 #include "Motor.h"
+#include "r2r.h"
 
 //*****************************************************************************
 //
@@ -186,9 +187,9 @@ void (* const g_pfnVectors[])(void) =
     IntDefaultHandler,                      // AES 0
     IntDefaultHandler,                      // DES3DES 0
     IntDefaultHandler,                      // LCD Controller 0
-    IntDefaultHandler,                      // Timer 6 subtimer A
+    TIMER6IntHandler,                       // Timer 6 subtimer A
     IntDefaultHandler,                      // Timer 6 subtimer B
-    IntDefaultHandler,                      // Timer 7 subtimer A
+    TIMER7IntHandler,                       // Timer 7 subtimer A
     IntDefaultHandler,                      // Timer 7 subtimer B
     IntDefaultHandler,                      // I2C6 Master and Slave
     IntDefaultHandler,                      // I2C7 Master and Slave

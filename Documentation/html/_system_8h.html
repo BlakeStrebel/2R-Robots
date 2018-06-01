@@ -66,6 +66,7 @@ $(function() {
 </div><!-- top -->
 <div class="header">
   <div class="summary">
+<a href="#define-members">Macros</a> &#124;
 <a href="#func-members">Functions</a> &#124;
 <a href="#var-members">Variables</a>  </div>
   <div class="headertitle">
@@ -75,37 +76,19 @@ $(function() {
 
 <p>system header  
 <a href="#details">More...</a></p>
-<div class="textblock"><code>#include &lt;stdbool.h&gt;</code><br />
-<code>#include &lt;stdint.h&gt;</code><br />
-<code>#include &lt;stdlib.h&gt;</code><br />
-<code>#include &lt;stdio.h&gt;</code><br />
-<code>#include &lt;stdarg.h&gt;</code><br />
-<code>#include &quot;sensorlib/i2cm_drv.h&quot;</code><br />
-<code>#include &quot;sensorlib/hw_mpu6050.h&quot;</code><br />
-<code>#include &quot;sensorlib/mpu6050.h&quot;</code><br />
-<code>#include &quot;inc/hw_ints.h&quot;</code><br />
-<code>#include &quot;inc/hw_memmap.h&quot;</code><br />
-<code>#include &quot;inc/hw_sysctl.h&quot;</code><br />
-<code>#include &quot;inc/hw_types.h&quot;</code><br />
-<code>#include &quot;inc/hw_i2c.h&quot;</code><br />
-<code>#include &quot;inc/hw_gpio.h&quot;</code><br />
-<code>#include &quot;driverlib/gpio.h&quot;</code><br />
-<code>#include &quot;driverlib/pin_map.h&quot;</code><br />
-<code>#include &quot;driverlib/rom.h&quot;</code><br />
-<code>#include &quot;driverlib/rom_map.h&quot;</code><br />
-<code>#include &quot;driverlib/debug.h&quot;</code><br />
-<code>#include &quot;driverlib/interrupt.h&quot;</code><br />
-<code>#include &quot;driverlib/i2c.h&quot;</code><br />
-<code>#include &quot;driverlib/sysctl.h&quot;</code><br />
-<code>#include &quot;driverlib/pwm.h&quot;</code><br />
-<code>#include &quot;driverlib/timer.h&quot;</code><br />
-<code>#include &quot;driverlib/uart.h&quot;</code><br />
-<code>#include &quot;driverlib/ssi.h&quot;</code><br />
-<code>#include &quot;driverlib/systick.h&quot;</code><br />
-<code>#include &quot;utils/uartstdio.h&quot;</code><br />
+<div class="textblock"><code>#include &quot;<a class="el" href="includes_8h_source.html">includes.h</a>&quot;</code><br />
 </div>
 <p><a href="_system_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
+Macros</h2></td></tr>
+<tr class="memitem:a98c7a97e19fc2cfa019bbd2d7e818f58"><td class="memItemLeft" align="right" valign="top"><a id="a98c7a97e19fc2cfa019bbd2d7e818f58"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>MOTOR1</b>&#160;&#160;&#160;1</td></tr>
+<tr class="separator:a98c7a97e19fc2cfa019bbd2d7e818f58"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9dd61fc755020c90dbfb072e2f0492e8"><td class="memItemLeft" align="right" valign="top"><a id="a9dd61fc755020c90dbfb072e2f0492e8"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>MOTOR2</b>&#160;&#160;&#160;2</td></tr>
+<tr class="separator:a9dd61fc755020c90dbfb072e2f0492e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:a9708de954e135b89af84d9d82b552667"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_system_8h.html#a9708de954e135b89af84d9d82b552667">sysInit</a> (void)</td></tr>
@@ -118,7 +101,7 @@ Functions</h2></td></tr>
 <tr class="memdesc:acd1ca90dcd2d241c90316f670dfcc2eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads input from UART.  <a href="#acd1ca90dcd2d241c90316f670dfcc2eb">More...</a><br /></td></tr>
 <tr class="separator:acd1ca90dcd2d241c90316f670dfcc2eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aba58039e2e0b55260a188aedbc87d18b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_system_8h.html#aba58039e2e0b55260a188aedbc87d18b">UART0write</a> (const char *string)</td></tr>
-<tr class="memdesc:aba58039e2e0b55260a188aedbc87d18b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes output from UART.  <a href="#aba58039e2e0b55260a188aedbc87d18b">More...</a><br /></td></tr>
+<tr class="memdesc:aba58039e2e0b55260a188aedbc87d18b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes output to UART.  <a href="#aba58039e2e0b55260a188aedbc87d18b">More...</a><br /></td></tr>
 <tr class="separator:aba58039e2e0b55260a188aedbc87d18b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adab76f1253da89e657056817a3a9a11a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_system_8h.html#adab76f1253da89e657056817a3a9a11a">gpioInit</a> (void)</td></tr>
 <tr class="memdesc:adab76f1253da89e657056817a3a9a11a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes all unused GPIO pins in High-Z state.  <a href="#adab76f1253da89e657056817a3a9a11a">More...</a><br /></td></tr>
@@ -126,14 +109,14 @@ Functions</h2></td></tr>
 <tr class="memitem:ab0b86e69a6c13e01349840d66db0f1f3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_system_8h.html#ab0b86e69a6c13e01349840d66db0f1f3">delayMS</a> (int ms)</td></tr>
 <tr class="memdesc:ab0b86e69a6c13e01349840d66db0f1f3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stops the processor for a given amount of time. This is an approximate time.  <a href="#ab0b86e69a6c13e01349840d66db0f1f3">More...</a><br /></td></tr>
 <tr class="separator:ab0b86e69a6c13e01349840d66db0f1f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9539b63f71e1a1c8b7cc5142560b189c"><td class="memItemLeft" align="right" valign="top"><a id="a9539b63f71e1a1c8b7cc5142560b189c"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>timeInit</b> (void)</td></tr>
+<tr class="memitem:a9539b63f71e1a1c8b7cc5142560b189c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_system_8h.html#a9539b63f71e1a1c8b7cc5142560b189c">timeInit</a> (void)</td></tr>
+<tr class="memdesc:a9539b63f71e1a1c8b7cc5142560b189c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the general purpose systick timer.  <a href="#a9539b63f71e1a1c8b7cc5142560b189c">More...</a><br /></td></tr>
 <tr class="separator:a9539b63f71e1a1c8b7cc5142560b189c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a606dc97cf5056886cfd30122ce54709c"><td class="memItemLeft" align="right" valign="top"><a id="a606dc97cf5056886cfd30122ce54709c"></a>
-uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>getTime</b> (void)</td></tr>
+<tr class="memitem:a606dc97cf5056886cfd30122ce54709c"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_system_8h.html#a606dc97cf5056886cfd30122ce54709c">getTime</a> (void)</td></tr>
+<tr class="memdesc:a606dc97cf5056886cfd30122ce54709c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the time in microseconds.  <a href="#a606dc97cf5056886cfd30122ce54709c">More...</a><br /></td></tr>
 <tr class="separator:a606dc97cf5056886cfd30122ce54709c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3ef2d72f5373681a06978ab3f437bd63"><td class="memItemLeft" align="right" valign="top"><a id="a3ef2d72f5373681a06978ab3f437bd63"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>timeInt</b> (void)</td></tr>
+<tr class="memitem:a3ef2d72f5373681a06978ab3f437bd63"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_system_8h.html#a3ef2d72f5373681a06978ab3f437bd63">timeInt</a> (void)</td></tr>
+<tr class="memdesc:a3ef2d72f5373681a06978ab3f437bd63"><td class="mdescLeft">&#160;</td><td class="mdescRight">The general purpose timer interrupt function.  <a href="#a3ef2d72f5373681a06978ab3f437bd63">More...</a><br /></td></tr>
 <tr class="separator:a3ef2d72f5373681a06978ab3f437bd63"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
@@ -174,6 +157,37 @@ Blake Strebel </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">ms</td><td>milliseconds </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Void </dd></dl>
+
+</div>
+</div>
+<a id="a606dc97cf5056886cfd30122ce54709c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a606dc97cf5056886cfd30122ce54709c">&#9670;&nbsp;</a></span>getTime()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t getTime </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the time in microseconds. </p>
+<p>This function can be used for delays as an alternative to <a class="el" href="_system_8h.html#ab0b86e69a6c13e01349840d66db0f1f3" title="Stops the processor for a given amount of time. This is an approximate time. ">delayMS()</a> because it is interrupt-based.</p>
+<p>Example: </p><pre class="fragment">    uint32_t curr_time = getTime();
+...
+uint32_t time_taken = getTime()-curr_time;
+</pre><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">us</td><td>microseconds </td></tr>
   </table>
   </dd>
 </dl>
@@ -235,6 +249,61 @@ Blake Strebel </dd></dl>
 
 </div>
 </div>
+<a id="a9539b63f71e1a1c8b7cc5142560b189c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9539b63f71e1a1c8b7cc5142560b189c">&#9670;&nbsp;</a></span>timeInit()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void timeInit </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Initializes the general purpose systick timer. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">Void</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Void </dd></dl>
+
+</div>
+</div>
+<a id="a3ef2d72f5373681a06978ab3f437bd63"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3ef2d72f5373681a06978ab3f437bd63">&#9670;&nbsp;</a></span>timeInt()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void timeInt </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The general purpose timer interrupt function. </p>
+<p>This function is called every microsecond and updates a counter.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ms</td><td>milliseconds </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Void </dd></dl>
+
+</div>
+</div>
 <a id="acd1ca90dcd2d241c90316f670dfcc2eb"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#acd1ca90dcd2d241c90316f670dfcc2eb">&#9670;&nbsp;</a></span>UART0read()</h2>
 
@@ -262,7 +331,13 @@ Blake Strebel </dd></dl>
 </div><div class="memdoc">
 
 <p>Reads input from UART. </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Combine this function with a char buffer to process inputs from UART</p>
+<p>Example: </p><pre class="fragment">int max_length = 50;
+float kp, ki, kd;
+char buffer[max_length];
+UART0read(buffer,max_length);
+sscanf(buffer, "%f %f %f", kp, ki, kd); // get P, I, D values from user
+</pre><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">char*</td><td>message pointer to a buffer </td></tr>
     <tr><td class="paramname">int</td><td>maxLength the maximum length of the buffer </td></tr>
@@ -289,8 +364,13 @@ Blake Strebel </dd></dl>
       </table>
 </div><div class="memdoc">
 
-<p>Writes output from UART. </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Writes output to UART. </p>
+<p>This function will write until it reaches the end of the char buffer '\0'.</p>
+<p>Example: </p><pre class="fragment">int max_length = 50;
+char buffer[max_length];
+sprintf(buffer,"kp: %f, ki: %f, kd: %f",kp, ki, kd);
+UART0write(buffer,max_length);
+</pre><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">const</td><td>char* message pointer to a buffer </td></tr>
   </table>

@@ -55,7 +55,7 @@ void currentControlInit(void){
     GPIOPinTypeADC(GPIO_PORTE_BASE, GPIO_PIN_4); // AIN9
 
 
-    // Configure the ADC to use 8x hardware averaging of ADC samples (we can't sample fast enough for this)
+    // Configure the ADC to use 4x hardware averaging of ADC samples (we can't sample fast enough for this)
     ADCHardwareOversampleConfigure(ADC0_BASE, 4);
 
 

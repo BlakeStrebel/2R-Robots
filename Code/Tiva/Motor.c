@@ -1,15 +1,13 @@
 #include "System.h"
 #include "Motor.h"
-
 #include "Encoder.h"
 #include "r2r.h"
-
 #include "Utilities.h"
 
 
 
 #define NUM_SSI_DATA            8
-#define PWMPERIOD 4000
+
 // Data from motor driver 2
 
 

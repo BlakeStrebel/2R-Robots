@@ -40,7 +40,7 @@ void MotorTimerInit(void){
 
     // Set the count time for timers
     TimerLoadSet(TIMER1_BASE, TIMER_A, ui32SysClock / 1000-1); // Use timer 1A 1KHz.
-    TimerLoadSet(TIMER2_BASE, TIMER_A, ui32SysClock / 5000); // Use timer 2A 5KHz.
+    TimerLoadSet(TIMER2_BASE, TIMER_A, ui32SysClock / 5000-1); // Use timer 2A 5KHz.
 
     // Setup the interrupts for the timer timeouts.
     IntEnable(INT_TIMER1A);
@@ -176,7 +176,8 @@ void Timer1IntHandler(void)
 
     TimerIntClear(TIMER1_BASE, TIMER_TIMA_TIMEOUT); // clear the interrupt flag
 
-    encoderRead(); // update encoder values
+    encoderRead(); // update encoder values, might have problems if called somewhere else 
+
     E1.actual = readMotor1RawRelative(); // read positions
     E2.actual = readMotor2RawRelative();
     E1.raw = readMotor1Raw();
@@ -232,6 +233,7 @@ void Timer1IntHandler(void)
 }
 
 // Calculate control effort and set pwm value to control motor
+// pass reference to struct rather than 
 void PID_Controller(int reference, int actual, int motor)
 {
     static float u;
@@ -263,14 +265,14 @@ void PID_Controller(int reference, int actual, int motor)
         }
     }
 
-    // Max effort
-    if (u > 9600)
+    // Max effort, defined in Motor.c
+    if (u > PWMPERIOD)
     {
-        u = 9600;
+        u = PWMPERIOD;
     }
-    else if (u < -9600)
+    else if (u < -PWMPERIOD)
     {
-        u = -9600;
+        u = -PWMPERIOD;
     }
 
     set_motor_pwm(motor, u);

@@ -177,6 +177,17 @@ void setNclient(int n);          // Recieve number of values to store in positio
 int boundInt(int a, int n);
 int maxInt(int a, int b);
 
+/**
+*
+*
+*
+*
+*
+*
+*
+*
+*/
 
+int anglesToCounts(float angle);
 
 #endif /* UTILITIES_H_ */
