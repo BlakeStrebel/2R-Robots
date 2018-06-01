@@ -13,9 +13,9 @@
 #ifndef UTILITIES_H_
 #define UTILITIES_H_
 
-#define DECIMATION 10    // Decimate the data if necessary
+#define DECIMATION 1    // Decimate the data if necessary
 #define REFERENCE_DATA 10000    // Reference data for trajectory tracking
-#define BUFLEN 10000 // Actual data; sent to client using circular buffer
+#define BUFLEN 1000 // Actual data; sent to client using circular buffer
 
 /**
  * Data structure containing the modes of the system

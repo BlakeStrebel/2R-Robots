@@ -22,6 +22,7 @@ int
 main(void)
 {
     // Init code
+    setMODE(PWM);
     r2rDefaultInit();
 
     char buffer[BUF_SIZE];
@@ -60,8 +61,11 @@ main(void)
                    UART0read(buffer,BUF_SIZE);
                    sscanf(buffer, "%d %d", &p1, &p2);
                    setMODE(PWM);
-                   set_motor_pwm(1, p1);
-                   set_motor_pwm(2, p2);
+                   motor1ControlPWM(p1);
+                   motor2ControlPWM(p2);
+
+                   //set_motor_pwm(1, p1);
+                   //set_motor_pwm(2, p2);
                    break;
                }
                case 'd':    // Get Motor PWM
@@ -161,6 +165,7 @@ main(void)
                    setMODE(IDLE);
                    set_motor_pwm(1, 0);
                    set_motor_pwm(2, 0);
+                   break;
                }
                case '1':    // Read Phase Currents in Counts
                {

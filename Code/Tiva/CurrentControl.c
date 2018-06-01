@@ -36,9 +36,9 @@ void currentControlInit(void){
     SysCtlPeripheralEnable(SYSCTL_PERIPH_ADC0);
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOE);
     SysCtlPeripheralEnable(SYSCTL_PERIPH_TIMER2);
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPION);
-    GPIOPinTypeGPIOOutput(GPIO_PORTN_BASE, GPIO_PIN_0);
-    GPIOPinWrite(GPIO_PORTN_BASE, GPIO_PIN_0, GPIO_PIN_0);
+    //SysCtlPeripheralEnable(SYSCTL_PERIPH_GPION);
+    //GPIOPinTypeGPIOOutput(GPIO_PORTN_BASE, GPIO_PIN_0); Used to time ADC
+    //GPIOPinWrite(GPIO_PORTN_BASE, GPIO_PIN_0, GPIO_PIN_0);
 
     // Wait for the ADC0 module to be ready
     while(!SysCtlPeripheralReady(SYSCTL_PERIPH_ADC0)) {;}
@@ -55,10 +55,9 @@ void currentControlInit(void){
     GPIOPinTypeADC(GPIO_PORTE_BASE, GPIO_PIN_4); // AIN9
 
 
+    // Configure the ADC to use 8x hardware averaging of ADC samples (we can't sample fast enough for this)
+    ADCHardwareOversampleConfigure(ADC0_BASE, 4);
 
-
-    // Configure the ADC to use 4x hardware averaging of ADC samples (we can't sample fast enough for this)
-    //ADCHardwareOversampleConfigure(ADC0_BASE, 2);
 
     // Configure the ADC to trigger at timer2 frequency
     ADCSequenceConfigure(ADC0_BASE, 0, ADC_TRIGGER_TIMER, 0);
@@ -81,9 +80,6 @@ void currentControlInit(void){
     ADCIntEnable(ADC0_BASE, 0x00); // First priority
     IntEnable(INT_ADC0SS0);
     IntMasterEnable();
-
-    //IntEnable(INT_TIMER2A);
-    //TimerIntEnable(TIMER2_BASE, TIMER_TIMA_TIMEOUT);
 }
 
 void CurrentControlIntHandler(void)
@@ -92,17 +88,12 @@ void CurrentControlIntHandler(void)
 
     ADCIntClear(ADC0_BASE, 0); // Clear interrupt  flag
 
-    // verify interrupt
-    GPIOPinWrite(GPIO_PORTN_BASE, GPIO_PIN_0, GPIO_PIN_0);
-
     // Update Mux
     //updateMux();
 
     // Update Current Values
     AD0_read();
     counts_read();
-
-    GPIOPinWrite(GPIO_PORTN_BASE, GPIO_PIN_0, 0x00); //verify interrupt
 
     // Wait until we've muxed both phases
     if (ready)
@@ -148,7 +139,7 @@ void CurrentControlIntHandler(void)
                 else
                 {
                     PI_controller(MOTOR1, MOTOR1REF, MOTOR1CURRENT); // Track reference signal
-                    PI_controller(MOTOR2, MOTOR2REF, MOTOR2CURRENT);
+                    //PI_controller(MOTOR2, MOTOR2REF, MOTOR2CURRENT);
 
                     i++; //increment data
 
@@ -156,8 +147,9 @@ void CurrentControlIntHandler(void)
                     decctr++;
                     if (decctr == DECIMATION)
                     {
-                        buffer_write(MOTOR1REF, MOTOR2REF, MOTOR1CURRENT, MOTOR2CURRENT);   // Write current values to buffer
+                        //buffer_write(MOTOR1REF, MOTOR2REF, MOTOR1CURRENT, MOTOR2CURRENT);   // Write current values to buffer
                         //buffer_write(COUNTS[0] - 2047 + C1A, COUNTS[1] - 2047 + C1B, COUNTS[2] - 2047 + C2A, COUNTS[3] - 2047 + C2B);
+                        //buffer_write(COUNTS[0] - 2047 + C1A, COUNTS[1] - 2047 + C1B, COUNTS[0] - 2047 + C1A, COUNTS[1] - 2047 + C1B);
                         decctr = 0; // reset decimation counter
                     }
 
@@ -193,7 +185,7 @@ void PI_controller(int motor, int reference, int actual)
         E1 = reference - actual;
         Eint1 = Eint1 + E1;
         PWM1 = Kp*E1 + Ki*Eint1;
-        PWM1 = boundInt(PWM1, PWMPERIOD);
+        PWM1 = boundInt(PWM1, PWMPERIOD-1);
         motor1ControlPWM(PWM1);
     }
     else if (motor == 2)
@@ -201,7 +193,7 @@ void PI_controller(int motor, int reference, int actual)
         E2 = reference - actual;
         Eint2 = Eint2 + E2;
         PWM2 = Kp*E2 + Ki*Eint2;
-        PWM2 = boundInt(PWM2, PWMPERIOD);
+        PWM2 = boundInt(PWM2, PWMPERIOD-1);
         motor2ControlPWM(PWM2);
     }
 }
