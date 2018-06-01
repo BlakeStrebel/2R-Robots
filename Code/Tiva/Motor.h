@@ -20,21 +20,21 @@
 /* MOTOR 1 HALL SENSOR PINS */
 #define M1H_PERIPH SYSCTL_PERIPH_GPIOL
 #define M1H_PORT GPIO_PORTL_BASE // IF YOU CHANGE THIS PORT YOU MUST CHANGE THE INT HANDLER IN tm4c1294ncpdt_startup_css.c
-#define M1H_PIN_A GPIO_PIN_5
-#define M1H_PIN_B GPIO_PIN_6
-#define M1H_PIN_C GPIO_PIN_7
+#define M1H_PIN_A GPIO_PIN_0
+#define M1H_PIN_B GPIO_PIN_1
+#define M1H_PIN_C GPIO_PIN_2
 #define M1H_PINS (M1H_PIN_A | M1H_PIN_B | M1H_PIN_C)
 
 /* MOTOR 1 CONTROL PINS */
 #define M1_INL_PERIPH_A SYSCTL_PERIPH_GPIOP
 #define M1_INL_PORT_A GPIO_PORTP_BASE
-#define M1_INL_PIN_A GPIO_PIN_2
+#define M1_INL_PIN_A GPIO_PIN_0
 #define M1_INL_PERIPH_B SYSCTL_PERIPH_GPIOP
 #define M1_INL_PORT_B GPIO_PORTP_BASE
-#define M1_INL_PIN_B GPIO_PIN_3
+#define M1_INL_PIN_B GPIO_PIN_1
 #define M1_INL_PERIPH_C SYSCTL_PERIPH_GPIOP
 #define M1_INL_PORT_C GPIO_PORTP_BASE
-#define M1_INL_PIN_C GPIO_PIN_0
+#define M1_INL_PIN_C GPIO_PIN_2
 
 /* MOTOR 1 COMMUTATION DATA */
 #define M1_HALLSTATE_0 (M1H_PIN_A | M1H_PIN_B)
@@ -43,12 +43,6 @@
 #define M1_HALLSTATE_3 M1H_PIN_C
 #define M1_HALLSTATE_4 (M1H_PIN_B | M1H_PIN_C)
 #define M1_HALLSTATE_5 M1H_PIN_B
-
-/* MOTOR 1 OUTPUT STATES */
-#define M1_INL_OUTPUT_0 (M1_INL_PIN_B | M1_INL_PIN_C)
-#define M1_INL_OUTPUT_1 (M1_INL_PIN_A | M1_INL_PIN_C)
-#define M1_INL_OUTPUT_2 (M1_INL_PIN_A | M1_INL_PIN_B)
-#define M1_INL_BREAK 0x00
 
 /* MOTOR 2 HALL SENSOR PINS */
 #define M2H_PERIPH SYSCTL_PERIPH_GPION
@@ -77,12 +71,6 @@
 #define M2_HALLSTATE_4 (M2_PIN_B | M2_PIN_C)
 #define M2_HALLSTATE_5 M2_PIN_B
 
-/* MOTOR 2 OUTPUT STATES */
-#define M2_INL_OUTPUT_0 (M2_INL_PIN_B | M2_INL_PIN_C)
-#define M2_INL_OUTPUT_1 (M2_INL_PIN_A | M2_INL_PIN_C)
-#define M2_INL_OUTPUT_2 (M2_INL_PIN_A | M2_INL_PIN_B)
-#define M2_INL_BREAK 0x00
-
 
 extern void M1HIntHandler(void);
 extern void M2HIntHandler(void);
@@ -101,6 +89,12 @@ extern void motorInit(void);
 
 void M1_INL_WRITE(int a, int b, int c);
 void M2_INL_WRITE(int a, int b, int c);
+
+int getmotor1PWM(void);
+int getmotor2PWM(void);
+
+int32_t getmotor1HALLS(void);
+int32_t getmotor2HALLS(void);
 
 
 

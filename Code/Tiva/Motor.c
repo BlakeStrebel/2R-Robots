@@ -6,14 +6,11 @@
 #define NUM_SSI_DATA            8
 #define PWMPERIOD 4000
 // Data from motor driver 2
-uint32_t pui32DataTx[NUM_SSI_DATA];
-uint32_t pui32DataRx[NUM_SSI_DATA];
-uint32_t ui32Index;
+
 
 int error_state;
 
 static volatile int32_t M1H_HALLS = 0, M2H_HALLS = 0; // Hall sensor data
-static volatile int32_t M1_DIR = 0, M2_DIR = 0; // Motor Direction (0 --> CCW, 1 --> CW)
 static volatile int M1_PWM = 0, M2_PWM = 0; // Motor PWM
 
 void motorInit()
@@ -87,6 +84,11 @@ void motorInit()
     M1H_HALLS = i32Val && M1H_PINS;
     i32Val = GPIOPinRead(M2H_PORT, M2H_PINS);
     M2H_HALLS = i32Val && M2H_PINS;
+
+    // Initialize motor enable pins and enable motors
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOK);
+    GPIOPinTypeGPIOOutput(GPIO_PORTK_BASE, GPIO_PIN_1 | GPIO_PIN_3);
+    GPIOPinWrite(GPIO_PORTK_BASE, GPIO_PIN_1 |  GPIO_PIN_3 , GPIO_PIN_3 | GPIO_PIN_1); // Enable the motors
 }
 
 void M1HIntHandler(void)
@@ -113,9 +115,14 @@ void M2HIntHandler(void)
 
 void motor1ControlPWM(int control)
 {
+    //static char buffer[10];
+    //static int i = 0;
+
     IntMasterDisable();
     M1_PWM = control; // Update global variable containing PWM value
     IntMasterEnable();
+
+    //i++;
 
     control = abs(control); // PWM must be positive
 
@@ -125,36 +132,48 @@ void motor1ControlPWM(int control)
         {
             case M1_HALLSTATE_0:
             {
+                //sprintf(buffer, "%d %d %d\r\n", 0, M1_PWM, i);
+
                 M1_INL_WRITE(0, 1, 1);
                 motor1PWM(0, control, 0);
                 break;
             }
             case M1_HALLSTATE_1:
             {
+                //sprintf(buffer, "%d %d %d\r\n", 1, M1_PWM, i);
+
                 M1_INL_WRITE(1, 0, 1);
                 motor1PWM(control, 0, 0);
                 break;
             }
             case M1_HALLSTATE_2:
             {
+                //sprintf(buffer, "%d %d %d\r\n", 2, M1_PWM, i);
+
                 M1_INL_WRITE(1, 1, 0);
                 motor1PWM(control, 0, 0);
                 break;
             }
             case M1_HALLSTATE_3:
             {
+                //sprintf(buffer, "%d %d %d\r\n", 3, M1_PWM, i);
+
                 M1_INL_WRITE(0, 1, 1);
                 motor1PWM(0, 0, control);
                 break;
             }
             case M1_HALLSTATE_4:
             {
+                //sprintf(buffer, "%d %d %d\r\n", 4, M1_PWM, i);
+
                 M1_INL_WRITE(1, 0, 1);
                 motor1PWM(0, 0, control);
                 break;
             }
             case M1_HALLSTATE_5:
             {
+                //sprintf(buffer, "%d %d %d\r\n", 5, M1_PWM, i);
+
                 M1_INL_WRITE(1, 1, 0);
                 motor1PWM(0, control, 0);
                 break;
@@ -171,36 +190,48 @@ void motor1ControlPWM(int control)
         {
             case M1_HALLSTATE_3:
             {
+                //sprintf(buffer, "%d %d %d\r\n", 0, M1_PWM, i);
+
                 M1_INL_WRITE(0, 1, 1);
                 motor1PWM(0, control, 0);
                 break;
             }
             case M1_HALLSTATE_4:
             {
+                //sprintf(buffer, "%d %d %d\r\n", 1, M1_PWM, i);
+
                 M1_INL_WRITE(1, 0, 1);
                 motor1PWM(control, 0, 0);
                 break;
             }
             case M1_HALLSTATE_5:
             {
+                //sprintf(buffer, "%d %d %d\r\n", 2, M1_PWM, i);
+
                 M1_INL_WRITE(1, 1, 0);
                 motor1PWM(control, 0, 0);
                 break;
             }
             case M1_HALLSTATE_0:
             {
+                //sprintf(buffer, "%d %d %d\r\n", 3, M1_PWM, i);
+
                 M1_INL_WRITE(0, 1, 1);
                 motor1PWM(0, 0, control);
                 break;
             }
             case M1_HALLSTATE_1:
             {
+                //sprintf(buffer, "%d %d %d\r\n", 4, M1_PWM, i);
+
                 M1_INL_WRITE(1, 0, 1);
                 motor1PWM(0, 0, control);
                 break;
             }
             case M1_HALLSTATE_2:
             {
+                //sprintf(buffer, "%d %d %d\r\n", 5, M1_PWM, i);
+
                 M1_INL_WRITE(1, 1, 0);
                 motor1PWM(0, control, 0);
                 break;
@@ -213,8 +244,33 @@ void motor1ControlPWM(int control)
     }
     else
     {
+        //sprintf(buffer, "zero\r\n");
+
         motor1PWM(0, 0, 0); // Apply zero current, Alternatively, break using M1_INL_BREAK
     }
+
+    //UART0write(buffer);
+
+}
+
+int getmotor1PWM(void)
+{
+   return M1_PWM;
+}
+
+int getmotor2PWM(void)
+{
+    return M2_PWM;
+}
+
+int32_t getmotor1HALLS(void)
+{
+    return M1H_HALLS;
+}
+
+int32_t getmotor2HALLS(void)
+{
+    return M2H_HALLS;
 }
 
 void motor1PWM(int pwm1, int pwm2, int pwm3)
@@ -237,21 +293,7 @@ void motor2PWM(int pwm1, int pwm2, int pwm3)
     PWMPulseWidthSet(PWM0_BASE, PWM_OUT_6, pwm3);
 }
 
-void shutdownNow(){
-    motor1ControlPWM(0);
-    motor2ControlPWM(0);
-}
 
-
-void motorSafetyCheck(){
-    int32_t vel1 =  readMotor1Speed();
-    int32_t vel2 = readMotor2Speed();
-    if(abs(vel1)>10||abs(vel2)>10){
-        shutdownNow();
-        error_state = MOTOR_SPINNING_TOO_FAST;
-    }
-
-}
 
 /*
  * This function initializes the SPI on SSI0, using PA2 (CLK), PA3(SS), PA4(RX), PA5(TX)
@@ -276,7 +318,7 @@ void MotorSPIinit(void){
     // Configure and enable the SSI port for SPI master mode.
     //TODO: Test if the bit rate can be the highest 5M.
     SSIConfigSetExpClk(SSI2_BASE, ui32SysClock, SSI_FRF_MOTO_MODE_1,
-                           SSI_MODE_MASTER, 100000, 16); // 16 bits for motor, use 1Mbps mode, use the system clock
+                           SSI_MODE_MASTER, 1000000, 16); // 16 bits for motor, use 1Mbps mode, use the system clock
 
     // Configure CS
     GPIOPinWrite(GPIO_PORTL_BASE, GPIO_PIN_2, GPIO_PIN_2); //Set CS to HIGH
@@ -296,63 +338,34 @@ void MotorSPIinit(void){
  * Note that the driver will NOT be set if motor power is not supplied because the driver will not be able to read the registers over SPI, even though it responds
  */
 void motorDriverInit(void){
-    char buffer[50];
+    uint32_t pui32DataTx[2];
+    uint32_t pui32DataRx[2];
 
-    //pui32DataTx[0] = 0b0001000001000000; // set register 3, bit 6 and 5 to 10, option 3, 1x PWM mode
+    pui32DataTx[0] = 0b0001000000100000; // set register 3, bit 6 and 5 to 10, option 3, 3x PWM mode
+    pui32DataTx[1] = 0b1001000000000000; // read
 
-    pui32DataTx[0] = 0b1001100001000000;
-
-    GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_3,0x00); // Pull CS pin low
-    SysCtlDelay(100);
-    SSIDataPut(SSI2_BASE, pui32DataTx[0]); // Send data
-    while(SSIBusy(SSI2_BASE)){}
-    SysCtlDelay(100);
-    GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_3,GPIO_PIN_3); // Bring the CS pin high
-    SSIDataGet(SSI2_BASE, &pui32DataRx[0]); // Get the data
-
-    sprintf(buffer,"%X\r\n",pui32DataRx[0]);
-    UART0write(buffer);
+    // Motor 1
+    GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_3,0x00);          // Pull CS pin low
+    SysCtlDelay(50);                                        // delay before sending data
+    SSIDataPut(SSI2_BASE, pui32DataTx[0]);                  // Send data
+    while(SSIBusy(SSI2_BASE)){}                             // wait until data sent
+    SysCtlDelay(50);                                        // delay after sending data
+    GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_3,GPIO_PIN_3);    // Bring the CS pin high
+    SSIDataGet(SSI2_BASE, &pui32DataRx[0]);                 // Get the data
 
     SysCtlDelay(1000);
 
+    // Motor 2
+    GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_2,0x00);          // Pull CS pin low
+    SysCtlDelay(50);                                        // delay before sending data
+    SSIDataPut(SSI2_BASE, pui32DataTx[0]);                  // Send data
+    while(SSIBusy(SSI2_BASE)){}                             // wait until data sent
+    SysCtlDelay(50);                                        // delay after sending data
+    GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_2,GPIO_PIN_2);    // Bring the CS pin high
+    SSIDataGet(SSI2_BASE, &pui32DataRx[0]);                 // Get the data
 
-/*
-    while(SSIBusy(SSI2_BASE)){}
-
-    pui32DataTx[0] = 0b1001000001000000; // set register 3, bit 6 and 5 to 10, option 3, 1x PWM mode
-
-    while(SSIDataGetNonBlocking(SSI2_BASE, &pui32DataRx[0])){}
-
-    GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_3,0x00); // Pull CS pin low
     SysCtlDelay(1000);
-    SSIDataPut(SSI2_BASE, pui32DataTx[0]); // Send data
-    SysCtlDelay(1000); // wait (at least 50ns)
-    GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_3,GPIO_PIN_3); // Being the CS pin high
-    SSIDataGet(SSI2_BASE, &pui32DataRx[0]); // Get the data
-
-    sprintf(buffer,"%X\r\n",pui32DataRx[0]);
-    UART0write(buffer);
-
-    while(SSIBusy(SSI2_BASE)){}
-
-    pui32DataTx[0] = 0b0001000001000000; // set register 3, bit 6 and 5 to 10, option 3, 1x PWM mode
-
-
-    while(SSIDataGetNonBlocking(SSI2_BASE, &pui32DataRx[0])){}
-
-    GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_2,0x00); // Pull CS pin low
-    SysCtlDelay(1000);
-    SSIDataPut(SSI2_BASE, pui32DataTx[0]); // Send data
-    SysCtlDelay(1000); // wait (at least 50ns)
-    GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_2,GPIO_PIN_2); // Being the CS pin high
-    SSIDataGet(SSI2_BASE, &pui32DataRx[0]); // Get the data
-
-    while(SSIBusy(SSI2_BASE)){}
-*/
 }
-
-
-
 
 void M1_INL_WRITE(int a, int b, int c)
 {
@@ -414,32 +427,21 @@ void M2_INL_WRITE(int a, int b, int c)
     }
 }
 
+void shutdownNow(){
+    motor1ControlPWM(0);
+    motor2ControlPWM(0);
+}
 
 
+void motorSafetyCheck(){
+    int32_t vel1 =  readMotor1Speed();
+    int32_t vel2 = readMotor2Speed();
+    if(abs(vel1)>10||abs(vel2)>10){
+        shutdownNow();
+        error_state = MOTOR_SPINNING_TOO_FAST;
+    }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+}
 
 /*
  * Reads the motor driver status over SPI
@@ -450,6 +452,10 @@ void M2_INL_WRITE(int a, int b, int c)
  * spiInit()
  */
 void readDriverStatus(void){
+    uint32_t pui32DataTx[NUM_SSI_DATA];
+    uint32_t pui32DataRx[NUM_SSI_DATA];
+    uint32_t ui32Index;
+
     while(SSIDataGetNonBlocking(SSI2_BASE, &pui32DataRx[0])){
     }
     pui32DataTx[0] = 0b1000000000000000; // read register 0
