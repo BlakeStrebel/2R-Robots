@@ -14,7 +14,7 @@
 
 
 void r2rDefaultInit(void){
-<<<<<<< HEAD
+
     sysInit(); // initialize System Clock and master interrupt
     uartInit(); // initialize UART
     encoderSPIInit(); // initialize SPI for encoder

@@ -23,18 +23,7 @@ void shutdownNow(){
     motor2Brake(); // shorts the output of the motor together
 }
 
-void motorSafetyCheck(){
-    float vel1 =  readMotor1Speed(); // get the speed of the motor
-    float vel2 = readMotor2Speed(); //get the speed of the motor
-    if(abs(vel1)>MAX_SPEED||abs(vel2)>MAX_SPEED){ // if the speed is > 10 rev/s
-        shutdownNow(); // shuts off the motor and turns on the brakes
-        error_state = MOTOR_SPINNING_TOO_FAST; // set the error message
-    }
-    if (tempRead1()>TEMP_LIMIT||tempRead2()>TEMP_LIMIT){
-      shutdownNow();// shuts off the motor and turns on the brakes
-      error_state = MOTOR_TOO_HOT;// set the error message
-    }
-}
+
 
 static volatile int32_t M1H_HALLS = 0, M2H_HALLS = 0; // Hall sensor data
 static volatile int M1_PWM = 0, M2_PWM = 0; // Motor PWM
@@ -418,30 +407,6 @@ void pwmInit(void)
  * sysInit()
  *
  */
-void motorInit(void)
-{
-       // Setting up motor driver pins,
-       // Motor directions PK0:1, PK2:2
-       // Motor enable pins, PK1: 1, PK3: 2
-       // Motor brake pins, PP4: 1, PP5: 2
-       SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOK); // set up GPIOs
-       SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOP); // set up GPIOs
-
-       GPIOPinTypeGPIOOutput(GPIO_PORTK_BASE, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3); //set up outputs
-       GPIOPinTypeGPIOOutput(GPIO_PORTP_BASE, GPIO_PIN_4 | GPIO_PIN_5); // set up output pins
-
-       //set directions
-       GPIOPinWrite(GPIO_PORTK_BASE, GPIO_PIN_0 | GPIO_PIN_2 , GPIO_PIN_0 + GPIO_PIN_2);
-
-       // turn on
-       GPIOPinWrite(GPIO_PORTK_BASE, GPIO_PIN_1 |  GPIO_PIN_3 , GPIO_PIN_3 + GPIO_PIN_1);
-
-       GPIOPinWrite(GPIO_PORTP_BASE, GPIO_PIN_4, GPIO_PIN_4); // brake for motor 1, set HIGH so no braking
-       GPIOPinWrite(GPIO_PORTP_BASE, GPIO_PIN_5, GPIO_PIN_5); // brake for motor 2, set HIGH so no braking
-
-       // TODO: Cal, short all amplifier inputs together (why?)
-       //GPIOPinTypeGPIOOutput(GPIO_PORTJ_BASE, GPIO_PIN_0 | GPIO_PIN_1 );
-}
 
 
 
@@ -541,25 +506,6 @@ void motor2Brake(void){
        // Motor enable pins, PK1: 1, PK3: 2
        // Motor brake pins, PP4: 1, PP5: 2
  */
-void motor1ControlPWM(int control){
-    if (control>0){
-        // Positive direction
-        GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_0,GPIO_PIN_0); // Set to HIGH  - forward
-        GPIOPinWrite(GPIO_PORTP_BASE,GPIO_PIN_4,GPIO_PIN_4); // Set to HIGH - no braking
-        motor1PWM(control); // set the pwm
-    }
-    else if (control<0) {
-        // Negative direction
-        GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_0,0); // set to LOW - reverse
-        GPIOPinWrite(GPIO_PORTP_BASE,GPIO_PIN_4,GPIO_PIN_4); // no braking
-        motor1PWM(-1*control); // set the pwm, but since control is negative, flip the sign
-    }
-    else {
-        GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_0,GPIO_PIN_0);
-        GPIOPinWrite(GPIO_PORTP_BASE,GPIO_PIN_4,GPIO_PIN_4); // Set brake pin to high, free to move.
-        motor1PWM(0); // ensure pwm is set to zero
-    }
-}
 
 void M2_INL_WRITE(int a, int b, int c)
 {
@@ -578,17 +524,6 @@ void M2_INL_WRITE(int a, int b, int c)
         GPIOPinWrite(M2_INL_PORT_B, M2_INL_PIN_B, M2_INL_PIN_B);
     }
 
-    else if (control<0) {
-        // Negative direction
-        GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_2,0); // set to LOW - reverse
-        GPIOPinWrite(GPIO_PORTP_BASE,GPIO_PIN_5,GPIO_PIN_5); // Set to HIGH - no braking
-        motor2PWM(-1*control);
-    }
-    else {
-        GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_2,GPIO_PIN_2); // Set to HIGH - forward
-        GPIOPinWrite(GPIO_PORTP_BASE,GPIO_PIN_5,GPIO_PIN_5); // Set to HIGH - no braking
-        motor2PWM(0); // free to turn
-
     else{
         GPIOPinWrite(M2_INL_PORT_B, M2_INL_PIN_B, 0);
     }
@@ -602,12 +537,8 @@ void M2_INL_WRITE(int a, int b, int c)
         GPIOPinWrite(M2_INL_PORT_C, M2_INL_PIN_C, 0);
     }
 }
-}
 
-void shutdownNow(){
-    motor1ControlPWM(0);
-    motor2ControlPWM(0);
-}
+
 
 
 /*
@@ -619,11 +550,6 @@ void shutdownNow(){
  * motorDriverInit()
  */
 
-void motor1PWM(int pwmValue){
-    // assuming PWM has been initialized.
-    PWMPulseWidthSet(PWM0_BASE, PWM_OUT_0,pwmValue); // set pwm
-}
-
 void motorSafetyCheck(){
     int32_t vel1 =  readMotor1Speed();
     int32_t vel2 = readMotor2Speed();
@@ -633,11 +559,8 @@ void motorSafetyCheck(){
     }
 
 }
-void motor2PWM(int pwmValue){
-    // assuming PWM has been initialized.
-    PWMPulseWidthSet(PWM0_BASE, PWM_OUT_4,pwmValue);  // set pwm
 
-}
+
 
 /*
  * Reads the motor driver status over SPI
