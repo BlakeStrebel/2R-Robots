@@ -338,14 +338,16 @@ void MotorSPIinit(void){
  * Note that the driver will NOT be set if motor power is not supplied because the driver will not be able to read the registers over SPI, even though it responds
  */
 void motorDriverInit(void){
-    uint32_t pui32DataTx[2], pui32DataRx[2], i = 0;
+    uint32_t pui32DataTx[4], pui32DataRx[4], i = 0;
 
-    pui32DataTx[0] = 0b1001000000000000; // Read from register 3
-    pui32DataTx[1] = 0b0001000000100000; // Set register 3, bit 6 and 5 to 10, option 3, 3x PWM mode
+    pui32DataTx[0] = 0b1001000000000000; // read register 3
+    pui32DataTx[1] = 0b0001000000100000; // set register 3, bit 6 and 5 to 10, option 3, 3x PWM mode
+    pui32DataTx[2]=  0b1001000000000000; // read register 3
+    pui32DataTx[3]=  0b1001000000000000; // read register 3 one more time
 
     /***  Motor 1 ***/
     // First do a read to clear buffers, then write to set driver to 3x PWM mode
-    for (i = 0; i < 2; i++)
+    for (i = 0; i < 3; i++)
     {
         GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_3,0x00);          // Pull CS pin low
         SysCtlDelay(50);                                        // delay before sending data
@@ -362,6 +364,12 @@ void motorDriverInit(void){
     UART0write(buffer);
 
     sprintf(buffer,"%X\r\n",pui32DataRx[1]);
+    UART0write(buffer);
+
+    sprintf(buffer,"%X\r\n",pui32DataRx[2]);
+    UART0write(buffer);
+
+    sprintf(buffer,"%X\r\n",pui32DataRx[3]);
     UART0write(buffer);
 
     /***  Motor 2 ***/
