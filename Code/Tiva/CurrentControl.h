@@ -18,7 +18,7 @@ void reset_current_error(void);
 void counts_read(void);
 
 
-void AD0_read(void);
+void AD0_read(int mux);
 
 
 /**

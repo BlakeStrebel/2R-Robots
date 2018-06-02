@@ -1,6 +1,6 @@
 function Client()
 %   provides a menu for interfacing with hopper robot system
-Tiva_port = 'COM5'; % Tiva board serial port
+Tiva_port = 'COM7'; % Tiva board serial port
 DECIMATION = 1;
 PWMPERIOD = 4000;
 
@@ -11,7 +11,7 @@ if ~isempty(instrfind)
 end
 
 % configure ports
-Tiva_Serial = serial(Tiva_port, 'BaudRate', 115200, 'FlowControl', 'hardware','Timeout',15); 
+Tiva_Serial = serial(Tiva_port, 'BaudRate', 115200, 'Timeout',15); %'FlowControl', 'hardware',
 
 fprintf('Opening port %s....\n',Tiva_port);
 

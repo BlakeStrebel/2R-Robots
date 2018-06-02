@@ -24,7 +24,7 @@ save('temp.mat','data');
 
 if nsamples > 1						        
     figure;
-    plot(data(:,[1, 2, 3]));
+    plot(data(:,1:4));
 else
     fprintf('Only 1 sample received\n')
     disp(data);

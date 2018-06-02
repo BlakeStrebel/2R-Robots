@@ -175,7 +175,7 @@ main(void)
                }
                case '3':
                {
-                   setNclient(5000);
+                   setNclient(1000);
                    setMODE(ITEST);
                    send_data();
                    break;
