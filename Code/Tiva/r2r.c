@@ -19,15 +19,22 @@
 
 void r2rDefaultInit(void){
 
+    sysInit(); // Init system clock and Master interrupt
+    uartInit();
+    encoderSPIInit();
+    MotorSPIinit();
+    motorInit(); // Set useful signal outputs.
+    motorDriverInit(); // Send values to set up the motor for 3x PWM mode
+    currentControlInit();
+
+
     sysInit(); // initialize System Clock and master interrupt
     uartInit(); // initialize UART
     encoderSPIInit(); // initialize SPI for encoder
-    motorInit(); // Set pins for motor driver
-    motorDriverInit(); // Send values to set up the motor for 1x PWM mode
     //adcInit();
     motorInit(); // Set useful signal outputs.
     motorDriverInit(); // Set up the motor for 3x PWM mode
-    //currentControlInit(); // Set up interrupts for current control 
+    currentControlInit(); // Set up interrupts for current control 
     //MotorTimerInit(); // Set up interrupts for motor control loop at 1kHz
     timeInit(); // general purpose tick tock timer, good for testing how long code takes.
 }

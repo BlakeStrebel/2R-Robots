@@ -63,16 +63,13 @@ main(void)
                    setMODE(PWM);
                    motor1ControlPWM(p1);
                    motor2ControlPWM(p2);
-
-                   //set_motor_pwm(1, p1);
-                   //set_motor_pwm(2, p2);
                    break;
                }
                case 'd':    // Get Motor PWM
                {
                    int pwm1, pwm2;
-                   pwm1 = get_motor_pwm(1);
-                   pwm2 = get_motor_pwm(2);
+                   pwm1 = getmotor1PWM();
+                   pwm2 = getmotor2PWM();
                    sprintf(buffer, "%d\r\n",pwm1);
                    UART0write(buffer);
                    sprintf(buffer, "%d\r\n",pwm2);
@@ -162,9 +159,9 @@ main(void)
                }
                case 'q':    // Motor Off
                {
+                   motor1ControlPWM(0);
+                   motor2ControlPWM(0);
                    setMODE(IDLE);
-                   set_motor_pwm(1, 0);
-                   set_motor_pwm(2, 0);
                    break;
                }
                case '1':    // Read Phase Currents in Counts
@@ -179,6 +176,7 @@ main(void)
                }
                case '3':
                {
+                   setNclient(1000);
                    setMODE(ITEST);
                    send_data();
                    break;
