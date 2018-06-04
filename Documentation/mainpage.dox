@@ -4,18 +4,27 @@
  *
  * Start at `Files > Files List` to view functions and their documentaion
  *
- * \section Writing Custom Code
+ * \section writingcustomcode Writing Custom Code
  *
  *	Two timers (Timer 6 and Timer 7) are set up in the code and can execute at user-set frequencies in `r2r.c`. The intention is that the user will either write code in r2r.c or create a header and source file. Here, an simple example will be set out to compute simple position control over motor 1 in r2r.c at 5kHz.
  *	
+ * \subsection writinginterrupts Writing Interrupts
  *
+ * In Code Composer Studio, Interrupts follow a general format. There is the interrupt initialization, the interrupt function itself, and a declaration of the interrupt function in the interrupt vector table in `tm4c1294ncpdt_startup_ccs.c`.
+ *
+ * In this example the timer interrupt has already been declared under `customTimersInit()` and the corresponding timer functions have been declared in `tm4c1294ncpdt_startup_ccs.c`.
+ * 
  *
  * In `r2r.c`, update frequency:
  * 
  * 		#define TIMER_6_FREQUENCY 5000
  *
+ * Add global variables for the PID controller in `r2r.c`
  *
- * Under `TIMER6IntHandler()`:
+ *		int int_error = 0;
+ *		int prev_error = 0;
+ *
+ * Under `TIMER6IntHandler()` in `r2r.c`:
  *
  *		void TIMER6IntHandler(){
  *			float kp = 0.5;
@@ -27,9 +36,55 @@
  *		    int raw = readMotor1Raw(); // read counts absolute
  *		    int error = angles2Counts(desired_position) - actual;
  *		    int u = kp*error+kd*prev_error+ki*int_error;
+ *          int_error = int_error+error;
+ *          prev_error = error;
  *		    motor1ControlPWM(u);
  *		 }	
  *  	
- *
+ * \subsection communication UART communication
  * 
+ * In order to communicate over UART, several functions are provided under `systemInit()`. In the default case, the UART is already initialised to a baud rate of 115200, 8N1 mode. This example will use a polling method to process input from the user.
+
+ * First set up a global variable in `main.c` that will be used to store the desired angle:
+ *		
+ *		volatile int setAngle = 0;
+ * 
+ * In `main.c`, under `main()`:
+ *
+ * 		int main(void){
+ *			char buffer[50]; // set up a char buffer
+ *
+ *			while(1){ // set up an infinite loop
+ *
+ *				UART0read(buffer); // read the buffer
+ *				scanf("%d",setAngle); 
+ *				sprintf(buffer,"Okay! Setting to: %d",setAngle) // acknowledge
+ *				UART0write(buffer,50); // write to the buffer
+ *
+ *			}	
+ *		}
+ *
+ *
+ * Add a global variable in `r2r.c` to refer to the setAngle variable we just created in main.c:
+ * 
+ * 		extern int setAngle;
+ * 
+ * Now we have to modify the code in the `TIMER6IntHandler()`:
+ *
+ *		void TIMER6IntHandler(){
+ *			float kp = 0.5;
+ *	 		float ki = 1;
+ *			float kd = 0;
+ *			desired_position = setAngle; //degrees
+ *			encoderRead(); // update the encoder
+ *			int actual = readMotor1RawRelative(); // read counts set to relative
+ *		    int raw = readMotor1Raw(); // read counts absolute
+ *		    int error = angles2Counts(desired_position) - actual;
+ *		    int u = kp*error+kd*prev_error+ki*int_error;
+ *          int_error = int_error+error;
+ *          prev_error = error;
+ *		    motor1ControlPWM(u);
+ *		 }	
+ *
+ *
  */

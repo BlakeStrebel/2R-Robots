@@ -68,20 +68,55 @@ $(function() {
 <div class="textblock"><h1><a class="anchor" id="intro_sec"></a>
 Introduction</h1>
 <p>Start at <code>Files &gt; Files List</code> to view functions and their documentaion</p>
-<h1><a class="anchor" id="Writing"></a>
-Custom Code</h1>
+<h1><a class="anchor" id="writingcustomcode"></a>
+Writing Custom Code</h1>
 <p>Two timers (Timer 6 and Timer 7) are set up in the code and can execute at user-set frequencies in <code><a class="el" href="r2r_8c.html" title="This file contains the main function that calls all other initialization functions. ">r2r.c</a></code>. The intention is that the user will either write code in <a class="el" href="r2r_8c.html" title="This file contains the main function that calls all other initialization functions. ">r2r.c</a> or create a header and source file. Here, an simple example will be set out to compute simple position control over motor 1 in <a class="el" href="r2r_8c.html" title="This file contains the main function that calls all other initialization functions. ">r2r.c</a> at 5kHz.</p>
+<h2><a class="anchor" id="writinginterrupts"></a>
+Writing Interrupts</h2>
+<p>In Code Composer Studio, Interrupts follow a general format. There is the interrupt initialization, the interrupt function itself, and a declaration of the interrupt function in the interrupt vector table in <code>tm4c1294ncpdt_startup_ccs.c</code>.</p>
+<p>In this example the timer interrupt has already been declared under <code>customTimersInit()</code> and the corresponding timer functions have been declared in <code>tm4c1294ncpdt_startup_ccs.c</code>.</p>
 <p>In <code><a class="el" href="r2r_8c.html" title="This file contains the main function that calls all other initialization functions. ">r2r.c</a></code>, update frequency: </p><pre class="fragment">    #define TIMER_6_FREQUENCY 5000
-</pre><p>Under <code><a class="el" href="r2r_8c.html#a57b21594b75d4b2a140a1f9bbb1465e8" title="Custom timer 6. ">TIMER6IntHandler()</a></code>: </p><pre class="fragment">void TIMER6IntHandler(){
+</pre><p>Add global variables for the PID controller in <code><a class="el" href="r2r_8c.html" title="This file contains the main function that calls all other initialization functions. ">r2r.c</a></code> </p><pre class="fragment">int int_error = 0;
+int prev_error = 0;
+</pre><p>Under <code><a class="el" href="r2r_8c.html#a57b21594b75d4b2a140a1f9bbb1465e8" title="Custom timer 6. ">TIMER6IntHandler()</a></code> in <code><a class="el" href="r2r_8c.html" title="This file contains the main function that calls all other initialization functions. ">r2r.c</a></code>: </p><pre class="fragment">void TIMER6IntHandler(){
     float kp = 0.5;
     float ki = 1;
     float kd = 0;
-        desired_position = 60; //degrees
+    desired_position = 60; //degrees
     encoderRead(); // update the encoder
     int actual = readMotor1RawRelative(); // read counts set to relative
     int raw = readMotor1Raw(); // read counts absolute
     int error = angles2Counts(desired_position) - actual;
     int u = kp*error+kd*prev_error+ki*int_error;
+     int_error = int_error+error;
+     prev_error = error;
+    motor1ControlPWM(u);
+ }  
+</pre><h2><a class="anchor" id="communication"></a>
+UART communication</h2>
+<p>In order to communicate over UART, several functions are provided under <code>systemInit()</code>. In the default case, the UART is already initialised to a baud rate of 115200, 8N1 mode. This example will use a polling method to process input from the user.</p>
+<p>First set up a global variable in <code>main.c</code> that will be used to store the desired angle: </p><pre class="fragment">volatile int setAngle = 0;
+</pre><p>In <code>main.c</code>, under <code>main()</code>: </p><pre class="fragment">    int main(void){
+    char buffer[50]; // set up a char buffer
+
+    while(1){ // set up an infinite loop
+        UART0read(buffer); // read the buffer
+        scanf("%d",setAngle);
+    }   
+}
+</pre><p>Modify the code in <code><a class="el" href="r2r_8c.html" title="This file contains the main function that calls all other initialization functions. ">r2r.c</a></code> to refer to the variable: </p><pre class="fragment">    extern int setAngle;
+</pre><p>Now we have to modify the code in the <code><a class="el" href="r2r_8c.html#a57b21594b75d4b2a140a1f9bbb1465e8" title="Custom timer 6. ">TIMER6IntHandler()</a></code>: </p><pre class="fragment">void TIMER6IntHandler(){
+    float kp = 0.5;
+    float ki = 1;
+    float kd = 0;
+    desired_position = setAngle; //degrees
+    encoderRead(); // update the encoder
+    int actual = readMotor1RawRelative(); // read counts set to relative
+    int raw = readMotor1Raw(); // read counts absolute
+    int error = angles2Counts(desired_position) - actual;
+    int u = kp*error+kd*prev_error+ki*int_error;
+     int_error = int_error+error;
+     prev_error = error;
     motor1ControlPWM(u);
  }  </pre> </div></div><!-- contents -->
 <!-- start footer part -->

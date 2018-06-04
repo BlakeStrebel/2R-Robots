@@ -1,21 +1,68 @@
 \hypertarget{index_intro_sec}{}\section{Introduction}\label{index_intro_sec}
-Start at {\ttfamily Files $>$ Files List} to view functions and their documentaion\hypertarget{index_Writing}{}\section{Custom Code}\label{index_Writing}
-Two timers (Timer 6 and Timer 7) are set up in the code and can execute at user-\/set frequencies in {\ttfamily \mbox{\hyperlink{r2r_8c}{r2r.\+c}}}. The intention is that the user will either write code in \mbox{\hyperlink{r2r_8c}{r2r.\+c}} or create a header and source file. Here, an simple example will be set out to compute simple position control over motor 1 in \mbox{\hyperlink{r2r_8c}{r2r.\+c}} at 5k\+Hz.
+Start at {\ttfamily Files $>$ Files List} to view functions and their documentaion\hypertarget{index_writingcustomcode}{}\section{Writing Custom Code}\label{index_writingcustomcode}
+Two timers (Timer 6 and Timer 7) are set up in the code and can execute at user-\/set frequencies in {\ttfamily \mbox{\hyperlink{r2r_8c}{r2r.\+c}}}. The intention is that the user will either write code in \mbox{\hyperlink{r2r_8c}{r2r.\+c}} or create a header and source file. Here, an simple example will be set out to compute simple position control over motor 1 in \mbox{\hyperlink{r2r_8c}{r2r.\+c}} at 5k\+Hz.\hypertarget{index_writinginterrupts}{}\subsection{Writing Interrupts}\label{index_writinginterrupts}
+In Code Composer Studio, Interrupts follow a general format. There is the interrupt initialization, the interrupt function itself, and a declaration of the interrupt function in the interrupt vector table in {\ttfamily tm4c1294ncpdt\+\_\+startup\+\_\+ccs.\+c}.
+
+In this example the timer interrupt has already been declared under {\ttfamily custom\+Timers\+Init()} and the corresponding timer functions have been declared in {\ttfamily tm4c1294ncpdt\+\_\+startup\+\_\+ccs.\+c}.
 
 In {\ttfamily \mbox{\hyperlink{r2r_8c}{r2r.\+c}}}, update frequency\+: \begin{DoxyVerb}    #define TIMER_6_FREQUENCY 5000
 \end{DoxyVerb}
 
 
-Under {\ttfamily \mbox{\hyperlink{r2r_8c_a57b21594b75d4b2a140a1f9bbb1465e8}{T\+I\+M\+E\+R6\+Int\+Handler()}}}\+: \begin{DoxyVerb}void TIMER6IntHandler(){
+Add global variables for the P\+ID controller in {\ttfamily \mbox{\hyperlink{r2r_8c}{r2r.\+c}}} \begin{DoxyVerb}int int_error = 0;
+int prev_error = 0;
+\end{DoxyVerb}
+
+
+Under {\ttfamily \mbox{\hyperlink{r2r_8c_a57b21594b75d4b2a140a1f9bbb1465e8}{T\+I\+M\+E\+R6\+Int\+Handler()}}} in {\ttfamily \mbox{\hyperlink{r2r_8c}{r2r.\+c}}}\+: \begin{DoxyVerb}void TIMER6IntHandler(){
     float kp = 0.5;
     float ki = 1;
     float kd = 0;
-        desired_position = 60; //degrees
+    desired_position = 60; //degrees
     encoderRead(); // update the encoder
     int actual = readMotor1RawRelative(); // read counts set to relative
     int raw = readMotor1Raw(); // read counts absolute
     int error = angles2Counts(desired_position) - actual;
     int u = kp*error+kd*prev_error+ki*int_error;
+     int_error = int_error+error;
+     prev_error = error;
+    motor1ControlPWM(u);
+ }  
+\end{DoxyVerb}
+\hypertarget{index_communication}{}\subsection{U\+A\+R\+T communication}\label{index_communication}
+In order to communicate over U\+A\+RT, several functions are provided under {\ttfamily system\+Init()}. In the default case, the U\+A\+RT is already initialised to a baud rate of 115200, 8\+N1 mode. This example will use a polling method to process input from the user.
+
+First set up a global variable in {\ttfamily main.\+c} that will be used to store the desired angle\+: \begin{DoxyVerb}volatile int setAngle = 0;
+\end{DoxyVerb}
+
+
+In {\ttfamily main.\+c}, under {\ttfamily main()}\+: \begin{DoxyVerb}    int main(void){
+    char buffer[50]; // set up a char buffer
+
+    while(1){ // set up an infinite loop
+        UART0read(buffer); // read the buffer
+        scanf("%d",setAngle);
+    }   
+}
+\end{DoxyVerb}
+
+
+Modify the code in {\ttfamily \mbox{\hyperlink{r2r_8c}{r2r.\+c}}} to refer to the variable\+: \begin{DoxyVerb}    extern int setAngle;
+\end{DoxyVerb}
+
+
+Now we have to modify the code in the {\ttfamily \mbox{\hyperlink{r2r_8c_a57b21594b75d4b2a140a1f9bbb1465e8}{T\+I\+M\+E\+R6\+Int\+Handler()}}}\+: \begin{DoxyVerb}void TIMER6IntHandler(){
+    float kp = 0.5;
+    float ki = 1;
+    float kd = 0;
+    desired_position = setAngle; //degrees
+    encoderRead(); // update the encoder
+    int actual = readMotor1RawRelative(); // read counts set to relative
+    int raw = readMotor1Raw(); // read counts absolute
+    int error = angles2Counts(desired_position) - actual;
+    int u = kp*error+kd*prev_error+ki*int_error;
+     int_error = int_error+error;
+     prev_error = error;
     motor1ControlPWM(u);
  }  \end{DoxyVerb}
  
