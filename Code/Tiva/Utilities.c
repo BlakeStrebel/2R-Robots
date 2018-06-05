@@ -62,11 +62,11 @@ int buffer_read_u(int motor) {   // reads current from current buffer location; 
     int u = 0;
     if (motor == 1)
     {
-        u = M1.u[READ];
+        u = M[1].u[READ];
     }
     else if (motor == 2)
     {
-        u = M2.u[READ];
+        u = M[2].u[READ];
     }
 
     return u;

@@ -25,7 +25,6 @@ static volatile int DECOGGING = 0;
  * Comes after:
  * - sysInit()
  */
-<<<<<<< HEAD:Code/Tiva/Control.c
 void timerIntInit(void)
 {
     setMODE(IDLE);
@@ -59,6 +58,7 @@ void timerIntInit(void)
     IntPrioritySet(INT_TIMER2A, 0);
 
     IntMasterEnable();
+}
 
 void MotorTimerInit(void){
     setMODE(IDLE);
@@ -71,9 +71,6 @@ void MotorTimerInit(void){
     TimerIntEnable(TIMER1_BASE, TIMER_TIMA_TIMEOUT);
     TimerEnable(TIMER1_BASE, TIMER_A);
     IntMasterEnable();
-
-    E1.u = 0;
-    E2.u = 0;
 }
 
 void get_position_gains(void)   // provide position control gains
@@ -148,12 +145,10 @@ void set_motor_pwm(int motor, int value)    // TODO this function is repetative,
     if (motor == 1)
     {
         motor1ControlPWM(value);
-        E1.u = value;
     }
     else if (motor == 2)
     {
         motor2ControlPWM(value);
-        E2.u = value;
     }
 }
 
@@ -169,12 +164,6 @@ void Timer1IntHandler(void)
 
     TimerIntClear(TIMER1_BASE, TIMER_TIMA_TIMEOUT); // clear the interrupt flag
 
-    encoderRead(); // update encoder values
-    E1.actual = readMotor1RawRelative(); // read positions
-    E2.actual = readMotor2RawRelative();
-    E1.raw = readMotor1Raw();
-    E2.raw = readMotor2Raw();
-
     switch(getMODE())
     {
         case IDLE:
@@ -189,19 +178,10 @@ void Timer1IntHandler(void)
                 decctr = 0; // reset decimation counter
             }
             i++;
-        }
+            break;
         case PWM:
-        {
             break;
-        }
         case ITEST:
-        {
-            break;
-        }
-        case HOLD:
-        {
-            PID_Controller(E1.desired, E1.actual, 1);    // motor1 control
-            PID_Controller(E2.desired, E2.actual, 2);    // motor2 control
             break;
         case PID2:
             PID_Controller(E[2].traj[i] / 2 / M_PI * 16384, readMotorRawRelative(2) - readMotorRawRelative(1), 2, 0);    // motor2 control

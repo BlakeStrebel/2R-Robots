@@ -14,11 +14,10 @@ void sysInit(void)
     while(!SysCtlPeripheralReady(SYSCTL_PERIPH_GPION)) {}
 
     // Set the clock to run directly from the crystal at 120MHz.
-    // TODO: Currently we are using internal oscillator and it is better to change to external crystal.
-    ui32SysClock = SysCtlClockFreqSet(SYSCTL_OSC_INT | SYSCTL_USE_PLL |
-                                      SYSCTL_CFG_VCO_480, 120000000);
+    // For internal crystal.
+    //ui32SysClock = SysCtlClockFreqSet(SYSCTL_OSC_INT | SYSCTL_USE_PLL | SYSCTL_CFG_VCO_480, 120000000);
     // Use 25Mhz crystal and use PLL to accelerate to 120MHz
-    //ui32SysClock = SysCtlClockFreqSet(SYSCTL_XTAL_25MHZ | SYSCTL_OSC_MAIN | SYSCTL_USE_PLL | SYSCTL_CFG_VCO_480, 120000000);
+    ui32SysClock = SysCtlClockFreqSet(SYSCTL_XTAL_25MHZ | SYSCTL_OSC_MAIN | SYSCTL_USE_PLL | SYSCTL_CFG_VCO_480, 120000000);
 
     // Enable FPU for calculation.
     FPUEnable();

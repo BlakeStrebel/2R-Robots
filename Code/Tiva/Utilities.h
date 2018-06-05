@@ -15,7 +15,7 @@
 
 #define DECIMATION 10    // Decimate the data if necessary
 #define REFERENCE_DATA 10000    // Reference data for trajectory tracking
-#define BUFLEN 10000 // Actual data; sent to client using circular buffer
+#define BUFLEN 100 // Actual data; sent to client using circular buffer  10000 possible?
 
 /**
  * Data structure containing the modes of the system

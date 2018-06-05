@@ -60,7 +60,7 @@ void r2rDefaultInit(void)
     uartInit();
     encoderSPIInit();
 
-    MotorSPIinit();
+    MotorSPIInit();
     motorInit(); // Set useful signal outputs.
     motorDriverInit(); // Send values to set up the motor for 3x PWM mode
     currentControlInit();

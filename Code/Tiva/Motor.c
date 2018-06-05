@@ -517,41 +517,6 @@ void pwmInit(void)
 }
 
 /*
- * This function sets up all the PWM pins and the gpio pins for the motor, may also optionally call SPI pins
- *
- * Comes after:
- * pwmInit()
- * sysInit()
- *
- */
-void motorInit(void)
-{
-       // Setting up motor driver pins,
-       // Motor directions PK0:1, PK2:2
-       // Motor enable pins, PK1: 1, PK3: 2
-       // Motor brake pins, PP4: 1, PP5: 2
-       SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOK); // set up GPIOs
-       SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOP); // set up GPIOs
-
-       GPIOPinTypeGPIOOutput(GPIO_PORTK_BASE, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3); //set up outputs
-       GPIOPinTypeGPIOOutput(GPIO_PORTP_BASE, GPIO_PIN_4 | GPIO_PIN_5); // set up output pins
-
-       //set directions
-       GPIOPinWrite(GPIO_PORTK_BASE, GPIO_PIN_0 | GPIO_PIN_2 , GPIO_PIN_0 + GPIO_PIN_2);
-
-       // turn on
-       GPIOPinWrite(GPIO_PORTK_BASE, GPIO_PIN_1 |  GPIO_PIN_3 , GPIO_PIN_3 + GPIO_PIN_1);
-
-       GPIOPinWrite(GPIO_PORTP_BASE, GPIO_PIN_4, GPIO_PIN_4); // brake for motor 1, set HIGH so no braking
-       GPIOPinWrite(GPIO_PORTP_BASE, GPIO_PIN_5, GPIO_PIN_5); // brake for motor 2, set HIGH so no braking
-
-       // TODO: Cal, short all amplifier inputs together (why?)
-       //GPIOPinTypeGPIOOutput(GPIO_PORTJ_BASE, GPIO_PIN_0 | GPIO_PIN_1 );
-}
-
-
-
-/*
  * This function sends SPI data over to the motor driver to setup the driver for 1x PWM mode
  * Comes after:
  * Motor power is supplied
@@ -560,37 +525,28 @@ void motorInit(void)
  *
  * Note that the driver will NOT be set if motor power is not supplied because the driver will not be able to read the registers over SPI, even though it responds
  */
-<<<<<<< HEAD
 void motorDriverInit(void)
 {
-
-    pui32DataTx[0] = 0b0001000001000000; // set register 3, bit 6 and 5 to 10, option 3, 1x PWM mode
-
-    while(SSIDataGetNonBlocking(SSI2_BASE, &pui32DataRx[0])){}
+    pui32DataTx[0] = 0b0001000000100000; // set register 3, bit 6 and 5 to 10, option 3, 1x PWM mode
 
     GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_2,0x00); // Pull CS pin low
     SysCtlDelay(1000);
     SSIDataPut(SSI2_BASE, pui32DataTx[0]); // Send data
     SysCtlDelay(1000); // wait (at least 50ns)
     GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_2,GPIO_PIN_2); // Being the CS pin high
-    SysCtlDelay(1000);
     SSIDataGet(SSI2_BASE, &pui32DataRx[0]); // Get the data
+    SysCtlDelay(1000);
 
-    while(SSIBusy(SSI2_BASE)){}
-
-    while(SSIDataGetNonBlocking(SSI2_BASE, &pui32DataRx[0])){}
 
     GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_3,0x00); // Pull CS pin low
-    SysCtlDelay(1000);
+    SysCtlDelay(1000);  //50?
     SSIDataPut(SSI2_BASE, pui32DataTx[0]); // Send data
-    SysCtlDelay(1000); // wait (at least 50ns)
-    GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_3,GPIO_PIN_3); // Being the CS pin high
-    SysCtlDelay(1000);
-    SSIDataGet(SSI2_BASE, &pui32DataRx[0]); // Get the data
-
     while(SSIBusy(SSI2_BASE)){}
+    SysCtlDelay(1000); // wait (at least 50ns)  50?
+    GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_3,GPIO_PIN_3); // Being the CS pin high
+    SSIDataGet(SSI2_BASE, &pui32DataRx[0]); // Get the data
+    SysCtlDelay(1000);
 }
-
 
 /*
  * Wrapper function that turns on the brakes for the motor and sets pwm to 0
@@ -671,44 +627,6 @@ void motorPWM(int motor_number, int pwmValue)
         PWMPulseWidthSet(PWM0_BASE, PWM_OUT_0,pwmValue); // set pwm
     else
         PWMPulseWidthSet(PWM0_BASE, PWM_OUT_4,pwmValue); // set pwm
-}
-
-void motorDriverInit(void){
-    uint32_t pui32DataTx[3], pui32DataRx[3], i = 0;
-
-    pui32DataTx[0] = 0b1001000000000000; // read register 3
-    pui32DataTx[1] = 0b0001000000100000; // set register 3, bit 6 and 5 to 10, option 3, 3x PWM mode
-    pui32DataTx[2]=  0b1001000000000000; // read register 3
-    pui32DataTx[3]=  0b1001000000000000; // read register 3
-
-
-    /***  Motor 1 ***/
-    // First do a read to clear buffers, then write to set driver to 3x PWM mode, then read again to verify
-    for (i = 0; i < 4; i++)
-    {
-        GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_3,0x00);          // Pull CS pin low
-        SysCtlDelay(50);                                        // delay before sending data
-        SSIDataPut(SSI2_BASE, pui32DataTx[i]);                  // Send data
-        while(SSIBusy(SSI2_BASE)){}                             // wait until data sent
-        SysCtlDelay(50);                                        // delay after sending data
-        GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_3,GPIO_PIN_3);    // Bring the CS pin high
-        SSIDataGet(SSI2_BASE, &pui32DataRx[i]);                 // Get the data
-        SysCtlDelay(1000);  // Delay between writes
-    }
-
-    /***  Motor 2 ***/
-    // First do a read to clear buffers, then write to set driver to 3x PWM mode
-    for (i = 0; i < 4; i++)
-    {
-        GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_2,0x00);          // Pull CS pin low
-        SysCtlDelay(50);                                        // delay before sending data
-        SSIDataPut(SSI2_BASE, pui32DataTx[i]);                  // Send data
-        while(SSIBusy(SSI2_BASE)){}                             // wait until data sent
-        SysCtlDelay(50);                                        // delay after sending data
-        GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_2,GPIO_PIN_2);    // Bring the CS pin high
-        SSIDataGet(SSI2_BASE, &pui32DataRx[i]);                 // Get the data
-        SysCtlDelay(1000);  // Delay between writes
-    }
 }
 
 void M1_INL_WRITE(int a, int b, int c)
