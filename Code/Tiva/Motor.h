@@ -133,16 +133,50 @@ extern void motorInit(void);
 void M1_INL_WRITE(int a, int b, int c);
 void M2_INL_WRITE(int a, int b, int c);
 
+
+/**
+* @brief Returns the current PWM of motor 1
+* 
+* @param Void
+* @return int pwm of motor
+*/
 int getmotor1PWM(void);
+
+
+/**
+* @brief Returns the current PWM of motor 2
+* 
+* @param Void
+* @return int pwm of motor
+*/
 int getmotor2PWM(void);
 
+/**
+* @brief Returns the current state of the halls for motor 1
+*
+* It returns 32 bit number representing the state of the motor as a bit array
+* It is compared to the HALLSTATE definitions to determine the current state. 
+* 
+* @param Void
+* @return int32_t the state of the motor in a bit array
+*/
 int32_t getmotor1HALLS(void);
+
+/**
+* @brief Returns the current state of the halls for motor 2
+*
+* It returns 32 bit number representing the state of the motor as a bit array
+* It is compared to the HALLSTATE definitions to determine the current state. 
+* 
+* @param Void
+* @return int32_t the state of the motor in a bit array
+*/
 int32_t getmotor2HALLS(void);
 
 
 
 /**
- * Brakes the motor and kills the pwm signal by pulling down the enable line.
+ * Brakes the motor and kills the pwm signal. Additionally also pulls down the enable line.
  *
  *
  * @param Void
@@ -170,8 +204,6 @@ extern void motorSafetyCheck(void);
  */
 extern void MotorSPIInit(void);
 
-
-
 /**
  * @brief Initializes the SPI commands to set the motor's configuration for 1x PWM mode.
  * @param Void
@@ -192,8 +224,6 @@ extern void motorDriverInit(void);
 extern void pwmInit(void);
 
 
-
-
 /**
  * @brief Brakes motor 1
  *
@@ -209,7 +239,6 @@ extern void motor1Brake(void);
  * @return Void
  */
 extern void motor2Brake(void);
-
 
 
 /**

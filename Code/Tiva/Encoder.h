@@ -165,7 +165,13 @@ extern float readMotor2Speed(void);
 extern float readMotor1Speed(void);
 
 
-int anglesToCounts(float angle);
+/**
+ * @brief Helper function that converts an angle degrees into counts
+ *
+ * @param float angle in degrees
+ * @return int counts
+ */
+extern int anglesToCounts(float angle);
 
 
 #endif /* ENCODER_H_ */

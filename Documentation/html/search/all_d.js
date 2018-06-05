@@ -1,8 +1,14 @@
 var searchData=
 [
-  ['timeinit',['timeInit',['../_system_8h.html#a9539b63f71e1a1c8b7cc5142560b189c',1,'System.c']]],
-  ['timeint',['timeInt',['../_system_8h.html#a3ef2d72f5373681a06978ab3f437bd63',1,'System.c']]],
-  ['timer6inthandler',['TIMER6IntHandler',['../r2r_8c.html#a57b21594b75d4b2a140a1f9bbb1465e8',1,'TIMER6IntHandler(void):&#160;r2r.c'],['../r2r_8h.html#a57b21594b75d4b2a140a1f9bbb1465e8',1,'TIMER6IntHandler(void):&#160;r2r.c']]],
-  ['timer7inthandler',['TIMER7IntHandler',['../r2r_8c.html#a39c6b9317ad29deebebf731f721f001b',1,'TIMER7IntHandler(void):&#160;r2r.c'],['../r2r_8h.html#a39c6b9317ad29deebebf731f721f001b',1,'TIMER7IntHandler(void):&#160;r2r.c']]],
-  ['track',['TRACK',['../_utilities_8h.html#a1a6b6fb557d8d37d59700faf4e4c9167a203efac3b32c320b1246bf5583be1e8c',1,'Utilities.h']]]
+  ['send_5fdata',['send_data',['../_utilities_8h.html#aa8061654c0af0c3c3fac9e63ed7eaed6',1,'Utilities.c']]],
+  ['set_5fdesired_5fangle',['set_desired_angle',['../_position_control_8h.html#a1849f501c3cb9e99ef17c65881960289',1,'PositionControl.c']]],
+  ['set_5fmotor_5fpwm',['set_motor_pwm',['../_position_control_8h.html#a2ee9e8e44ffa875e1d7e2099c8539507',1,'PositionControl.c']]],
+  ['set_5fposition_5fgains',['set_position_gains',['../_position_control_8h.html#aab0c2966059686b7288fceaa8b72d950',1,'PositionControl.c']]],
+  ['setadcmux',['setADCMux',['../_adc_8h.html#ab07c8a54a14148ee47eef30ea3baa661',1,'Adc.c']]],
+  ['setdecogging',['setDecogging',['../_position_control_8h.html#aeca5028b3ba9d68e9a9ccccae98396cd',1,'PositionControl.c']]],
+  ['setmode',['setMODE',['../_utilities_8h.html#af4c5a7352334b805d0c36e3b495d0a16',1,'Utilities.c']]],
+  ['setn',['setN',['../_utilities_8h.html#acba07f8eaf5cdce3760657cfd53c35b8',1,'Utilities.c']]],
+  ['shutdownnow',['shutdownNow',['../_motor_8h.html#a3736cf7b742152f2787804fad1c999e2',1,'Motor.c']]],
+  ['sysinit',['sysInit',['../_system_8h.html#a9708de954e135b89af84d9d82b552667',1,'System.c']]],
+  ['system_2eh',['System.h',['../_system_8h.html',1,'']]]
 ];

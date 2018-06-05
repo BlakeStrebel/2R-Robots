@@ -1,12 +1,14 @@
 var searchData=
 [
-  ['send_5fdata',['send_data',['../_utilities_8h.html#aa8061654c0af0c3c3fac9e63ed7eaed6',1,'Utilities.c']]],
-  ['set_5fdesired_5fangle',['set_desired_angle',['../_position_control_8h.html#a1849f501c3cb9e99ef17c65881960289',1,'PositionControl.c']]],
-  ['set_5fmotor_5fpwm',['set_motor_pwm',['../_position_control_8h.html#a2ee9e8e44ffa875e1d7e2099c8539507',1,'PositionControl.c']]],
-  ['set_5fposition_5fgains',['set_position_gains',['../_position_control_8h.html#aab0c2966059686b7288fceaa8b72d950',1,'PositionControl.c']]],
-  ['setdecogging',['setDecogging',['../_position_control_8h.html#aeca5028b3ba9d68e9a9ccccae98396cd',1,'PositionControl.c']]],
-  ['setmode',['setMODE',['../_utilities_8h.html#af4c5a7352334b805d0c36e3b495d0a16',1,'Utilities.c']]],
-  ['setn',['setN',['../_utilities_8h.html#acba07f8eaf5cdce3760657cfd53c35b8',1,'Utilities.c']]],
-  ['shutdownnow',['shutdownNow',['../_motor_8h.html#a3736cf7b742152f2787804fad1c999e2',1,'Motor.c']]],
-  ['sysinit',['sysInit',['../_system_8h.html#a9708de954e135b89af84d9d82b552667',1,'System.c']]]
+  ['motor1brake',['motor1Brake',['../_motor_8h.html#aea6e9daf04c89835b507bf4bbf477841',1,'Motor.c']]],
+  ['motor1controlpwm',['motor1ControlPWM',['../_motor_8h.html#a8ab898affd7b6bbc1d359284e85c31c3',1,'Motor.c']]],
+  ['motor1pwm',['motor1PWM',['../_motor_8h.html#a40e064ce1ed8e8fe099904717d9c7e46',1,'Motor.c']]],
+  ['motor2brake',['motor2Brake',['../_motor_8h.html#abeb06d04160b25625c36d1a07e111033',1,'Motor.c']]],
+  ['motor2controlpwm',['motor2ControlPWM',['../_motor_8h.html#aa3421fe96b22e90c356e013a0abef7d6',1,'Motor.c']]],
+  ['motor2pwm',['motor2PWM',['../_motor_8h.html#a8d3950b6912f5a60d2ceded0e0ed502b',1,'Motor.c']]],
+  ['motordriverinit',['motorDriverInit',['../_motor_8h.html#a4e7b27c5715df8d71dfe87a22ae0b004',1,'Motor.c']]],
+  ['motorerror',['motorError',['../_motor_8h.html#ad2fb0421114b988126b41428644453a3',1,'Motor.c']]],
+  ['motorinit',['motorInit',['../_motor_8h.html#aa29e2982047be0f7afbb10c8d6f3f5c3',1,'Motor.c']]],
+  ['motorsafetycheck',['motorSafetyCheck',['../_motor_8h.html#ab59ffbd33a12b2f672648d85a5466798',1,'Motor.c']]],
+  ['motorspiinit',['MotorSPIInit',['../_motor_8h.html#a45846f2d47f8db7242ebf6026fbf51d3',1,'Motor.c']]]
 ];

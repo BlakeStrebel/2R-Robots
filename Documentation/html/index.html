@@ -13,6 +13,7 @@
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen_html_style.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -68,6 +69,61 @@ $(function() {
 <div class="textblock"><h1><a class="anchor" id="intro_sec"></a>
 Introduction</h1>
 <p>Start at <code>Files &gt; Files List</code> to view functions and their documentaion</p>
+<h1><a class="anchor" id="setup"></a>
+Setting up CCS for R2R</h1>
+<p>In order to start programming the microcontroller, the user has to install Code Composer Studio (CCS) from TI. In CCS, the TIVAware library has to be installed. This can be done through the Resource Explorer avaliable in CCS. The Resource Explorer can be reached from Help &gt; Getting Started &gt; Browse Examples.</p>
+<div class="image">
+<img src="images/tivaware.JPG" alt="tivaware.JPG"/>
+<div class="caption">
+CCS Resource Explorer (Tirex)</div></div>
+<p> Once the libraries have been installed, create a new project</p>
+<div class="image">
+<img src="images/newproject.JPG" alt="newproject.JPG"/>
+<div class="caption">
+Creating a new project</div></div>
+<p> Ensure that the Tiva TM4C1294NCPDT chip is selected and give your project a name. When you are done, select Finish</p>
+<div class="image">
+<img src="images/newprojectoptions.JPG" alt="newprojectoptions.JPG"/>
+<div class="caption">
+Options for a new project</div></div>
+<p> The code perspective will open up. On the left the active project is bolded. Your new project should be bolded. If it is not, select it. Some libraries have to be manually added to the project before the code can run. Right click the project name in Project Explorer, and select properties.</p>
+<p>Under CCS Build &gt; ARM Compiler &gt; Include options, include the Tivaware library.</p>
+<div class="image">
+<img src="images/includetivaware.JPG" alt="includetivaware.JPG"/>
+<div class="caption">
+Including libraries</div></div>
+<p> Next, under CCS Build &gt; ARM Linker &gt; File Search Path the library files for the driver library are included. The sensorlib files are also included in the same manner</p>
+<div class="image">
+<img src="images/driverlib.JPG" alt="driverlib.JPG"/>
+<div class="caption">
+Including Driverlib</div></div>
+<p> Finally the files from the Github project can be added to the project. Because version control is already managed by Github in this case, the files are linked into the the project. However, the user can also add the files directly into the project.</p>
+<div class="image">
+<img src="images/r2rstep1.JPG" alt="r2rstep1.JPG"/>
+<div class="caption">
+Including R2R files</div></div>
+<div class="image">
+<img src="images/r2rstep2.JPG" alt="r2rstep2.JPG"/>
+<div class="caption">
+Including R2R files</div></div>
+<div class="image">
+<img src="images/r2rstep3.JPG" alt="r2rstep3.JPG"/>
+<div class="caption">
+Including R2R files</div></div>
+<div class="image">
+<img src="images/r2rstep4.JPG" alt="r2rstep4.JPG"/>
+<div class="caption">
+Including R2R files</div></div>
+<p> If the files cannot be added, delete the conflicting file in the project and attempt to add the file again. Once all the files have been added, CCS should look like the following state.</p>
+<div class="image">
+<img src="images/r2rstep5.JPG" alt="r2rstep5.JPG"/>
+<div class="caption">
+Setup Completed</div></div>
+<p> The code is built by clicking on the hammer icon. In order to program the board, the green debug symbol is clicked. Test by compiling the code. It should compile without any errors.</p>
+<div class="image">
+<img src="images/programming.JPG" alt="programming.JPG"/>
+<div class="caption">
+Programming</div></div>
 <h1><a class="anchor" id="writingcustomcode"></a>
 Writing Custom Code</h1>
 <p>Two timers (Timer 6 and Timer 7) are set up in the code and can execute at user-set frequencies in <code><a class="el" href="r2r_8c.html" title="This file contains the main function that calls all other initialization functions. ">r2r.c</a></code>. The intention is that the user will either write code in <a class="el" href="r2r_8c.html" title="This file contains the main function that calls all other initialization functions. ">r2r.c</a> or create a header and source file. Here, an simple example will be set out to compute simple position control over motor 1 in <a class="el" href="r2r_8c.html" title="This file contains the main function that calls all other initialization functions. ">r2r.c</a> at 5kHz.</p>
@@ -100,12 +156,16 @@ UART communication</h2>
     char buffer[50]; // set up a char buffer
 
     while(1){ // set up an infinite loop
+
         UART0read(buffer); // read the buffer
-        scanf("%d",setAngle);
+        scanf("%d",setAngle); 
+        sprintf(buffer,"Okay! Setting to: %d",setAngle) // acknowledge
+        UART0write(buffer,50); // write to the buffer
+
     }   
 }
-</pre><p>Modify the code in <code><a class="el" href="r2r_8c.html" title="This file contains the main function that calls all other initialization functions. ">r2r.c</a></code> to refer to the variable: </p><pre class="fragment">    extern int setAngle;
-</pre><p>Now we have to modify the code in the <code><a class="el" href="r2r_8c.html#a57b21594b75d4b2a140a1f9bbb1465e8" title="Custom timer 6. ">TIMER6IntHandler()</a></code>: </p><pre class="fragment">void TIMER6IntHandler(){
+</pre><p>Add a global variable in <code><a class="el" href="r2r_8c.html" title="This file contains the main function that calls all other initialization functions. ">r2r.c</a></code> to refer to the setAngle variable we just created in main.c: </p><pre class="fragment">    extern int setAngle;
+</pre><p>Now we have to modify the code in the <code><a class="el" href="r2r_8c.html#a57b21594b75d4b2a140a1f9bbb1465e8" title="Custom timer 6. ">TIMER6IntHandler()</a></code> to refer to this variable: </p><pre class="fragment">void TIMER6IntHandler(){
     float kp = 0.5;
     float ki = 1;
     float kd = 0;
@@ -118,7 +178,11 @@ UART communication</h2>
      int_error = int_error+error;
      prev_error = error;
     motor1ControlPWM(u);
- }  </pre> </div></div><!-- contents -->
+ }  
+</pre><h2><a class="anchor" id="menu"></a>
+Writing Menu Commands</h2>
+<p>The MATLAB menu can also be modified to fit a custom control law. </p>
+</div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by &#160;<a href="http://www.doxygen.org/index.html">

@@ -1,5 +1,24 @@
 \hypertarget{index_intro_sec}{}\section{Introduction}\label{index_intro_sec}
-Start at {\ttfamily Files $>$ Files List} to view functions and their documentaion\hypertarget{index_writingcustomcode}{}\section{Writing Custom Code}\label{index_writingcustomcode}
+Start at {\ttfamily Files $>$ Files List} to view functions and their documentaion\hypertarget{index_setup}{}\section{Setting up C\+C\+S for R2R}\label{index_setup}
+In order to start programming the microcontroller, the user has to install Code Composer Studio (C\+CS) from TI. In C\+CS, the T\+I\+V\+Aware library has to be installed. This can be done through the Resource Explorer avaliable in C\+CS. The Resource Explorer can be reached from Help $>$ Getting Started $>$ Browse Examples.
+
+ Once the libraries have been installed, create a new project
+
+ Ensure that the Tiva T\+M4\+C1294\+N\+C\+P\+DT chip is selected and give your project a name. When you are done, select Finish
+
+ The code perspective will open up. On the left the active project is bolded. Your new project should be bolded. If it is not, select it. Some libraries have to be manually added to the project before the code can run. Right click the project name in Project Explorer, and select properties.
+
+Under C\+CS Build $>$ A\+RM Compiler $>$ Include options, include the Tivaware library.
+
+ Next, under C\+CS Build $>$ A\+RM Linker $>$ File Search Path the library files for the driver library are included. The sensorlib files are also included in the same manner
+
+ Finally the files from the Github project can be added to the project. Because version control is already managed by Github in this case, the files are linked into the the project. However, the user can also add the files directly into the project.
+
+ If the files cannot be added, delete the conflicting file in the project and attempt to add the file again. Once all the files have been added, C\+CS should look like the following state.
+
+ The code is built by clicking on the hammer icon. In order to program the board, the green debug symbol is clicked. Test by compiling the code. It should compile without any errors.
+
+\hypertarget{index_writingcustomcode}{}\section{Writing Custom Code}\label{index_writingcustomcode}
 Two timers (Timer 6 and Timer 7) are set up in the code and can execute at user-\/set frequencies in {\ttfamily \mbox{\hyperlink{r2r_8c}{r2r.\+c}}}. The intention is that the user will either write code in \mbox{\hyperlink{r2r_8c}{r2r.\+c}} or create a header and source file. Here, an simple example will be set out to compute simple position control over motor 1 in \mbox{\hyperlink{r2r_8c}{r2r.\+c}} at 5k\+Hz.\hypertarget{index_writinginterrupts}{}\subsection{Writing Interrupts}\label{index_writinginterrupts}
 In Code Composer Studio, Interrupts follow a general format. There is the interrupt initialization, the interrupt function itself, and a declaration of the interrupt function in the interrupt vector table in {\ttfamily tm4c1294ncpdt\+\_\+startup\+\_\+ccs.\+c}.
 
@@ -40,18 +59,22 @@ In {\ttfamily main.\+c}, under {\ttfamily main()}\+: \begin{DoxyVerb}    int mai
     char buffer[50]; // set up a char buffer
 
     while(1){ // set up an infinite loop
+
         UART0read(buffer); // read the buffer
-        scanf("%d",setAngle);
+        scanf("%d",setAngle); 
+        sprintf(buffer,"Okay! Setting to: %d",setAngle) // acknowledge
+        UART0write(buffer,50); // write to the buffer
+
     }   
 }
 \end{DoxyVerb}
 
 
-Modify the code in {\ttfamily \mbox{\hyperlink{r2r_8c}{r2r.\+c}}} to refer to the variable\+: \begin{DoxyVerb}    extern int setAngle;
+Add a global variable in {\ttfamily \mbox{\hyperlink{r2r_8c}{r2r.\+c}}} to refer to the set\+Angle variable we just created in main.\+c\+: \begin{DoxyVerb}    extern int setAngle;
 \end{DoxyVerb}
 
 
-Now we have to modify the code in the {\ttfamily \mbox{\hyperlink{r2r_8c_a57b21594b75d4b2a140a1f9bbb1465e8}{T\+I\+M\+E\+R6\+Int\+Handler()}}}\+: \begin{DoxyVerb}void TIMER6IntHandler(){
+Now we have to modify the code in the {\ttfamily \mbox{\hyperlink{r2r_8c_a57b21594b75d4b2a140a1f9bbb1465e8}{T\+I\+M\+E\+R6\+Int\+Handler()}}} to refer to this variable\+: \begin{DoxyVerb}void TIMER6IntHandler(){
     float kp = 0.5;
     float ki = 1;
     float kd = 0;
@@ -64,5 +87,7 @@ Now we have to modify the code in the {\ttfamily \mbox{\hyperlink{r2r_8c_a57b215
      int_error = int_error+error;
      prev_error = error;
     motor1ControlPWM(u);
- }  \end{DoxyVerb}
- 
+ }  
+\end{DoxyVerb}
+\hypertarget{index_menu}{}\subsection{Writing Menu Commands}\label{index_menu}
+The M\+A\+T\+L\+AB menu can also be modified to fit a custom control law. 

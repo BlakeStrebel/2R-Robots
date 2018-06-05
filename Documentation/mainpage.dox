@@ -3,6 +3,47 @@
  * \section intro_sec Introduction
  *
  * Start at `Files > Files List` to view functions and their documentaion
+
+ * \section setup Setting up CCS for R2R
+
+ *  In order to start programming the microcontroller, the user has to install Code Composer Studio (CCS) from TI. In CCS, the TIVAware library has to be installed. This can be done through the Resource Explorer avaliable in CCS. The Resource Explorer can be reached from Help > Getting Started > Browse Examples.
+
+ * \image html images/tivaware.JPG "CCS Resource Explorer (Tirex)"
+
+ * Once the libraries have been installed, create a new project
+
+ * \image html images/newproject.JPG "Creating a new project"
+
+ * Ensure that the Tiva TM4C1294NCPDT chip is selected and give your project a name. When you are done, select Finish
+
+ * \image html images/newprojectoptions.JPG "Options for a new project"
+
+ * The code perspective will open up. On the left the active project is bolded. Your new project should be bolded. If it is not, select it. Some libraries have to be manually added to the project before the code can run. Right click the project name in Project Explorer, and select properties. 
+
+ * Under CCS Build > ARM Compiler > Include options, include the Tivaware library.
+ *
+ * \image html images/includetivaware.JPG "Including libraries"
+ *
+ * Next, under CCS Build > ARM Linker > File Search Path the library files for the driver library are included. The sensorlib files are also included in the same manner
+ *
+ * \image html images/driverlib.JPG "Including Driverlib"
+ *
+ * Finally the files from the Github project can be added to the project. Because version control is already managed by Github in this case, the files are linked into the the project. However, the user can also add the files directly into the project.
+ *
+ * \image html images/r2rstep1.JPG "Including R2R files"
+ * \image html images/r2rstep2.JPG "Including R2R files"
+ * \image html images/r2rstep3.JPG "Including R2R files"
+ * \image html images/r2rstep4.JPG "Including R2R files"
+ *
+ * If the files cannot be added, delete the conflicting file in the project and attempt to add the file again. Once all the files have been added, CCS should look like the following state.
+
+ * \image html images/r2rstep5.JPG "Setup Completed"
+ *
+ * The code is built by clicking on the hammer icon. In order to program the board, the green debug symbol is clicked. Test by compiling the code. It should compile without any errors.
+ *
+ * \image html images/programming.JPG "Programming"
+ * 
+ * 
  *
  * \section writingcustomcode Writing Custom Code
  *
@@ -69,7 +110,7 @@
  * 
  * 		extern int setAngle;
  * 
- * Now we have to modify the code in the `TIMER6IntHandler()`:
+ * Now we have to modify the code in the `TIMER6IntHandler()` to refer to this variable:
  *
  *		void TIMER6IntHandler(){
  *			float kp = 0.5;
@@ -85,6 +126,9 @@
  *          prev_error = error;
  *		    motor1ControlPWM(u);
  *		 }	
- *
+ * 
+ * \subsection menu Writing Menu Commands
+ * 
+ * The MATLAB menu can also be modified to fit a custom control law.
  *
  */

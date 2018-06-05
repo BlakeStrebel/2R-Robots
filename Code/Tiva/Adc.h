@@ -1,8 +1,17 @@
-/*
- * adc.h
+/**
+ * @file Adc.h
+ * @brief header for ADC
  *
- *  Created on: May 31, 2018
- *      Author: Ben
+ * This file contains ADC functions for 1x PWM mode. It also contains utility functions for 3x PWM mode.
+ * 
+ * Because the ADC is so closely tied to the motor for the 3x PWM Mode, the ADC has already been 
+ * initialised in `motorInit()` and configured. The only function that is currently being used is `setADCMux`.
+ * The other functions are maintained in this file in case the user wishes to move back to 1x PWM Mode.
+ *
+ * @author Benjamen Lim
+ * @author Huan Weng
+ * @author Blake Strebel
+ *
  */
 
 #ifndef ADC_H_

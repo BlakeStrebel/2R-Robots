@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['motor_2eh',['Motor.h',['../_motor_8h.html',1,'']]]
+  ['encoder_2eh',['Encoder.h',['../_encoder_8h.html',1,'']]]
 ];
