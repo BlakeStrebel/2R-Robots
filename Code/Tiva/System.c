@@ -85,19 +85,6 @@ void UART0write(const char * string)
     }
 }
 
-/*
- *  This function sets up all the GPIO pins for unused and other pins that are used in other functions.
- *
- *  Comes after:
- *  -
- */
-void gpioInit(void){
-    // Unused pins, enable and set to inputs
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOP);
-    GPIOPinTypeGPIOInput(GPIO_PORTP_BASE, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2);
-    GPIOPinTypeGPIOOutput(GPIO_PORTP_BASE,GPIO_PIN_3);
-    GPIOPinWrite(GPIO_PORTP_BASE,GPIO_PIN_3,GPIO_PIN_3);
-}
 
 /*
  * This function stops the clock for a given amount of ms

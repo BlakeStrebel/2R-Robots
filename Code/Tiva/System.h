@@ -45,6 +45,9 @@
 #include "driverlib/fpu.h"
 #include "math.h"
 
+#define MOTOR1 1
+#define MOTOR2 2
+
 uint32_t ui32SysClock;
 uint32_t micros;
 
@@ -91,13 +94,6 @@ extern void UART0read(char * message, int maxLength);
 extern void UART0write(const char * string);
 
 
-/**
- * @brief Initializes all unused GPIO pins in High-Z state
- *
- * @param Void
- * @return Void
- */
-extern void gpioInit(void); // inits all unused GPIO
 
 /**
  * @brief Stops the processor for a given amount of time. This is an approximate time

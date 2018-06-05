@@ -1,7 +1,9 @@
 function Client()
 %   provides a menu for interfacing with hopper robot system
-Tiva_port = 'COM7'; % Tiva board serial port
-DECIMATION = 10;
+
+Tiva_port = 'COM5'; % Tiva board serial port
+DECIMATION = 1;
+PWMPERIOD = 4000;
 
 % Opening COM connection
 if ~isempty(instrfind)
@@ -10,8 +12,7 @@ if ~isempty(instrfind)
 end
 
 % configure ports
-Tiva_Serial = serial(Tiva_port, 'BaudRate', 115200, 'FlowControl', 'hardware','Timeout',15); 
-%Tiva_Serial = serial(Tiva_port, 'BaudRate', 115200, 'Timeout',15); 
+Tiva_Serial = serial(Tiva_port, 'BaudRate', 115200, 'Timeout',15); %'FlowControl', 'hardware',
 
 fprintf('Opening port %s....\n',Tiva_port);
 
@@ -54,12 +55,12 @@ while ~has_quit
         case 'c'
             PWM1 = input('Enter your desired motor1 PWM [-100,100]:  ');
             PWM2 = input('Enter your desired motor2 PWM [-100,100]:  ');
-            fprintf(Tiva_Serial, '%d %d\n',[PWM1/100*9600, PWM2/100*9600]);
+            fprintf(Tiva_Serial, '%d %d\n',[PWM1/100*(PWMPERIOD), PWM2/100*(PWMPERIOD)]);
             fprintf('PWM1 set to %3.2f\nPWM2 set to %3.2f\n',PWM1,PWM2);
         case 'd'
             pwm1 = fscanf(Tiva_Serial,'%d');
             pwm2 = fscanf(Tiva_Serial,'%d');
-            fprintf('The  motor duty cycles are:\nMotor 1: %3.2f\nMotor 2: %3.2f\n',pwm1/9600*100, pwm2/9600*100);
+            fprintf('The  motor duty cycles are:\nMotor 1: %3.2f\nMotor 2: %3.2f\n',pwm1/(PWMPERIOD)*100, pwm2/(PWMPERIOD)*100);
         case 'e'
             desPos1 = fscanf(Tiva_Serial,'%d');
             desPos2 = fscanf(Tiva_Serial,'%d');
@@ -178,12 +179,32 @@ while ~has_quit
             fprintf('Encoders zeroed\n');
         case 'q'
             has_quit = 1;
+        case '1'
+            counts(1:2) = fscanf(Tiva_Serial, '%d %d');
+            fprintf('Motor 1: %d counts\nMotor2: %d counts\n',counts(1), counts(2)); 
+        case '2'
+            mA(1:2) = fscanf(Tiva_Serial, '%d %d');
+            fprintf('Motor 1: %d mA\nMotor2: %d mA\n',mA(1), mA(2));
+        case '3'
+           read_plot_matrix_current(Tiva_Serial);
+        case '4'
+           read_plot_matrix_current(Tiva_Serial);
+        case '5'
+            Kp = input('Enter your desired Kp position gain: ');
+            Ki = input('Enter your desired Ki position gain: ');
+            fprintf(Tiva_Serial, '%3.2f %3.2f\n',[Kp,Ki]);
+        case '6'
+            Kp = fscanf(Tiva_Serial, '%f');    
+            Ki = fscanf(Tiva_Serial, '%f');     
+            fprintf('The controller is using Kp = %3.2f and Ki = %3.2f\n',[Kp,Ki]);
+        case '7'
+            fprintf('Recalibrating current offsets\n');
+            pause(1);
         otherwise
             fprintf('Invalid Command, try again...\n');
     end
 end
 
 fclose(Tiva_Serial);
-
 
 end

@@ -2,8 +2,9 @@
 #include "System.h"
 #include "Encoder.h"
 #include "Motor.h"
-#include "Control.h"
+#include "PositionControl.h"
 #include "Utilities.h"
+#include "CurrentControl.h"
 
 #define BUF_SIZE 50
 
@@ -141,20 +142,49 @@ main(void)
         UART0read(buffer, BUF_SIZE); // Expect next character to be a menu command
 
         switch (buffer[0]) {
-
-
+               case 'a':    // Read Raw Encoder Values
+               {
+                   int a1, a2;
+                   a1 = readMotor1Raw();
+                   a2 = readMotor2Raw();
+                   sprintf(buffer, "%d\r\n", a1);
+                   UART0write(buffer);
+                   sprintf(buffer, "%d\r\n", a2);
+                   UART0write(buffer);
+                   break;
+               }
+               case 'b':    // Read Relative Encoder Angle
+               {
+                   int b1, b2;
+                   b1 = readMotor1RawRelative();
+                   b2 = readMotor2RawRelative();
+                   sprintf(buffer, "%d\r\n", b1);
+                   UART0write(buffer);
+                   sprintf(buffer, "%d\r\n", b2);
+                   UART0write(buffer);
+                   break;
+               }
+               case 'c':    // Set Motor PWM
+               {
+                   int p1, p2;
+                   UART0read(buffer,BUF_SIZE);
+                   sscanf(buffer, "%d %d", &p1, &p2);
+                   setMODE(PWM);
+                   motor1ControlPWM(p1);
+                   motor2ControlPWM(p2);
+                   break;
+               }
                case 'd':    // Get Motor PWM
                {
                    int pwm1, pwm2;
-                   pwm1 = get_motor_pwm(1);
-                   pwm2 = get_motor_pwm(2);
+                   pwm1 = getmotor1PWM();
+                   pwm2 = getmotor2PWM();
                    sprintf(buffer, "%d\r\n",pwm1);
                    UART0write(buffer);
                    sprintf(buffer, "%d\r\n",pwm2);
                    UART0write(buffer);
                    break;
                }
-
                case 'e':    // Get Desired Angle
                {
                    int d1, d2;
@@ -238,17 +268,48 @@ main(void)
                }
                case 'q':    // Motor Off
                {
+                   motor1ControlPWM(0);
+                   motor2ControlPWM(0);
                    setMODE(IDLE);
-                   set_motor_pwm(1, 0);
-                   set_motor_pwm(2, 0);
-               }
-               case '1':
-               {
                    break;
                }
-               case '2':
+               case '1':    // Read Phase Currents in Counts
                {
+                   get_counts();
                    break;
+               }
+               case '2':    // Read Current in mA
+               {
+                   get_mA();
+                   break;
+               }
+               case '3':
+               {
+                   setNclient(5000);
+                   setMODE(ISENSE);
+                   send_data();
+                   break;
+               }
+               case '4':
+               {
+                   setNclient(1000);
+                   setMODE(ITEST);
+                   send_data();
+                   break;
+               }
+               case '5':
+               {
+                   set_current_gains();
+                   break;
+               }
+               case '6':
+               {
+                   get_current_gains();
+                   break;
+               }
+               case '7':
+               {
+                   setMODE(ICALIB);
                }
                default:
                {
