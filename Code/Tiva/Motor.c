@@ -4,8 +4,8 @@
 
 #define NUM_SSI_DATA            8
 // Data from motor driver 2
-uint32_t pui32DataTx[NUM_SSI_DATA];
-uint32_t pui32DataRx[NUM_SSI_DATA];
+uint32_t pui32DataTx[NUM_SSI_DATA] = {0x00};
+uint32_t pui32DataRx[NUM_SSI_DATA] = {0x00};
 uint32_t ui32Index;
 
 int error_state;
@@ -161,6 +161,7 @@ void motorInit(void)
  */
 void motorDriverInit(void)
 {
+
     pui32DataTx[0] = 0b0001000001000000; // set register 3, bit 6 and 5 to 10, option 3, 1x PWM mode
 
     while(SSIDataGetNonBlocking(SSI2_BASE, &pui32DataRx[0])){}
@@ -187,6 +188,7 @@ void motorDriverInit(void)
 
     while(SSIBusy(SSI2_BASE)){}
 }
+
 
 /*
  * Wrapper function that turns on the brakes for the motor and sets pwm to 0
@@ -239,13 +241,13 @@ void motorControlPWM(int motor_number, int control)
         if (control >= 0)
         {
             // Positive direction
-            GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_0,GPIO_PIN_0); // Set to HIGH  - forward
+            GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_2,GPIO_PIN_2); // Set to HIGH  - forward
             motorPWM(2, control); // set the pwm
         }
         else
         {
             // Negative direction
-            GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_0,0); // set to LOW - reverse
+            GPIOPinWrite(GPIO_PORTK_BASE,GPIO_PIN_2, 0); // set to LOW - reverse
             motorPWM(2, -1*control); // set the pwm, but since control is negative, flip the sign
         }
     }

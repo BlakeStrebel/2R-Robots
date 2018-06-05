@@ -49,9 +49,9 @@ void encoderSPIInit(void)
     // Configure and enable the SSI port for SPI master mode.
     // TODO: Ideally the max bit rate is 2M, but there will be some error reading the value.
     SSIConfigSetExpClk(SSI0_BASE, ui32SysClock, SSI_FRF_MOTO_MODE_1,
-                                    SSI_MODE_MASTER, 1500000, 8); // 8 bits for encoder, note that we can't go above 16 bits using SPI Freescale mode
+                                    SSI_MODE_MASTER, 1400000, 8); // 8 bits for encoder, note that we can't go above 16 bits using SPI Freescale mode
     SSIConfigSetExpClk(SSI1_BASE, ui32SysClock, SSI_FRF_MOTO_MODE_1,
-                            SSI_MODE_MASTER, 1500000, 8); // 8 bits for encoder, note that we can't go above 16 bits using SPI Freescale mode
+                            SSI_MODE_MASTER, 1400000, 8); // 8 bits for encoder, note that we can't go above 16 bits using SPI Freescale mode
 
     // Configure the CS
     GPIOPinWrite(GPIO_PORTL_BASE, GPIO_PIN_0, GPIO_PIN_0); // Set CS to HIGH        //Is it necessary for L0?
@@ -64,8 +64,8 @@ void encoderSPIInit(void)
     // Set the initial encoder values
     encoderRead(1);
     encoderRead(2);
-    zeroMotorRawRelative(1);
-    zeroMotorRawRelative(2);
+    setMotorZero(1);
+    setMotorZero(2);
     encoder[1].previous_count = readMotorRaw(1);
     encoder[2].previous_count = readMotorRaw(2);
 }
@@ -139,13 +139,13 @@ void encoderRead(int motor_number)
     int angle_gap = encoder[motor_number].position_count - encoder[motor_number].previous_count; // difference in angles
 
     if (angle_gap > 8000) // we crossed over a singularity, if greater than means that we went from 1 to 360, backwards, so take away counts
-        encoder[motor_number].continuous_count -= 16383; // 14 bits = 16383 counts
+        encoder[motor_number].continuous_count -= 16384; // 14 bits = 16384 counts
     else if (angle_gap < -8000)// we crossed over a singularity, if less than means that we went from 360 to 1, forwards, so add counts
-        encoder[motor_number].continuous_count += 16383; // 14 bits = 16383 counts
+        encoder[motor_number].continuous_count += 16384; // 14 bits = 16384 counts
     encoder[motor_number].continuous_count += angle_gap; // add or - 360 from our relative angle - the zeroing, return the angle.
 }
 
-void zeroMotorRawRelative(int motor_number)
+void setMotorZero(int motor_number)
 {
     encoder[motor_number].continuous_count = 0; // zero the modifier
     encoder[motor_number].zero_count = encoder[motor_number].position_count; // read the absolute value and set it as zeroing modifier.
@@ -178,31 +178,34 @@ float readMotorSpeed(int motor_number)
 
 float readMotorAngleRelative(int motor_number)
 {
-    return ((float)readMotorRawRelative(motor_number)/16383.0)*360.0; // convert to degrees
+    return readMotorRawRelative(motor_number) / 16384.0 * 360.0; // convert to degrees
 }
 
 float readMotorRadRelative(int motor_number)
 {
-    return readMotorRawRelative(motor_number)/16383*2*3.14; // convert to radians
+    return readMotorRawRelative(motor_number) * 2 * M_PI / 16384; // convert to radians
 }
 
 int readMotorRaw(int motor_number)
 {
-    int zero = encoder[motor_number].zero_count;
-    int now = encoder[motor_number].position_count;
-    if (now >= zero)
-        return now - zero;
+    int raw = encoder[motor_number].position_count - encoder[motor_number].zero_count;
+    if (raw >= 0)
+        return raw;
     else
-        return 16383 - zero + now;
+        return 16383 + raw;
 }
 
 float readMotorAngle(int motor_number)
 {
-    return ((float)readMotorRaw(motor_number)/16383.0)*360.0;
+    return readMotorRaw(motor_number) / 16384.0 * 360.0;
 }
 
-// TODO: include M_PI here
 float readMotorRad(int motor_number)
 {
-    return readMotorRaw(motor_number)/16383*2*3.14;
+    return readMotorRaw(motor_number) * 2 * M_PI / 16384;
+}
+
+int readMotorCounts(int motor_number)
+{
+    return encoder[motor_number].position_count;
 }

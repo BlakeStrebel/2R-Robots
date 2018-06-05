@@ -18,7 +18,10 @@ void sysInit(void)
     ui32SysClock = SysCtlClockFreqSet(SYSCTL_OSC_INT | SYSCTL_USE_PLL |
                                       SYSCTL_CFG_VCO_480, 120000000);
     // Use 25Mhz crystal and use PLL to accelerate to 120MHz
-    //ui32SysClock = ysCtlClockFreqSet(SYSCTL_XTAL_25MHZ | SYSCTL_OSC_MAIN | SYSCTL_USE_PLL | SYSCTL_CFG_VCO_480, 120000000);
+    //ui32SysClock = SysCtlClockFreqSet(SYSCTL_XTAL_25MHZ | SYSCTL_OSC_MAIN | SYSCTL_USE_PLL | SYSCTL_CFG_VCO_480, 120000000);
+
+    // Enable FPU for calculation.
+    FPUEnable();
 }
 
 /*
@@ -105,7 +108,6 @@ void gpioInit(void){
 void delayMS(int ms) {
     //SysCtlDelay( (SysCtlClockGet()/(3*1000))*ms ) ;
     SysCtlDelay( (ui32SysClock/(3*1000))*ms ) ; // 3 clock delays is 1us
-
 }
 
 /*
@@ -163,4 +165,15 @@ float UART0FloatGet()
         recev[i] = UARTCharGet(UART0_BASE);
     getfloat = &recev;
     return *getfloat;
+}
+
+int UART0IntGet()
+{
+    char recev[4];
+    int *getint;
+    int i;
+    for (i = 0; i < 4; i++)
+        recev[i] = UARTCharGet(UART0_BASE);
+    getint = &recev;
+    return *getint;
 }

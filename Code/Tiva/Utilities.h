@@ -23,7 +23,13 @@
 typedef enum {
 	IDLE, /**< Sets motor effort to 0 */
 	HOLD, /**< Sets motor effort to holding position */
-	TRACK /**< Sets motor effort to tracking mode */
+	TRACK, /**< Sets motor effort to tracking mode */
+	READ1,
+	READ2,
+	READb,
+	PID1,
+	PID2,
+	PIDb
 	} mode;    // define data structure containing modes
 
 
@@ -31,9 +37,11 @@ typedef enum {
  * Data structure containing the control data
  */
 typedef struct {                          
-    int refPos[REFERENCE_DATA]; /**< The reference position of the motor */
+    //int refPos[REFERENCE_DATA]; /**< The reference position of the motor */
+    //int actPos[REFERENCE_DATA];  /**< The actual position of the motor */
+    int refPos[BUFLEN]; /**< The reference position of the motor */
     int actPos[BUFLEN];  /**< The actual position of the motor */
-    float u[BUFLEN];  /**< The control effort of the motor */
+    float u[REFERENCE_DATA];  /**< The control effort of the motor */
 } control_data_t;
 
 /**

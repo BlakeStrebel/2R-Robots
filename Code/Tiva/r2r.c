@@ -110,10 +110,9 @@ void r2rDefaultInit(void)
     pwmInit(); // PWM OUT 4 and PWM OUT 6, PF0 and PF2
     motorInit(); // Set useful signal outputs.
     motorDriverInit(); // Send values to set up the motor for 1x PWM mode
-    adcInit(); // Init for current and temperture
+    //adcInit(); // Init for current and temperture
     //gpioInit(); // Init for general GPIO - set to input for safety
     timerIntInit();
-    //timeInit();
 }
 
 /*

@@ -53,7 +53,7 @@ extern void encoderRead(int motor_number);
  * @return Void
  *
  */
-extern void zeroMotorRawRelative(int motor_number);
+extern void setMotorZero(int motor_number);
 
 
 /**
@@ -110,5 +110,7 @@ extern float readMotorSpeed(int motor_number);
 extern float readMotorRadRelative(int motor_number);
 
 extern float readMotorRad(int motor_number);
+
+extern int readMotorCounts(int motor_number);
 
 #endif /* ENCODER_H_ */

@@ -42,6 +42,8 @@
 #include "driverlib/ssi.h"
 #include "driverlib/systick.h"
 #include "utils/uartstdio.h"
+#include "driverlib/fpu.h"
+#include "math.h"
 
 uint32_t ui32SysClock;
 uint32_t micros;
@@ -112,5 +114,6 @@ extern void timeInt(void);
 extern void UART0IntPut(int value);
 extern void UART0FloatPut(float value);
 extern float UART0FloatGet();
+extern int UART0IntGet();
 
 #endif /* SYSTEM_H_ */

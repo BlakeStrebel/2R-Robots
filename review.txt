@@ -1,0 +1,41 @@
+r2rDefaultInit
+//get rid of any comments?
+
+encoderSPIInit
+// Set the initial encoder values?
+
+sysInit
+// What is GPION used for? 
+
+uartInit
+// Baud rate?
+
+encoderSPIInit
+CS?
+// Set the initial encoder values?
+
+MotorSPIInit  
+// Test if the bit rate can be the highest 5M.
+
+pwmInit
+// TODO: Here is a tradeoff on period. Ideally should be larger than 1KHz.
+//TODO: Test if this can be 0.
+
+motorInit
+//Why using +?
+// TODO: Cal, short all amplifier inputs together (why?)
+
+motorDriverInit
+//Get rid of any delay?
+//Need to be improved
+
+adcInit
+//Need to be improved
+
+timerIntInit
+// setMODE?
+//disable at first?
+// Define E1?
+
+//timeInit 
+//used for debugging?
