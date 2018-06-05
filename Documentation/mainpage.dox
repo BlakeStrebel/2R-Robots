@@ -129,6 +129,10 @@
  * 
  * \subsection menu Writing Menu Commands
  * 
- * The MATLAB menu can also be modified to fit a custom control law.
+ * The MATLAB menu can also be modified to fit a custom control law. The MATLAB code is set up in a tree format where each entry is a node that includes information about its parent and children. The only point to edit is * where the details of the node has to be specified
+
+ * There are two types of nodes: a data node, which accepts input from the user and immediately transitions to its child node, and a navigational node, which accepts input from the user and checks its child nodes for the matching option. The navigational node does simple error checking, but the data node does not because of the wide variety of data types that might be possible. Instead, a statement of the expected data type is presented and the user is expected to conform to this data type when interacting with a data node.
+
+ * On the firmware side, additional case statements are added that correspond to the added nodes to process the incoming data.
  *
  */
