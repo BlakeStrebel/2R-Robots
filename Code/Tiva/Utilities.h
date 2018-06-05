@@ -37,12 +37,10 @@ typedef enum {
  * Data structure containing the control data
  */
 typedef struct {                          
-    //int refPos[REFERENCE_DATA]; /**< The reference position of the motor */
-    //int actPos[REFERENCE_DATA];  /**< The actual position of the motor */
-    int refPos[BUFLEN]; /**< The reference position of the motor */
-    int actPos[BUFLEN];  /**< The actual position of the motor */
+    int refPos[REFERENCE_DATA]; /**< The reference position of the motor */
+    int actPos[REFERENCE_DATA];  /**< The actual position of the motor */
     float u[REFERENCE_DATA];  /**< The control effort of the motor */
-} control_data_t;
+} motor_control_data;
 
 /**
  * @brief Return the Mode of the robot
@@ -73,7 +71,7 @@ void setMODE(mode newMODE);          // Set operating mode
  * @param Void
  * @return Void
  */
-void setN(void);  
+void setN(int timestep);
 
 /**
  * @brief Returns the number of samples
@@ -83,7 +81,7 @@ void setN(void);
  * @param Void
  * @return int the number of samples
  */                                  
-int getN(void);                                             
+int getN(void);
 
 
 /**

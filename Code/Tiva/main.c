@@ -49,11 +49,11 @@ main(void)
                     UART0FloatPut(2 * M_PI * readMotorRawRelative(1) / 16383);
                     break;
                 case 3: // Read Motor 2 position.
-                    UART0FloatPut(2 * M_PI * readMotorRawRelative(2) / 16383);
+                    UART0FloatPut(2 * M_PI * (readMotorRawRelative(2) - readMotorRawRelative(1)) / 16383);
                     break;
                 case 4: // Read two motors' positions.
                     UART0FloatPut(2 * M_PI * readMotorRawRelative(1) / 16383);
-                    UART0FloatPut(2 * M_PI * readMotorRawRelative(2) / 16383);
+                    UART0FloatPut(2 * M_PI * (readMotorRawRelative(2) - readMotorRawRelative(1)) / 16383);
                     break;
 
                     // Are these necessary?
@@ -75,7 +75,7 @@ main(void)
 
 
                 case 9: // Set reading time.
-                    setTime(UART0IntGet());
+                    setN(UART0IntGet());
                     break;
                 case 10: // Read Motor 1 position continuously.
                     setMODE(READ1);
@@ -92,28 +92,27 @@ main(void)
                     //GPIOPinWrite(GPIO_PORTP_BASE,GPIO_PIN_3,GPIO_PIN_3);
                     break;
                 case 14: // Load Motor 1 trajectory.
-                    setTime(UART0IntGet());
-                    loadTrajectory(1);
+                    setN(UART0IntGet());
+                    loadPositionTrajectory(1);
                     break;
                 case 15: // Load Motor 2 trajectory.
-                    setTime(UART0IntGet());
-                    loadTrajectory(2);
+                    setN(UART0IntGet());
+                    loadPositionTrajectory(2);
                     break;
                 case 16: // Load two motors' trajectories.
-                    setTime(UART0IntGet() / 2);
-                    loadTrajectory(1);
-                    loadTrajectory(2);
+                    setN(UART0IntGet() / 2);
+                    loadPositionTrajectory(1);
+                    loadPositionTrajectory(2);
                     break;
                 case 17: // Set Motor 1 position control PID.
-                    set_position_PID(1);
+                    setPositionPID(1);
                     break;
                 case 18: // Set Motor 2 position control PID.
-                    set_position_PID(2);
+                    setPositionPID(2);
                     break;
                 case 19: // Set two motors' position control PIDs.
-                    set_position_PID(1);
-                    set_position_PID(2);
-                    GPIOPinWrite(GPIO_PORTP_BASE,GPIO_PIN_3,GPIO_PIN_3);
+                    setPositionPID(1);
+                    setPositionPID(2);
                     break;
                 case 20: // Motor 1 PID control.
                     setMODE(PID1);
@@ -123,8 +122,6 @@ main(void)
                     break;
                 case 22: // Two motors' PID control.
                     setMODE(PIDb);
-                    GPIOPinWrite(GPIO_PORTP_BASE,GPIO_PIN_3,0);
-                    //GPIOPinWrite(GPIO_PORTP_BASE,GPIO_PIN_3,GPIO_PIN_3);
                     break;
 
 

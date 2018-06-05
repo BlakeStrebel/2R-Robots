@@ -6,17 +6,17 @@
 #include <math.h>
 
 // PID gains
-static volatile float Kp[3] = {0.0};
-static volatile float Ki[3] = {0.0};
-static volatile float Kd[3] = {0.0};
-static volatile float dKp[3] = {0.0};
-static volatile float dKi[3] = {0.0};
-static volatile float dKd[3] = {0.0};
+static volatile PID_gains PID[3];
+
+static volatile float Kp[3] = {0};
+static volatile float Ki[3] = {0};
+static volatile float Kd[3] = {0};
+static volatile float dKp[3] = {0};
+static volatile float dKi[3] = {0};
+static volatile float dKd[3] = {0};
 static volatile int t = 0;
 
 // Control info
-//static volatile control_data_t M1;
-//static volatile control_data_t M2;
 static volatile control_error E[3];
 
 // Decogging state
@@ -67,13 +67,13 @@ void timerIntInit(void)
 
 void get_position_gains(void)   // provide position control gains
 {
-    char buffer[25];
-    sprintf(buffer, "%f\r\n",Kp);
-    UART0write(buffer);
-    sprintf(buffer, "%f\r\n",Ki);
-    UART0write(buffer);
-    sprintf(buffer, "%f\r\n",Kd);
-    UART0write(buffer);
+    //char buffer[25];
+    //sprintf(buffer, "%f\r\n",Kp);
+    //UART0write(buffer);
+    //sprintf(buffer, "%f\r\n",Ki);
+    //UART0write(buffer);
+    //sprintf(buffer, "%f\r\n",Kd);
+    //UART0write(buffer);
 }
 
 void set_position_gains(void)   // recieve position control gains
@@ -83,11 +83,19 @@ void set_position_gains(void)   // recieve position control gains
     UART0read(buffer,25);                              // Store gains in buffer
     sscanf(buffer, "%f %f %f",&Kptemp, &Kitemp, &Kdtemp);   // Extract gains to temporary variables
     IntMasterDisable();                         // Disable interrupts briefly
-    Kp[1] = Kptemp;                                            // Set gains
-    Ki[1] = Kitemp;
-    Kd[1] = Kdtemp;
+    PID[1].Kp = Kptemp;                                            // Set gains
+    PID[1].Ki = Kitemp;
+    PID[1].Kd = Kdtemp;
     reset_controller_error();
     IntMasterEnable();                          // Re-enable interrupts
+}
+
+void setPositionPID(int motor)   // recieve position control gains
+{
+    PID[motor].Kp = UART0FloatGet();
+    PID[motor].Ki = UART0FloatGet();
+    PID[motor].Kd = UART0FloatGet();
+    reset_controller_error();
 }
 
 // Set new desired angle for motor
@@ -146,52 +154,51 @@ Timer1IntHandler(void)
 
     encoderRead(1); // update encoder values
     encoderRead(2); // update encoder values
-    E[1].actual = readMotorRawRelative(1); // read positions
-    E[2].actual = readMotorRawRelative(2);
+
     switch(getMODE())
     {
         case IDLE:
             break;
         case PID1:
-            PID_Controller(E[1].traj[i], E[1].actual, 1);    // motor1 control
+            PID_Controller(E[1].traj[i], readMotorRawRelative(1), 1);    // motor1 control
         case READ1:
             decctr++;
             if (decctr == DECIMATION)
             {
-                UART0FloatPut(2 * M_PI * readMotorRawRelative(1) / 16383);
+                UART0FloatPut(2 * M_PI * readMotorRawRelative(1) / 16384);
                 decctr = 0; // reset decimation counter
             }
             i++;
             break;
         case PID2:
-            PID_Controller(E[2].traj[i], E[2].actual, 2);    // motor2 control
+            PID_Controller(E[2].traj[i], readMotorRawRelative(2), 2);    // motor2 control
         case READ2:
             decctr++;
             if (decctr == DECIMATION)
             {
-                UART0FloatPut(2 * M_PI * readMotorRawRelative(2) / 16383);
+                UART0FloatPut(2 * M_PI * (readMotorRawRelative(2) - readMotorRawRelative(1)) / 16384);
                 decctr = 0; // reset decimation counter
             }
             i++;
             break;
         case PIDb:
             //GPIOPinWrite(GPIO_PORTP_BASE,GPIO_PIN_3,GPIO_PIN_3);
-            PID_Controller(E[1].traj[i], E[1].actual, 1);    // motor1 control
-            PID_Controller(E[2].traj[i], E[2].actual, 2);    // motor2 control
+            PID_Controller(E[1].traj[i], readMotorRawRelative(1), 1);    // motor1 control
+            PID_Controller(E[2].traj[i], readMotorRawRelative(2), 2);    // motor2 control
         case READb:
             decctr++;
             if (decctr == DECIMATION)
             {
-                UART0FloatPut(2 * M_PI * readMotorRawRelative(1) / 16383);
-                UART0FloatPut(2 * M_PI * readMotorRawRelative(2) / 16383);
+                UART0FloatPut(2 * M_PI * readMotorRawRelative(1) / 16384);
+                UART0FloatPut(2 * M_PI * (readMotorRawRelative(2) - readMotorRawRelative(1)) / 16384);
                 decctr = 0; // reset decimation counter
             }
             i++;
             //GPIOPinWrite(GPIO_PORTP_BASE,GPIO_PIN_3,GPIO_PIN_3);
             break;
         case HOLD:
-            PID_Controller(E[1].desired, E[1].actual, 1);    // motor1 control
-            PID_Controller(E[2].desired, E[2].actual, 2);    // motor2 control
+            PID_Controller(E[1].desired, readMotorRawRelative(1), 1);    // motor1 control
+            PID_Controller(E[2].desired, readMotorRawRelative(2), 2);    // motor2 control
             break;
     }
     if (i >= t)
@@ -213,7 +220,7 @@ void PID_Controller(int reference, int actual, int motor)
     E[motor].Eint = E[motor].Eint + E[motor].Enew;                // Calculate intergral error
     E[motor].Edot = E[motor].Enew - E[motor].Eold;                // Calculate derivative error
     E[motor].Eold = E[motor].Enew;                          // Update old error
-    u = Kp[motor]*E[motor].Enew + Ki[motor]*E[motor].Eint + Kd[motor]*E[motor].Edot;   // Calculate effort
+    u = PID[motor].Kp * E[motor].Enew + PID[motor].Ki * E[motor].Eint + PID[motor].Kd * E[motor].Edot;   // Calculate effort
 
     if (DECOGGING)                              // Add decogging control
         u += decog_motor(readMotorCounts(motor), motor);
@@ -253,38 +260,10 @@ void setDecogging(void) // Turn motor decogging on/off
     DECOGGING = decog;
 }
 
-
-void load_position_trajectory(int motor)      // Load trajectory for tracking
-{
-    int i, n, data;
-    char buffer[10];
-    setN();         // Receive number of samples from client
-    n = getN();     // Determine number of samples
-
-    for (i = 0; i < n; i++)
-    {
-        UART0read(buffer,10);           // Read reference position from client
-        sscanf(buffer,"%d",&data);      // Store position in data
-        write_refPos(data, i, motor);   // Write data to reference position array
-    }
-}
-
-void setTime(int time)
-{
-    t = time;
-}
-
-void loadTrajectory(int motor)
+void loadPositionTrajectory(int motor)
 {
     int i;
-    for (i = 0; i < t; i++)
+    for (i = 0; i < getN(); i++)
         E[motor].traj[i] = UART0FloatGet();
 }
 
-void set_position_PID(int motor)   // recieve position control gains
-{
-    Kp[motor] = UART0FloatGet();
-    Ki[motor] = UART0FloatGet();
-    Kd[motor] = UART0FloatGet();
-    reset_controller_error();
-}

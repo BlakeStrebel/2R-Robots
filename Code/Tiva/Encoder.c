@@ -127,7 +127,6 @@ void encoderRead(int motor_number)
         for(encoderMsgIndex = 0; encoderMsgIndex < NUM_ENCODER_DATA; encoderMsgIndex++)
             SSIDataGet(SSI1_BASE, &encoderDataRx[encoderMsgIndex]);// get the data that was shifted in
     }
-    // TODO: check that the data RX2 is overwritten
     // The first element bit shift 6 to the left combining with the next element bit shifted right by 2 to get the 14 bits encoder data.
     encoder[motor_number].position_count = (encoderDataRx[0] << 6) | (encoderDataRx[1] >> 2);
 
@@ -161,14 +160,10 @@ void setMotorZero(int motor_number)
  * modifier
  * last_motor_angle
  *
- * TODO: CHANGE RANDOM 4000 value
  */
 int readMotorRawRelative(int motor_number)
 {
-    if (motor_number == 1)
-        return encoder[1].continuous_count;
-    else
-        return encoder[2].continuous_count - encoder[1].continuous_count;
+    encoder[motor_number].continuous_count;
 }
 
 float readMotorSpeed(int motor_number)

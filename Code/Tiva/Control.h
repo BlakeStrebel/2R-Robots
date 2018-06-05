@@ -13,6 +13,19 @@
 #ifndef CONTROL_H_
 #define CONTROL_H_
 
+#define DEFAULT_KP1 2
+#define DEFAULT_KI1 0
+#define DEFAULT_KD1 0
+#define DEFAULT_KP2 2
+#define DEFAULT_KI2 0
+#define DEFAULT_KD2 0
+
+typedef struct {                          // Define data structure containing control data
+    float Kp;
+    float Ki;
+    float Kd;
+} PID_gains;
+
 // TODO in setup set these to zero
 typedef struct {                          // Define data structure containing control data
     int Enew;
@@ -20,7 +33,6 @@ typedef struct {                          // Define data structure containing co
     int Eint;
     int Edot;
     int desired;
-    int actual;
     float u;
     float traj[10000];
 } control_error;
@@ -89,7 +101,7 @@ void reset_controller_error(void);                  // Reset the error on both c
 * @param motor specifies the trajectory that is being assigned from UART
 * @return Void
 */
-void load_position_trajectory(int motor);                // Load desired position trajectory from client
+void loadPositionTrajectory(int motor);                // Load desired position trajectory from client
 
 /**
 * @brief Returns the set pwm on a given motor
@@ -114,10 +126,8 @@ void PID_Controller(int reference, int actual, int motor);
 float decog_motor(int x, int motor);
 void setDecogging(void);
 
-void setTime(int time);
-
 void loadTrajectory(int motor);
 
-void set_position_PID(int motor);
+void setPositionPID(int motor);
 
 #endif /* CONTROL_H_ */
