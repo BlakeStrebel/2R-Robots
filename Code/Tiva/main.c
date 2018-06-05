@@ -21,7 +21,6 @@ int
 main(void)
 {
     // Init code
-    setMODE(PWM);
     r2rDefaultInit();
 
     char buffer[BUF_SIZE];
@@ -175,20 +174,31 @@ main(void)
                }
                case '3':
                {
-                   setNclient(1000);
-                   setMODE(ITEST);
+                   setNclient(5000);
+                   setMODE(ISENSE);
                    send_data();
                    break;
                }
                case '4':
                {
-                   set_current_gains();
+                   setNclient(1000);
+                   setMODE(ITEST);
+                   send_data();
                    break;
                }
                case '5':
                {
+                   set_current_gains();
+                   break;
+               }
+               case '6':
+               {
                    get_current_gains();
                    break;
+               }
+               case '7':
+               {
+                   setMODE(ICALIB);
                }
                default:
                {

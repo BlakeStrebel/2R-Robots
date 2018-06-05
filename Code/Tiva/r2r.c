@@ -43,6 +43,7 @@
 #include "Motor.h"
 #include "PositionControl.h"
 #include "CurrentControl.h"
+#include "Utilities.h"
 
 
 // TODO: motor driver 2 cs pin is actually motor driver 1's CS pin
@@ -65,6 +66,10 @@ void r2rDefaultInit(void){
     //gpioInit(); // Init for general GPIO - set to input for safety
     //MotorTimerInit();
     timeInit();
+
+    SysCtlDelay(ui32SysClock); // Wait for a second
+
+    setMODE(ICALIB);    // Calibrate current offsets
 }
 
 /*

@@ -110,12 +110,13 @@ void motor1ControlPWM(int control)
 {
     //static char buffer[10];
     //static int i = 0;
+    //i++;
 
     IntMasterDisable();
     M1_PWM = control; // Update global variable containing PWM value
     IntMasterEnable();
 
-    //i++;
+
 
     control = abs(control); // PWM must be positive
 
@@ -173,6 +174,7 @@ void motor1ControlPWM(int control)
             }
             default :
             {
+                //sprintf(buffer, "Check Hall Wiring\r\n");
                 // You should not end up here, check hall wiring
             }
         }
@@ -249,12 +251,11 @@ void motor2ControlPWM(int control)
 {
     //static char buffer[10];
     //static int i = 0;
+    //i++;
 
     IntMasterDisable();
     M2_PWM = control; // Update global variable containing PWM value
     IntMasterEnable();
-
-    //i++;
 
     control = abs(control); // PWM must be positive
 
@@ -466,10 +467,12 @@ void motorDriverInit(void){
     pui32DataTx[0] = 0b1001000000000000; // read register 3
     pui32DataTx[1] = 0b0001000000100000; // set register 3, bit 6 and 5 to 10, option 3, 3x PWM mode
     pui32DataTx[2]=  0b1001000000000000; // read register 3
+    pui32DataTx[3]=  0b1001000000000000; // read register 3
+
 
     /***  Motor 1 ***/
     // First do a read to clear buffers, then write to set driver to 3x PWM mode, then read again to verify
-    for (i = 0; i < 3; i++)
+    for (i = 0; i < 4; i++)
     {
         GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_3,0x00);          // Pull CS pin low
         SysCtlDelay(50);                                        // delay before sending data
