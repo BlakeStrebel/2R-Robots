@@ -153,12 +153,6 @@ int32_t getmotor1HALLS(void);
 int32_t getmotor2HALLS(void);
 
 
-
-
-
-
-extern void motorSafetyCheck(void);
-
 /**
  * @brief Initializes the SPI channels for the motor drivers
  *
@@ -189,26 +183,5 @@ extern void motorDriverInit(void);
  * @return Void
  */
 extern void pwmInit(void);
-
-
-
-
-
-extern float readMotor2Speed(void);
-extern float readMotor1Speed(void);
-
-
-/**
- * @brief Checks the error pins and returns a value based on the state of the pin
- *
- * Returns 0 on no error, 1 on motor 1 error, and 2 on motor 2 error
- *
- * @param Void 
- * @return Void
- *
- */
-extern int motorError(void); 
-
-
 
 #endif /* MOTOR_H_ */

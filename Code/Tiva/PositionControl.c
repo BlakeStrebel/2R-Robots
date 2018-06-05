@@ -7,7 +7,7 @@
 #include <math.h>
 
 // PID gains
-static volatile float Kp = 2;
+static volatile float Kp = 0;
 static volatile float Ki = 0;
 static volatile float Kd = 0;
 
@@ -28,19 +28,14 @@ static volatile int DECOGGING = 0;
 void MotorTimerInit(void){
     setMODE(IDLE);
     IntMasterDisable();
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_TIMER1); // Use timer 1
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_TIMER1);
     TimerConfigure(TIMER1_BASE, TIMER_CFG_PERIODIC);
-    TimerLoadSet(TIMER1_BASE, TIMER_A, ui32SysClock/1000-1); // Use timer A // activate every 1/2 of a second 120/120/2 = 0.5s
+    TimerLoadSet(TIMER1_BASE, TIMER_A, ui32SysClock/1000-1);    // Set control frequency to 1kHz
     IntPrioritySet(INT_TIMER1A, 0x40); // Second highest priority
     IntEnable(INT_TIMER1A);
     TimerIntEnable(TIMER1_BASE, TIMER_TIMA_TIMEOUT);
     TimerEnable(TIMER1_BASE, TIMER_A);
     IntMasterEnable();
-
-
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPION);
-    GPIOPinTypeGPIOOutput(GPIO_PORTN_BASE, GPIO_PIN_1);
-    GPIOPinWrite(GPIO_PORTN_BASE,GPIO_PIN_1,GPIO_PIN_1);
 
     E1.u = 0;
     E2.u = 0;
@@ -131,7 +126,7 @@ int get_motor_pwm(int motor)
     return pwm;
 }
 
-void set_motor_pwm(int motor, int value)
+void set_motor_pwm(int motor, int value)    // TODO this function is repetative, delete it
 {
     if (motor == 1)
     {
@@ -239,14 +234,16 @@ void PID_Controller(int reference, int actual, int motor)
         }
     }
 
+    // Convert mA to counts, bound
+
     // Max effort
-    if (u > 9600)
+    if (u > 2047)
     {
-        u = 9600;
+        u = 2047;
     }
-    else if (u < -9600)
+    else if (u < -2047)
     {
-        u = -9600;
+        u = -2047;
     }
 
     set_motor_pwm(motor, u);

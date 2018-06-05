@@ -63,8 +63,8 @@ void r2rDefaultInit(void){
     motorDriverInit(); // Send values to set up the motor for 3x PWM mode
     currentControlInit();
 
-    //gpioInit(); // Init for general GPIO - set to input for safety
-    //MotorTimerInit();
+
+    MotorTimerInit();
     timeInit();
 
     SysCtlDelay(ui32SysClock); // Wait for a second

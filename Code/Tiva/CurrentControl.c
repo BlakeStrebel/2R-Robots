@@ -16,7 +16,7 @@ static volatile uint32_t M1_A_COUNTS, M1_B_COUNTS, M2_A_COUNTS, M2_B_COUNTS;
 static volatile int MOTOR1CURRENT = 0, MOTOR1REF = 0;
 static volatile int MOTOR2CURRENT = 0, MOTOR2REF = 0;
 
-static volatile int E1 = 0, Eint1 = 0, E2 = 0, Eint2 = 0, PWM1 = 0, PWM2 = 0;
+static volatile int E1 = 0, Eint1 = 0, E2 = 0, Eint2 = 0;
 static volatile float Kp = 5, Ki = 0.15;
 
 void currentControlInit(void){
@@ -180,7 +180,8 @@ void CurrentControlIntHandler(void)
                     {
                         //buffer_write(M1_A_COUNTS - 2047 + M1_A_OFFSET, M1_B_COUNTS - 2047 + M1_B_OFFSET, M2_A_COUNTS - 2047 + M2_A_OFFSET, M2_B_COUNTS - 2047 + M2_B_OFFSET);
                         //buffer_write(M1_A_COUNTS - 2047 + M1_A_OFFSET, M1_B_COUNTS - 2047 + M1_B_OFFSET, MOTOR1CURRENT,MOTOR1CURRENT);
-                        buffer_write(M2_A_COUNTS - 2047 + M2_A_OFFSET, M2_B_COUNTS - 2047 + M2_B_OFFSET, MOTOR2CURRENT,MOTOR2CURRENT);
+                        //buffer_write(M2_A_COUNTS - 2047 + M2_A_OFFSET, M2_B_COUNTS - 2047 + M2_B_OFFSET, MOTOR2CURRENT,MOTOR2CURRENT);
+                        buffer_write(MOTOR1REF, MOTOR1CURRENT, MOTOR2REF, MOTOR2CURRENT);
 
                         decctr = 0; // reset decimation counter
                     }
@@ -251,6 +252,8 @@ void CurrentControlIntHandler(void)
 
 void PI_controller(int motor, int reference, int actual)
 {
+    static int PWM1, PWM2;
+
     if (motor == 1)
     {
         E1 = reference - actual;
@@ -278,7 +281,7 @@ void get_current_gains(void)   // provide position control gains
     UART0write(buffer);
 }
 
-void set_current_gains(void)   // recieve position control gains
+void set_current_gains(void)   // Receive position control gains
 {
     char buffer[25];
     float Kptemp, Kitemp;
@@ -454,38 +457,32 @@ void AD0_read(int mux)
 // Print motor current in mA
 void get_mA(void)
 {
-    /*
-
-     char buffer[50];
-    int M1_A, M1_B, M2_A, M2_B;
+    char buffer[10];
+    int M1_current_mA, M2_current_mA;
+    int mA_per_count = 5.7547431; //TODO: Check this
 
     // Convert counts to mA
     IntMasterDisable();
-    M1_A = abs(COUNTS[0] * 5.7547431 - 11428.5712);
-    M1_B = abs(COUNTS[1] * 5.7547431 - 11428.5712);
-    M2_A = abs(COUNTS[2] * 5.7547431 - 11428.5712);
-    M2_B = abs(COUNTS[3] * 5.7547431 - 11428.5712);
+    M1_current_mA = MOTOR1CURRENT*mA_per_count;
+    M2_current_mA = MOTOR2CURRENT*mA_per_count;
     IntMasterEnable();
 
-    sprintf(buffer, "%d %d %d %d\r\n", M1_A, M1_B, M2_A, M2_B);
+    sprintf(buffer, "%d %d\r\n", M1_current_mA, M2_current_mA);
     UART0write(buffer);
-*/
 }
 
 // Print motor current in counts
 void get_counts(void)
 {
-    char buffer[100];
-    int M1_A, M1_B, M2_A, M2_B;
+    char buffer[10];
+    int M1_current_counts, M2_current_counts;
 
     IntMasterDisable();
-    M1_A = M1_A_COUNTS - 2047 + M1_A_OFFSET;
-    M1_B = M1_B_COUNTS - 2047 + M1_B_OFFSET;
-    M2_A = M2_A_COUNTS - 2047 + M2_A_OFFSET;
-    M2_B = M2_B_COUNTS - 2047 + M2_B_OFFSET;
+    M1_current_counts = MOTOR1CURRENT;
+    M2_current_counts = MOTOR2CURRENT;
     IntMasterEnable();
 
-    sprintf(buffer, "%d %d %d %d\r\n", M1_A, M1_B, M2_A, M2_B);
+    sprintf(buffer, "%d %d\r\n", M1_current_counts, M2_current_counts);
     UART0write(buffer);
 }
 

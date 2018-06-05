@@ -178,11 +178,11 @@ while ~has_quit
         case 'q'
             has_quit = 1;
         case '1'
-            counts(1:4) = fscanf(Tiva_Serial, '%d %d %d %d');
-            fprintf('Motor 1 A: %d, B: %d\nMotor2 A: %d, B: %d\n',counts(1), counts(2), counts(3), counts(4)); 
+            counts(1:2) = fscanf(Tiva_Serial, '%d %d');
+            fprintf('Motor 1: %d counts\nMotor2: %d counts\n',counts(1), counts(2)); 
         case '2'
-            mA(1:4) = fscanf(Tiva_Serial, '%d %d %d %d');
-            fprintf('Motor 1 A: %d, B: %d\nMotor2 A: %d, B: %d\n',mA(1), mA(2), mA(3), mA(4)); 
+            mA(1:2) = fscanf(Tiva_Serial, '%d %d');
+            fprintf('Motor 1: %d mA\nMotor2: %d mA\n',mA(1), mA(2));
         case '3'
            read_plot_matrix_current(Tiva_Serial);
         case '4'
@@ -197,12 +197,12 @@ while ~has_quit
             fprintf('The controller is using Kp = %3.2f and Ki = %3.2f\n',[Kp,Ki]);
         case '7'
             fprintf('Recalibrating current offsets\n');
+            pause(1);
         otherwise
             fprintf('Invalid Command, try again...\n');
     end
 end
 
 fclose(Tiva_Serial);
-
 
 end
