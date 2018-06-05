@@ -12,15 +12,16 @@ data = []; % Initialize variable.
 fprintf(repmat('\b', 1, length(response) + 17));
 %*** Deal with Quit.
 if response == 'q'
-    robotReset(serial);
+    robotRelax(serial);
     return % Return directly.
 %*** Deal with Main menu.
 elseif response == 'a' 
-    robotReset(serial);
+    robotRelax(serial);
     stepnew = 2; % Reset linked list.
     clc; % Clear all contents.
 %*** Deal with Return.    
 elseif length(response) == 1 && response == 'r' && stepold ~= 1
+    robotRelax(serial);
     stepnew = menuold(stepold).parent; % Return back to parent.
     fprintf(repmat('\b', 1, menuold(stepold).optionslength ...
                             + menuold(stepold).titlelength ...

@@ -713,10 +713,11 @@ menu(id).title = ['                            Both motor are rotating\n        
 id = 72;
 menu(id) = menu(5);
 menu(id).symbol = 's';
-menu(id).name = 'Settings  (developing)';
+menu(id).name = 'Settings';
 menu(id).title = ['                                    Settings\n  ', ...                                  
                  ones(1, 76) * '-', '\n'];
-menu(id).children = [];
+menu(id).question = 'Choose the option to be set:\n';
+menu(id).children = [76];
 
 % Main menu -> Temp reading
 id = 73;
@@ -725,6 +726,7 @@ menu(id).symbol = 't';
 menu(id).name = 'Temp reading (developing)';
 menu(id).title = ['                                  Temp reading\n  ', ...                                                    
                  ones(1, 76) * '-', '\n'];
+menu(id).question = '';
 menu(id).children = [];
 
 % Main menu -> Demo 1
@@ -734,6 +736,7 @@ menu(id).symbol = '1';
 menu(id).name = 'Demo 1 (developing)';
 menu(id).title = ['                                     Demo 1\n  ', ...                                                     
                  ones(1, 76) * '-', '\n'];
+menu(id).question = '';
 menu(id).children = [];
 
 % Main menu -> Demo 2
@@ -743,7 +746,36 @@ menu(id).symbol = '2';
 menu(id).name = 'Demo 2 (developing)';
 menu(id).title = ['                                     Demo 2\n  ', ...                                                     
                  ones(1, 76) * '-', '\n'];
+menu(id).question = '';
 menu(id).children = [];
+
+% Main menu -> Settings -> Decogging
+id = 76;
+menu(id) = menu(1);
+menu(id).symbol = 'd';
+menu(id).name = 'Decogging';
+menu(id).parent = 72;
+menu(id).title = 'Decogging setting';
+menu(id).children = [77, 78];
+menu(id).data = false;
+
+% Main menu -> Settings -> Decogging -> Turn on 
+id = 77;
+menu(id) = menu(1);
+menu(id).symbol = 'y';
+menu(id).name = 'Turn on';
+menu(id).parent = 76;
+menu(id).process = @(state) decoggingSet(1, serial);
+menu(id).title = 'Decogging is turned on';
+
+% Main menu -> Settings -> Decogging -> Turn off 
+id = 78;
+menu(id) = menu(1);
+menu(id).symbol = 'n';
+menu(id).name = 'Turn off';
+menu(id).parent = 76;
+menu(id).process = @(state) decoggingSet(0, serial);
+menu(id).title = 'Decogging is turned off';
 
 
             
