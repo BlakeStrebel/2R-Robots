@@ -13,12 +13,9 @@
 #ifndef CONTROL_H_
 #define CONTROL_H_
 
-#define DEFAULT_KP1 2
-#define DEFAULT_KI1 0
-#define DEFAULT_KD1 0
-#define DEFAULT_KP2 2
-#define DEFAULT_KI2 0
-#define DEFAULT_KD2 0
+static const float defaultKp[3] = {0, 2, 2};
+static const float defaultKi[3] = {0, 0, 0};
+static const float defaultKd[3] = {0, 0, 0};
 
 typedef struct {                          // Define data structure containing control data
     float Kp;
@@ -33,7 +30,6 @@ typedef struct {                          // Define data structure containing co
     int Eint;
     int Edot;
     int desired;
-    float u;
     float traj[10000];
 } control_error;
 
@@ -111,8 +107,6 @@ void loadPositionTrajectory(int motor);                // Load desired position 
 */
 int get_motor_pwm(int motor);
 
-void set_motor_pwm(int motor, int value);
-
 /**
 * @brief Calculates pwm to send to the motor drivr
 *
@@ -121,10 +115,10 @@ void set_motor_pwm(int motor, int value);
 * @param motor the specified motor
 * @return Void
 */
-void PID_Controller(int reference, int actual, int motor);
+void PID_Controller(int reference, int actual, int motor, int default_gains);
 
 float decog_motor(int x, int motor);
-void setDecogging(void);
+void setDecogging(int decog);
 
 void loadTrajectory(int motor);
 

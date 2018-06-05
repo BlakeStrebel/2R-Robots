@@ -55,8 +55,6 @@ main(void)
                     UART0FloatPut(2 * M_PI * readMotorRawRelative(1) / 16383);
                     UART0FloatPut(2 * M_PI * (readMotorRawRelative(2) - readMotorRawRelative(1)) / 16383);
                     break;
-
-                    // Are these necessary?
                 case 5: // Rotate Motor 1
                     motorControlPWM(1, (int)(96 * UART0FloatGet()));
                     motorControlPWM(2, 0);
@@ -70,10 +68,9 @@ main(void)
                     motorControlPWM(2, (int)(96 * UART0FloatGet()));
                     break;
                 case 8:
+                    motorControlPWM(1, 0);
+                    motorControlPWM(2, 0);
                     break;
-
-
-
                 case 9: // Set reading time.
                     setN(UART0IntGet());
                     break;
@@ -124,25 +121,15 @@ main(void)
                     setMODE(PIDb);
                     break;
 
-
-                    //These should be all float instead of int.
-                case 23:
-                    set_motor_pwm(1, (int)(UART0FloatGet() * 96));
-                    break;
-                case 24:
-                    set_motor_pwm(2, (int)(UART0FloatGet() * 96));
-                    break;
-                case 25:
-                    set_motor_pwm(1, (int)(UART0FloatGet() * 96));
-                    set_motor_pwm(2, (int)(UART0FloatGet() * 96));
-                    break;
                 case 26:
                     setMODE(IDLE);
                     break;
                 case 27:
                     setMODE(HOLD);
                 case 28:
-                    setDecogging();
+                    setDecogging(1);
+                case 29:
+                    setDecogging(0);
             }
 
     }
@@ -154,37 +141,8 @@ main(void)
         UART0read(buffer, BUF_SIZE); // Expect next character to be a menu command
 
         switch (buffer[0]) {
-               case 'a':    // Read Raw Encoder Values
-               {
-                   int a1, a2;
-                   a1 = readMotorRaw(1);
-                   a2 = readMotorRaw(2);
-                   sprintf(buffer, "%d\r\n", a1);
-                   UART0write(buffer);
-                   sprintf(buffer, "%d\r\n", a2);
-                   UART0write(buffer);
-                   break;
-               }
-               case 'b':    // Read Relative Encoder Angle
-               {
-                   int b1, b2;
-                   b1 = readMotorRawRelative(1);
-                   b2 = readMotorRawRelative(2);
-                   sprintf(buffer, "%d\r\n", b1);
-                   UART0write(buffer);
-                   sprintf(buffer, "%d\r\n", b2);
-                   UART0write(buffer);
-                   break;
-               }
-               case 'c':    // Set Motor PWM
-               {
-                   int p1, p2;
-                   UART0read(buffer,BUF_SIZE);
-                   sscanf(buffer, "%d %d", &p1, &p2);
-                   set_motor_pwm(1, p1);
-                   set_motor_pwm(2, p2);
-                   break;
-               }
+
+
                case 'd':    // Get Motor PWM
                {
                    int pwm1, pwm2;

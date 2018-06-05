@@ -8,14 +8,6 @@
 // PID gains
 static volatile PID_gains PID[3];
 
-static volatile float Kp[3] = {0};
-static volatile float Ki[3] = {0};
-static volatile float Kd[3] = {0};
-static volatile float dKp[3] = {0};
-static volatile float dKi[3] = {0};
-static volatile float dKd[3] = {0};
-static volatile int t = 0;
-
 // Control info
 static volatile control_error E[3];
 
@@ -60,9 +52,6 @@ void timerIntInit(void)
     IntPrioritySet(INT_TIMER2A, 0);
 
     IntMasterEnable();
-
-    E[1].u = 0;
-    E[2].u = 0;
 }
 
 void get_position_gains(void)   // provide position control gains
@@ -128,14 +117,10 @@ void reset_controller_error(void)
 
 int get_motor_pwm(int motor)
 {
-    return E[motor].u;
+    //return E[motor].u;
+    return 0;
 }
 
-void set_motor_pwm(int motor, int value)
-{
-    motorControlPWM(motor, value);
-    E[motor].u = value;
-}
 
 
 void
@@ -160,7 +145,7 @@ Timer1IntHandler(void)
         case IDLE:
             break;
         case PID1:
-            PID_Controller(E[1].traj[i], readMotorRawRelative(1), 1);    // motor1 control
+            PID_Controller(E[1].traj[i] / 2 / M_PI * 16384, readMotorRawRelative(1), 1, 0);    // motor1 control
         case READ1:
             decctr++;
             if (decctr == DECIMATION)
@@ -171,7 +156,7 @@ Timer1IntHandler(void)
             i++;
             break;
         case PID2:
-            PID_Controller(E[2].traj[i], readMotorRawRelative(2), 2);    // motor2 control
+            PID_Controller(E[2].traj[i] / 2 / M_PI * 16384, readMotorRawRelative(2) - readMotorRawRelative(1), 2, 0);    // motor2 control
         case READ2:
             decctr++;
             if (decctr == DECIMATION)
@@ -183,8 +168,8 @@ Timer1IntHandler(void)
             break;
         case PIDb:
             //GPIOPinWrite(GPIO_PORTP_BASE,GPIO_PIN_3,GPIO_PIN_3);
-            PID_Controller(E[1].traj[i], readMotorRawRelative(1), 1);    // motor1 control
-            PID_Controller(E[2].traj[i], readMotorRawRelative(2), 2);    // motor2 control
+            PID_Controller(E[1].traj[i] / 2 / M_PI * 16384, readMotorRawRelative(1), 1, 0);    // motor1 control
+            PID_Controller(E[2].traj[i] / 2 / M_PI * 16384, readMotorRawRelative(2) - readMotorRawRelative(1), 2, 0);    // motor2 control
         case READb:
             decctr++;
             if (decctr == DECIMATION)
@@ -197,11 +182,11 @@ Timer1IntHandler(void)
             //GPIOPinWrite(GPIO_PORTP_BASE,GPIO_PIN_3,GPIO_PIN_3);
             break;
         case HOLD:
-            PID_Controller(E[1].desired, readMotorRawRelative(1), 1);    // motor1 control
-            PID_Controller(E[2].desired, readMotorRawRelative(2), 2);    // motor2 control
+            PID_Controller(E[1].desired, readMotorRawRelative(1), 1, 1);    // motor1 control
+            PID_Controller(E[2].desired, readMotorRawRelative(2), 2, 1);    // motor2 control
             break;
     }
-    if (i >= t)
+    if (i >= getN())
     {
         i = 0;
         //GPIOPinWrite(GPIO_PORTP_BASE,GPIO_PIN_3,0);
@@ -212,7 +197,7 @@ Timer1IntHandler(void)
 }
 
 // Calculate control effort and set pwm value to control motor
-void PID_Controller(int reference, int actual, int motor)
+void PID_Controller(int reference, int actual, int motor, int default_gains)
 {
     static float u;
 
@@ -220,22 +205,21 @@ void PID_Controller(int reference, int actual, int motor)
     E[motor].Eint = E[motor].Eint + E[motor].Enew;                // Calculate intergral error
     E[motor].Edot = E[motor].Enew - E[motor].Eold;                // Calculate derivative error
     E[motor].Eold = E[motor].Enew;                          // Update old error
-    u = PID[motor].Kp * E[motor].Enew + PID[motor].Ki * E[motor].Eint + PID[motor].Kd * E[motor].Edot;   // Calculate effort
+
+    if (default_gains)
+        u = defaultKp[motor] * E[motor].Enew + defaultKi[motor] * E[motor].Eint + defaultKd[motor] * E[motor].Edot;   // Calculate effort
+    else
+        u = PID[motor].Kp * E[motor].Enew + PID[motor].Ki * E[motor].Eint + PID[motor].Kd * E[motor].Edot;   // Calculate effort
 
     if (DECOGGING)                              // Add decogging control
         u += decog_motor(readMotorCounts(motor), motor);
 
     // Max effort
     if (u > 9600)
-    {
         u = 9600;
-    }
     else if (u < -9600)
-    {
         u = -9600;
-    }
-
-    set_motor_pwm(motor, u);
+    motorControlPWM(motor, u);
 }
 
 float decog_motor(int x, int motor)
@@ -253,10 +237,8 @@ float decog_motor(int x, int motor)
     return u;
 }
 
-void setDecogging(void) // Turn motor decogging on/off
+void setDecogging(int decog) // Turn motor decogging on/off
 {
-    char buffer[10]; int decog;
-    sscanf(buffer,"%d",&decog);
     DECOGGING = decog;
 }
 

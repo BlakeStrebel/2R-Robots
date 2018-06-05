@@ -38,8 +38,8 @@ typedef enum {
  */
 typedef struct {                          
     int refPos[REFERENCE_DATA]; /**< The reference position of the motor */
-    int actPos[REFERENCE_DATA];  /**< The actual position of the motor */
-    float u[REFERENCE_DATA];  /**< The control effort of the motor */
+    int actPos[BUFLEN];  /**< The actual position of the motor */
+    float u[BUFLEN];  /**< The control effort of the motor */
 } motor_control_data;
 
 /**
