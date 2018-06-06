@@ -38,6 +38,8 @@
 #include "driverlib/pwm.h"
 #include "driverlib/timer.h"
 #include "driverlib/uart.h"
+#include "driverlib/ssi.h"
+#include "driverlib/systick.h"
 #include "driverlib/adc.h"
 #include "utils/uartstdio.h"
 
@@ -57,29 +59,67 @@
  */
 extern void r2rDefaultInit(void);
 
+
+#define MOTOR1 1
+#define MOTOR2 2
+
+uint32_t ui32SysClock;
+uint32_t micros;
+
+//int error_state = 0;
+
 /**
- * @brief Checks for all end conditions and shuts down the motor control if any are detected
+ * @brief Initializes the system clock and the master interrupts for the R2R project
+ *
  *
  * @param Void
  * @return Void
  */
-extern void safetyCheck(void); //explicit function to test for end conditions
+extern void sysInit(void);
+
+/**
+ * @brief Initializes the UART for 115200 Baud Rate and 8-N-1 transfer rate.
+ *
+ *
+ * @param Void
+ * @return Void
+ */
+extern void uartInit(void);
+
+/**
+ * @brief Reads input from UART
+ *
+ *
+ *
+ * @param char* message pointer to a buffer
+ * @param int maxLength the maximum length of the buffer
+ * @return Void
+ */
+extern void UART0read(char * message, int maxLength);
+
+
+/**
+ * @brief Writes output from UART
+ *
+ *
+ *
+ * @param const char* message pointer to a buffer
+ * @return Void
+ */
+extern void UART0write(const char * string);
 
 
 
 /**
- * @brief Updates all sensor arrays.
+ * @brief Stops the processor for a given amount of time. This is an approximate time
  *
- * Sensors are grouped for the ease of use into one function and the array is updated each time this function is called.
- *
- * @param Void
+ * @param ms milliseconds
  * @return Void
- *
  */
-extern void sensorUpdate(void); // Updates sensor data. Always call sensor update at beginning of loop!
+extern void delayMS(int ms); // stops processor for a given amount of time in ms, this is approximate.
 
-extern void i2cInit(tI2CMInstance g_sI2CMSimpleInst);
-//extern void i2cIntHandler(void);
-
+extern void timeInit(void);
+extern uint32_t getTime(void);
+extern void timeInt(void);
 
 #endif /* R2R_H_ */

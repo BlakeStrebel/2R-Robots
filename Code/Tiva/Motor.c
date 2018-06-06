@@ -1,4 +1,4 @@
-#include "System.h"
+#include "r2r.h"
 #include "Motor.h"
 #include "Utilities.h"
 
@@ -462,7 +462,7 @@ void MotorSPIinit(void){
  * Note that the driver will NOT be set if motor power is not supplied because the driver will not be able to read the registers over SPI, even though it responds
  */
 void motorDriverInit(void){
-    uint32_t pui32DataTx[3], pui32DataRx[3], i = 0;
+    uint32_t pui32DataTx[4], pui32DataRx[4], i = 0;
 
     pui32DataTx[0] = 0b1001000000000000; // read register 3
     pui32DataTx[1] = 0b0001000000100000; // set register 3, bit 6 and 5 to 10, option 3, 3x PWM mode

@@ -46,10 +46,8 @@
 #include "Utilities.h"
 
 
-// TODO: motor driver 2 cs pin is actually motor driver 1's CS pin
-
 /*
- * This function does initialisation for all the default connections
+ * This function does initialization for all the default connections
  *
  * Comes after:
  * -
@@ -72,126 +70,115 @@ void r2rDefaultInit(void){
     setMODE(ICALIB);    // Calibrate current offsets
 }
 
-/*
- * This function explicitly checks for safety conditions, and it uses a global variable run_program to turn off the motor
- * TODO: save last state to a permanent storage device and check it upon starting. If last state was some error state, user must clear the flag
- */
-void safetyCheck(void){
-    ;
-}
 
 /*
- * This function updates all the sensors that we are using. Usually runs once every loop.
- * TODO: Add sensor functions, add interrupts
+ * The system init function initiazes the system clock and the processor interrupts
+ * Clock: 120Mhz
+ *
+ * Comes after:
+ * -
  */
-void sensorUpdate(void){
-    //adcRead();
-    encoderRead();
+void sysInit(void){
+    // Enable and wait for the port to be ready for access
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPION);
+    while(!SysCtlPeripheralReady(SYSCTL_PERIPH_GPION)) {;}
+
+    //
+    // Set the clock to run directly from the crystal at 120MHz.
+    //
+    ui32SysClock = SysCtlClockFreqSet((SYSCTL_OSC_INT |
+                                             SYSCTL_OSC_MAIN |
+                                             SYSCTL_USE_PLL |
+                                             SYSCTL_CFG_VCO_480), 120000000); // Use 25Mhz crystal and use PLL to accelerate to 120MHz
 }
 
 /*
- * This function sets up an I2C bus on I2C0, PB2 and PB3
- * Sets 400kbps
+ * This function sets up the UART on UART0, PA0(RX) and PA1 (TX)
+ * It is set up for 115200 baud 8N1. To send numbers and characters use
+ * UARTprintf.
  */
+void uartInit(void){
+    // Enable GPIO port A which is used for UART0 pins.
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOA);
 
-void i2cInit(tI2CMInstance g_sI2CMSimpleInst){
-    //enable I2C module 0
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_I2C0);
+    // Configure UART0 pins on port A0 and A1.
+    GPIOPinConfigure(GPIO_PA0_U0RX);
+    GPIOPinConfigure(GPIO_PA1_U0TX);
 
-    //reset module
-    SysCtlPeripheralReset(SYSCTL_PERIPH_I2C0);
+    // Enable UART0 so that we can configure the clock.
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_UART0);
 
-    //enable GPIO peripheral that contains I2C 0
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOB);
+    // Select the alternate (UART) function for these pins.
+    GPIOPinTypeUART(GPIO_PORTA_BASE, GPIO_PIN_0 | GPIO_PIN_1);
 
-    // Configure the pin muxing for I2C0 functions on port B2 and B3.
-    GPIOPinConfigure(GPIO_PB2_I2C0SCL);
-    GPIOPinConfigure(GPIO_PB3_I2C0SDA);
-
-    // Select the I2C function for these pins.
-    GPIOPinTypeI2CSCL(GPIO_PORTB_BASE, GPIO_PIN_2);
-    GPIOPinTypeI2C(GPIO_PORTB_BASE, GPIO_PIN_3);
-
-    // Enable and initialize the I2C0 master module.  Use the system clock for
-    // the I2C0 module.
-    // I2C data transfer rate set to 400kbps.
-    I2CMasterInitExpClk(I2C0_BASE, SysCtlClockGet(), true);
-
-    //clear I2C FIFOs
-    HWREG(I2C0_BASE + I2C_O_FIFOCTL) = 80008000;
-
-    // Initialize the I2C master driver.
-    I2CMInit(&g_sI2CMSimpleInst, I2C0_BASE, INT_I2C0, 0xff, 0xff, SysCtlClockGet());
+    UARTConfigSetExpClk(UART0_BASE, ui32SysClock, 115200,
+                            (UART_CONFIG_WLEN_8 | UART_CONFIG_STOP_ONE |
+                             UART_CONFIG_PAR_NONE));
 }
 
-
-void MCP9600init(){
-    // See https://ncd.io/k-type-thermocouple-mcp9600-with-arduino/
-    // Operations:
-    // Set thermo config
-    // write 0x05
-    // write 0x00
-    // Set device config
-    // write 0x06
-    // write 0x00
-    //I2CMwrite(i2cints,0x64,0x00,1,data,count,callback,write)
-}
-
-void MCP9600ready(){
-    // Write 0x04
-    // wait
-    // check if slave busy, if not read
-    // return int
-}
-
-void MCP9600read(){
-    // write 0x00
-    // read to long int = 1
-    // read to long int = 2
-    // if 1 &0x80 == 0x80
-    // 1 = 1& 0x7F
-    //temp  = 1024 - (1 *16/ + 2/16)
-}
-/*********************************************** CURRENTLY NOT BEING IMPLEMENTED ********************************************/
-
-
-
-
-
-/*
- * Reads the temperature
- */
-uint32_t tempRead(void){
-    uint32_t pui32ADC0Value[4];
-    // uint32_t ui32TempValueC;
-    //
-    // Trigger the ADC conversion.
-    //
-    ADCProcessorTrigger(ADC0_BASE, 3);
-
-    //
-    // Wait for conversion to be completed.
-    //
-    while(!ADCIntStatus(ADC0_BASE, 3, false))
+void UART0read(char * message, int maxLength)
+{
+    char data = 0;
+    int complete = 0, num_bytes = 0;
+    // loop until you get a '\r' or '\n'
+    while (!complete)
     {
+        data = UARTCharGet(UART0_BASE); // read char when it becomes available
+        if ((data == '\n') || (data == '\r')) {
+            complete = 1;
+        }
+        else
+        {
+            message[num_bytes] = data;
+            ++num_bytes;
+            // roll over if the array is too small
+            if (num_bytes >= maxLength) {
+                num_bytes = 0;
+            }
+        }
     }
-    //
-    // Clear the ADC interrupt flag.
-    //
-    ADCIntClear(ADC0_BASE, 3);
+    // end the string
+    message[num_bytes] = '\0';
+}
 
-    //
-    // Read ADC Value.
-    //
-    ADCSequenceDataGet(ADC0_BASE, 3, pui32ADC0Value);
-    //
-    // Use non-calibrated conversion provided in the data sheet.  Make
-    // sure you divide last to avoid dropout.
-    //
-    // Read internal processor temperature
-    //ui32TempValueC = ((1475 * 1023) - (2250 * pui32ADC0Value[0])) / 10230;
+void UART0write(const char * string)
+{
+    while (*string != '\0') {
+        UARTCharPut(UART0_BASE, *string); // send the data
+        ++string;
+    }
+}
 
-    return 1;
+
+/*
+ * This function stops the clock for a given amount of ms
+ *
+ * Comes after:
+ * sysInit()
+ */
+void delayMS(int ms) {
+    //SysCtlDelay( (SysCtlClockGet()/(3*1000))*ms ) ;
+    SysCtlDelay( (ui32SysClock/(3*1000))*ms ) ;
+
+}
+
+/*
+ * Sets up a sysTICK timer to count time, used mainly as a prototype tool to test speed of code
+ */
+
+void timeInit(){
+    SysTickPeriodSet(120); // micro
+    SysTickIntRegister(timeInt);
+    SysTickIntEnable();
+    SysTickEnable();
+}
+
+void timeInt(){
+    micros++;
+}
+
+uint32_t getTime(){
+    return micros;
 }
 
 
