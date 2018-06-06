@@ -14,7 +14,7 @@
 
  * \image html images/newproject.JPG "Creating a new project"
 
- * Ensure that the Tiva TM4C1294NCPDT chip is selected and give your project a name. When you are done, select Finish
+ * Ensure that the Tiva TM4C1294NCPDT chip is selected and give your project a name. When you are done, select Finish.
 
  * \image html images/newprojectoptions.JPG "Options for a new project"
 
@@ -24,7 +24,7 @@
  *
  * \image html images/includetivaware.JPG "Including libraries"
  *
- * Next, under CCS Build > ARM Linker > File Search Path the library files for the driver library are included. The sensorlib files are also included in the same manner
+ * Next, under CCS Build > ARM Linker > File Search Path, include the library files for the driver library, driverlib. The sensorlib files are also included in the same manner.
  *
  * \image html images/driverlib.JPG "Including Driverlib"
  *
@@ -43,7 +43,6 @@
  *
  * \image html images/programming.JPG "Programming"
  * 
- * 
  *
  * \section writingcustomcode Writing Custom Code
  *
@@ -51,7 +50,7 @@
  *	
  * \subsection writinginterrupts Writing Interrupts
  *
- * In Code Composer Studio, Interrupts follow a general format. There is the interrupt initialization, the interrupt function itself, and a declaration of the interrupt function in the interrupt vector table in `tm4c1294ncpdt_startup_ccs.c`.
+ * In Code Composer Studio, interrupts follow a general format. There is the interrupt initialization, the interrupt function itself, and a declaration of the interrupt function in the interrupt vector table in `tm4c1294ncpdt_startup_ccs.c`.
  *
  * In this example the timer interrupt has already been declared under `customTimersInit()` and the corresponding timer functions have been declared in `tm4c1294ncpdt_startup_ccs.c`.
  * 

@@ -39,10 +39,30 @@
 extern void r2rDefaultInit(void);
 
 /**
+ * @brief Initializes custom timers
+ *
+ * This function initializes timers 6 and 7 at preset frequencies as defined in r2r.c
+ *
+ *
+ * @param Void
+ * @return Void
+ */
+extern void customTimersInit(void);
+
+/**
  * @brief Custom timer 6
  *
  * This function executes at the rate set by TIMER_6_FREQ set in r2r.c
- * This function does not have to be called anywhere. 
+ * This function does not have to be called anywhere. This function does not return any values
+ *
+ * Example:
+ *
+ *		 void TIMER6IntHandler() {
+ *	
+ *			// add custom controller code here
+ *
+ * 		 }
+ *
  *
  *
  * @param Void
