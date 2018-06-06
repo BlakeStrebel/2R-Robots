@@ -22,7 +22,7 @@ typedef struct {                          // Define data structure containing co
     int desired;
     int actual;
     int raw;
-    float u;
+    int u;
 } control_error;
 
 
@@ -90,15 +90,6 @@ void reset_controller_error(void);                  // Reset the error on both c
 */
 void load_position_trajectory(int motor);                // Load desired position trajectory from client
 
-/**
-* @brief Returns the set pwm on a given motor
-*
-* @param motor the pwm on a given motor
-* @return Void
-*/
-int get_motor_pwm(int motor);
-
-void set_motor_pwm(int motor, int value);
 
 /**
 * @brief Calculates pwm to send to the motor drivr

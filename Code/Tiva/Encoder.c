@@ -20,7 +20,7 @@ int zeroing1 = 0;
 int zeroing2 = 0;
 
 /*
- * This function initilizes the SPI on SSI0, using PA2 (CLK), PA3(SS), PA4(RX), PA5(TX)
+ * This function initializes the SPI on SSI0, using PA2 (CLK), PA3(SS), PA4(RX), PA5(TX)
  */
 void encoderSPIInit(void){
     // Enable SSI0 and SSI1 peripherals for use.
@@ -57,9 +57,9 @@ void encoderSPIInit(void){
     // Configure and enable the SSI port for SPI master mode.
     // Ideally the max bit rate is 2M, but there will be some error reading the value.
     SSIConfigSetExpClk(SSI0_BASE, ui32SysClock, SSI_FRF_MOTO_MODE_1,
-                                    SSI_MODE_MASTER, 1500000, 8); // 8 bits for encoder, note that we can't go above 16 bits using SPI Freescale mode
+                                    SSI_MODE_MASTER, 500000, 8); // 8 bits for encoder, note that we can't go above 16 bits using SPI Freescale mode
     SSIConfigSetExpClk(SSI1_BASE, ui32SysClock, SSI_FRF_MOTO_MODE_1,
-                            SSI_MODE_MASTER, 1500000, 8); // 8 bits for encoder, note that we can't go above 16 bits using SPI Freescale mode
+                            SSI_MODE_MASTER, 500000, 8); // 8 bits for encoder, note that we can't go above 16 bits using SPI Freescale mode
 
     // Configure the CS
     GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_1,GPIO_PIN_1); // Set CS to HIGH        //Is it necessary for L0?
@@ -228,7 +228,7 @@ int readMotor2RawRelative(void){
     else if (angle_gap<-8000){ // crossed over in the opposite direction
         modifier2 = modifier2 + 16383;
     }
-    int relative_angle = readMotor2Raw()+modifier2-zeroing2-readMotor1RawRelative(); // add or - 360 from our relative angle - the zeroing, return the angle.
+    int relative_angle = readMotor2Raw()+modifier2-zeroing2;//-readMotor1RawRelative(); // add or - 360 from our relative angle - the zeroing, return the angle.
     last_motor_2_angle = readMotor2Raw(); // save the last angle for comparision the next time
     return relative_angle;
 }

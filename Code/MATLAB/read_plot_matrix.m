@@ -23,7 +23,7 @@ data(:,2) = ref2(1:size(data,1));
 
 
 for i=1:nsamples
-    data(i,3:6) = fscanf(mySerial,'%d %d %f %f'); % read in data from Tiva (pos m1, pos m2, control eff 1, control eff 2)
+    data(i,3:6) = fscanf(mySerial,'%d %d %d %d'); % read in data from Tiva (pos m1, pos m2, control eff 1, control eff 2)
     
     xvec=x(i);
     yrvec = data(i,4)/16383*360;
@@ -41,7 +41,7 @@ save('temp.mat','data');
 
 % Perform Conversions
 data(:,1:4) = data(:,1:4)/16383*360;    % convert counts to degrees
-data(:,5:6) = data(:,5:6)/9600*100;     % Scale control effort from 0 -> 100
+data(:,5:6) = data(:,5:6)/2047*100;     % Scale control effort from 0 -> 100
 times = 10*(1:size(data,1)); % adjust this if data is decimated
 
 if nsamples > 1						        

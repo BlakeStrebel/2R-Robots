@@ -22,6 +22,7 @@
 // MOTOR 1 HALL SENSOR PINS
 #define M1H_PERIPH SYSCTL_PERIPH_GPIOM
 #define M1H_PORT GPIO_PORTM_BASE // IF YOU CHANGE THIS PORT YOU MUST CHANGE THE INT HANDLER IN tm4c1294ncpdt_startup_css.c
+#define M1H_PORT_INT INT_GPIOM
 #define M1H_PIN_A GPIO_PIN_0
 #define M1H_PIN_B GPIO_PIN_1
 #define M1H_PIN_C GPIO_PIN_2
@@ -49,6 +50,7 @@
 // MOTOR 2 HALL SENSOR PINS
 #define M2H_PERIPH SYSCTL_PERIPH_GPION
 #define M2H_PORT GPIO_PORTN_BASE // IF YOU CHANGE THIS PORT YOU MUST CHANGE THE INT HANDLER IN tm4c1294ncpdt_startup_css.c
+#define M2H_PORT_INT INT_GPION
 #define M2H_PIN_A GPIO_PIN_0
 #define M2H_PIN_B GPIO_PIN_1
 #define M2H_PIN_C GPIO_PIN_2
@@ -132,6 +134,11 @@
 
 extern void M1HIntHandler(void);
 extern void M2HIntHandler(void);
+
+void motor1Commutate(int State, int control);
+void motor2Commutate(int State, int control);
+
+
 
 extern void motor1PWM(int pwm1, int pwm2, int pwm3);
 

@@ -1,7 +1,7 @@
 function Client()
 %   provides a menu for interfacing with hopper robot system
 Tiva_port = 'COM5'; % Tiva board serial port
-DECIMATION = 1;
+DECIMATION = 10;
 PWMPERIOD = 4000;
 
 % Opening COM connection
@@ -11,7 +11,7 @@ if ~isempty(instrfind)
 end
 
 % configure ports
-Tiva_Serial = serial(Tiva_port, 'BaudRate', 115200, 'Timeout',15); %'FlowControl', 'hardware',
+Tiva_Serial = serial(Tiva_port, 'BaudRate', 115200, 'Timeout',5); %'FlowControl', 'hardware',
 
 fprintf('Opening port %s....\n',Tiva_port);
 
@@ -30,7 +30,7 @@ while ~has_quit
     disp('a: Read Absolute Angle  b: Read Relative Angle')
     disp('c: Set PWM              d: Read PWM')
     disp('e: Read Desired Angle   f: Set Desired Angle')
-    disp('g: Set mode             h: Set PID gains')
+    disp('g: Get mode             h: Set PID gains')
     disp('i: Get PID gains        j: Hold Position')
     disp('k: Set trajectory       l: Execute Trajectory ')
     disp('m: Move Arm             n: Load and Run Test')
@@ -88,7 +88,7 @@ while ~has_quit
             Kd = fscanf(Tiva_Serial, '%f');    
             fprintf('The controller is using Kp = %3.2f, Ki = %3.2f, and Kd = %3.2f.\n',[Kp,Ki,Kd]);
         case 'j'
-            fprintf('The motors are now holding their positions');
+            fprintf('The motors are now holding their positions\n');
         case 'k'
             error_check = 1;
             while (error_check)
@@ -134,6 +134,7 @@ while ~has_quit
                fprintf(Tiva_Serial,'%d\n',ref2(i)); 
             end
         case 'l'
+            %read_plot_matrix_current(Tiva_Serial);
             read_plot_matrix(Tiva_Serial, ref1(1:DECIMATION:end)', ref2(1:DECIMATION:end)');
         case 'm'
             lengthofTime = input('Time to run for (s): ');
@@ -198,6 +199,11 @@ while ~has_quit
         case '7'
             fprintf('Recalibrating current offsets\n');
             pause(1);
+        case '8'
+            i1 = input('Enter your desired  motor 1 current in counts: ');
+            i2 = input('Enter your desired motor 2 current in counts: ');
+            fprintf(Tiva_Serial, '%d %d\n',[i1,i2]);
+            read_plot_matrix_current(Tiva_Serial);
         otherwise
             fprintf('Invalid Command, try again...\n');
     end

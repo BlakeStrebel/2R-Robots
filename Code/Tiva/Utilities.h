@@ -13,7 +13,7 @@
 #ifndef UTILITIES_H_
 #define UTILITIES_H_
 
-#define DECIMATION 1    // Decimate the data if necessary
+#define DECIMATION 10    // Decimate the data if necessary
 #define REFERENCE_DATA 10000    // Reference data for trajectory tracking
 #define BUFLEN 10000 // Actual data; sent to client using circular buffer
 
@@ -23,11 +23,12 @@
 typedef enum {
 	IDLE, /**< Sets motor effort to 0 */
 	PWM, /**< PWM directly set by user */
+    HOLD, /**< Sets motor effort to holding position */
+    TRACK, /**< Sets motor effort to tracking mode */
+	ITRACK,
 	ITEST,
 	ISENSE,
-	ICALIB,
-	HOLD, /**< Sets motor effort to holding position */
-	TRACK /**< Sets motor effort to tracking mode */
+	ICALIB
 	} mode;    // define data structure containing modes
 
 
@@ -37,7 +38,7 @@ typedef enum {
 typedef struct {                          
     int refPos[REFERENCE_DATA]; /**< The reference position of the motor */
     int actPos[BUFLEN];  /**< The actual position of the motor */
-    float u[BUFLEN];  /**< The control effort of the motor */
+    int u[BUFLEN];  /**< The control effort of the motor */
 } control_data_t;
 
 /**

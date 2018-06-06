@@ -180,6 +180,9 @@ main(void)
                }
                case '4':
                {
+                   reset_current_error();
+                   motor1ControlPWM(0);
+                   motor2ControlPWM(0);
                    setNclient(1000);
                    setMODE(ITEST);
                    send_data();
@@ -198,6 +201,18 @@ main(void)
                case '7':
                {
                    setMODE(ICALIB);
+               }
+               case '8':
+               {
+                   int i1, i2;
+                   UART0read(buffer,BUF_SIZE);
+                   sscanf(buffer, "%d %d", &i1, &i2);
+                   setCurrent(MOTOR1, i1);
+                   //setCurrent(MOTOR2, i2);
+                   setNclient(30000);
+                   setMODE(ITRACK);
+                   send_data();
+                   break;
                }
                default:
                {

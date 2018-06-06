@@ -71,6 +71,8 @@ void motorInit()
     GPIOPinTypeGPIOInput(M2H_PORT, M2H_PINS);
     GPIOIntTypeSet(M1H_PORT, M1H_PINS, GPIO_BOTH_EDGES);
     GPIOIntTypeSet(M2H_PORT, M2H_PINS, GPIO_BOTH_EDGES);
+    IntPrioritySet(M1H_PORT_INT, 0x00); // Highest Priority
+    IntPrioritySet(M2H_PORT_INT, 0x00);
     GPIOIntEnable(M1H_PORT, M1H_PINS);
     GPIOIntEnable(M2H_PORT, M2H_PINS);
 
@@ -108,281 +110,195 @@ void M2HIntHandler(void)
 
 void motor1ControlPWM(int control)
 {
-    //static char buffer[10];
-    //static int i = 0;
-    //i++;
-
+    // Update global variable containing PWM value
     IntMasterDisable();
-    M1_PWM = control; // Update global variable containing PWM value
+    M1_PWM = control;
     IntMasterEnable();
-
-
 
     control = abs(control); // PWM must be positive
 
-    if (M1_PWM > 0) // CCW
+    // Use hall information and PWM direction to commutate motor
+    if (M1_PWM > 0) // CCW Torque
     {
         switch (M1H_HALLS)
         {
             case M1_HALLSTATE_0:
-            {
-                //sprintf(buffer, "%d %d %d\r\n", 0, M1_PWM, i);
-
-                M1_INL_WRITE(0, 1, 1);
-                motor1PWM(0, control, 0);
+                motor1Commutate(3, control);    // Commutation state 3
                 break;
-            }
             case M1_HALLSTATE_1:
-            {
-                //sprintf(buffer, "%d %d %d\r\n", 1, M1_PWM, i);
-
-                M1_INL_WRITE(1, 0, 1);
-                motor1PWM(control, 0, 0);
+                motor1Commutate(4, control);    // Commutation state 4
                 break;
-            }
             case M1_HALLSTATE_2:
-            {
-                //sprintf(buffer, "%d %d %d\r\n", 2, M1_PWM, i);
-
-                M1_INL_WRITE(1, 1, 0);
-                motor1PWM(control, 0, 0);
+                motor1Commutate(5, control);    // Commutation state 5
                 break;
-            }
             case M1_HALLSTATE_3:
-            {
-                //sprintf(buffer, "%d %d %d\r\n", 3, M1_PWM, i);
-
-                M1_INL_WRITE(0, 1, 1);
-                motor1PWM(0, 0, control);
+                motor1Commutate(0, control);    // Commutation state 0
                 break;
-            }
             case M1_HALLSTATE_4:
-            {
-                //sprintf(buffer, "%d %d %d\r\n", 4, M1_PWM, i);
-
-                M1_INL_WRITE(1, 0, 1);
-                motor1PWM(0, 0, control);
+                motor1Commutate(1, control);    // Commutation state 1
                 break;
-            }
             case M1_HALLSTATE_5:
-            {
-                //sprintf(buffer, "%d %d %d\r\n", 5, M1_PWM, i);
-
-                M1_INL_WRITE(1, 1, 0);
-                motor1PWM(0, control, 0);
+                motor1Commutate(2, control);    // Commutation state 2
                 break;
-            }
-            default :
-            {
-                //sprintf(buffer, "Check Hall Wiring\r\n");
-                // You should not end up here, check hall wiring
-            }
         }
     }
-    else if (M1_PWM < 0) // CW
+    else if (M1_PWM < 0) // CW Torque
     {
         switch (M1H_HALLS)
         {
-            case M1_HALLSTATE_3:
-            {
-                //sprintf(buffer, "%d %d %d\r\n", 3, M1_PWM, i);
-
-                M1_INL_WRITE(0, 1, 1);
-                motor1PWM(0, control, 0);
-                break;
-            }
-            case M1_HALLSTATE_4:
-            {
-                //sprintf(buffer, "%d %d %d\r\n", 4, M1_PWM, i);
-
-                M1_INL_WRITE(1, 0, 1);
-                motor1PWM(control, 0, 0);
-                break;
-            }
-            case M1_HALLSTATE_5:
-            {
-                //sprintf(buffer, "%d %d %d\r\n", 5, M1_PWM, i);
-
-                M1_INL_WRITE(1, 1, 0);
-                motor1PWM(control, 0, 0);
-                break;
-            }
             case M1_HALLSTATE_0:
-            {
-                //sprintf(buffer, "%d %d %d\r\n", 0, M1_PWM, i);
-
-                M1_INL_WRITE(0, 1, 1);
-                motor1PWM(0, 0, control);
+                motor1Commutate(0, control);    // Commutation state 0
                 break;
-            }
             case M1_HALLSTATE_1:
-            {
-                //sprintf(buffer, "%d %d %d\r\n", 1, M1_PWM, i);
-
-                M1_INL_WRITE(1, 0, 1);
-                motor1PWM(0, 0, control);
+                motor1Commutate(1, control);    // Commutation state 1
                 break;
-            }
             case M1_HALLSTATE_2:
-            {
-                //sprintf(buffer, "%d %d %d\r\n", 2, M1_PWM, i);
-
-                M1_INL_WRITE(1, 1, 0);
-                motor1PWM(0, control, 0);
+                motor1Commutate(2, control);    // Commutation state 2
                 break;
-            }
-            default :
-            {
-                // You should not end up here, check hall wiring
-            }
+            case M1_HALLSTATE_3:
+                motor1Commutate(3, control);    // Commutation state 3
+                break;
+            case M1_HALLSTATE_4:
+                motor1Commutate(4, control);    // Commutation state 4
+                break;
+            case M1_HALLSTATE_5:
+                motor1Commutate(5, control);    // Commutation state 5
+                break;
         }
     }
     else
     {
-        //sprintf(buffer, "zero\r\n");
-
-        motor1PWM(0, 0, 0); // Apply zero current, Alternatively, break using M1_INL_BREAK
+        motor1PWM(0, 0, 0); // Apply zero current
     }
-
-    //UART0write(buffer);
 }
 
 void motor2ControlPWM(int control)
 {
-    //static char buffer[10];
-    //static int i = 0;
-    //i++;
-
+    // Update global variable containing PWM value
     IntMasterDisable();
-    M2_PWM = control; // Update global variable containing PWM value
+    M2_PWM = control;
     IntMasterEnable();
 
     control = abs(control); // PWM must be positive
 
-    if (M2_PWM > 0) // CCW
+    // Use hall information and PWM direction to commutate motor
+    if (M2_PWM > 0) // CCW Torque
     {
         switch (M2H_HALLS)
         {
             case M2_HALLSTATE_0:
-            {
-                //sprintf(buffer, "%d %d %d\r\n", 0, M2_PWM, i);
-
-                M2_INL_WRITE(0, 1, 1);
-                motor2PWM(0, control, 0);
+                motor2Commutate(3, control);    // Commutation state 3
                 break;
-            }
             case M2_HALLSTATE_1:
-            {
-                //sprintf(buffer, "%d %d %d\r\n", 1, M2_PWM, i);
-
-                M2_INL_WRITE(1, 0, 1);
-                motor2PWM(control, 0, 0);
+                motor2Commutate(4, control);    // Commutation state 4
                 break;
-            }
             case M2_HALLSTATE_2:
-            {
-                //sprintf(buffer, "%d %d %d\r\n", 2, M2_PWM, i);
-
-                M2_INL_WRITE(1, 1, 0);
-                motor2PWM(control, 0, 0);
+                motor2Commutate(5, control);    // Commutation state 5
                 break;
-            }
             case M2_HALLSTATE_3:
-            {
-                //sprintf(buffer, "%d %d %d\r\n", 3, M2_PWM, i);
-
-                M2_INL_WRITE(0, 1, 1);
-                motor2PWM(0, 0, control);
+                motor2Commutate(0, control);    // Commutation state 0
                 break;
-            }
             case M2_HALLSTATE_4:
-            {
-                //sprintf(buffer, "%d %d %d\r\n", 4, M2_PWM, i);
-
-                M2_INL_WRITE(1, 0, 1);
-                motor2PWM(0, 0, control);
+                motor2Commutate(1, control);    // Commutation state 1
                 break;
-            }
             case M2_HALLSTATE_5:
-            {
-                //sprintf(buffer, "%d %d %d\r\n", 5, M2_PWM, i);
-
-                M2_INL_WRITE(1, 1, 0);
-                motor2PWM(0, control, 0);
+                motor2Commutate(2, control);    // Commutation state 2
                 break;
-            }
-            default :
-            {
-                // You should not end up here, check hall wiring
-            }
         }
     }
-    else if (M2_PWM < 0) // CW
+    else if (M2_PWM < 0) // CW Torque
     {
         switch (M2H_HALLS)
         {
-            case M2_HALLSTATE_3:
-            {
-                //sprintf(buffer, "%d %d %d\r\n", 3, M2_PWM, i);
-
-                M2_INL_WRITE(0, 1, 1);
-                motor2PWM(0, control, 0);
-                break;
-            }
-            case M2_HALLSTATE_4:
-            {
-                //sprintf(buffer, "%d %d %d\r\n", 4, M2_PWM, i);
-
-                M2_INL_WRITE(1, 0, 1);
-                motor2PWM(control, 0, 0);
-                break;
-            }
-            case M2_HALLSTATE_5:
-            {
-                //sprintf(buffer, "%d %d %d\r\n", 5, M2_PWM, i);
-
-                M2_INL_WRITE(1, 1, 0);
-                motor2PWM(control, 0, 0);
-                break;
-            }
             case M2_HALLSTATE_0:
-            {
-                //sprintf(buffer, "%d %d %d\r\n", 0, M2_PWM, i);
-
-                M2_INL_WRITE(0, 1, 1);
-                motor2PWM(0, 0, control);
+                motor2Commutate(0, control);    // Commutation state 0
                 break;
-            }
             case M2_HALLSTATE_1:
-            {
-                //sprintf(buffer, "%d %d %d\r\n", 1, M2_PWM, i);
-
-                M2_INL_WRITE(1, 0, 1);
-                motor2PWM(0, 0, control);
+                motor2Commutate(1, control);    // Commutation state 1
                 break;
-            }
             case M2_HALLSTATE_2:
-            {
-                //sprintf(buffer, "%d %d %d\r\n", 2, M2_PWM, i);
-
-                M2_INL_WRITE(1, 1, 0);
-                motor2PWM(0, control, 0);
+                motor2Commutate(2, control);    // Commutation state 2
                 break;
-            }
-            default :
-            {
-                // You should not end up here, check hall wiring
-            }
+            case M2_HALLSTATE_3:
+                motor2Commutate(3, control);    // Commutation state 3
+                break;
+            case M2_HALLSTATE_4:
+                motor2Commutate(4, control);    // Commutation state 4
+                break;
+            case M2_HALLSTATE_5:
+                motor2Commutate(5, control);    // Commutation state 5
+                break;
         }
     }
     else
     {
-        //sprintf(buffer, "zero\r\n");
-
-        motor2PWM(0, 0, 0); // Apply zero current, Alternatively, break using M2_INL_BREAK
+        motor2PWM(0, 0, 0); // Apply zero current
     }
+}
 
-    //UART0write(buffer);
+
+void motor1Commutate(int State, int control)
+{
+    // Apply commutation state to the motor driver
+    switch (State)
+    {
+        case 0: // B-->C
+            M1_INL_WRITE(0, 1, 1);
+            motor1PWM(0, control, 0);
+            break;
+        case 1: // A-->C
+            M1_INL_WRITE(1, 0, 1);
+            motor1PWM(control, 0, 0);
+            break;
+        case 2: // A-->B
+            M1_INL_WRITE(1, 1, 0);
+            motor1PWM(control, 0, 0);
+            break;
+        case 3: // C-->B
+            M1_INL_WRITE(0, 1, 1);
+            motor1PWM(0, 0, control);
+            break;
+        case 4: // C-->A
+            M1_INL_WRITE(1, 0, 1);
+            motor1PWM(0, 0, control);
+            break;
+        case 5: // B-->A
+            M1_INL_WRITE(1, 1, 0);
+            motor1PWM(0, control, 0);
+            break;
+    }
+}
+
+void motor2Commutate(int State, int control)
+{
+    // Apply commutation state to the motor driver
+    switch (State)
+    {
+        case 0: // B-->C
+            M2_INL_WRITE(0, 1, 1);
+            motor2PWM(0, control, 0);
+            break;
+        case 1: // A-->C
+            M2_INL_WRITE(1, 0, 1);
+            motor2PWM(control, 0, 0);
+            break;
+        case 2: // A-->B
+            M2_INL_WRITE(1, 1, 0);
+            motor2PWM(control, 0, 0);
+            break;
+        case 3: // C-->B
+            M2_INL_WRITE(0, 1, 1);
+            motor2PWM(0, 0, control);
+            break;
+        case 4: // C-->A
+            M2_INL_WRITE(1, 0, 1);
+            motor2PWM(0, 0, control);
+            break;
+        case 5: // B-->A
+            M2_INL_WRITE(1, 1, 0);
+            motor2PWM(0, control, 0);
+            break;
+    }
 }
 
 void motor1PWM(int pwm1, int pwm2, int pwm3)
