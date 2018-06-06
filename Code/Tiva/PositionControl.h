@@ -13,19 +13,32 @@
 #ifndef POSITION_CONTROL_H_
 #define POSITION_CONTROL_H_
 
+
 /**
 * This struct contains the PID data
 */
+
+static const float defaultKp[3] = {0, 2, 2};
+static const float defaultKi[3] = {0, 0, 0};
+static const float defaultKd[3] = {0, 0, 0};
+
+typedef struct {                          // Define data structure containing control data
+    float Kp;
+    float Ki;
+    float Kd;
+} PID_gains;
+
+// TODO in setup set these to zero
+
 typedef struct {                          // Define data structure containing control data
     int Enew;
     int Eold;
     int Eint;
     int Edot;
     int desired;
-    int actual;
-    int raw;
-    float u;
-    int motor_number;
+
+    float traj[10000];
+
 } control_error;
 
 
@@ -58,7 +71,7 @@ void get_position_gains(void);                      // Get position gains
 * @param motor reads the desired angle for the given motor
 * @return Void
 */
-int get_desired_angle(int motor);
+int getDesiredAngle(int motor);
 
 /**
 * @brief Sets desired angle for a given motor
@@ -66,7 +79,7 @@ int get_desired_angle(int motor);
 * @param motor specifies the desired angle for the given motor
 * @return Void
 */
-void set_desired_angle(int angle, int motor);
+void setDesiredAngle(int angle, int motor);
 
 /**
 * @brief Resets desired position to origin
@@ -82,7 +95,7 @@ void reset_pos(void);                               // Reset desired position to
 * @param Void
 * @return Void
 */
-void reset_controller_error(void);                  // Reset the error on both controllers to be zero
+void resetControllerError(void);                  // Reset the error on both controllers to be zero
 
 
 /**
@@ -91,25 +104,16 @@ void reset_controller_error(void);                  // Reset the error on both c
 * @param motor specifies the trajectory that is being assigned from UART
 * @return Void
 */
-void load_position_trajectory(int motor);                // Load desired position trajectory from client
+void loadPositionTrajectory(int motor);                // Load desired position trajectory from client
 
 /**
 * @brief Returns the set pwm on a given motor
 *
-* @param motor the pwm on a given motor
-* @return Void
+* @param int a given motor
+* @return int the pwm on the motor
 */
 int get_motor_pwm(int motor);
 
-/**
-* @brief Sets the pwm on a given motor
-*
-* @param motor motor to select
-* @param value the pwm on a given motor
-* @return Void
-*/
-
-void set_motor_pwm(int motor, int value);
 
 /**
 * @brief Calculates pwm to send to the motor driver
@@ -119,7 +123,7 @@ void set_motor_pwm(int motor, int value);
 * @param motor the specified motor
 * @return Void
 */
-void PID_Controller(int reference, int actual, int motor);
+void PID_Controller(int reference, int actual, int motor, int default_gains);
 
 /**
 * @brief Motor decogging to smooth output of motor
@@ -136,15 +140,21 @@ void PID_Controller(int reference, int actual, int motor);
 * @param motor the motor to decog
 * @return the modified control signal
 */
-float decog_motor(int x, int motor);
+float decogMotor(int x, int motor);
+
 
 /**
 * @brief Turns on motor decogging
 *
 *   
-* @param Void
+* @param int 1 turns on decogging, 0 turns it off
 * @return Void
 */
-void setDecogging(void);
+void setDecogging(int decog);
+
+
+
+void setPositionPID(int motor);
+
 
 #endif /* POSITION_CONTROL_H_ */

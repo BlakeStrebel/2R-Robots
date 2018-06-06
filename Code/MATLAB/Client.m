@@ -1,6 +1,7 @@
 function Client()
 %   provides a menu for interfacing with hopper robot system
-Tiva_port = 'COM7'; % Tiva board serial port
+
+Tiva_port = 'COM5'; % Tiva board serial port
 DECIMATION = 1;
 PWMPERIOD = 4000;
 
@@ -46,6 +47,7 @@ while ~has_quit
             absPos1 = fscanf(Tiva_Serial,'%d');
             absPos2 = fscanf(Tiva_Serial,'%d');
             fprintf('The absolute motor angles are:\nMotor 1: %3.2f degrees Motor 2: %3.2f degrees\n',absPos1/16383*360,absPos2/16383*360);
+            %fprintf('The absolute motor angles are:\nMotor 1: %d degrees Motor 2: %d degrees\n',absPos1,absPos2);
         case 'b'
             relPos1 = fscanf(Tiva_Serial,'%d');
             relPos2 = fscanf(Tiva_Serial,'%d');
@@ -178,27 +180,31 @@ while ~has_quit
         case 'q'
             has_quit = 1;
         case '1'
-            counts(1:4) = fscanf(Tiva_Serial, '%d %d %d %d');
-            fprintf('Motor 1 A: %d, B: %d\nMotor2 A: %d, B: %d\n',counts(1), counts(2), counts(3), counts(4)); 
+            counts(1:2) = fscanf(Tiva_Serial, '%d %d');
+            fprintf('Motor 1: %d counts\nMotor2: %d counts\n',counts(1), counts(2)); 
         case '2'
-            mA(1:4) = fscanf(Tiva_Serial, '%d %d %d %d');
-            fprintf('Motor 1 A: %d, B: %d\nMotor2 A: %d, B: %d\n',mA(1), mA(2), mA(3), mA(4)); 
+            mA(1:2) = fscanf(Tiva_Serial, '%d %d');
+            fprintf('Motor 1: %d mA\nMotor2: %d mA\n',mA(1), mA(2));
         case '3'
            read_plot_matrix_current(Tiva_Serial);
         case '4'
+           read_plot_matrix_current(Tiva_Serial);
+        case '5'
             Kp = input('Enter your desired Kp position gain: ');
             Ki = input('Enter your desired Ki position gain: ');
             fprintf(Tiva_Serial, '%3.2f %3.2f\n',[Kp,Ki]);
-        case '5'
+        case '6'
             Kp = fscanf(Tiva_Serial, '%f');    
             Ki = fscanf(Tiva_Serial, '%f');     
             fprintf('The controller is using Kp = %3.2f and Ki = %3.2f\n',[Kp,Ki]);
+        case '7'
+            fprintf('Recalibrating current offsets\n');
+            pause(1);
         otherwise
             fprintf('Invalid Command, try again...\n');
     end
 end
 
 fclose(Tiva_Serial);
-
 
 end

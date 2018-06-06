@@ -12,23 +12,53 @@
 
 
 #include "r2r.h"
+#include "System.h"
+#include "Encoder.h"
+#include "Motor.h"
+#include "PositionControl.h"
+#include "CurrentControl.h"
+#include "Utilities.h"
+
 
 #define TIMER_6_FREQUENCY 10000
 #define TIMER_7_FREQUENCY 1000
 
 
-void r2rDefaultInit(void){
 
+/*
+ * This function does initialisation for all the default connections
+ *
+ * Comes after:
+ * -
+ */
+void r2rDefaultInit(void)
+{
     sysInit(); // initialize System Clock and master interrupt
     uartInit(); // initialize UART
     encoderSPIInit(); // initialize SPI for encoder
     //adcInit();
     motorInit(); // Set useful signal outputs.
+    MotorSPIInit();
     motorDriverInit(); // Set up the motor for 3x PWM mode
     currentControlInit(); // Set up interrupts for current control 
-    //MotorTimerInit(); // Set up interrupts for motor control loop at 1kHz
+    MotorTimerInit(); // Set up interrupts for motor control loop at 1kHz
     timeInit(); // general purpose tick tock timer, good for testing how long code takes.
+
+    SysCtlDelay(ui32SysClock); // Wait for a second
+
+    setMODE(ICALIB);    // Calibrate current offsets
 }
+
+/*
+ * This function updates all the sensors that we are using. Usually runs once every loop.
+ * TODO: Add sensor functions, add interrupts
+ */
+void sensorUpdate(void){
+    //adcRead();
+    encoderRead(1);
+    encoderRead(2);
+}
+
 
 
 void TIMER6IntHandler(void){
@@ -72,10 +102,11 @@ void customTimersInit(){
     IntPrioritySet(INT_TIMER6A,  0xB0);
     // Set the INT_TIMER7A interrupt priority to the 2nd lowest priority.
     IntPrioritySet(INT_TIMER7A,  0xC0);
-
     IntMasterEnable();
 
 }
+
+
 
 
 

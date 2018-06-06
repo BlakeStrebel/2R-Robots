@@ -13,9 +13,9 @@
 #ifndef UTILITIES_H_
 #define UTILITIES_H_
 
-#define DECIMATION 1    // Decimate the data if necessary
+#define DECIMATION 10    // Decimate the data if necessary
 #define REFERENCE_DATA 10000    // Reference data for trajectory tracking
-#define BUFLEN 10000 // Actual data; sent to client using circular buffer
+#define BUFLEN 100 // Actual data; sent to client using circular buffer  10000 possible?
 
 /**
  * Data structure containing the modes of the system
@@ -24,8 +24,16 @@ typedef enum {
 	IDLE, /**< Sets motor effort to 0 */
 	PWM, /**< PWM directly set by user */
 	ITEST,
+	ISENSE,
+	ICALIB,
 	HOLD, /**< Sets motor effort to holding position */
-	TRACK /**< Sets motor effort to tracking mode */
+	TRACK, /**< Sets motor effort to tracking mode */
+	READ1,
+	READ2,
+	READb,
+	PID1,
+	PID2,
+	PIDb
 	} mode;    // define data structure containing modes
 
 
@@ -36,7 +44,7 @@ typedef struct {
     int refPos[REFERENCE_DATA]; /**< The reference position of the motor */
     int actPos[BUFLEN];  /**< The actual position of the motor */
     float u[BUFLEN];  /**< The control effort of the motor */
-} control_data_t;
+} motor_control_data;
 
 /**
  * @brief Return the Mode of the robot
@@ -67,7 +75,7 @@ void setMODE(mode newMODE);          // Set operating mode
  * @param Void
  * @return Void
  */
-void setN(void);  
+void setN(int timestep);
 
 /**
  * @brief Returns the number of samples
@@ -77,7 +85,7 @@ void setN(void);
  * @param Void
  * @return int the number of samples
  */                                  
-int getN(void);                                             
+int getN(void);
 
 
 /**

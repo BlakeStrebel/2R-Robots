@@ -7,15 +7,15 @@
 #include <math.h>
 
 // PID gains
-static volatile float Kp = 2;
+static volatile PID_gains PID[3];
+
+static volatile float Kp = 0;
 static volatile float Ki = 0;
 static volatile float Kd = 0;
 
+
 // Control info
-static volatile control_data_t M1;
-static volatile control_data_t M2;
-static volatile control_error E1;
-static volatile control_error E2;
+static volatile control_error E[3];
 
 // Decogging state
 static volatile int DECOGGING = 0;
@@ -26,7 +26,10 @@ static volatile int DECOGGING = 0;
  * Comes after:
  * - sysInit()
  */
-void MotorTimerInit(void){
+
+void timerIntInit(void)
+{
+
     setMODE(IDLE);
     IntMasterDisable();
 
@@ -52,121 +55,99 @@ void MotorTimerInit(void){
     TimerEnable(TIMER1_BASE, TIMER_A);
     TimerEnable(TIMER2_BASE, TIMER_A);
 
-  
+
+
     // Set the INT_TIMER1A interrupt priority to the lowest priority.
     IntPrioritySet(INT_TIMER1A, 0x40);
     // Set the INT_TIMER2A interrupt priority to the highest priority.
     IntPrioritySet(INT_TIMER2A, 0);
 
+
+    IntMasterEnable();
+}
+
+void MotorTimerInit(void){
+    setMODE(IDLE);
+    IntMasterDisable();
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_TIMER1);
+    TimerConfigure(TIMER1_BASE, TIMER_CFG_PERIODIC);
+    TimerLoadSet(TIMER1_BASE, TIMER_A, ui32SysClock/1000-1);    // Set control frequency to 1kHz
+    IntPrioritySet(INT_TIMER1A, 0x40); // Second highest priority
+    IntEnable(INT_TIMER1A);
+    TimerIntEnable(TIMER1_BASE, TIMER_TIMA_TIMEOUT);
+    TimerEnable(TIMER1_BASE, TIMER_A);
     IntMasterEnable();
 
-
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPION);
-    GPIOPinTypeGPIOOutput(GPIO_PORTN_BASE, GPIO_PIN_1);
-    GPIOPinWrite(GPIO_PORTN_BASE,GPIO_PIN_1,GPIO_PIN_1);
-
-    E1.u = 0;
-    E2.u = 0;
 }
 
-void get_position_gains(void)   // provide position control gains
+void getPositionGains(void)   // provide position control gains
 {
-    char buffer[25];
-    sprintf(buffer, "%f\r\n",Kp);
-    UART0write(buffer);
-    sprintf(buffer, "%f\r\n",Ki);
-    UART0write(buffer);
-    sprintf(buffer, "%f\r\n",Kd);
-    UART0write(buffer);
+    //char buffer[25];
+    //sprintf(buffer, "%f\r\n",Kp);
+    //UART0write(buffer);
+    //sprintf(buffer, "%f\r\n",Ki);
+    //UART0write(buffer);
+    //sprintf(buffer, "%f\r\n",Kd);
+    //UART0write(buffer);
 }
 
-void set_position_gains(void)   // recieve position control gains
+void setPositionGains(void)   // recieve position control gains
 {
     char buffer[25];
     float Kptemp, Kitemp, Kdtemp;
     UART0read(buffer,25);                              // Store gains in buffer
     sscanf(buffer, "%f %f %f",&Kptemp, &Kitemp, &Kdtemp);   // Extract gains to temporary variables
     IntMasterDisable();                         // Disable interrupts briefly
-    Kp = Kptemp;                                            // Set gains
-    Ki = Kitemp;
-    Kd = Kdtemp;
-    reset_controller_error();
+    PID[1].Kp = Kptemp;                                            // Set gains
+    PID[1].Ki = Kitemp;
+    PID[1].Kd = Kdtemp;
+    resetControllerError();
     IntMasterEnable();                          // Re-enable interrupts
+}
+
+void setPositionPID(int motor)   // recieve position control gains
+{
+    PID[motor].Kp = UART0FloatGet();
+    PID[motor].Ki = UART0FloatGet();
+    PID[motor].Kd = UART0FloatGet();
+    resetControllerError();
 }
 
 // Set new desired angle for motor
 // takes angle in counts
-void set_desired_angle(int angle, int motor)
+void setDesiredAngle(int angle, int motor)
 {
     IntMasterDisable();
-    if (motor == 1)
-    {
-        E1.desired = angle;
-    }
-    else if (motor == 2)
-    {
-        E2.desired = angle;
-    }
+    E[motor].desired = angle;
     IntMasterEnable();
 }
 
-int get_desired_angle(int motor)
+int getDesiredAngle(int motor)
 {
-    int angle;
-    if (motor == 1)
-    {
-        angle = E1.desired;
-    }
-    else if (motor == 2)
-    {
-        angle = E2.desired;
-    }
-
-    return angle;
+    return E[motor].desired;
 }
 
 // Reset error for all of the motors
-void reset_controller_error(void)
+void resetControllerError(void)
 {
-    E1.Eold = 0;
-    E1.Enew = 0;
-    E1.Eint = 0;
-    E1.Edot = 0;
+    E[1].Eold = 0;
+    E[1].Enew = 0;
+    E[1].Eint = 0;
+    E[1].Edot = 0;
 
-    E2.Eold = 0;
-    E2.Enew = 0;
-    E2.Eint = 0;
-    E2.Edot = 0;
+    E[2].Eold = 0;
+    E[2].Enew = 0;
+    E[2].Eint = 0;
+    E[2].Edot = 0;
 }
 
-int get_motor_pwm(int motor)
+int getMotorPWM(int motor)
 {
-    int pwm;
-    if (motor == 1)
-    {
-        pwm = E1.u;
-    }
-    else if (motor == 2)
-    {
-        pwm = E2.u;
-    }
-
-    return pwm;
+    //return E[motor].u;
+    return 0;
 }
 
-void set_motor_pwm(int motor, int value)
-{
-    if (motor == 1)
-    {
-        motor1ControlPWM(value);
-        E1.u = value;
-    }
-    else if (motor == 2)
-    {
-        motor2ControlPWM(value);
-        E2.u = value;
-    }
-}
+
 
 
 void Timer1IntHandler(void)
@@ -174,96 +155,93 @@ void Timer1IntHandler(void)
     static int decctr = 0;  // counter for data decimation
     static int i = 0;   // trajectory index
 
+
+    encoderRead(1); // update encoder values
+    encoderRead(2); // update encoder values
+
+
     TimerIntClear(TIMER1_BASE, TIMER_TIMA_TIMEOUT); // clear the interrupt flag
 
-    encoderRead(); // update encoder values, might have problems if called somewhere else 
 
-    E1.actual = readMotor1RawRelative(); // read positions
-    E2.actual = readMotor2RawRelative();
-    E1.raw = readMotor1Raw();
-    E2.raw = readMotor2Raw();
     switch(getMODE())
     {
         case IDLE:
-        {
             break;
-        }
+        case PID1:
+            PID_Controller(E[1].traj[i] / 2 / M_PI * 16384, readMotorRawRelative(1), 1, 0);    // motor1 control
+        case READ1:
+            decctr++;
+            if (decctr == DECIMATION)
+            {
+                UART0FloatPut(2 * M_PI * readMotorRawRelative(1) / 16384);
+                decctr = 0; // reset decimation counter
+            }
+            i++;
+            break;
         case PWM:
-        {
             break;
-        }
         case ITEST:
-        {
             break;
-        }
+        case PID2:
+            PID_Controller(E[2].traj[i] / 2 / M_PI * 16384, readMotorRawRelative(2) - readMotorRawRelative(1), 2, 0);    // motor2 control
+        case READ2:
+            decctr++;
+            if (decctr == DECIMATION)
+            {
+                UART0FloatPut(2 * M_PI * (readMotorRawRelative(2) - readMotorRawRelative(1)) / 16384);
+                decctr = 0; // reset decimation counter
+            }
+            i++;
+            break;
+        case PIDb:
+            //GPIOPinWrite(GPIO_PORTP_BASE,GPIO_PIN_3,GPIO_PIN_3);
+            PID_Controller(E[1].traj[i] / 2 / M_PI * 16384, readMotorRawRelative(1), 1, 0);    // motor1 control
+            PID_Controller(E[2].traj[i] / 2 / M_PI * 16384, readMotorRawRelative(2) - readMotorRawRelative(1), 2, 0);    // motor2 control
+        case READb:
+            decctr++;
+            if (decctr == DECIMATION)
+            {
+                UART0FloatPut(2 * M_PI * readMotorRawRelative(1) / 16384);
+                UART0FloatPut(2 * M_PI * (readMotorRawRelative(2) - readMotorRawRelative(1)) / 16384);
+                decctr = 0; // reset decimation counter
+            }
+            i++;
+            //GPIOPinWrite(GPIO_PORTP_BASE,GPIO_PIN_3,GPIO_PIN_3);
+            break;
         case HOLD:
-        {
-            PID_Controller(E1.desired, E1.actual, 1);    // motor1 control
-            PID_Controller(E2.desired, E2.actual, 2);    // motor2 control
+            PID_Controller(E[1].desired, readMotorRawRelative(1), 1, 1);    // motor1 control
+            PID_Controller(E[2].desired, readMotorRawRelative(2), 2, 1);    // motor2 control
             break;
-
-        }
-        case TRACK:
-        {
-            if (i == getN())    // Done tracking when index equals number of samples
-            {
-                i = 0; // reset index
-                setMODE(HOLD);  // Hold final position, Could set PWM to zero instead
-            }
-            else
-            {
-                E1.desired = get_refPos(i, 1);
-                E2.desired = get_refPos(i, 2);
-                PID_Controller(E1.desired, E1.actual, 1);    // motor1 control
-                PID_Controller(E2.desired, E2.actual, 2);    // motor2 control
-
-                i++;    // increment index
-
-                // Handle data decimation
-                decctr++;
-                if (decctr == DECIMATION)
-                {
-                    buffer_write(E1.actual, E2.actual, E1.u, E2.u);
-                    decctr = 0; // reset decimation counter
-                }
-            }
-            break;
-        }
+    }
+    if (i >= getN())
+    {
+        i = 0;
+        //GPIOPinWrite(GPIO_PORTP_BASE,GPIO_PIN_3,0);
+        setMODE(IDLE);
     }
 }
 
 // Calculate control effort and set pwm value to control motor
-// pass reference to struct rather than 
-void PID_Controller(int reference, int actual, int motor)
+
+void PID_Controller(int reference, int actual, int motor, int default_gains)
+
 {
     static float u;
 
-    if (motor == 1)
-    {
-        E1.Enew = reference - actual;               // Calculate error
-        E1.Eint = E1.Eint + E1.Enew;                // Calculate intergral error
-        E1.Edot = E1.Enew - E1.Eold;                // Calculate derivative error
-        E1.Eold = E1.Enew;                          // Update old error
-        u = Kp*E1.Enew + Ki*E1.Eint + Kd*E1.Edot;   // Calculate effort
+    E[motor].Enew = reference - actual;               // Calculate error
+    E[motor].Eint = E[motor].Eint + E[motor].Enew;                // Calculate intergral error
+    E[motor].Edot = E[motor].Enew - E[motor].Eold;                // Calculate derivative error
+    E[motor].Eold = E[motor].Enew;                          // Update old error
 
-        if (DECOGGING)                              // Add decogging control
-        {
-            u = u + decog_motor(E1.raw, 1);
-        }
-    }
-    else if (motor == 2)
-    {
-        E2.Enew = reference - actual;               // Calculate error
-        E2.Eint = E2.Eint + E2.Enew;                // Calculate intergral error
-        E2.Edot = E2.Enew - E2.Eold;                // Calculate derivative error
-        E2.Eold = E2.Enew;                          // Update old error
-        u = Kp*E2.Enew + Ki*E2.Eint + Kd*E2.Edot;   // Calculate effort
+    if (default_gains)
+        u = defaultKp[motor] * E[motor].Enew + defaultKi[motor] * E[motor].Eint + defaultKd[motor] * E[motor].Edot;   // Calculate effort
+    else
+        u = PID[motor].Kp * E[motor].Enew + PID[motor].Ki * E[motor].Eint + PID[motor].Kd * E[motor].Edot;   // Calculate effort
 
-        if (DECOGGING)                              // Add decogging control
-        {
-            u = u + decog_motor(E2.raw, 2);
-        }
-    }
+    if (DECOGGING)                              // Add decogging control
+        u += decogMotor(readMotorCounts(motor), motor);
+
+    // Convert mA to counts, bound
 
     // Max effort, defined in Motor.c
     if (u > PWMPERIOD)
@@ -273,12 +251,13 @@ void PID_Controller(int reference, int actual, int motor)
     else if (u < -PWMPERIOD)
     {
         u = -PWMPERIOD;
+
     }
 
     set_motor_pwm(motor, u);
 }
 
-float decog_motor(int x, int motor)
+float decogMotor(int x, int motor)
 {
     float u = 0;
     if (motor == 1)
@@ -293,25 +272,17 @@ float decog_motor(int x, int motor)
     return u;
 }
 
-void setDecogging(void) // Turn motor decogging on/off
+void setDecogging(int decog) // Turn motor decogging on/off
 {
-    char buffer[10]; int decog;
-    sscanf(buffer,"%d",&decog);
     DECOGGING = decog;
 }
 
-void load_position_trajectory(int motor)      // Load trajectory for tracking
-{
-    int i, n, data;
-    char buffer[10];
-    setN();         // Receive number of samples from client
-    n = getN();     // Determine number of samples
 
-    for (i = 0; i < n; i++)
-    {
-        UART0read(buffer,10);           // Read reference position from client
-        sscanf(buffer,"%d",&data);      // Store position in data
-        write_refPos(data, i, motor);   // Write data to reference position array
-    }
+void loadPositionTrajectory(int motor)
+
+{
+    int i;
+    for (i = 0; i < getN(); i++)
+        E[motor].traj[i] = UART0FloatGet();
 }
 

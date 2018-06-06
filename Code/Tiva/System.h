@@ -13,7 +13,9 @@
 #ifndef SYSTEM_H_
 #define SYSTEM_H_
 
+<<<<<<< HEAD
 #include "includes.h"
+
 
 #define MOTOR1 1
 #define MOTOR2 2
@@ -80,13 +82,6 @@ extern void UART0read(char * message, int maxLength);
 extern void UART0write(const char * string);
 
 
-/**
- * @brief Initializes all unused GPIO pins in High-Z state
- *
- * @param Void
- * @return Void
- */
-extern void gpioInit(void); // inits all unused GPIO
 
 /**
  * @brief Stops the processor for a given amount of time. This is an approximate time
@@ -130,5 +125,10 @@ extern uint32_t getTime(void);
  * @return Void
  */
 extern void timeInt(void);
+
+extern void UART0IntPut(int value);
+extern void UART0FloatPut(float value);
+extern float UART0FloatGet();
+extern int UART0IntGet();
 
 #endif /* SYSTEM_H_ */

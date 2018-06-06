@@ -13,8 +13,21 @@
 #ifndef ENCODER_H_
 #define ENCODER_H_
 
+
 #include "includes.h"
 #include "System.h"
+
+
+typedef struct {
+    int position_count;
+    int velocity_count;
+    int zero_count;
+    int previous_count;
+    int continuous_count;
+} encoder_states;
+
+
+
 
 /**
  * @brief Initializes the SPI channels for the motor drivers, encoders, and RAM.
@@ -32,38 +45,30 @@ extern void encoderSPIInit(void);
  * This function sends a 's' and 40 pulses via SPI to the encoder and reads out the encoder's reply to
  * the encoderVal array.
  *
- * @param Void
+ * @param The motor number
  * @return Void
  *
  */
-extern void encoderRead(void);
+extern void encoderRead(int motor_number);
 
 /**
- * @brief Reads value of motor 1 encoders and sets the relative angle to zero
+ * @brief Reads value of motor encoders and sets the relative angle to zero
  *
- * @param Void
+ * @param The motor number
  * @return Void
  *
  */
-extern void zeroMotor1RawRelative(void);
-
-/**
- * @brief Reads value of motor 2 encoders and sets the relative angle to zero
- *
- * @param Void
- * @return The angle as a float
- *
- */
-extern void zeroMotor2RawRelative (void);
+extern void setMotorZero(int motor_number);
 
 
 /**
- * @brief Reads value in encoderVal array for motor 1 and converts it to an angle
+ * @brief Reads value in encoderVal array for motors and converts it to an angle
  *
- * @param Void
+ * @param The motor number
  * @return The angle as a float
  *
  */
+
 extern float readMotor1Angle(void);
 
 /**
@@ -78,92 +83,97 @@ extern float readMotor2Angle(void);
 /**
  * @brief Reads value in encoderVal array for motor 1
  *
- * The range for the read angle is 0 to 16383
+ * The range for the read angle is 0 to 360
  *
  * Example:
  *
  *		encoderRead();
- *		int current_position = readMotor1Raw();
+ *		int current_position = readMotorAngle(1); // reads motor 1
  *
  * @param Void
  * @return The angle as an int
  *
  */
-extern int readMotor1Raw(void);
+extern float readMotorAngle(int motor_number);
+
 
 /**
- * @brief Reads value in encoderVal array for motor 2
+ * @brief Reads value in encoderVal array for motors
  *
  * The range for the read angle is 0 to 16383
  *
- * @param Void
+ * @param The motor number
  * @return The angle as an int
  *
  */
-extern int readMotor2Raw(void);
+extern int readMotorRaw(int motor_number);
 
 /**
- * @brief Reads value in encoderVal array for motor 1 and keeps track of multiturn counts
+ * @brief Reads value in encoderVal array for motors and keeps track of multiturn counts
  *
  * This function reads out the angle and keeps track of it for multiple turns. The value
  * ranges from -2,147,483,648 to 2,147,483,648. Each turn is 16383 counts
  *
- * @param Void
+ * @param The motor number
  * @return The counts as an int
  *
  */
-extern int readMotor1RawRelative(void);
+extern int readMotorRawRelative(int motor_number);
 
 /**
- * @brief Reads value in encoderVal array for motor 2 and keeps track of multiturn counts
- *
- * This function reads out the angle and keeps track of it for multiple turns. The value
- * ranges from -2,147,483,648 to 2,147,483,648
- *
- * @param Void
- * @return The counts as an int
- *
- */
-extern int readMotor2RawRelative(void);
-
-/**
- * @brief Reads value in encoderVal array for motor 1 and keeps track of multiturn angles
+ * @brief Reads value in encoderVal array for motors and keeps track of multiturn angles
  *
  * This function reads out the angle and keeps track of it for multiple turns.
  *
- * @param Void
- * @return The angle as an int
+ * @param int motor number
+ * @return float relative angle in degrees
  *
  */
-extern float readMotor1AngleRelative(void);
+extern float readMotorAngleRelative(int motor_number);
 
 /**
- * @brief Reads value in encoderVal array for motor 2 and keeps track of multiturn angles
+ * @brief Reads the motors' speed in terms of revolutions/sec from the encoder
  *
- * This function reads out the angle and keeps track of it for multiple turns.
- *
- * @param Void
- * @return The angle as an int
- *
- */
-extern float readMotor2AngleRelative(void);
-
-/**
- * @brief Reads the motor 1's speed in terms of revolutions/sec from the encoder
- *
- * @param Void
+ * @param int motor number
  * @return float the speed of the motor in rev/s
  */
-extern float readMotor2Speed(void);
+extern float readMotorSpeed(int motor_number);
 
 /**
- * @brief Reads the motor 2's speed in terms of revolutions/sec from the encoder
+ * @brief Reads value in encoderVal array for motors and keeps track of multiturn angles
  *
- * @param Void
- * @return float the speed of the motor in rev/s
+ * This function reads out the angle in radians and keeps track of it for multiple turns.
+ *
+ * @param int motor number
+ * @return float relative angle in radians
+ *
  */
-extern float readMotor1Speed(void);
+extern float readMotorRadRelative(int motor_number);
 
+
+
+/**
+ * @brief Reads absolute angle in radians
+ *
+ * This function reads out the absolute angle in radians
+ *
+ * @param int motor number
+ * @return float absolute angle in radians
+ *
+ */
+extern float readMotorRad(int motor_number);
+
+/**
+ * @brief Reads absolute angle in counts
+ *
+ * This function reads out the absolute angle in radians
+ *
+ * @param int motor number
+ * @return int absolute angle in counts
+ *
+ */
+
+extern int readMotorCounts(int motor_number);
 
 /**
  * @brief Helper function that converts an angle degrees into counts
@@ -172,6 +182,5 @@ extern float readMotor1Speed(void);
  * @return int counts
  */
 extern int anglesToCounts(float angle);
-
 
 #endif /* ENCODER_H_ */

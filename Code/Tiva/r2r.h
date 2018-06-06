@@ -39,6 +39,22 @@
 extern void r2rDefaultInit(void);
 
 /**
+ * @brief Updates the sensor readings
+ *
+ * When called this function updates the encoder readings. Other sensor reading functions can also be added here.
+ *
+ * Example:
+ *
+ *     int main() {
+ *			sensorUpdate();
+ *     }
+ *
+ * @param Void
+ * @return Void
+ */
+extern void sensorUpdate()
+
+/**
  * @brief Initializes custom timers
  *
  * This function initializes timers 6 and 7 at preset frequencies as defined in r2r.c

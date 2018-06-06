@@ -16,11 +16,13 @@ void sysInit(void)
     while(!SysCtlPeripheralReady(SYSCTL_PERIPH_GPION)) {}
 
     // Set the clock to run directly from the crystal at 120MHz.
-    // TODO: Currently we are using internal oscillator and it is better to change to external crystal.
-    ui32SysClock = SysCtlClockFreqSet(SYSCTL_OSC_INT | SYSCTL_USE_PLL |
-                                      SYSCTL_CFG_VCO_480, 120000000);
+    // For internal crystal.
+    //ui32SysClock = SysCtlClockFreqSet(SYSCTL_OSC_INT | SYSCTL_USE_PLL | SYSCTL_CFG_VCO_480, 120000000);
     // Use 25Mhz crystal and use PLL to accelerate to 120MHz
-    //ui32SysClock = ysCtlClockFreqSet(SYSCTL_XTAL_25MHZ | SYSCTL_OSC_MAIN | SYSCTL_USE_PLL | SYSCTL_CFG_VCO_480, 120000000);
+    ui32SysClock = SysCtlClockFreqSet(SYSCTL_XTAL_25MHZ | SYSCTL_OSC_MAIN | SYSCTL_USE_PLL | SYSCTL_CFG_VCO_480, 120000000);
+
+    // Enable FPU for calculation.
+    FPUEnable();
 }
 
 /*
@@ -84,19 +86,6 @@ void UART0write(const char * string)
     }
 }
 
-/*
- *  This function sets up all the GPIO pins for unused and other pins that are used in other functions.
- *
- *  Comes after:
- *  -
- */
-void gpioInit(void){
-    // Unused pins, enable and set to inputs
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOP);
-    GPIOPinTypeGPIOInput(GPIO_PORTP_BASE, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2);
-    GPIOPinTypeGPIOOutput(GPIO_PORTP_BASE,GPIO_PIN_3);
-    GPIOPinWrite(GPIO_PORTP_BASE,GPIO_PIN_3,GPIO_PIN_3);
-}
 
 /*
  * This function stops the clock for a given amount of ms
@@ -107,7 +96,6 @@ void gpioInit(void){
 void delayMS(int ms) {
     //SysCtlDelay( (SysCtlClockGet()/(3*1000))*ms ) ;
     SysCtlDelay( (ui32SysClock/(3*1000))*ms ) ; // 3 clock delays is 1us
-
 }
 
 /*
@@ -126,4 +114,53 @@ void timeInt(){
 
 uint32_t getTime(){
     return micros; //return the counter
+}
+
+void UART0IntPut(int value)
+{
+    uint8_t *byte;
+    byte = &value;
+    int i;
+    for (i = 0; i < 4; i++)
+        UARTCharPut(UART0_BASE, *byte++);
+}
+
+void UART0FloatPut(float value)
+{
+    uint8_t *byte;
+    byte = &value;
+    int i;
+    for (i = 0; i < 4; i++)
+        UARTCharPut(UART0_BASE, *byte++);
+}
+
+void UART0ArrayPut(int number, float * value)
+{
+    uint8_t *byte;
+    byte = &value;
+    int i;
+    for (i = 0; i < number * 4; i++)
+        UARTCharPut(UART0_BASE, *byte++);
+}
+
+float UART0FloatGet()
+{
+    char recev[4];
+    float *getfloat;
+    int i;
+    for (i = 0; i < 4; i++)
+        recev[i] = UARTCharGet(UART0_BASE);
+    getfloat = &recev;
+    return *getfloat;
+}
+
+int UART0IntGet()
+{
+    char recev[4];
+    int *getint;
+    int i;
+    for (i = 0; i < 4; i++)
+        recev[i] = UARTCharGet(UART0_BASE);
+    getint = &recev;
+    return *getint;
 }
