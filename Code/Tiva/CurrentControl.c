@@ -5,8 +5,8 @@
 #include "Utilities.h"
 #include <stdio.h>
 
-#define SWITCHDELAY 30  // Number of Cycles to Delay updating current on state switch
-#define MA_PER_COUNT 5.75474330357
+#define SWITCHDELAY 30              // Number of Cycles to Delay updating current on state switch
+#define MA_PER_COUNT 5.75474330357  // Conversion between ADC counts and mA
 
 // Voltage offsets for the motor phases in counts
 static volatile int M1_A_OFFSET = 0;
@@ -14,31 +14,25 @@ static volatile int M1_B_OFFSET = 0;
 static volatile int M2_A_OFFSET = 0;
 static volatile int M2_B_OFFSET = 0;
 
+// Current sensing
 static volatile uint32_t M1_A_COUNTS, M1_B_COUNTS, M2_A_COUNTS, M2_B_COUNTS;
 static volatile int MOTOR1CURRENT = 0, MOTOR1REF = 0;
 static volatile int MOTOR2CURRENT = 0, MOTOR2REF = 0;
-static volatile int PWM1 = 0, PWM2 = 0;
 
+// Current control data
 static volatile int E1 = 0, Eint1 = 0, E2 = 0, Eint2 = 0;
 static volatile float Kp = 5, Ki = 0.15;
+static volatile int PWM1 = 0, PWM2 = 0;
 
+// Initialize ADC0 to read phase currents for each motor using fixed frequency interrupt
 void currentControlInit(void){
 
     IntMasterDisable();
-
-    // Initialize ADC mux
-    /*SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOM);
-    GPIOPinTypeGPIOOutput(GPIO_PORTM_BASE, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3);
-    setADCMux(1,0); // Initialize mux to sample Phase A
-    setADCMux(2,0);*/
 
     // Peripheral Enable
     SysCtlPeripheralEnable(SYSCTL_PERIPH_ADC0);
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOE);
     SysCtlPeripheralEnable(SYSCTL_PERIPH_TIMER2);
-    //SysCtlPeripheralEnable(SYSCTL_PERIPH_GPION);
-    //GPIOPinTypeGPIOOutput(GPIO_PORTN_BASE, GPIO_PIN_0); Used to time ADC
-    //GPIOPinWrite(GPIO_PORTN_BASE, GPIO_PIN_0, GPIO_PIN_0);
 
     // Wait for the ADC0 module to be ready
     while(!SysCtlPeripheralReady(SYSCTL_PERIPH_ADC0)) {;}
@@ -49,8 +43,6 @@ void currentControlInit(void){
 
     // Configure the ADC to use 2x hardware averaging of ADC samples
     ADCHardwareOversampleConfigure(ADC0_BASE, 2);
-
-    /* DEV BOARD */
 
     // Configure ADC pins
     GPIOPinTypeADC(GPIO_PORTE_BASE, GPIO_PIN_0); // AIN3 (Motor 1 A)
@@ -74,212 +66,174 @@ void currentControlInit(void){
     TimerControlTrigger(TIMER2_BASE, TIMER_A, true);
     TimerEnable(TIMER2_BASE, TIMER_A);
 
-    /* PCB
-
-    // Configure ADC pins
-    GPIOPinTypeADC(GPIO_PORTE_BASE, GPIO_PIN_1); // AIN2 (Motor 1)
-    GPIOPinTypeADC(GPIO_PORTE_BASE, GPIO_PIN_0); // AIN3 (Motor 2)
-
-    ADCSequenceConfigure(ADC0_BASE, 0, ADC_TRIGGER_TIMER, 0);
-    ADCSequenceStepConfigure(ADC0_BASE, 0, 0, ADC_CTL_CH2);
-    ADCSequenceStepConfigure(ADC0_BASE, 0, 1, ADC_CTL_CH3| ADC_CTL_IE | ADC_CTL_END);
-    ADCSequenceEnable(ADC0_BASE, 0);
-    IntPrioritySet(INT_ADC0SS0, 0x00);   // Set ADC interrupt to highest priority
-
-    // Configure ADC timer
-    TimerConfigure(TIMER2_BASE, TIMER_CFG_PERIODIC);
-    int samplePeriod = ui32SysClock/60000;  // Read ADC at 60,000Hz, current control runs at half this frequency
-    TimerLoadSet(TIMER2_BASE, TIMER_A, samplePeriod-1);
-    TimerControlTrigger(TIMER2_BASE, TIMER_A, true);
-    TimerEnable(TIMER2_BASE, TIMER_A);
-    */
-
     // Enable Interrupts
-    ADCIntEnable(ADC0_BASE, 0x00); // First priority
+    ADCIntEnable(ADC0_BASE, 0x00);
     IntEnable(INT_ADC0SS0);
     IntMasterEnable();
 }
 
 void CurrentControlIntHandler(void)
 {
-    static int i = 0, decctr = 0, ready = 1, mux = 0;
-    static int m1_A_calib = 0, m1_B_calib = 0, m2_A_calib = 0, m2_B_calib = 0;
+    static int i = 0, decctr = 0;   // Indexing values
+    static int m1_A_calib = 0, m1_B_calib = 0, m2_A_calib = 0, m2_B_calib = 0;  // Current sense calibration
 
     ADCIntClear(ADC0_BASE, 0); // Clear interrupt  flag
 
-    // Update ADC values for muxed phase
-    AD0_read(mux);
+    AD0_read(0);    // Update ADC values
+    counts_read();  // Update motor current from phase currents
 
-    // Update Mux for the next read
-    /*mux = !mux;
-    setADCMux(1,mux);
-    setADCMux(2,mux);
-    */
-
-    // Wait until we've sampled both phases to do control
-    if (ready)
+    switch(getMODE())
     {
-        counts_read();  // Update motor current from phase currents
-
-        switch(getMODE())
+        case IDLE:
         {
-            case IDLE:
+            // Zero control effort
+            motor1ControlPWM(0);
+            motor2ControlPWM(0);
+            reset_current_error();
+            break;
+        }
+        case PWM:
+        {
+            // Motor PWMs have been set externally
+            break;
+        }
+        case HOLD:
+        {
+            PI_controller(MOTOR1, MOTOR1REF, MOTOR1CURRENT); // Track reference signal
+            PI_controller(MOTOR2, MOTOR2REF, MOTOR2CURRENT);
+            break;
+        }
+        case TRACK:
+        {
+            PI_controller(MOTOR1, MOTOR1REF, MOTOR1CURRENT); // Track reference signal
+            PI_controller(MOTOR2, MOTOR2REF, MOTOR2CURRENT);
+            break;
+        }
+        case ICALIB:
+        {
+            if (i == 1000)  // Done sensing when index equals number of samples
             {
-                // Zero control effort
+                // Find average deviation from zero current and apply as offset
+                M1_A_OFFSET = -1*m1_A_calib/1000;
+                M1_B_OFFSET = -1*m1_B_calib/1000;
+                M2_A_OFFSET = -1*m2_A_calib/1000;
+                M2_B_OFFSET = -1*m2_B_calib/1000;
+
+                // Reset calibration sums
+                m1_A_calib = 0;
+                m1_B_calib = 0;
+                m2_A_calib = 0;
+                m2_B_calib = 0;
+
+                setMODE(IDLE);
+                i = 0;
+            }
+            else
+            {
+                i++; //increment data
+
+                // Sum deviations from zero current
+                m1_A_calib = m1_A_calib + M1_A_COUNTS - 2047;
+                m1_B_calib = m1_B_calib + M1_B_COUNTS - 2047;
+                m2_A_calib = m2_A_calib + M2_A_COUNTS - 2047;
+                m2_B_calib = m2_B_calib + M2_B_COUNTS - 2047;
+            }
+
+            break;
+        }
+        case ISENSE:
+        {
+            if (i == getN())  // Done sensing when index equals number of samples
+            {
+                setMODE(IDLE);
+                i = 0;
+            }
+            else
+            {
+                i++; //increment data
+
+                // Handle data decimation
+                decctr++;
+                if (decctr == DECIMATION)
+                {
+                    buffer_write(MOTOR1REF, MOTOR1CURRENT, MOTOR2REF, MOTOR2CURRENT);
+                    decctr = 0; // reset decimation counter
+                }
+            }
+            break;
+        }
+        case ITEST:
+        {
+            // Generate Reference Square Wave
+            if (i == 0)
+            {
+                MOTOR1REF = 200;    // 200 count amplitude (~1150mA)
+                MOTOR2REF = 200;
+            }
+            else if (i % 150 == 0)
+            {
+                MOTOR1REF = -MOTOR1REF;
+                MOTOR2REF = -MOTOR2REF;
+            }
+
+            if (i == getN())  // Done tracking when index equals number of samples
+            {
+                setMODE(IDLE);
+                MOTOR1REF = 0;
+                MOTOR2REF = 0;
                 motor1ControlPWM(0);
                 motor2ControlPWM(0);
+                i = 0;
                 reset_current_error();
-                break;
             }
-            case PWM:
-            {
-                // Motor PWMs have been set externally
-                break;
-            }
-            case HOLD:
+            else
             {
                 PI_controller(MOTOR1, MOTOR1REF, MOTOR1CURRENT); // Track reference signal
                 PI_controller(MOTOR2, MOTOR2REF, MOTOR2CURRENT);
-                break;
+
+                i++; //increment data
+
+                // Handle data decimation
+                decctr++;
+                if (decctr == DECIMATION)
+                {
+                    buffer_write(MOTOR1REF, MOTOR1CURRENT, MOTOR2REF, MOTOR2CURRENT);
+                    decctr = 0; // reset decimation counter
+                }
+
             }
-            case TRACK:
+            break;
+        }
+        case ITRACK:
+        {
+            // Reference current has been set by client
+
+            if (i == getN())  // Done sensing when index equals number of samples
+            {
+                setMODE(IDLE);
+                i = 0;
+            }
+            else
             {
                 PI_controller(MOTOR1, MOTOR1REF, MOTOR1CURRENT); // Track reference signal
                 PI_controller(MOTOR2, MOTOR2REF, MOTOR2CURRENT);
-                break;
+
+                i++; //increment data
+
+                // Handle data decimation
+                decctr++;
+                if (decctr == DECIMATION)
+                {
+                    buffer_write(MOTOR1REF, MOTOR1CURRENT, MOTOR2REF, MOTOR2CURRENT);
+                    decctr = 0; // reset decimation counter
+                }
             }
-            case ICALIB:
-            {
-                if (i == 1000)  // Done sensing when index equals number of samples
-                {
-                    // Find average deviation from zero current and apply as offset
-                    M1_A_OFFSET = -1*m1_A_calib/1000;
-                    M1_B_OFFSET = -1*m1_B_calib/1000;
-                    M2_A_OFFSET = -1*m2_A_calib/1000;
-                    M2_B_OFFSET = -1*m2_B_calib/1000;
-
-                    // Reset calibration sums
-                    m1_A_calib = 0;
-                    m1_B_calib = 0;
-                    m2_A_calib = 0;
-                    m2_B_calib = 0;
-
-                    setMODE(IDLE);
-                    i = 0;
-                }
-                else
-                {
-                    i++; //increment data
-
-                    // Sum deviations from zero current
-                    m1_A_calib = m1_A_calib + M1_A_COUNTS - 2047;
-                    m1_B_calib = m1_B_calib + M1_B_COUNTS - 2047;
-                    m2_A_calib = m2_A_calib + M2_A_COUNTS - 2047;
-                    m2_B_calib = m2_B_calib + M2_B_COUNTS - 2047;
-                }
-
-                break;
-            }
-            case ISENSE:
-            {
-                if (i == getN())  // Done sensing when index equals number of samples
-                {
-                    setMODE(IDLE);
-                    i = 0;
-                }
-                else
-                {
-                    i++; //increment data
-
-                    // Handle data decimation
-                    decctr++;
-                    if (decctr == DECIMATION)
-                    {
-                        //buffer_write(M1_A_COUNTS - 2047 + M1_A_OFFSET, M1_B_COUNTS - 2047 + M1_B_OFFSET, M2_A_COUNTS - 2047 + M2_A_OFFSET, M2_B_COUNTS - 2047 + M2_B_OFFSET);
-                        //buffer_write(M1_A_COUNTS - 2047 + M1_A_OFFSET, M1_B_COUNTS - 2047 + M1_B_OFFSET, MOTOR1CURRENT,MOTOR1CURRENT);
-                        //buffer_write(M2_A_COUNTS - 2047 + M2_A_OFFSET, M2_B_COUNTS - 2047 + M2_B_OFFSET, MOTOR2CURRENT,MOTOR2CURRENT);
-                        buffer_write(MOTOR1REF, MOTOR1CURRENT, MOTOR2REF, MOTOR2CURRENT);
-
-                        decctr = 0; // reset decimation counter
-                    }
-                }
-                break;
-            }
-            case ITEST:
-            {
-                // Generate Reference Square Wave
-                if (i == 0)
-                {
-                    MOTOR1REF = 200;    // 200 count amplitude (~1150mA)
-                    MOTOR2REF = 200;
-                }
-                else if (i % 150 == 0)
-                {
-                    MOTOR1REF = -MOTOR1REF;
-                    MOTOR2REF = -MOTOR2REF;
-                }
-
-                if (i == getN())  // Done tracking when index equals number of samples
-                {
-                    setMODE(IDLE);
-                    MOTOR1REF = 0;
-                    MOTOR2REF = 0;
-                    motor1ControlPWM(0);
-                    motor2ControlPWM(0);
-                    i = 0;
-                    reset_current_error();
-                }
-                else
-                {
-                    PI_controller(MOTOR1, MOTOR1REF, MOTOR1CURRENT); // Track reference signal
-                    PI_controller(MOTOR2, MOTOR2REF, MOTOR2CURRENT);
-
-                    i++; //increment data
-
-                    // Handle data decimation
-                    decctr++;
-                    if (decctr == DECIMATION)
-                    {
-                        buffer_write(MOTOR1REF, MOTOR1CURRENT, MOTOR2REF, MOTOR2CURRENT);
-                        decctr = 0; // reset decimation counter
-                    }
-
-                }
-                break;
-            }
-            case ITRACK:
-            {
-                // Reference current has been set by client
-
-                if (i == getN())  // Done sensing when index equals number of samples
-                {
-                    setMODE(IDLE);
-                    i = 0;
-                }
-                else
-                {
-                    PI_controller(MOTOR1, MOTOR1REF, MOTOR1CURRENT); // Track reference signal
-                    PI_controller(MOTOR2, MOTOR2REF, MOTOR2CURRENT);
-
-                    i++; //increment data
-
-                    // Handle data decimation
-                    decctr++;
-                    if (decctr == DECIMATION)
-                    {
-                        buffer_write(MOTOR1REF, MOTOR1CURRENT, MOTOR2REF, MOTOR2CURRENT);
-                        decctr = 0; // reset decimation counter
-                    }
-                }
-                break;
-            }
+            break;
         }
     }
-
-    //ready = !ready;
-
 }
 
+// Calculate motor pwm using current error
 void PI_controller(int motor, int reference, int actual)
 {
     if (motor == 1)
@@ -287,7 +241,7 @@ void PI_controller(int motor, int reference, int actual)
         E1 = reference - actual;
         Eint1 = Eint1 + E1;
         PWM1 = Kp*E1 + Ki*Eint1;
-        PWM1 = boundInt(PWM1, 2000);
+        PWM1 = boundInt(PWM1, PWMPERIOD-1);
         motor1ControlPWM(PWM1);
     }
     else if (motor == 2)
@@ -295,12 +249,13 @@ void PI_controller(int motor, int reference, int actual)
         E2 = reference - actual;
         Eint2 = Eint2 + E2;
         PWM2 = Kp*E2 + Ki*Eint2;
-        PWM2 = boundInt(PWM2, 2000);
+        PWM2 = boundInt(PWM2, PWMPERIOD-1);
         motor2ControlPWM(PWM2);
     }
 }
 
-void get_current_gains(void)   // provide position control gains
+// Print current control gains over UART
+void get_current_gains(void)
 {
     char buffer[25];
     sprintf(buffer, "%f\r\n",Kp);
@@ -309,19 +264,21 @@ void get_current_gains(void)   // provide position control gains
     UART0write(buffer);
 }
 
-void set_current_gains(void)   // Receive position control gains
+// Set current control gains over UART
+void set_current_gains(void)
 {
     char buffer[25];
     float Kptemp, Kitemp;
-    UART0read(buffer,25);                              // Store gains in buffer
+    UART0read(buffer,25);                       // Store gains in buffer
     sscanf(buffer, "%f %f",&Kptemp, &Kitemp);   // Extract gains to temporary variables
     IntMasterDisable();                         // Disable interrupts briefly
-    Kp = Kptemp;                                            // Set gains
+    Kp = Kptemp;                                // Set gains
     Ki = Kitemp;
     reset_current_error();
     IntMasterEnable();                          // Re-enable interrupts
 }
 
+// Set reference current for motor current controller
 void setCurrent(int motor, int u)
 {
     if (motor == 1)
@@ -334,6 +291,7 @@ void setCurrent(int motor, int u)
     }
 }
 
+// Return motor current
 int getCurrent(int motor)
 {
     int current;
@@ -348,6 +306,7 @@ int getCurrent(int motor)
     return current;
 }
 
+// Return motor PWM
 int getPWM(int motor)
 {
     int pwm;
@@ -362,13 +321,14 @@ int getPWM(int motor)
     return pwm;
 }
 
-
+// Reset error being used for current control
 void reset_current_error(void)
 {
     E1 = 0; E2 = 0;
     Eint1 = 0; Eint2 = 0;
 }
 
+// Process phase voltages to update motor currents in counts
 void counts_read(void)
 {
     static int M1_A, M1_B, M2_A, M2_B;
@@ -376,7 +336,7 @@ void counts_read(void)
     static int32_t M1_hallstate = 0, M1_hallstate_prev = 0, M1_hallstate_cntr = 0;
     static int32_t M2_hallstate = 0, M2_hallstate_prev = 0, M2_hallstate_cntr = 0;
 
-    // Offset phase currents to be centered at zero
+    // Offset phase currents to be centered at zero using calibration data
     IntMasterDisable();
     M1_A = (int)M1_A_COUNTS - 2047 + M1_A_OFFSET;
     M1_B = (int)M1_B_COUNTS - 2047 + M1_B_OFFSET;
@@ -469,21 +429,13 @@ void counts_read(void)
     M2_current_prev = MOTOR2CURRENT;    // Update previous current value
 }
 
-
-
-
-
-
-
-// Read AD0
+// Read AD0 containing raw phase voltages measured across shunt resistor
 void AD0_read(int mux)
 {
     static uint32_t TEMP[8]={0};
 
     // Extract ADC values into array
     ADCSequenceDataGet(ADC0_BASE, 0, TEMP);
-
-    /* DEV BOARD */
 
     // Update Global COUNTS
     IntMasterDisable();
@@ -492,25 +444,6 @@ void AD0_read(int mux)
     M2_A_COUNTS = TEMP[2];
     M2_B_COUNTS = TEMP[3];
     IntMasterEnable();
-
-    /* PCB
-    if (mux == 0)   // mux 1 reads Phase A
-    {
-        // Update Global COUNTS
-        IntMasterDisable();
-        M1_A_COUNTS = TEMP[0];
-        M2_A_COUNTS = TEMP[1];
-        IntMasterEnable();
-    }
-    else            // mux 2 reads Phase B
-    {
-        // Update Global COUNTS
-        IntMasterDisable();
-        M1_B_COUNTS = TEMP[0];
-        M2_B_COUNTS = TEMP[1];
-        IntMasterEnable();
-    }
-    */
 }
 
 // Print motor current in mA
@@ -518,7 +451,6 @@ void get_mA(void)
 {
     char buffer[10];
     int M1_current_mA, M2_current_mA;
-
 
     // Convert counts to mA
     IntMasterDisable();
@@ -545,7 +477,7 @@ void get_counts(void)
     UART0write(buffer);
 }
 
-// Mux being used to read current values
+// Mux being used to read current values, this function is only necessary on the PCB
 void setADCMux(int motor,int number){
     switch(motor){
     case 1:
