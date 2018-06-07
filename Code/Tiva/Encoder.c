@@ -41,9 +41,6 @@ void encoderSPIInit(void){
     GPIOPinConfigure(GPIO_PQ2_SSI3XDAT0);
     GPIOPinConfigure(GPIO_PQ3_SSI3XDAT1);
 
-    /*GPIOPinConfigure(GPIO_PA2_SSI0CLK);
-    GPIOPinConfigure(GPIO_PA4_SSI0XDAT0);
-    GPIOPinConfigure(GPIO_PA5_SSI0XDAT1);*/
     // Encoder 2
     GPIOPinConfigure(GPIO_PB5_SSI1CLK);
     GPIOPinConfigure(GPIO_PE4_SSI1XDAT0);
@@ -53,9 +50,6 @@ void encoderSPIInit(void){
     // encoder 1
     GPIOPinTypeSSI(GPIO_PORTQ_BASE, GPIO_PIN_0 | GPIO_PIN_2 | GPIO_PIN_3); // SCK/MOSI/MISO
     GPIOPinTypeGPIOOutput(GPIO_PORTL_BASE, GPIO_PIN_4); //CS
-
-    //GPIOPinTypeSSI(GPIO_PORTA_BASE, GPIO_PIN_2 | GPIO_PIN_4 | GPIO_PIN_5); // SCK/MOSI/MISO
-    //GPIOPinTypeGPIOOutput(GPIO_PORTL_BASE, GPIO_PIN_0); //CS
 
     // encoder 2
     GPIOPinTypeSSI(GPIO_PORTB_BASE, GPIO_PIN_5); // SCK

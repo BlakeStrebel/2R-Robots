@@ -9,10 +9,6 @@ static volatile control_data_t M2;
 static volatile int N;                  // Number of samples to store
 static volatile unsigned int READ = 0, WRITE = 0; // circular buffer indexes
 
-
-//TODO: Are there complications with my buffer usage?
-
-
 void setMODE(mode newMODE) {  // Set mode
     MODE = newMODE;     // Update global MODE
 }

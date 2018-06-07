@@ -41,6 +41,10 @@ typedef struct {
     int u[BUFLEN];  /**< The control effort of the motor */
 } control_data_t;
 
+void setNclient(int n);          // Recieve number of values to store in position data arrays from client
+int boundInt(int a, int n);
+int maxInt(int a, int b);
+
 /**
  * @brief Return the Mode of the robot
  * 
@@ -175,11 +179,6 @@ void buffer_write(int M1_actPos, int M2_actPos, int M1_u, int M2_u);
  * @return Void
  */
 void send_data(void);
-
-void setNclient(int n);          // Recieve number of values to store in position data arrays from client
-int boundInt(int a, int n);
-int maxInt(int a, int b);
-
 
 
 #endif /* UTILITIES_H_ */
