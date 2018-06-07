@@ -54,7 +54,7 @@ extern void Timer1IntHandler(void);
 * @param Void
 * @return Void
 */
-void set_position_gains(void);                      // Set position gains
+void setPositionGains(void);                      // Set position gains
 
 /**
 * @brief Gets position gains on the Tiva microcontroller by reading to UART
@@ -62,7 +62,7 @@ void set_position_gains(void);                      // Set position gains
 * @param Void
 * @return Void
 */
-void get_position_gains(void);                      // Get position gains
+void getPositionGains(void);                      // Get position gains
 
 
 /**
@@ -81,13 +81,6 @@ int getDesiredAngle(int motor);
 */
 void setDesiredAngle(int angle, int motor);
 
-/**
-* @brief Resets desired position to origin
-*
-* @param Void
-* @return Void
-*/
-void reset_pos(void);                               // Reset desired position to origin (0 um)
 
 /**
 * @brief Resets controller error on both controllers to be zero
@@ -112,7 +105,7 @@ void loadPositionTrajectory(int motor);                // Load desired position 
 * @param int a given motor
 * @return int the pwm on the motor
 */
-int get_motor_pwm(int motor);
+int getMotorPWM(int motor);
 
 
 /**

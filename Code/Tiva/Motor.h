@@ -24,9 +24,7 @@
 #define PWMPERIOD 4000
 
 
-<<<<<<< HEAD
-/* MOTOR 1 HALL SENSOR PINS */
-=======
+
 /* DEV BOARD WIRING */
 // MOTOR 1 HALL SENSOR PINS
 #define M1H_PERIPH SYSCTL_PERIPH_GPIOM
@@ -180,7 +178,7 @@ extern void motor1ControlPWM(int control);
  */
 extern void motor2ControlPWM(int control);
 
-<<<<<<< HEAD
+
 
 /**
 * @brief Initializes the GPIO pins for the motor
@@ -190,8 +188,6 @@ extern void motor2ControlPWM(int control);
 * @param Void
 * @return Void
 */
-=======
->>>>>>> Huan
 extern void motorInit(void);
 
 void M1_INL_WRITE(int a, int b, int c);
@@ -226,7 +222,7 @@ int getmotor2PWM(void);
 */
 int32_t getmotor1HALLS(void);
 
-<<<<<<< HEAD
+
 /**
 * @brief Returns the current state of the halls for motor 2
 *
@@ -259,8 +255,6 @@ extern void shutdownNow(void);
  */
 extern void motorSafetyCheck(void);
 
-=======
->>>>>>> Huan
 /**
  * @brief Initializes the SPI channels for the motor drivers
  *
@@ -282,18 +276,14 @@ extern void motorDriverInit(void);
 /**
  * @brief Initializes PWM
  *
- * Initialize PWM on PF0 (motor 1) and PG0 (motor 2), and the default period if 9600 SysClk
- * cycles or 12500Hz
+ * Initialize PWM on PF0 (motor 1) and PG0 (motor 2), and the default period if 4000 SysClk
+ * cycles or 30000Hz
  *
  * @param Void
  * @return Void
  */
 extern void pwmInit(void);
 
-<<<<<<< HEAD
-
-=======
->>>>>>> Huan
 /**
  * @brief Sets the PWM value to motors
  *
@@ -308,14 +298,12 @@ extern void motorPWM(int motor_number, int pwmValue);
  * @brief Sets the PWM value and direction to motors
  *
  * @param The motor number
- * @param control The pwmValue ranges from -maximum pwm period to the positive period. The default pwm period is 320 SysClk cycles
+ * @param control The control ranges from -maximum pwm period to the positive period. The default maximum is 4000
  * @return Void
  *
  */
 extern void motorControlPWM(int motor_number, int control);
 
-<<<<<<< HEAD
-=======
 /**
  * @brief Brakes motors
  *
@@ -324,7 +312,6 @@ extern void motorControlPWM(int motor_number, int control);
  */
 extern void motorBrake(int motor_number);
 
->>>>>>> Huan
 /**
  * @brief Checks the error pins and returns a value based on the state of the pin
  *

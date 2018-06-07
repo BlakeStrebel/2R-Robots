@@ -13,7 +13,6 @@
 #ifndef SYSTEM_H_
 #define SYSTEM_H_
 
-<<<<<<< HEAD
 #include "includes.h"
 
 
@@ -126,9 +125,41 @@ extern uint32_t getTime(void);
  */
 extern void timeInt(void);
 
+
+/**
+ * @brief A UART function that puts an int into UART0
+ *
+ *
+ * @param int value that is sent over UART
+ * @return Void
+ */
 extern void UART0IntPut(int value);
+
+/**
+ * @brief A UART function that puts a float into UART0
+ *
+ *
+ * @param float value that is sent over UART
+ * @return Void
+ */
 extern void UART0FloatPut(float value);
-extern float UART0FloatGet();
-extern int UART0IntGet();
+
+/**
+ * @brief A UART function that gets a float from UART0
+ *
+ *
+ * @param Void
+ * @return float the value that is read from the UART buffer
+ */
+extern float UART0FloatGet(void);
+
+/**
+ * @brief A UART function that gets an int from UART0
+ *
+ *
+ * @param Void
+ * @return int the value that is read from the UART buffer
+ */
+extern int UART0IntGet(void);
 
 #endif /* SYSTEM_H_ */
