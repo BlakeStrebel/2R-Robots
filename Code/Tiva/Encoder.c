@@ -20,16 +20,16 @@ int zeroing1 = 0;
 int zeroing2 = 0;
 
 /*
- * This function initializes the SPI on SSI0, using PA2 (CLK), PA3(SS), PA4(RX), PA5(TX)
+ * This function initializes the SPI on SSI3, using PA2 (CLK), PA3(SS), PA4(RX), PA5(TX)
  */
 void encoderSPIInit(void){
-    // Enable SSI0 and SSI1 peripherals for use.
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_SSI0); // SSI0
+    // Enable SSI3 and SSI1 peripherals for use.
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_SSI3); // SSI3
     SysCtlPeripheralEnable(SYSCTL_PERIPH_SSI1); // SSI1
 
     // Enable GPIO for SSI
     // Encoder 1
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOA);
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOQ);
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOL);
     // Encoder2
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOB);
@@ -37,9 +37,13 @@ void encoderSPIInit(void){
 
     // Configure SSI pins
     // Encoder 1
-    GPIOPinConfigure(GPIO_PA2_SSI0CLK);
+    GPIOPinConfigure(GPIO_PQ0_SSI3CLK);
+    GPIOPinConfigure(GPIO_PQ2_SSI3XDAT0);
+    GPIOPinConfigure(GPIO_PQ3_SSI3XDAT1);
+
+    /*GPIOPinConfigure(GPIO_PA2_SSI0CLK);
     GPIOPinConfigure(GPIO_PA4_SSI0XDAT0);
-    GPIOPinConfigure(GPIO_PA5_SSI0XDAT1);
+    GPIOPinConfigure(GPIO_PA5_SSI0XDAT1);*/
     // Encoder 2
     GPIOPinConfigure(GPIO_PB5_SSI1CLK);
     GPIOPinConfigure(GPIO_PE4_SSI1XDAT0);
@@ -47,26 +51,29 @@ void encoderSPIInit(void){
 
     // Configure the GPIO settings for the SSI pins.
     // encoder 1
-    GPIOPinTypeSSI(GPIO_PORTA_BASE, GPIO_PIN_2 | GPIO_PIN_4 | GPIO_PIN_5); // SCK/MOSI/MISO
-    GPIOPinTypeGPIOOutput(GPIO_PORTL_BASE, GPIO_PIN_0); //CS
+    GPIOPinTypeSSI(GPIO_PORTQ_BASE, GPIO_PIN_0 | GPIO_PIN_2 | GPIO_PIN_3); // SCK/MOSI/MISO
+    GPIOPinTypeGPIOOutput(GPIO_PORTL_BASE, GPIO_PIN_4); //CS
+
+    //GPIOPinTypeSSI(GPIO_PORTA_BASE, GPIO_PIN_2 | GPIO_PIN_4 | GPIO_PIN_5); // SCK/MOSI/MISO
+    //GPIOPinTypeGPIOOutput(GPIO_PORTL_BASE, GPIO_PIN_0); //CS
+
     // encoder 2
     GPIOPinTypeSSI(GPIO_PORTB_BASE, GPIO_PIN_5); // SCK
     GPIOPinTypeSSI(GPIO_PORTE_BASE, GPIO_PIN_5 | GPIO_PIN_4); // MOSI/MISO
     GPIOPinTypeGPIOOutput(GPIO_PORTL_BASE, GPIO_PIN_1); //CS
 
     // Configure and enable the SSI port for SPI master mode.
-    // Ideally the max bit rate is 2M, but there will be some error reading the value.
-    SSIConfigSetExpClk(SSI0_BASE, ui32SysClock, SSI_FRF_MOTO_MODE_1,
-                                    SSI_MODE_MASTER, 500000, 8); // 8 bits for encoder, note that we can't go above 16 bits using SPI Freescale mode
+    SSIConfigSetExpClk(SSI3_BASE, ui32SysClock, SSI_FRF_MOTO_MODE_1,
+                                    SSI_MODE_MASTER, 2000000, 8); // 8 bits for encoder, note that we can't go above 16 bits using SPI Freescale mode
     SSIConfigSetExpClk(SSI1_BASE, ui32SysClock, SSI_FRF_MOTO_MODE_1,
-                            SSI_MODE_MASTER, 500000, 8); // 8 bits for encoder, note that we can't go above 16 bits using SPI Freescale mode
+                            SSI_MODE_MASTER, 2000000, 8); // 8 bits for encoder, note that we can't go above 16 bits using SPI Freescale mode
 
     // Configure the CS
+    GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_4,GPIO_PIN_4); //Set CS to HIGH
     GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_1,GPIO_PIN_1); // Set CS to HIGH        //Is it necessary for L0?
-    GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_2,GPIO_PIN_2); //Set CS to HIGH
 
-    // Enable the SSI0 and SSI1 modules
-    SSIEnable(SSI0_BASE);
+    // Enable the SSI3 and SSI1 modules
+    SSIEnable(SSI3_BASE);
     SSIEnable(SSI1_BASE);
 
     // Set the initial encoder values
@@ -93,27 +100,27 @@ void encoderRead(void){
     pui32DataTx2[2] = 0x00;
     pui32DataTx2[3] = 0x00;
     pui32DataTx2[4] = 0x00;
-    while(SSIDataGetNonBlocking(SSI0_BASE, &pui32DataRx2[0])){
+    while(SSIDataGetNonBlocking(SSI3_BASE, &pui32DataRx2[0])){
     }
 
-    GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_0,0x00);
+    GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_4,0x00);
     SysCtlDelay(10);
 
     for(ui32Index2 = 0; ui32Index2 < NUM_SSI_DATA2; ui32Index2++)
     {
-       SSIDataPut(SSI0_BASE, pui32DataTx2[ui32Index2]);
+       SSIDataPut(SSI3_BASE, pui32DataTx2[ui32Index2]);
     }
-    while(SSIBusy(SSI0_BASE))
+    while(SSIBusy(SSI3_BASE))
     {
     }
 
-    GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_0,GPIO_PIN_0);
+    GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_4,GPIO_PIN_4);
     SysCtlDelay(10);
 
     for(ui32Index2 = 0; ui32Index2 < NUM_SSI_DATA2; ui32Index2++)
     {
       pui32DataRx2[ui32Index2] &= 0x00FF;
-      SSIDataGet(SSI0_BASE, &pui32DataRx2[ui32Index2]);
+      SSIDataGet(SSI3_BASE, &pui32DataRx2[ui32Index2]);
     }
 
     // The angle is the first 14 bits of the response.

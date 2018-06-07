@@ -15,9 +15,7 @@ __error__(char *pcFilename, uint32_t ui32Line)
 }
 #endif
 
-
-int
-main(void)
+int main(void)
 {
     // Init code
     r2rDefaultInit();
@@ -208,8 +206,8 @@ main(void)
                    UART0read(buffer,BUF_SIZE);
                    sscanf(buffer, "%d %d", &i1, &i2);
                    setCurrent(MOTOR1, i1);
-                   //setCurrent(MOTOR2, i2);
-                   setNclient(30000);
+                   setCurrent(MOTOR2, i2);
+                   setNclient(10000);
                    setMODE(ITRACK);
                    send_data();
                    break;

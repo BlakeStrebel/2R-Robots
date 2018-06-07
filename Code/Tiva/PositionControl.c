@@ -7,9 +7,9 @@
 #include <math.h>
 
 // PID gains
-static volatile float Kp = 0;
+static volatile float Kp = 0.5;
 static volatile float Ki = 0;
-static volatile float Kd = 0;
+static volatile float Kd = 0.5;
 
 // Control info
 static volatile control_data_t M1;
@@ -143,7 +143,7 @@ void Timer1IntHandler(void)
         case HOLD:
         {
             PID_Controller(E1.desired, E1.actual, MOTOR1);    // motor1 control
-            //PID_Controller(E2.desired, E2.actual, MOTOR2);    // motor2 control TODO: here
+            PID_Controller(E2.desired, E2.actual, MOTOR2);    // motor2 control
             break;
 
         }
@@ -158,8 +158,8 @@ void Timer1IntHandler(void)
             {
                 E1.desired = get_refPos(i, 1);
                 E2.desired = get_refPos(i, 2);
-                PID_Controller(E1.desired, E1.actual, 1);    // motor1 control
-                //PID_Controller(E2.desired, E2.actual, 2);    // motor2 control TODO: test
+                PID_Controller(E1.desired, E1.actual, MOTOR1);    // motor1 control
+                PID_Controller(E2.desired, E2.actual, MOTOR2);    // motor2 control
 
                 i++;    // increment index
 
@@ -167,8 +167,7 @@ void Timer1IntHandler(void)
                 decctr++;
                 if (decctr == DECIMATION)
                 {
-                    buffer_write(E1.actual, E2.actual, E1.u, E2.u);   //TODO: uncomment this
-                    //buffer_write(E1.actual, E1.actual, E1.u, getPWM(MOTOR1)); //getCurrent(MOTOR1)s
+                    buffer_write(E1.actual, E2.actual, E1.u, E2.u);
                     decctr = 0; // reset decimation counter
                 }
             }
@@ -182,24 +181,24 @@ void PID_Controller(int reference, int actual, int motor)
 {
     if (motor == 1)
     {
-        E1.Enew = reference - actual;               // Calculate error
-        E1.Eint = E1.Eint + E1.Enew;                // Calculate intergral error
-        E1.Edot = E1.Enew - E1.Eold;                // Calculate derivative error
-        E1.Eold = E1.Enew;                          // Update old error
-        E1.u = Kp*E1.Enew + Ki*E1.Eint + Kd*E1.Edot;   // Calculate effort
+        E1.Enew = reference - actual;                   // Calculate error
+        E1.Eint = E1.Eint + E1.Enew;                    // Calculate integral error
+        E1.Edot = E1.Enew - E1.Eold;                    // Calculate derivative error
+        E1.Eold = E1.Enew;                              // Update old error
+        E1.u = Kp*E1.Enew + Ki*E1.Eint + Kd*E1.Edot;    // Calculate effort
 
-        if (DECOGGING)                              // Add decogging control
+        if (DECOGGING)                                  // Add decogging control
         {
             E1.u = E1.u + decog_motor(E1.raw, 1);
         }
 
-        E1.u = boundInt(E1.u, 1500);
-        setCurrent(motor, E1.u);
+        E1.u = boundInt(E1.u, 2047);    // Bound max/min effort
+        setCurrent(motor, E1.u);        // Set desired motor current
     }
     else if (motor == 2)
     {
         E2.Enew = reference - actual;               // Calculate error
-        E2.Eint = E2.Eint + E2.Enew;                // Calculate intergral error
+        E2.Eint = E2.Eint + E2.Enew;                // Calculate integral error
         E2.Edot = E2.Enew - E2.Eold;                // Calculate derivative error
         E2.Eold = E2.Enew;                          // Update old error
         E2.u = Kp*E2.Enew + Ki*E2.Eint + Kd*E2.Edot;   // Calculate effort
@@ -209,8 +208,8 @@ void PID_Controller(int reference, int actual, int motor)
             E2.u = E2.u + decog_motor(E2.raw, 2);
         }
 
-        E2.u = boundInt(E2.u, 1500);
-        setCurrent(motor, E2.u);
+        E2.u = boundInt(E2.u, 200);     // Bound max/min effort
+        setCurrent(motor, E2.u);        // Set desired motor current
     }
 }
 

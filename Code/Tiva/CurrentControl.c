@@ -5,7 +5,7 @@
 #include "Utilities.h"
 #include <stdio.h>
 
-#define SWITCHDELAY 5  // Number of Cycles to Delay updating current on state switch
+#define SWITCHDELAY 30  // Number of Cycles to Delay updating current on state switch
 #define MA_PER_COUNT 5.75474330357
 
 // Voltage offsets for the motor phases in counts
@@ -47,7 +47,7 @@ void currentControlInit(void){
     // Note: this must be between 16 and 32 MHz for TM4C129x devices
     ADCClockConfigSet(ADC0_BASE,ADC_CLOCK_SRC_PLL | ADC_CLOCK_RATE_FULL, 20);
 
-    // Configure the ADC to use 4x hardware averaging of ADC samples
+    // Configure the ADC to use 2x hardware averaging of ADC samples
     ADCHardwareOversampleConfigure(ADC0_BASE, 2);
 
     /* DEV BOARD */
@@ -128,6 +128,7 @@ void CurrentControlIntHandler(void)
                 // Zero control effort
                 motor1ControlPWM(0);
                 motor2ControlPWM(0);
+                reset_current_error();
                 break;
             }
             case PWM:
@@ -176,6 +177,7 @@ void CurrentControlIntHandler(void)
                     m2_A_calib = m2_A_calib + M2_A_COUNTS - 2047;
                     m2_B_calib = m2_B_calib + M2_B_COUNTS - 2047;
                 }
+
                 break;
             }
             case ISENSE:
@@ -195,8 +197,8 @@ void CurrentControlIntHandler(void)
                     {
                         //buffer_write(M1_A_COUNTS - 2047 + M1_A_OFFSET, M1_B_COUNTS - 2047 + M1_B_OFFSET, M2_A_COUNTS - 2047 + M2_A_OFFSET, M2_B_COUNTS - 2047 + M2_B_OFFSET);
                         //buffer_write(M1_A_COUNTS - 2047 + M1_A_OFFSET, M1_B_COUNTS - 2047 + M1_B_OFFSET, MOTOR1CURRENT,MOTOR1CURRENT);
-                        buffer_write(M2_A_COUNTS - 2047 + M2_A_OFFSET, M2_B_COUNTS - 2047 + M2_B_OFFSET, MOTOR2CURRENT,MOTOR2CURRENT);
-                        //buffer_write(MOTOR1REF, MOTOR1CURRENT, MOTOR2REF, MOTOR2CURRENT);
+                        //buffer_write(M2_A_COUNTS - 2047 + M2_A_OFFSET, M2_B_COUNTS - 2047 + M2_B_OFFSET, MOTOR2CURRENT,MOTOR2CURRENT);
+                        buffer_write(MOTOR1REF, MOTOR1CURRENT, MOTOR2REF, MOTOR2CURRENT);
 
                         decctr = 0; // reset decimation counter
                     }
@@ -249,7 +251,7 @@ void CurrentControlIntHandler(void)
             {
                 // Reference current has been set by client
 
-                if (i == 30000)  // Done sensing when index equals number of samples
+                if (i == getN())  // Done sensing when index equals number of samples
                 {
                     setMODE(IDLE);
                     i = 0;
@@ -257,7 +259,7 @@ void CurrentControlIntHandler(void)
                 else
                 {
                     PI_controller(MOTOR1, MOTOR1REF, MOTOR1CURRENT); // Track reference signal
-                    //PI_controller(MOTOR2, MOTOR2REF, MOTOR2CURRENT);
+                    PI_controller(MOTOR2, MOTOR2REF, MOTOR2CURRENT);
 
                     i++; //increment data
 
@@ -265,7 +267,7 @@ void CurrentControlIntHandler(void)
                     decctr++;
                     if (decctr == DECIMATION)
                     {
-                        buffer_write(MOTOR1REF, MOTOR1CURRENT, PWM1, MOTOR2CURRENT);
+                        buffer_write(MOTOR1REF, MOTOR1CURRENT, MOTOR2REF, MOTOR2CURRENT);
                         decctr = 0; // reset decimation counter
                     }
                 }
@@ -406,6 +408,24 @@ void counts_read(void)
             break;
     }
 
+    // Smooth voltage spikes when commutation state changes
+    if (M1_hallstate != M1_hallstate_prev)
+    {
+        // wait SWITCHDELAY control cycles before updating current
+        if (M1_hallstate_cntr < SWITCHDELAY)
+        {
+            MOTOR1CURRENT = M1_current_prev;
+            M1_hallstate_cntr++;
+        }
+        else
+        {
+            M1_hallstate_prev = M1_hallstate;
+            M1_hallstate_cntr = 0;
+        }
+    }
+
+    M1_current_prev = MOTOR1CURRENT;    // Update previous current value
+
     // Update motor 2 current and direction
     M2_hallstate = getmotor2HALLS();
     switch (M2_hallstate)
@@ -430,76 +450,7 @@ void counts_read(void)
             break;
     }
 
-    /*
-    if (M1_hallstate == M1_HALLSTATE_1 || M1_hallstate == M1_HALLSTATE_2 || M1_hallstate == M1_HALLSTATE_3)
-    {
-        if (M1_A > M1_B)
-        {
-            MOTOR1CURRENT = -1*maxInt(abs(M1_A),abs(M1_B));    // Negative current (CW)
-
-        }
-        else
-        {
-            MOTOR1CURRENT = maxInt(abs(M1_A),abs(M1_B)); // Positive current (CCW)
-        }
-    }
-    else
-    {
-        if (M1_A > M1_B)
-        {
-            MOTOR1CURRENT = maxInt(abs(M1_A),abs(M1_B)); // Positive current (CCW)
-        }
-        else
-        {
-            MOTOR1CURRENT = -1*maxInt(abs(M1_A),abs(M1_B));    // Negative current (CW)
-        }
-    }
-
-    // Add some hysteresis to smooth current spikes when commutation state changes
-    if (M1_hallstate != M1_hallstate_prev)
-    {
-        // wait SWITCHDELAY control cycles before updating current
-        if (M1_hallstate_cntr < SWITCHDELAY)
-        {
-            MOTOR1CURRENT = M1_current_prev;
-            M1_hallstate_cntr++;
-        }
-        else
-        {
-            M1_hallstate_prev = M1_hallstate;
-            M1_hallstate_cntr = 0;
-        }
-    }
-
-    M1_current_prev = MOTOR1CURRENT;    // Update previous current value
-
-    // Update motor 2 current and direction
-    M2_hallstate = getmotor2HALLS();
-    if (M2_hallstate == M2_HALLSTATE_1 || M2_hallstate == M2_HALLSTATE_2 || M2_hallstate == M2_HALLSTATE_3)
-    {
-        if (M2_A > M2_B)
-        {
-            MOTOR2CURRENT = -1*maxInt(abs(M2_A),abs(M2_B));    // Negative current (CW)
-
-        }
-        else
-        {
-            MOTOR2CURRENT = maxInt(abs(M2_A),abs(M2_B)); // Positive current (CCW)
-        }
-    }
-    else
-    {
-        if (M2_A > M2_B)
-        {
-            MOTOR2CURRENT = maxInt(abs(M2_A),abs(M2_B)); // Positive current (CCW)
-        }
-        else
-        {
-            MOTOR2CURRENT = -1*maxInt(abs(M2_A),abs(M2_B));    // Negative current (CW)
-        }
-    }
-
-    // Add some hysteresis to smooth current spikes when commutation state changes
+    // Smooth voltage spikes when commutation state changes
     if (M2_hallstate != M2_hallstate_prev)
     {
         // wait SWITCHDELAY control cycles before updating current
@@ -516,9 +467,13 @@ void counts_read(void)
     }
 
     M2_current_prev = MOTOR2CURRENT;    // Update previous current value
-
-    */
 }
+
+
+
+
+
+
 
 // Read AD0
 void AD0_read(int mux)

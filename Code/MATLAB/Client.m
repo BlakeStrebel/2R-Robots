@@ -11,7 +11,7 @@ if ~isempty(instrfind)
 end
 
 % configure ports
-Tiva_Serial = serial(Tiva_port, 'BaudRate', 115200, 'Timeout',5); %'FlowControl', 'hardware',
+Tiva_Serial = serial(Tiva_port, 'BaudRate', 115200,'FlowControl', 'hardware', 'Timeout',5); %,
 
 fprintf('Opening port %s....\n',Tiva_port);
 
@@ -134,7 +134,6 @@ while ~has_quit
                fprintf(Tiva_Serial,'%d\n',ref2(i)); 
             end
         case 'l'
-            %read_plot_matrix_current(Tiva_Serial);
             read_plot_matrix(Tiva_Serial, ref1(1:DECIMATION:end)', ref2(1:DECIMATION:end)');
         case 'm'
             lengthofTime = input('Time to run for (s): ');

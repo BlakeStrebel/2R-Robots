@@ -13,8 +13,6 @@
 #ifndef MOTOR_H_
 #define MOTOR_H_
 
-#define MOTOR_SPINNING_TOO_FAST 10
-#define MOTOR_TOO_HOT 11
 #define PWMPERIOD 4000
 
 
@@ -57,15 +55,15 @@
 #define M2H_PINS (M2H_PIN_A | M2H_PIN_B | M2H_PIN_C)
 
 // MOTOR 2 CONTROL PINS
-#define M2_INL_PERIPH_A SYSCTL_PERIPH_GPIOQ
-#define M2_INL_PORT_A GPIO_PORTQ_BASE
-#define M2_INL_PIN_A GPIO_PIN_0
-#define M2_INL_PERIPH_B SYSCTL_PERIPH_GPIOQ
-#define M2_INL_PORT_B GPIO_PORTQ_BASE
-#define M2_INL_PIN_B GPIO_PIN_2
-#define M2_INL_PERIPH_C SYSCTL_PERIPH_GPIOQ
-#define M2_INL_PORT_C GPIO_PORTQ_BASE
-#define M2_INL_PIN_C GPIO_PIN_3
+#define M2_INL_PERIPH_A SYSCTL_PERIPH_GPIOM
+#define M2_INL_PORT_A GPIO_PORTM_BASE
+#define M2_INL_PIN_A GPIO_PIN_5
+#define M2_INL_PERIPH_B SYSCTL_PERIPH_GPIOM
+#define M2_INL_PORT_B GPIO_PORTM_BASE
+#define M2_INL_PIN_B GPIO_PIN_6
+#define M2_INL_PERIPH_C SYSCTL_PERIPH_GPIOM
+#define M2_INL_PORT_C GPIO_PORTM_BASE
+#define M2_INL_PIN_C GPIO_PIN_7
 
 // MOTOR 2 COMMUTATION DATA
 #define M2_HALLSTATE_0 (M2H_PIN_A | M2H_PIN_B)
@@ -137,8 +135,6 @@ extern void M2HIntHandler(void);
 
 void motor1Commutate(int State, int control);
 void motor2Commutate(int State, int control);
-
-
 
 extern void motor1PWM(int pwm1, int pwm2, int pwm3);
 

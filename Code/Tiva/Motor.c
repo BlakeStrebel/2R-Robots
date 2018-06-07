@@ -2,10 +2,6 @@
 #include "Motor.h"
 #include "Utilities.h"
 
-#define PWMPERIOD 4000
-
-int error_state;
-
 static volatile int32_t M1H_HALLS = 0, M2H_HALLS = 0; // Hall sensor data
 static volatile int M1_PWM = 0, M2_PWM = 0; // Motor PWM
 
@@ -30,10 +26,10 @@ void motorInit()
     PWMGenConfigure(PWM0_BASE, PWM_GEN_1, PWM_GEN_MODE_UP_DOWN | PWM_GEN_MODE_NO_SYNC);
     PWMGenConfigure(PWM0_BASE, PWM_GEN_2, PWM_GEN_MODE_UP_DOWN | PWM_GEN_MODE_NO_SYNC);
     PWMGenConfigure(PWM0_BASE, PWM_GEN_3, PWM_GEN_MODE_UP_DOWN | PWM_GEN_MODE_NO_SYNC);
-    PWMGenPeriodSet(PWM0_BASE, PWM_GEN_0, PWMPERIOD); // N = (1 / f) * SysClk --> (1 / 30000Hz) * 120MHz = 4000 cycles
-    PWMGenPeriodSet(PWM0_BASE, PWM_GEN_1, PWMPERIOD); // N = (1 / f) * SysClk --> (1 / 30000Hz) * 120MHz = 4000 cycles
-    PWMGenPeriodSet(PWM0_BASE, PWM_GEN_2, PWMPERIOD); // N = (1 / f) * SysClk --> (1 / 30000Hz) * 120MHz = 4000 cycles
-    PWMGenPeriodSet(PWM0_BASE, PWM_GEN_3, PWMPERIOD); // N = (1 / f) * SysClk --> (1 / 30000Hz) * 120MHz = 4000 cycles
+    PWMGenPeriodSet(PWM0_BASE, PWM_GEN_0, PWMPERIOD);   // PWMPERIOD = (1 / f) * SysClk --> (1 / 30000Hz) * 120MHz = 4000 cycles
+    PWMGenPeriodSet(PWM0_BASE, PWM_GEN_1, PWMPERIOD);
+    PWMGenPeriodSet(PWM0_BASE, PWM_GEN_2, PWMPERIOD);
+    PWMGenPeriodSet(PWM0_BASE, PWM_GEN_3, PWMPERIOD);
     PWMGenEnable(PWM0_BASE, PWM_GEN_0);
     PWMGenEnable(PWM0_BASE, PWM_GEN_1);
     PWMGenEnable(PWM0_BASE, PWM_GEN_2);
@@ -88,24 +84,20 @@ void motorInit()
 
 void M1HIntHandler(void)
 {
-    GPIOIntClear(M1H_PORT, M1H_PINS);
+    GPIOIntClear(M1H_PORT, M1H_PINS);               // Clear the interrupt flag
 
-    // Update Hall States
-    M1H_HALLS = GPIOPinRead(M1H_PORT, M1H_PINS);
+    M1H_HALLS = GPIOPinRead(M1H_PORT, M1H_PINS);    // Update Hall States
 
-    // Update PWM outputs
-    motor1ControlPWM(M1_PWM);
+    motor1ControlPWM(M1_PWM);                       // Update PWM outputs
 }
 
 void M2HIntHandler(void)
 {
-    GPIOIntClear(M2H_PORT, M2H_PINS);
+    GPIOIntClear(M2H_PORT, M2H_PINS);               // Clear the interrupt flag
 
-    // Update Hall States
-    M2H_HALLS = GPIOPinRead(M2H_PORT, M2H_PINS);
+    M2H_HALLS = GPIOPinRead(M2H_PORT, M2H_PINS);    // Update Hall States
 
-    // Update PWM outputs
-    motor2ControlPWM(M2_PWM);
+    motor2ControlPWM(M2_PWM);                       // Update PWM outputs
 }
 
 void motor1ControlPWM(int control)
