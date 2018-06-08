@@ -24,7 +24,7 @@
 
 #include <stdint.h>
 #include "PositionControl.h"
-#include "System.h"
+#include "r2r.h"
 #include "CurrentControl.h"
 #include "Motor.h"
 
@@ -87,7 +87,7 @@ void (* const g_pfnVectors[])(void) =
     IntDefaultHandler,                      // Debug monitor handler
     0,                                      // Reserved
     IntDefaultHandler,                      // The PendSV handler
-    timeInt,                                // The SysTick handler
+    IntDefaultHandler,                      // The SysTick handler
     IntDefaultHandler,                      // GPIO Port A
     IntDefaultHandler,                      // GPIO Port B
     IntDefaultHandler,                      // GPIO Port C

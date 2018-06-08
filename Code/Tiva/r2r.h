@@ -12,6 +12,7 @@
 #ifndef R2R_H_
 #define R2R_H_
 
+
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdlib.h>
@@ -38,9 +39,12 @@
 #include "driverlib/pwm.h"
 #include "driverlib/timer.h"
 #include "driverlib/uart.h"
-#include "driverlib/adc.h"
+#include "driverlib/ssi.h"
+#include "driverlib/systick.h"
 #include "utils/uartstdio.h"
-
+#include "driverlib/fpu.h"
+#include "math.h"
+#include "driverlib/adc.h"
 
 /*
  * General functions
@@ -57,29 +61,42 @@
  */
 extern void r2rDefaultInit(void);
 
+#define MOTOR1 1
+#define MOTOR2 2
+
+uint32_t ui32SysClock;
+uint32_t micros;
+
+//int error_state = 0;
+
 /**
- * @brief Checks for all end conditions and shuts down the motor control if any are detected
+ * @brief Initializes the system clock and the master interrupts for the R2R project
+ *
  *
  * @param Void
  * @return Void
  */
-extern void safetyCheck(void); //explicit function to test for end conditions
-
-
+extern void sysInit(void);
 
 /**
- * @brief Updates all sensor arrays.
+ * @brief Initializes the UART for 115200 Baud Rate and 8-N-1 transfer rate.
  *
- * Sensors are grouped for the ease of use into one function and the array is updated each time this function is called.
  *
  * @param Void
  * @return Void
- *
  */
-extern void sensorUpdate(void); // Updates sensor data. Always call sensor update at beginning of loop!
+extern void uartInit(void);
 
-extern void i2cInit(tI2CMInstance g_sI2CMSimpleInst);
-//extern void i2cIntHandler(void);
+extern void UART0IntPut(int value);
+
+extern void UART0FloatPut(float value);
+
+extern void UART0ArrayPut(int number, float * value);
+
+extern float UART0FloatGet();
+
+extern int UART0IntGet();
+
 
 
 #endif /* R2R_H_ */

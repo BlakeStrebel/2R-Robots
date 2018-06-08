@@ -14,8 +14,8 @@
 #define UTILITIES_H_
 
 #define DECIMATION 10    // Decimate the data if necessary
-#define REFERENCE_DATA 10000    // Reference data for trajectory tracking
-#define BUFLEN 100 // Actual data; sent to client using circular buffer  10000 possible?
+#define REFERENCE_DATA 100    // Reference data for trajectory tracking
+#define BUFLEN 100 // Actual data; sent to client using circular buffer
 
 /**
  * Data structure containing the modes of the system
@@ -23,17 +23,18 @@
 typedef enum {
 	IDLE, /**< Sets motor effort to 0 */
 	PWM, /**< PWM directly set by user */
+    HOLD, /**< Sets motor effort to holding position */
+    TRACK, /**< Sets motor effort to tracking mode */
+	ITRACK,
 	ITEST,
 	ISENSE,
 	ICALIB,
-	HOLD, /**< Sets motor effort to holding position */
-	TRACK, /**< Sets motor effort to tracking mode */
-	READ1,
-	READ2,
-	READb,
-	PID1,
-	PID2,
-	PIDb
+    READ1,
+    READ2,
+    READb,
+    PID1,
+    PID2,
+    PIDb
 	} mode;    // define data structure containing modes
 
 
@@ -43,8 +44,11 @@ typedef enum {
 typedef struct {                          
     int refPos[REFERENCE_DATA]; /**< The reference position of the motor */
     int actPos[BUFLEN];  /**< The actual position of the motor */
-    float u[BUFLEN];  /**< The control effort of the motor */
-} motor_control_data;
+    int u[BUFLEN];  /**< The control effort of the motor */
+} control_data_t;
+
+int boundInt(int a, int n);
+int maxInt(int a, int b);
 
 /**
  * @brief Return the Mode of the robot
@@ -85,7 +89,7 @@ void setN(int timestep);
  * @param Void
  * @return int the number of samples
  */                                  
-int getN(void);
+int getN(void);                                             
 
 
 /**
@@ -111,79 +115,8 @@ void write_refPos(int position, int index, int motor);
  */
 int get_refPos(int index, int motor);                       
 
-/**
- * @brief Returns true if the buffer is empty
- * 
- * READ == WRITE
- *
- * @param Void 
- * @return int true if buffer is empty
- */
-int buffer_empty(void);             
 
-/**
- * @brief Returns true if the buffer is full
- * 
- * (WRITE + 1) % BUFLEN == READ
- *
- * @param Void 
- * @return int true if buffer is full
- */
-int buffer_full(void);              
 
-/**
- * @brief Reads position from the current buffer location
- * 
- * This function assumes that buffer is not empty
- *
- * @param int motor the motor that is read from
- * @return int position of the current buffer location
- */
-int buffer_read_position(int motor);
-
-/**
- * @brief Reads current value from current buffer location
- * 
- * This function assumes that buffer is not empty
- *
- * @param int motor motor that is read from
- * @return int current value in buffer
- */
-int buffer_read_u(int motor);
-
-/**
- * @brief Increments the buffer read index
- * 
- *
- * @param Void 
- * @return Void
- */
-void buffer_read_increment(void);   
-
-/**
- * @brief Write data to buffer
- * 
- *
- * @param int M1_actPos motor 1 position
- * @param int M2_actPos motor 2 position
- * @param float M1_u motor 1 effort
- * @param float M1_u motor 2 effort
- * @return Void
- */
-void buffer_write(int M1_actPos, int M2_actPos, int M1_u, int M2_u);
-
-/**
- * @brief Send data to client when it becomes available
- * 
- *
- * @param Void 
- * @return Void
- */
-void send_data(void);
-
-void setNclient(int n);          // Recieve number of values to store in position data arrays from client
-int boundInt(int a, int n);
-int maxInt(int a, int b);
 
 
 

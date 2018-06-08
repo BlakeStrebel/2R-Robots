@@ -13,9 +13,11 @@
 #ifndef POSITION_CONTROL_H_
 #define POSITION_CONTROL_H_
 
+
 static const float defaultKp[3] = {0, 2, 2};
 static const float defaultKi[3] = {0, 0, 0};
 static const float defaultKd[3] = {0, 0, 0};
+
 
 typedef struct {                          // Define data structure containing control data
     float Kp;
@@ -23,6 +25,7 @@ typedef struct {                          // Define data structure containing co
     float Kd;
 } PID_gains;
 
+// TODO in setup set these to zero
 // TODO in setup set these to zero
 typedef struct {                          // Define data structure containing control data
     int Enew;
@@ -33,28 +36,9 @@ typedef struct {                          // Define data structure containing co
     float traj[10000];
 } control_error;
 
-
-extern void MotorTimerInit(void);
+extern void positionControlInit(void);
 
 extern void Timer1IntHandler(void);
-
-
-//void positioncontrol_setup(void);                   // Setup position control module
-/**
-* @brief Sets position gains on the Tiva microcontroller by reading from UART
-*
-* @param Void
-* @return Void
-*/
-void set_position_gains(void);                      // Set position gains
-
-/**
-* @brief Gets position gains on the Tiva microcontroller by reading to UART
-*
-* @param Void
-* @return Void
-*/
-void get_position_gains(void);                      // Get position gains
 
 
 /**
@@ -89,23 +73,6 @@ void reset_pos(void);                               // Reset desired position to
 */
 void reset_controller_error(void);                  // Reset the error on both controllers to be zero
 
-
-/**
-* @brief Loads position trajectory for a given motor over UART
-*
-* @param motor specifies the trajectory that is being assigned from UART
-* @return Void
-*/
-void loadPositionTrajectory(int motor);                // Load desired position trajectory from client
-
-/**
-* @brief Returns the set pwm on a given motor
-*
-* @param motor the pwm on a given motor
-* @return Void
-*/
-int get_motor_pwm(int motor);
-
 /**
 * @brief Calculates pwm to send to the motor drivr
 *
@@ -120,9 +87,8 @@ float decog_motor(int x, int motor);
 
 void setDecogging(int decog);
 
-void loadTrajectory(int motor);
+void loadPositionTrajectory(int motor);
 
 void setPositionPID(int motor);
-
 
 #endif /* POSITION_CONTROL_H_ */
