@@ -101,7 +101,7 @@ void load_position_trajectory(int motor);                // Load desired positio
 */
 void PID_Controller(int reference, int actual, int motor);
 
-float decog_motor(int x, int motor);
+int decog_motor(int x, int motor);
 
 void setDecogging(void);
 

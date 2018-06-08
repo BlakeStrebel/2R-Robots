@@ -35,6 +35,13 @@ extern void encoderSPIInit(void);
  */
 extern void encoderRead(void);
 
+
+
+
+void resetMotor1RawRelative(void);
+
+void resetMotor2RawRelative(void);
+
 /**
  * @brief Reads value of motor 1 encoders and sets the relative angle to zero
  *

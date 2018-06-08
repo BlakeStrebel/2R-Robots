@@ -34,7 +34,7 @@ while ~has_quit
     disp('i: Get PID gains        j: Hold Position')
     disp('k: Set trajectory       l: Execute Trajectory ')
     disp('m: Move Arm             n: Load and Run Test')
-    disp('o: Set Decogging        r: Zero Encoders')
+    disp('o: Set Decogging        r: Reset Encoders')
     disp('q: Quit')
     selection = input('\nENTER COMMAND: ', 's');
    
@@ -174,6 +174,8 @@ while ~has_quit
             
             read_plot_matrix(Tiva_Serial, ref1(1:DECIMATION:end)', ref2(1:DECIMATION:end)');
         case 'r'
+            fprintf('Encoders reset\n');
+        case 'z'
             fprintf('Encoders zeroed\n');
         case 'q'
             has_quit = 1;

@@ -189,10 +189,10 @@ void PID_Controller(int reference, int actual, int motor)
 
         if (DECOGGING)                                  // Add decogging control
         {
-            E1.u = E1.u + decog_motor(E1.raw, 1);
+            E1.u = E1.u + decog_motor(E1.raw, MOTOR1);
         }
 
-        E1.u = boundInt(E1.u, 2047);    // Bound max/min effort
+        E1.u = boundInt(E1.u, 1000);    // Bound max/min effort
         setCurrent(motor, E1.u);        // Set desired motor current
     }
     else if (motor == 2)
@@ -205,10 +205,10 @@ void PID_Controller(int reference, int actual, int motor)
 
         if (DECOGGING)                              // Add decogging control
         {
-            E2.u = E2.u + decog_motor(E2.raw, 2);
+            E2.u = E2.u + decog_motor(E2.raw, MOTOR2);
         }
 
-        E2.u = boundInt(E2.u, 200);     // Bound max/min effort
+        E2.u = boundInt(E2.u, 1000);     // Bound max/min effort
         setCurrent(motor, E2.u);        // Set desired motor current
     }
 }
@@ -227,16 +227,16 @@ void reset_controller_error(void)
     E2.Edot = 0;
 }
 
-float decog_motor(int x, int motor)
+int decog_motor(int x, int motor)
 {
-    float u = 0;
+    int u = 0;
     if (motor == 1)
     {
-        u = 0;
+        u = 6.87414*cos(0.00466804*x - 5.067) + 12.1625*cos(0.00311203*x + 0.756258) + 10.6513*cos(0.00933609*x - 3.8819);
     }
     else if (motor == 2)
     {
-        u = 20.4732*cos(0.00921288*x - 2.68484) + 14.1249*cos(0.00460644*x - 1.3871) + 21.0256*cos(0.00307096*x - 2.93648); // + 66.7217
+        u = 12.8548*cos(0.00309313*x - 0.0809486) + 3.12775*cos(0.0046397*x - 7.34903) + 5.12612*cos(0.0092794*x - 7.75651);
     }
 
     return u;

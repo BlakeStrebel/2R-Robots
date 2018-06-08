@@ -58,9 +58,9 @@ void encoderSPIInit(void){
 
     // Configure and enable the SSI port for SPI master mode.
     SSIConfigSetExpClk(SSI3_BASE, ui32SysClock, SSI_FRF_MOTO_MODE_1,
-                                    SSI_MODE_MASTER, 2000000, 8); // 8 bits for encoder, note that we can't go above 16 bits using SPI Freescale mode
+                                    SSI_MODE_MASTER, 1000000, 8); // 8 bits for encoder, note that we can't go above 16 bits using SPI Freescale mode
     SSIConfigSetExpClk(SSI1_BASE, ui32SysClock, SSI_FRF_MOTO_MODE_1,
-                            SSI_MODE_MASTER, 2000000, 8); // 8 bits for encoder, note that we can't go above 16 bits using SPI Freescale mode
+                            SSI_MODE_MASTER, 1000000, 8); // 8 bits for encoder, note that we can't go above 16 bits using SPI Freescale mode
 
     // Configure the CS
     GPIOPinWrite(GPIO_PORTL_BASE,GPIO_PIN_4,GPIO_PIN_4); //Set CS to HIGH
@@ -159,28 +159,6 @@ void encoderRead(void){
     encoderVal[3] = num;
 }
 
-
-/*
- * Wrapper function to read the encoder's raw data (int), angle data (float) or optionally angle in radians (float)
- *
- * Comes after:
- * sensorUpdate()
- */
-
-int angleFix(int curr_angle){
-    int output_angle = 0;
-    if ((curr_angle<90) || (curr_angle>270)){
-        output_angle = curr_angle - 180;
-
-    }
-    else {
-        output_angle = curr_angle;
-    }
-    return output_angle;
-
-}
-
-
 void zeroMotor1RawRelative(void){
     modifier1 = 0; // zero the modifier
     zeroing1 = 0; // zero the previous zeroing, now it is just RAW angles, now relative should be synced up with absolute
@@ -192,6 +170,15 @@ void zeroMotor2RawRelative(void){
     zeroing2 = 0; // zero the previous zeroing, now it is just RAW angles, now relative should be synced up with absolute
     //last_motor_2_angle = 0;
     zeroing2 = readMotor2Raw();  // read the absolute value and set it as zeroing modifier.
+}
+
+void resetMotor1RawRelative(void){
+    modifier1 = 0; // zero the modifier
+    zeroing1 = 0; // zero the previous zeroing, now it is just RAW angles, now relative should be synced up with absolute
+}
+void resetMotor2RawRelative(void){
+    modifier2 = 0; // zero the modifier
+    zeroing2 = 0; // zero the previous zeroing, now it is just RAW angles, now relative should be synced up with absolute
 }
 
 

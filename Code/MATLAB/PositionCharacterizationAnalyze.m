@@ -6,7 +6,7 @@ dmax = -101*ones(1,size(desired_pos,2));
 dmin = 101*ones(1,size(desired_pos,2));
 
 
-figure; plot(desired_pos, d); title('Duty Cycle vs. Desired Position')
+figure; plot(desired_pos, d); title('Current vs. Desired Position')
 
 
 

@@ -145,12 +145,17 @@ int main(void)
                {
                    setDecogging();
                }
-               case 'r': // zero encoders
+               case 'r': // reset encoders to raw value
+               {
+                   resetMotor1RawRelative();
+                   resetMotor2RawRelative();
+                   break;
+               }
+               case 'z' : // zero encoders
                {
                    zeroMotor1RawRelative();
                    zeroMotor2RawRelative();
                    break;
-
                }
                case 'q':    // Motor Off
                {

@@ -61,7 +61,7 @@ void currentControlInit(void){
 
     // Configure ADC timer
     TimerConfigure(TIMER2_BASE, TIMER_CFG_PERIODIC);
-    int samplePeriod = ui32SysClock/30000;  // Read ADC at 30,000Hz, current control runs at this frequency
+    int samplePeriod = ui32SysClock/15000;  // Read ADC at 15,000Hz, current control runs at this frequency
     TimerLoadSet(TIMER2_BASE, TIMER_A, samplePeriod-1);
     TimerControlTrigger(TIMER2_BASE, TIMER_A, true);
     TimerEnable(TIMER2_BASE, TIMER_A);
@@ -473,7 +473,9 @@ void get_counts(void)
     M2_current_counts = MOTOR2CURRENT;
     IntMasterEnable();
 
-    sprintf(buffer, "%d %d\r\n", M1_current_counts, M2_current_counts);
+    sprintf(buffer, "%d\r\n", M1_current_counts);
+    UART0write(buffer);
+    sprintf(buffer, "%d\r\n", M2_current_counts);
     UART0write(buffer);
 }
 
