@@ -7,7 +7,7 @@
 #include <math.h>
 
 // PID gains
-static volatile float Kp = 0.5;
+static volatile float Kp = 3.5;
 static volatile float Ki = 0;
 static volatile float Kd = 0.5;
 
@@ -192,7 +192,7 @@ void PID_Controller(int reference, int actual, int motor)
             E1.u = E1.u + decog_motor(E1.raw, MOTOR1);
         }
 
-        E1.u = boundInt(E1.u, 1000);    // Bound max/min effort
+        E1.u = boundInt(E1.u, 2047);    // Bound max/min effort
         setCurrent(motor, E1.u);        // Set desired motor current
     }
     else if (motor == 2)
@@ -208,7 +208,7 @@ void PID_Controller(int reference, int actual, int motor)
             E2.u = E2.u + decog_motor(E2.raw, MOTOR2);
         }
 
-        E2.u = boundInt(E2.u, 1000);     // Bound max/min effort
+        E2.u = boundInt(E2.u, 2047);     // Bound max/min effort
         setCurrent(motor, E2.u);        // Set desired motor current
     }
 }
@@ -232,11 +232,11 @@ int decog_motor(int x, int motor)
     int u = 0;
     if (motor == 1)
     {
-        u = 6.87414*cos(0.00466804*x - 5.067) + 12.1625*cos(0.00311203*x + 0.756258) + 10.6513*cos(0.00933609*x - 3.8819);
+        u = 3.23954*cos(0.00461321*x - 8.52623) + 5.9993*cos(0.00922641*x - 10.2104) + 13.0407*cos(0.00307547*x - 0.924921);
     }
     else if (motor == 2)
     {
-        u = 12.8548*cos(0.00309313*x - 0.0809486) + 3.12775*cos(0.0046397*x - 7.34903) + 5.12612*cos(0.0092794*x - 7.75651);
+        u = 12.7145*cos(0.00306347*x - 17.3066) + 10.9486*cos(0.00919042*x - 58.1871) + 7.98726*cos(0.00459521*x - 29.1469);
     }
 
     return u;
