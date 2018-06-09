@@ -13,7 +13,7 @@ end
 % configure ports
 Tiva_Serial = serial(Tiva_port, 'BaudRate', 115200,'FlowControl', 'hardware', 'Timeout',5); %,
 
-fprintf('Opening port %s....\n',Tiva_port);
+fprintf('Opening port %s....\n\n',Tiva_port);
 
 % opens serial connection
 fopen(Tiva_Serial);
@@ -27,15 +27,20 @@ has_quit = false;
 % menu loop
 while ~has_quit
     % read the user's choice
+    disp('--------------------------------------------------')
     disp('a: Read Absolute Angle  b: Read Relative Angle')
     disp('c: Set PWM              d: Read PWM')
     disp('e: Read Desired Angle   f: Set Desired Angle')
-    disp('g: Get mode             h: Set PID gains')
+    disp('g: Get mode             h: Set PID Gains')
     disp('i: Get PID gains        j: Hold Position')
-    disp('k: Set trajectory       l: Execute Trajectory ')
-    disp('m: Move Arm             n: Load and Run Test')
+    disp('k: Set Trajectory       l: Execute Trajectory ')
     disp('o: Set Decogging        r: Reset Encoders')
     disp('q: Quit')
+    disp('--------------------------------------------------')
+    disp('1: Read Counts          2: Read mA')
+    disp('3: Current Sense        4: Test Current Control')
+    disp('5: Set Current Gains    6: Get Current Gains')
+    disp('7: Calibrate Current    8: Set Current');
     selection = input('\nENTER COMMAND: ', 's');
    
     fprintf(Tiva_Serial,'%c\n',selection);  % send the command to the Tiva
@@ -93,26 +98,39 @@ while ~has_quit
             error_check = 1;
             while (error_check)
                 fprintf('Motor 1:\n');
-                mode = input('    Enter mode (''linear'', ''cubic'', ''step'', ''zero''): ');
+                mode = input('    Enter mode (''linear'', ''sine'', ''cubic'', ''step'', ''zero''): ');
                 if (strcmp(mode, 'zero'))
                     time = input('Enter time in seconds: ');
                     ref1 = zeros(time*1000,1)';
+                elseif strcmp(mode,'sine')
+                    A = input('Enter amplitude (deg): ');
+                    f = input('Enter frequency (Hz): ');
+                    t = 0:.001:0.999;
+                    ref1 = A + A*sin(2*pi*f*t-pi/2); 
+                    figure; plot(t,ref1); ylabel('Angle (degrees)'); xlabel('Time (s)')
                 else
                     trajectory = input('Enter position trajectory, in sec and degrees [time1, pos1; time2, pos2; ...]:');
                     ref1 = genRef(trajectory,mode);
-                    ref1 = round(ref1/360*16383);
                 end
+                
+                ref1 = round(ref1/360*16383);
                
                 fprintf('Motor 2:\n');
-                mode = input('    Enter mode (''linear'', ''cubic'', ''step'', ''zero''): ');
+                mode = input('    Enter mode (''linear'', ''sine'', ''cubic'', ''step'', ''zero''): ');
                 if (strcmp(mode,'zero'))
                     time = input('Enter time in seconds: ');
                     ref2 = zeros(time*1000,1)';
+                elseif strcmp(mode,'sine')
+                    A = input('Enter amplitude (deg): ');
+                    f = input('Enter frequency (Hz): ');
+                    t = 0:.001:0.999;
+                    ref2 = A + A*sin(2*pi*f*t-pi/2); 
+                    figure; plot(t,ref2); ylabel('Angle (degrees)'); xlabel('Time (s)')
                 else
                     trajectory = input('Enter position trajectory, in sec and degrees [time1, pos1; time2, pos2; ...]:');
                     ref2 = genRef(trajectory,mode);
-                    ref2 = round(ref2/360*16383);
                 end
+                ref2 = round(ref2/360*16383);
                 
                 if (size(ref1,2) == size(ref2,2))
                     error_check = 0;

@@ -121,22 +121,8 @@ int main(void)
                }
                case 'l':    // Execute Position Trajectory
                {
-                   setMODE(TRACK);
-                   send_data();
-                   break;
-               }
-               case 'm':   // free moving arm
-               {
-                   set_position_gains();
-                   load_position_trajectory(1);
-                   load_position_trajectory(2);
-                   break;
-               }
-               case 'n':   // Hello User test
-               {
-                   set_position_gains();
-                   load_position_trajectory(1);
-                   load_position_trajectory(2);
+                   zeroMotor1RawRelative();
+                   zeroMotor2RawRelative();
                    setMODE(TRACK);
                    send_data();
                    break;
@@ -212,7 +198,7 @@ int main(void)
                    sscanf(buffer, "%d %d", &i1, &i2);
                    setCurrent(MOTOR1, i1);
                    setCurrent(MOTOR2, i2);
-                   setNclient(10000);
+                   setNclient(30000);
                    setMODE(ITRACK);
                    send_data();
                    break;
