@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['control_2eh',['Control.h',['../_control_8h.html',1,'']]],
   ['control_5ferror',['control_error',['../structcontrol__error.html',1,'']]],
   ['counts_5fread',['counts_read',['../_current_control_8h.html#a3fcbe969c8ba545f99c2ad2581783e1b',1,'CurrentControl.c']]],
   ['currentcontrol_2eh',['CurrentControl.h',['../_current_control_8h.html',1,'']]],

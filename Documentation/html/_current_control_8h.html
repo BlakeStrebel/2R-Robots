@@ -142,9 +142,10 @@ Blake Strebel </dd></dl>
 </div><div class="memdoc">
 
 <p>Triggers the ADC reading and saves it to the TEMP array. </p>
+<p>On the PCB you have to specify either 1 or 2 to read the phase. For the breadboard prototype the number does not matter</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">Void</td><td></td></tr>
+    <tr><td class="paramname">int</td><td>the muxed pins, specify 1 for phase A and 2 for phase B </td></tr>
   </table>
   </dd>
 </dl>

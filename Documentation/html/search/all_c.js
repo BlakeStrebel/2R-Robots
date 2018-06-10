@@ -14,8 +14,6 @@ var searchData=
   ['readmotorrawrelative',['readMotorRawRelative',['../_encoder_8h.html#a772612423c09160fb30903910645dd71',1,'Encoder.c']]],
   ['readmotorspeed',['readMotorSpeed',['../_encoder_8h.html#acd3dc7f7a6dc84b5dba607f76092acee',1,'Encoder.c']]],
   ['refpos',['refPos',['../structmotor__control__data.html#ae6513e1fa4febfae80aa33ecabb99dbc',1,'motor_control_data']]],
-  ['reset_5fcontroller_5ferror',['reset_controller_error',['../_control_8h.html#adf80f17bfeea7e84613a2fb9142dfbc4',1,'Control.c']]],
   ['reset_5fcurrent_5ferror',['reset_current_error',['../_current_control_8h.html#a7158c18c7941b14c7eac79a8c4f6692e',1,'CurrentControl.c']]],
-  ['reset_5fpos',['reset_pos',['../_control_8h.html#a68b7b6c3193b76e37c547f3448c6fcbb',1,'Control.h']]],
   ['resetcontrollererror',['resetControllerError',['../_position_control_8h.html#a95e5f03d55fba3d858adbcea6afa9315',1,'PositionControl.c']]]
 ];

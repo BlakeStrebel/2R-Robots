@@ -1,6 +1,10 @@
 var searchData=
 [
   ['main_20page_20for_20r2r_20software_20documentation',['Main Page for R2R software documentation',['../index.html',1,'']]],
+  ['m1_5finl_5fwrite',['M1_INL_WRITE',['../_motor_8h.html#a418a9beb64e4f3d3563917d05a5a3544',1,'Motor.c']]],
+  ['m1hinthandler',['M1HIntHandler',['../_motor_8h.html#a879b94540bd8b5d2e5217c749029e12b',1,'Motor.c']]],
+  ['m2_5finl_5fwrite',['M2_INL_WRITE',['../_motor_8h.html#ac9edbc13c57419de1647c90a69bcfae0',1,'Motor.c']]],
+  ['m2hinthandler',['M2HIntHandler',['../_motor_8h.html#afde750f7e2ef4ebb04f36c81089c832d',1,'Motor.c']]],
   ['maxint',['maxInt',['../_utilities_8h.html#acec61ed867597bb5d25a00b0e33d4476',1,'Utilities.c']]],
   ['mode',['mode',['../_utilities_8h.html#a1a6b6fb557d8d37d59700faf4e4c9167',1,'Utilities.h']]],
   ['motor_2eh',['Motor.h',['../_motor_8h.html',1,'']]],

@@ -1,5 +1,9 @@
 var searchData=
 [
+  ['m1_5finl_5fwrite',['M1_INL_WRITE',['../_motor_8h.html#a418a9beb64e4f3d3563917d05a5a3544',1,'Motor.c']]],
+  ['m1hinthandler',['M1HIntHandler',['../_motor_8h.html#a879b94540bd8b5d2e5217c749029e12b',1,'Motor.c']]],
+  ['m2_5finl_5fwrite',['M2_INL_WRITE',['../_motor_8h.html#ac9edbc13c57419de1647c90a69bcfae0',1,'Motor.c']]],
+  ['m2hinthandler',['M2HIntHandler',['../_motor_8h.html#afde750f7e2ef4ebb04f36c81089c832d',1,'Motor.c']]],
   ['maxint',['maxInt',['../_utilities_8h.html#acec61ed867597bb5d25a00b0e33d4476',1,'Utilities.c']]],
   ['motor1controlpwm',['motor1ControlPWM',['../_motor_8h.html#a8ab898affd7b6bbc1d359284e85c31c3',1,'Motor.c']]],
   ['motor1pwm',['motor1PWM',['../_motor_8h.html#a40e064ce1ed8e8fe099904717d9c7e46',1,'Motor.c']]],

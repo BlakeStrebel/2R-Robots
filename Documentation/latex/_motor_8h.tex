@@ -147,12 +147,10 @@
 \subsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\Hypertarget{_motor_8h_a879b94540bd8b5d2e5217c749029e12b}\label{_motor_8h_a879b94540bd8b5d2e5217c749029e12b}} 
-void {\bfseries M1\+H\+Int\+Handler} (void)
-\item 
-\mbox{\Hypertarget{_motor_8h_afde750f7e2ef4ebb04f36c81089c832d}\label{_motor_8h_afde750f7e2ef4ebb04f36c81089c832d}} 
-void {\bfseries M2\+H\+Int\+Handler} (void)
-\item 
+void \mbox{\hyperlink{_motor_8h_a879b94540bd8b5d2e5217c749029e12b}{M1\+H\+Int\+Handler}} (void)
+\begin{DoxyCompactList}\small\item\em Hall sensor interrupt for motor 1. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_motor_8h_afde750f7e2ef4ebb04f36c81089c832d}{M2\+H\+Int\+Handler}} (void)
+\begin{DoxyCompactList}\small\item\em Hall sensor interrupt for motor 2. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{_motor_8h_a40e064ce1ed8e8fe099904717d9c7e46}{motor1\+P\+WM}} (int pwm1, int pwm2, int pwm3)
 \begin{DoxyCompactList}\small\item\em Sets the P\+WM value to motor 1. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{_motor_8h_a8d3950b6912f5a60d2ceded0e0ed502b}{motor2\+P\+WM}} (int pwm1, int pwm2, int pwm3)
@@ -163,12 +161,10 @@ void \mbox{\hyperlink{_motor_8h_aa3421fe96b22e90c356e013a0abef7d6}{motor2\+Contr
 \begin{DoxyCompactList}\small\item\em Sets the P\+WM value and direction to motor 2. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{_motor_8h_aa29e2982047be0f7afbb10c8d6f3f5c3}{motor\+Init}} (void)
 \begin{DoxyCompactList}\small\item\em Initializes the G\+P\+IO pins for the motor. \end{DoxyCompactList}\item 
-\mbox{\Hypertarget{_motor_8h_a418a9beb64e4f3d3563917d05a5a3544}\label{_motor_8h_a418a9beb64e4f3d3563917d05a5a3544}} 
-void {\bfseries M1\+\_\+\+I\+N\+L\+\_\+\+W\+R\+I\+TE} (int a, int b, int c)
-\item 
-\mbox{\Hypertarget{_motor_8h_ac9edbc13c57419de1647c90a69bcfae0}\label{_motor_8h_ac9edbc13c57419de1647c90a69bcfae0}} 
-void {\bfseries M2\+\_\+\+I\+N\+L\+\_\+\+W\+R\+I\+TE} (int a, int b, int c)
-\item 
+void \mbox{\hyperlink{_motor_8h_a418a9beb64e4f3d3563917d05a5a3544}{M1\+\_\+\+I\+N\+L\+\_\+\+W\+R\+I\+TE}} (int a, int b, int c)
+\begin{DoxyCompactList}\small\item\em Commutation table for motor 1. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_motor_8h_ac9edbc13c57419de1647c90a69bcfae0}{M2\+\_\+\+I\+N\+L\+\_\+\+W\+R\+I\+TE}} (int a, int b, int c)
+\begin{DoxyCompactList}\small\item\em Commutation table for motor 2. \end{DoxyCompactList}\item 
 int \mbox{\hyperlink{_motor_8h_aa2c42019652e402afdfa5330e84a917e}{getmotor1\+P\+WM}} (void)
 \begin{DoxyCompactList}\small\item\em Returns the current P\+WM of motor 1. \end{DoxyCompactList}\item 
 int \mbox{\hyperlink{_motor_8h_a25d33861bd682d093b24c60f2cbabf20}{getmotor2\+P\+WM}} (void)
@@ -190,7 +186,7 @@ void \mbox{\hyperlink{_motor_8h_a1c8ae46921c4ae7d57bd44dd994e10bd}{pwm\+Init}} (
 void \mbox{\hyperlink{_motor_8h_a039514071775abacb3e57660c1f9dc85}{motor\+P\+WM}} (int motor\+\_\+number, int pwm\+Value)
 \begin{DoxyCompactList}\small\item\em Sets the P\+WM value to motors. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{_motor_8h_acec9de9c8240e305235826d3e580be1a}{motor\+Control\+P\+WM}} (int motor\+\_\+number, int control)
-\begin{DoxyCompactList}\small\item\em Sets the P\+WM value and direction to motors. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em Sets the P\+WM value and direction to motors. N\+O\+TE\+: 1x\+P\+WM only. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{_motor_8h_ad2741cc74d08cc9d8e9412bbb8c80997}{motor\+Brake}} (int motor\+\_\+number)
 \begin{DoxyCompactList}\small\item\em Brakes motors. \end{DoxyCompactList}\item 
 int \mbox{\hyperlink{_motor_8h_ad2fb0421114b988126b41428644453a3}{motor\+Error}} (void)
@@ -286,6 +282,94 @@ Returns the current P\+WM of motor 2.
 \begin{DoxyReturn}{Returns}
 int pwm of motor 
 \end{DoxyReturn}
+\mbox{\Hypertarget{_motor_8h_a418a9beb64e4f3d3563917d05a5a3544}\label{_motor_8h_a418a9beb64e4f3d3563917d05a5a3544}} 
+\index{Motor.\+h@{Motor.\+h}!M1\+\_\+\+I\+N\+L\+\_\+\+W\+R\+I\+TE@{M1\+\_\+\+I\+N\+L\+\_\+\+W\+R\+I\+TE}}
+\index{M1\+\_\+\+I\+N\+L\+\_\+\+W\+R\+I\+TE@{M1\+\_\+\+I\+N\+L\+\_\+\+W\+R\+I\+TE}!Motor.\+h@{Motor.\+h}}
+\subsubsection{\texorpdfstring{M1\+\_\+\+I\+N\+L\+\_\+\+W\+R\+I\+T\+E()}{M1\_INL\_WRITE()}}
+{\footnotesize\ttfamily void M1\+\_\+\+I\+N\+L\+\_\+\+W\+R\+I\+TE (\begin{DoxyParamCaption}\item[{int}]{a,  }\item[{int}]{b,  }\item[{int}]{c }\end{DoxyParamCaption})}
+
+
+
+Commutation table for motor 1. 
+
+This function contains the commutation table for motor 1 and sets the control pins for each phase accordingly.
+
+
+\begin{DoxyParams}{Parameters}
+{\em int} & a phase A \\
+\hline
+{\em int} & b phase B \\
+\hline
+{\em int} & c phase C \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_motor_8h_a879b94540bd8b5d2e5217c749029e12b}\label{_motor_8h_a879b94540bd8b5d2e5217c749029e12b}} 
+\index{Motor.\+h@{Motor.\+h}!M1\+H\+Int\+Handler@{M1\+H\+Int\+Handler}}
+\index{M1\+H\+Int\+Handler@{M1\+H\+Int\+Handler}!Motor.\+h@{Motor.\+h}}
+\subsubsection{\texorpdfstring{M1\+H\+Int\+Handler()}{M1HIntHandler()}}
+{\footnotesize\ttfamily void M1\+H\+Int\+Handler (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Hall sensor interrupt for motor 1. 
+
+This function is used to determine the commutation on motor 1
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_motor_8h_ac9edbc13c57419de1647c90a69bcfae0}\label{_motor_8h_ac9edbc13c57419de1647c90a69bcfae0}} 
+\index{Motor.\+h@{Motor.\+h}!M2\+\_\+\+I\+N\+L\+\_\+\+W\+R\+I\+TE@{M2\+\_\+\+I\+N\+L\+\_\+\+W\+R\+I\+TE}}
+\index{M2\+\_\+\+I\+N\+L\+\_\+\+W\+R\+I\+TE@{M2\+\_\+\+I\+N\+L\+\_\+\+W\+R\+I\+TE}!Motor.\+h@{Motor.\+h}}
+\subsubsection{\texorpdfstring{M2\+\_\+\+I\+N\+L\+\_\+\+W\+R\+I\+T\+E()}{M2\_INL\_WRITE()}}
+{\footnotesize\ttfamily void M2\+\_\+\+I\+N\+L\+\_\+\+W\+R\+I\+TE (\begin{DoxyParamCaption}\item[{int}]{a,  }\item[{int}]{b,  }\item[{int}]{c }\end{DoxyParamCaption})}
+
+
+
+Commutation table for motor 2. 
+
+This function contains the commutation table for motor 2 and sets the control pins for each phase accordingly.
+
+
+\begin{DoxyParams}{Parameters}
+{\em int} & a phase A \\
+\hline
+{\em int} & b phase B \\
+\hline
+{\em int} & c phase C \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_motor_8h_afde750f7e2ef4ebb04f36c81089c832d}\label{_motor_8h_afde750f7e2ef4ebb04f36c81089c832d}} 
+\index{Motor.\+h@{Motor.\+h}!M2\+H\+Int\+Handler@{M2\+H\+Int\+Handler}}
+\index{M2\+H\+Int\+Handler@{M2\+H\+Int\+Handler}!Motor.\+h@{Motor.\+h}}
+\subsubsection{\texorpdfstring{M2\+H\+Int\+Handler()}{M2HIntHandler()}}
+{\footnotesize\ttfamily void M2\+H\+Int\+Handler (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Hall sensor interrupt for motor 2. 
+
+This function is used to determine the commutation on motor 2
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
 \mbox{\Hypertarget{_motor_8h_a8ab898affd7b6bbc1d359284e85c31c3}\label{_motor_8h_a8ab898affd7b6bbc1d359284e85c31c3}} 
 \index{Motor.\+h@{Motor.\+h}!motor1\+Control\+P\+WM@{motor1\+Control\+P\+WM}}
 \index{motor1\+Control\+P\+WM@{motor1\+Control\+P\+WM}!Motor.\+h@{Motor.\+h}}
@@ -296,9 +380,13 @@ int pwm of motor
 
 Sets the P\+WM value and direction to motor 1. 
 
+This function handles all the commutation for motor 1. This is done via hall sensing to determine the position the B\+L\+DC motor is in.
+
+Example\+: motor2\+Control\+P\+W\+M(200); // sets the motor speed to 5\% of default, clockwise delay\+M\+S(100); //delay for 100 ms motor2\+Control\+P\+WM(-\/200); // sets motor speed to 5\% of default, counter clockwise.
+
 
 \begin{DoxyParams}{Parameters}
-{\em control} & The pwm\+Value ranges from -\/maximum pwm period to the positive period. The default pwm period is 320 Sys\+Clk cycles \\
+{\em control} & The pwm\+Value ranges from -\/maximum pwm period to the positive period. The default pwm period is 4000, 30k\+Hz. \\
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
@@ -316,7 +404,11 @@ Sets the P\+WM value to motor 1.
 
 
 \begin{DoxyParams}{Parameters}
-{\em pwm\+Value} & The pwm\+Value ranges from 0 to the pwm period. \\
+{\em pwm1} & the pwm output on phase A \\
+\hline
+{\em pwm2} & the pwm output on phase B \\
+\hline
+{\em pwm3} & the pwm output on phase C \\
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
@@ -332,9 +424,13 @@ Void
 
 Sets the P\+WM value and direction to motor 2. 
 
+This function handles all the commutation for motor 2. This is done via hall sensing to determine the position the B\+L\+DC motor is in.
+
+Example\+: motor2\+Control\+P\+W\+M(200); // sets the motor speed to 5\% of default, clockwise delay\+M\+S(100); //delay for 100 ms motor2\+Control\+P\+WM(-\/200); // sets motor speed to 5\% of default, counter clockwise.
+
 
 \begin{DoxyParams}{Parameters}
-{\em control} & The pwm\+Value ranges from -\/maximum pwm period to the positive period. The default pwm period is 320 Sys\+Clk cycles \\
+{\em control} & The pwm\+Value ranges from -\/maximum pwm period to the positive period. The default pwm period is 4000, 30k\+Hz. \\
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
@@ -352,7 +448,11 @@ Sets the P\+WM value to motor 2.
 
 
 \begin{DoxyParams}{Parameters}
-{\em pwm\+Value} & The pwm\+Value ranges from 0 to the pwm period. \\
+{\em pwm1} & the pwm output on phase A \\
+\hline
+{\em pwm2} & the pwm output on phase B \\
+\hline
+{\em pwm3} & the pwm output on phase C \\
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
@@ -370,7 +470,7 @@ Brakes motors.
 
 
 \begin{DoxyParams}{Parameters}
-{\em The} & motor number \\
+{\em motor\+\_\+number} & the motor to brake, either 1 or 2 \\
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
@@ -384,11 +484,11 @@ Void
 
 
 
-Sets the P\+WM value and direction to motors. 
+Sets the P\+WM value and direction to motors. N\+O\+TE\+: 1x\+P\+WM only. 
 
 
 \begin{DoxyParams}{Parameters}
-{\em The} & motor number \\
+{\em motor\+\_\+number} & the motor to control \\
 \hline
 {\em control} & The control ranges from -\/maximum pwm period to the positive period. The default maximum is 4000 \\
 \hline
