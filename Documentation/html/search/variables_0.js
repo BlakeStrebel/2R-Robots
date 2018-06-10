@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['actpos',['actPos',['../structcontrol__data__t.html#a892c45389a98ba3bfc68972f71eaaf12',1,'control_data_t']]]
+  ['actpos',['actPos',['../structmotor__control__data.html#a15da9ec28fdeb23649bdf9755b82f229',1,'motor_control_data']]]
 ];

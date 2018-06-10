@@ -26,8 +26,6 @@ void \mbox{\hyperlink{_system_8h_acd1ca90dcd2d241c90316f670dfcc2eb}{U\+A\+R\+T0r
 \begin{DoxyCompactList}\small\item\em Reads input from U\+A\+RT. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{_system_8h_aba58039e2e0b55260a188aedbc87d18b}{U\+A\+R\+T0write}} (const char $\ast$string)
 \begin{DoxyCompactList}\small\item\em Writes output to U\+A\+RT. \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{_system_8h_adab76f1253da89e657056817a3a9a11a}{gpio\+Init}} (void)
-\begin{DoxyCompactList}\small\item\em Initializes all unused G\+P\+IO pins in High-\/Z state. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{_system_8h_ab0b86e69a6c13e01349840d66db0f1f3}{delay\+MS}} (int ms)
 \begin{DoxyCompactList}\small\item\em Stops the processor for a given amount of time. This is an approximate time. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{_system_8h_a9539b63f71e1a1c8b7cc5142560b189c}{time\+Init}} (void)
@@ -35,7 +33,15 @@ void \mbox{\hyperlink{_system_8h_a9539b63f71e1a1c8b7cc5142560b189c}{time\+Init}}
 uint32\+\_\+t \mbox{\hyperlink{_system_8h_a606dc97cf5056886cfd30122ce54709c}{get\+Time}} (void)
 \begin{DoxyCompactList}\small\item\em Returns the time in microseconds. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{_system_8h_a3ef2d72f5373681a06978ab3f437bd63}{time\+Int}} (void)
-\begin{DoxyCompactList}\small\item\em The general purpose timer interrupt function. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em The general purpose timer interrupt function. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_system_8h_a11b518c43dcc2b8001bfc1fbe3e789e1}{U\+A\+R\+T0\+Int\+Put}} (int value)
+\begin{DoxyCompactList}\small\item\em A U\+A\+RT function that puts an int into U\+A\+R\+T0. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_system_8h_a9cf7703560ef43e86c45d394d4ceb385}{U\+A\+R\+T0\+Float\+Put}} (float value)
+\begin{DoxyCompactList}\small\item\em A U\+A\+RT function that puts a float into U\+A\+R\+T0. \end{DoxyCompactList}\item 
+float \mbox{\hyperlink{_system_8h_aedca7a3f4132da69b3698e8825f9e946}{U\+A\+R\+T0\+Float\+Get}} (void)
+\begin{DoxyCompactList}\small\item\em A U\+A\+RT function that gets a float from U\+A\+R\+T0. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{_system_8h_a63714211feff311adcdfb7be980775a7}{U\+A\+R\+T0\+Int\+Get}} (void)
+\begin{DoxyCompactList}\small\item\em A U\+A\+RT function that gets an int from U\+A\+R\+T0. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \subsection*{Variables}
 \begin{DoxyCompactItemize}
 \item 
@@ -106,24 +112,6 @@ uint32_t time_taken = getTime()-curr_time;
 \begin{DoxyReturn}{Returns}
 Void 
 \end{DoxyReturn}
-\mbox{\Hypertarget{_system_8h_adab76f1253da89e657056817a3a9a11a}\label{_system_8h_adab76f1253da89e657056817a3a9a11a}} 
-\index{System.\+h@{System.\+h}!gpio\+Init@{gpio\+Init}}
-\index{gpio\+Init@{gpio\+Init}!System.\+h@{System.\+h}}
-\subsubsection{\texorpdfstring{gpio\+Init()}{gpioInit()}}
-{\footnotesize\ttfamily void gpio\+Init (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
-
-
-
-Initializes all unused G\+P\+IO pins in High-\/Z state. 
-
-
-\begin{DoxyParams}{Parameters}
-{\em Void} & \\
-\hline
-\end{DoxyParams}
-\begin{DoxyReturn}{Returns}
-Void 
-\end{DoxyReturn}
 \mbox{\Hypertarget{_system_8h_a9708de954e135b89af84d9d82b552667}\label{_system_8h_a9708de954e135b89af84d9d82b552667}} 
 \index{System.\+h@{System.\+h}!sys\+Init@{sys\+Init}}
 \index{sys\+Init@{sys\+Init}!System.\+h@{System.\+h}}
@@ -175,6 +163,78 @@ This function is called every microsecond and updates a counter.
 
 \begin{DoxyParams}{Parameters}
 {\em ms} & milliseconds \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_system_8h_aedca7a3f4132da69b3698e8825f9e946}\label{_system_8h_aedca7a3f4132da69b3698e8825f9e946}} 
+\index{System.\+h@{System.\+h}!U\+A\+R\+T0\+Float\+Get@{U\+A\+R\+T0\+Float\+Get}}
+\index{U\+A\+R\+T0\+Float\+Get@{U\+A\+R\+T0\+Float\+Get}!System.\+h@{System.\+h}}
+\subsubsection{\texorpdfstring{U\+A\+R\+T0\+Float\+Get()}{UART0FloatGet()}}
+{\footnotesize\ttfamily float U\+A\+R\+T0\+Float\+Get (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+A U\+A\+RT function that gets a float from U\+A\+R\+T0. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+float the value that is read from the U\+A\+RT buffer 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_system_8h_a9cf7703560ef43e86c45d394d4ceb385}\label{_system_8h_a9cf7703560ef43e86c45d394d4ceb385}} 
+\index{System.\+h@{System.\+h}!U\+A\+R\+T0\+Float\+Put@{U\+A\+R\+T0\+Float\+Put}}
+\index{U\+A\+R\+T0\+Float\+Put@{U\+A\+R\+T0\+Float\+Put}!System.\+h@{System.\+h}}
+\subsubsection{\texorpdfstring{U\+A\+R\+T0\+Float\+Put()}{UART0FloatPut()}}
+{\footnotesize\ttfamily void U\+A\+R\+T0\+Float\+Put (\begin{DoxyParamCaption}\item[{float}]{value }\end{DoxyParamCaption})}
+
+
+
+A U\+A\+RT function that puts a float into U\+A\+R\+T0. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em float} & value that is sent over U\+A\+RT \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_system_8h_a63714211feff311adcdfb7be980775a7}\label{_system_8h_a63714211feff311adcdfb7be980775a7}} 
+\index{System.\+h@{System.\+h}!U\+A\+R\+T0\+Int\+Get@{U\+A\+R\+T0\+Int\+Get}}
+\index{U\+A\+R\+T0\+Int\+Get@{U\+A\+R\+T0\+Int\+Get}!System.\+h@{System.\+h}}
+\subsubsection{\texorpdfstring{U\+A\+R\+T0\+Int\+Get()}{UART0IntGet()}}
+{\footnotesize\ttfamily int U\+A\+R\+T0\+Int\+Get (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+A U\+A\+RT function that gets an int from U\+A\+R\+T0. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int the value that is read from the U\+A\+RT buffer 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_system_8h_a11b518c43dcc2b8001bfc1fbe3e789e1}\label{_system_8h_a11b518c43dcc2b8001bfc1fbe3e789e1}} 
+\index{System.\+h@{System.\+h}!U\+A\+R\+T0\+Int\+Put@{U\+A\+R\+T0\+Int\+Put}}
+\index{U\+A\+R\+T0\+Int\+Put@{U\+A\+R\+T0\+Int\+Put}!System.\+h@{System.\+h}}
+\subsubsection{\texorpdfstring{U\+A\+R\+T0\+Int\+Put()}{UART0IntPut()}}
+{\footnotesize\ttfamily void U\+A\+R\+T0\+Int\+Put (\begin{DoxyParamCaption}\item[{int}]{value }\end{DoxyParamCaption})}
+
+
+
+A U\+A\+RT function that puts an int into U\+A\+R\+T0. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em int} & value that is sent over U\+A\+RT \\
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}

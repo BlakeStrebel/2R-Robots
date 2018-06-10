@@ -41,9 +41,20 @@ typedef struct {                          // Define data structure containing co
 
 } control_error;
 
-
+/**
+* @brief This function sets up the timer interrupt for poosition control
+*
+* @param Void
+* @return Void
+*/
 extern void MotorTimerInit(void);
 
+/**
+* @brief The interrupt handler for position control
+*
+* @param Void
+* @return Void
+*/
 extern void Timer1IntHandler(void);
 
 
@@ -146,7 +157,13 @@ float decogMotor(int x, int motor);
 void setDecogging(int decog);
 
 
-
+/**
+* @brief Receives position gains over UART, intended for use in a menu
+*
+*   
+* @param int motor
+* @return Void
+*/
 void setPositionPID(int motor);
 
 

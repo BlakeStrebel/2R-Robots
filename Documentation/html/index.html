@@ -73,55 +73,55 @@ Introduction</h1>
 Setting up CCS for R2R</h1>
 <p>In order to start programming the microcontroller, the user has to install Code Composer Studio (CCS) from TI. In CCS, the TIVAware library has to be installed. This can be done through the Resource Explorer avaliable in CCS. The Resource Explorer can be reached from Help &gt; Getting Started &gt; Browse Examples.</p>
 <div class="image">
-<img src="images/tivaware.JPG" alt="tivaware.JPG"/>
+<img src="tivaware.JPG" alt="tivaware.JPG"/>
 <div class="caption">
 CCS Resource Explorer (Tirex)</div></div>
 <p> Once the libraries have been installed, create a new project</p>
 <div class="image">
-<img src="images/newproject.JPG" alt="newproject.JPG"/>
+<img src="newproject.JPG" alt="newproject.JPG"/>
 <div class="caption">
 Creating a new project</div></div>
-<p> Ensure that the Tiva TM4C1294NCPDT chip is selected and give your project a name. When you are done, select Finish</p>
+<p> Ensure that the Tiva TM4C1294NCPDT chip is selected and give your project a name. When you are done, select Finish.</p>
 <div class="image">
-<img src="images/newprojectoptions.JPG" alt="newprojectoptions.JPG"/>
+<img src="newprojectoptions.JPG" alt="newprojectoptions.JPG"/>
 <div class="caption">
 Options for a new project</div></div>
 <p> The code perspective will open up. On the left the active project is bolded. Your new project should be bolded. If it is not, select it. Some libraries have to be manually added to the project before the code can run. Right click the project name in Project Explorer, and select properties.</p>
 <p>Under CCS Build &gt; ARM Compiler &gt; Include options, include the Tivaware library.</p>
 <div class="image">
-<img src="images/includetivaware.JPG" alt="includetivaware.JPG"/>
+<img src="includetivaware.JPG" alt="includetivaware.JPG"/>
 <div class="caption">
 Including libraries</div></div>
-<p> Next, under CCS Build &gt; ARM Linker &gt; File Search Path the library files for the driver library are included. The sensorlib files are also included in the same manner</p>
+<p> Next, under CCS Build &gt; ARM Linker &gt; File Search Path, include the library files for the driver library, driverlib. The sensorlib files are also included in the same manner.</p>
 <div class="image">
-<img src="images/driverlib.JPG" alt="driverlib.JPG"/>
+<img src="driverlib.JPG" alt="driverlib.JPG"/>
 <div class="caption">
 Including Driverlib</div></div>
 <p> Finally the files from the Github project can be added to the project. Because version control is already managed by Github in this case, the files are linked into the the project. However, the user can also add the files directly into the project.</p>
 <div class="image">
-<img src="images/r2rstep1.JPG" alt="r2rstep1.JPG"/>
+<img src="r2rstep1.JPG" alt="r2rstep1.JPG"/>
 <div class="caption">
 Including R2R files</div></div>
 <div class="image">
-<img src="images/r2rstep2.JPG" alt="r2rstep2.JPG"/>
+<img src="r2rstep2.JPG" alt="r2rstep2.JPG"/>
 <div class="caption">
 Including R2R files</div></div>
 <div class="image">
-<img src="images/r2rstep3.JPG" alt="r2rstep3.JPG"/>
+<img src="r2rstep3.JPG" alt="r2rstep3.JPG"/>
 <div class="caption">
 Including R2R files</div></div>
 <div class="image">
-<img src="images/r2rstep4.JPG" alt="r2rstep4.JPG"/>
+<img src="r2rstep4.JPG" alt="r2rstep4.JPG"/>
 <div class="caption">
 Including R2R files</div></div>
 <p> If the files cannot be added, delete the conflicting file in the project and attempt to add the file again. Once all the files have been added, CCS should look like the following state.</p>
 <div class="image">
-<img src="images/r2rstep5.JPG" alt="r2rstep5.JPG"/>
+<img src="r2rstep5.JPG" alt="r2rstep5.JPG"/>
 <div class="caption">
 Setup Completed</div></div>
 <p> The code is built by clicking on the hammer icon. In order to program the board, the green debug symbol is clicked. Test by compiling the code. It should compile without any errors.</p>
 <div class="image">
-<img src="images/programming.JPG" alt="programming.JPG"/>
+<img src="programming.JPG" alt="programming.JPG"/>
 <div class="caption">
 Programming</div></div>
 <h1><a class="anchor" id="writingcustomcode"></a>
@@ -129,7 +129,7 @@ Writing Custom Code</h1>
 <p>Two timers (Timer 6 and Timer 7) are set up in the code and can execute at user-set frequencies in <code><a class="el" href="r2r_8c.html" title="This file contains the main function that calls all other initialization functions. ">r2r.c</a></code>. The intention is that the user will either write code in <a class="el" href="r2r_8c.html" title="This file contains the main function that calls all other initialization functions. ">r2r.c</a> or create a header and source file. Here, an simple example will be set out to compute simple position control over motor 1 in <a class="el" href="r2r_8c.html" title="This file contains the main function that calls all other initialization functions. ">r2r.c</a> at 5kHz.</p>
 <h2><a class="anchor" id="writinginterrupts"></a>
 Writing Interrupts</h2>
-<p>In Code Composer Studio, Interrupts follow a general format. There is the interrupt initialization, the interrupt function itself, and a declaration of the interrupt function in the interrupt vector table in <code>tm4c1294ncpdt_startup_ccs.c</code>.</p>
+<p>In Code Composer Studio, interrupts follow a general format. There is the interrupt initialization, the interrupt function itself, and a declaration of the interrupt function in the interrupt vector table in <code>tm4c1294ncpdt_startup_ccs.c</code>.</p>
 <p>In this example the timer interrupt has already been declared under <code>customTimersInit()</code> and the corresponding timer functions have been declared in <code>tm4c1294ncpdt_startup_ccs.c</code>.</p>
 <p>In <code><a class="el" href="r2r_8c.html" title="This file contains the main function that calls all other initialization functions. ">r2r.c</a></code>, update frequency: </p><pre class="fragment">    #define TIMER_6_FREQUENCY 5000
 </pre><p>Add global variables for the PID controller in <code><a class="el" href="r2r_8c.html" title="This file contains the main function that calls all other initialization functions. ">r2r.c</a></code> </p><pre class="fragment">int int_error = 0;
@@ -181,7 +181,19 @@ UART communication</h2>
  }  
 </pre><h2><a class="anchor" id="menu"></a>
 Writing Menu Commands</h2>
-<p>The MATLAB menu can also be modified to fit a custom control law. </p>
+<p>The MATLAB menu can also be modified to fit a custom control law. The MATLAB code is set up in a tree format where each entry is a node that includes information about its parent and children. The only point to edit is * where the details of the node has to be specified</p>
+<p>There are two types of nodes: a data node, which accepts input from the user and immediately transitions to its child node, and a navigational node, which accepts input from the user and checks its child nodes for the matching option. The navigational node does simple error checking, but the data node does not because of the wide variety of data types that might be possible. Instead, a statement of the expected data type is presented and the user is expected to conform to this data type when interacting with a data node.</p>
+<p>On the firmware side, additional case statements are added that correspond to the added nodes to process the incoming data.</p>
+<p>The user has to add in two functions, one which saves the input to the state of the program, and the other which processes the input. The only function that needs to be edited is the <code>hierarchicalMenu.m</code>, which is found in: <code>BackupAndUI &gt; R2R_interfaces &gt; menu_library</code></p>
+<div class="image">
+<img src="parent.JPG" alt="parent.JPG"/>
+<div class="caption">
+Adding a parent node</div></div>
+<p> Once the top level menu option has been created, a menu function to process the data must also be created.</p>
+<div class="image">
+<img src="child.JPG" alt="child.JPG"/>
+<div class="caption">
+Adding a child node</div></div>
 </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

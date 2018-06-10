@@ -17,6 +17,8 @@ Main R2R library header.
 \item 
 void \mbox{\hyperlink{r2r_8h_af06127bca89306e7f9af0ea36f162ca0}{r2r\+Default\+Init}} (void)
 \begin{DoxyCompactList}\small\item\em Initializes the default connections for the R2R project. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{r2r_8h_a4ecaa31712e652b0a1cc2d8fc212e2f5}{sensor\+Update}} () extern void custom\+Timers\+Init(void)
+\begin{DoxyCompactList}\small\item\em Updates the sensor readings. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{r2r_8h_a57b21594b75d4b2a140a1f9bbb1465e8}{T\+I\+M\+E\+R6\+Int\+Handler}} (void)
 \begin{DoxyCompactList}\small\item\em Custom timer 6. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{r2r_8h_a39c6b9317ad29deebebf731f721f001b}{T\+I\+M\+E\+R7\+Int\+Handler}} (void)
@@ -62,6 +64,42 @@ Example\+: \begin{DoxyVerb}int main() {
 \begin{DoxyReturn}{Returns}
 Void 
 \end{DoxyReturn}
+\mbox{\Hypertarget{r2r_8h_a4ecaa31712e652b0a1cc2d8fc212e2f5}\label{r2r_8h_a4ecaa31712e652b0a1cc2d8fc212e2f5}} 
+\index{r2r.\+h@{r2r.\+h}!sensor\+Update@{sensor\+Update}}
+\index{sensor\+Update@{sensor\+Update}!r2r.\+h@{r2r.\+h}}
+\subsubsection{\texorpdfstring{sensor\+Update()}{sensorUpdate()}}
+{\footnotesize\ttfamily void sensor\+Update (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Updates the sensor readings. 
+
+When called this function updates the encoder readings. Other sensor reading functions can also be added here.
+
+Example\+: \begin{DoxyVerb}int main() {
+    sensorUpdate();
+}
+\end{DoxyVerb}
+
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void Initializes custom timers
+\end{DoxyReturn}
+This function initializes timers 6 and 7 at preset frequencies as defined in \mbox{\hyperlink{r2r_8c}{r2r.\+c}}
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
 \mbox{\Hypertarget{r2r_8h_a57b21594b75d4b2a140a1f9bbb1465e8}\label{r2r_8h_a57b21594b75d4b2a140a1f9bbb1465e8}} 
 \index{r2r.\+h@{r2r.\+h}!T\+I\+M\+E\+R6\+Int\+Handler@{T\+I\+M\+E\+R6\+Int\+Handler}}
 \index{T\+I\+M\+E\+R6\+Int\+Handler@{T\+I\+M\+E\+R6\+Int\+Handler}!r2r.\+h@{r2r.\+h}}
@@ -72,7 +110,15 @@ Void
 
 Custom timer 6. 
 
-This function executes at the rate set by T\+I\+M\+E\+R\+\_\+6\+\_\+\+F\+R\+EQ set in \mbox{\hyperlink{r2r_8c}{r2r.\+c}} This function does not have to be called anywhere.
+This function executes at the rate set by T\+I\+M\+E\+R\+\_\+6\+\_\+\+F\+R\+EQ set in \mbox{\hyperlink{r2r_8c}{r2r.\+c}} This function does not have to be called anywhere. This function does not return any values
+
+Example\+: \begin{DoxyVerb} void TIMER6IntHandler() {
+
+    // add custom controller code here
+
+     }
+\end{DoxyVerb}
+
 
 
 \begin{DoxyParams}{Parameters}

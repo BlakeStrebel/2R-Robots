@@ -83,19 +83,19 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcontrol__data__t.html">control_data_t</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmotor__control__data.html">motor_control_data</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
 <tr class="memitem:a8b0b0ebd19cb978bcd825b842558c31a"><td class="memItemLeft" align="right" valign="top"><a id="a8b0b0ebd19cb978bcd825b842558c31a"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>DECIMATION</b>&#160;&#160;&#160;1</td></tr>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>DECIMATION</b>&#160;&#160;&#160;10</td></tr>
 <tr class="separator:a8b0b0ebd19cb978bcd825b842558c31a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afdeaf9c0da96c91dfdf573f977d32e6b"><td class="memItemLeft" align="right" valign="top"><a id="afdeaf9c0da96c91dfdf573f977d32e6b"></a>
 #define&#160;</td><td class="memItemRight" valign="bottom"><b>REFERENCE_DATA</b>&#160;&#160;&#160;10000</td></tr>
 <tr class="separator:afdeaf9c0da96c91dfdf573f977d32e6b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad974fe981249f5e84fbf1683b012c9f8"><td class="memItemLeft" align="right" valign="top"><a id="ad974fe981249f5e84fbf1683b012c9f8"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>BUFLEN</b>&#160;&#160;&#160;10000</td></tr>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>BUFLEN</b>&#160;&#160;&#160;100</td></tr>
 <tr class="separator:ad974fe981249f5e84fbf1683b012c9f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
@@ -104,9 +104,19 @@ Enumerations</h2></td></tr>
 &#160;&#160;<a class="el" href="_utilities_8h.html#a1a6b6fb557d8d37d59700faf4e4c9167afd6a0e4343048b10646dd2976cc5ad18">IDLE</a>, 
 <a class="el" href="_utilities_8h.html#a1a6b6fb557d8d37d59700faf4e4c9167aef99a276e1f3b62b5df98acc27b38028">PWM</a>, 
 <b>ITEST</b>, 
-<a class="el" href="_utilities_8h.html#a1a6b6fb557d8d37d59700faf4e4c9167a9cfa27b414cab750fb14ec07cdf5cf6a">HOLD</a>, 
+<b>ISENSE</b>, 
 <br />
-&#160;&#160;<a class="el" href="_utilities_8h.html#a1a6b6fb557d8d37d59700faf4e4c9167a203efac3b32c320b1246bf5583be1e8c">TRACK</a>
+&#160;&#160;<b>ICALIB</b>, 
+<a class="el" href="_utilities_8h.html#a1a6b6fb557d8d37d59700faf4e4c9167a9cfa27b414cab750fb14ec07cdf5cf6a">HOLD</a>, 
+<a class="el" href="_utilities_8h.html#a1a6b6fb557d8d37d59700faf4e4c9167a203efac3b32c320b1246bf5583be1e8c">TRACK</a>, 
+<b>READ1</b>, 
+<br />
+&#160;&#160;<b>READ2</b>, 
+<b>READb</b>, 
+<b>PID1</b>, 
+<b>PID2</b>, 
+<br />
+&#160;&#160;<b>PIDb</b>
 <br />
  }</td></tr>
 <tr class="separator:a1a6b6fb557d8d37d59700faf4e4c9167"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -119,9 +129,9 @@ Functions</h2></td></tr>
 <tr class="memitem:af4c5a7352334b805d0c36e3b495d0a16"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_utilities_8h.html#af4c5a7352334b805d0c36e3b495d0a16">setMODE</a> (<a class="el" href="_utilities_8h.html#a1a6b6fb557d8d37d59700faf4e4c9167">mode</a> newMODE)</td></tr>
 <tr class="memdesc:af4c5a7352334b805d0c36e3b495d0a16"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the Mode of the robot.  <a href="#af4c5a7352334b805d0c36e3b495d0a16">More...</a><br /></td></tr>
 <tr class="separator:af4c5a7352334b805d0c36e3b495d0a16"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acba07f8eaf5cdce3760657cfd53c35b8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_utilities_8h.html#acba07f8eaf5cdce3760657cfd53c35b8">setN</a> (void)</td></tr>
-<tr class="memdesc:acba07f8eaf5cdce3760657cfd53c35b8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Receive number N of samples to save into data buffer.  <a href="#acba07f8eaf5cdce3760657cfd53c35b8">More...</a><br /></td></tr>
-<tr class="separator:acba07f8eaf5cdce3760657cfd53c35b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a879808dbc63ea605a96bed9d93441d3f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_utilities_8h.html#a879808dbc63ea605a96bed9d93441d3f">setN</a> (int timestep)</td></tr>
+<tr class="memdesc:a879808dbc63ea605a96bed9d93441d3f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Receive number N of samples to save into data buffer.  <a href="#a879808dbc63ea605a96bed9d93441d3f">More...</a><br /></td></tr>
+<tr class="separator:a879808dbc63ea605a96bed9d93441d3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad100531ac5483b0915dc7ebf2e6f3a3d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_utilities_8h.html#ad100531ac5483b0915dc7ebf2e6f3a3d">getN</a> (void)</td></tr>
 <tr class="memdesc:ad100531ac5483b0915dc7ebf2e6f3a3d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the number of samples.  <a href="#ad100531ac5483b0915dc7ebf2e6f3a3d">More...</a><br /></td></tr>
 <tr class="separator:ad100531ac5483b0915dc7ebf2e6f3a3d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -152,14 +162,14 @@ Functions</h2></td></tr>
 <tr class="memitem:aa8061654c0af0c3c3fac9e63ed7eaed6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_utilities_8h.html#aa8061654c0af0c3c3fac9e63ed7eaed6">send_data</a> (void)</td></tr>
 <tr class="memdesc:aa8061654c0af0c3c3fac9e63ed7eaed6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send data to client when it becomes available.  <a href="#aa8061654c0af0c3c3fac9e63ed7eaed6">More...</a><br /></td></tr>
 <tr class="separator:aa8061654c0af0c3c3fac9e63ed7eaed6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a28222caa228cb42e3dd503f611a431ff"><td class="memItemLeft" align="right" valign="top"><a id="a28222caa228cb42e3dd503f611a431ff"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setNclient</b> (int n)</td></tr>
+<tr class="memitem:a28222caa228cb42e3dd503f611a431ff"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_utilities_8h.html#a28222caa228cb42e3dd503f611a431ff">setNclient</a> (int n)</td></tr>
+<tr class="memdesc:a28222caa228cb42e3dd503f611a431ff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Recieve number of values to store in position data arrays from client.  <a href="#a28222caa228cb42e3dd503f611a431ff">More...</a><br /></td></tr>
 <tr class="separator:a28222caa228cb42e3dd503f611a431ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a88ade88617e9bae6f82653ec6d6470a1"><td class="memItemLeft" align="right" valign="top"><a id="a88ade88617e9bae6f82653ec6d6470a1"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>boundInt</b> (int a, int n)</td></tr>
+<tr class="memitem:a88ade88617e9bae6f82653ec6d6470a1"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_utilities_8h.html#a88ade88617e9bae6f82653ec6d6470a1">boundInt</a> (int a, int n)</td></tr>
+<tr class="memdesc:a88ade88617e9bae6f82653ec6d6470a1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Bounds a given input to a range of values.  <a href="#a88ade88617e9bae6f82653ec6d6470a1">More...</a><br /></td></tr>
 <tr class="separator:a88ade88617e9bae6f82653ec6d6470a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acec61ed867597bb5d25a00b0e33d4476"><td class="memItemLeft" align="right" valign="top"><a id="acec61ed867597bb5d25a00b0e33d4476"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>maxInt</b> (int a, int b)</td></tr>
+<tr class="memitem:acec61ed867597bb5d25a00b0e33d4476"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_utilities_8h.html#acec61ed867597bb5d25a00b0e33d4476">maxInt</a> (int a, int b)</td></tr>
+<tr class="memdesc:acec61ed867597bb5d25a00b0e33d4476"><td class="mdescLeft">&#160;</td><td class="mdescRight">returns the large value of the two  <a href="#acec61ed867597bb5d25a00b0e33d4476">More...</a><br /></td></tr>
 <tr class="separator:acec61ed867597bb5d25a00b0e33d4476"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -197,6 +207,44 @@ Blake Strebel </dd></dl>
 </div>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
+<a id="a88ade88617e9bae6f82653ec6d6470a1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a88ade88617e9bae6f82653ec6d6470a1">&#9670;&nbsp;</a></span>boundInt()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int boundInt </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>a</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>n</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Bounds a given input to a range of values. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">int</td><td>a the input value </td></tr>
+    <tr><td class="paramname">int</td><td>n the range of the bounds </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>int the bounded output </dd></dl>
+
+</div>
+</div>
 <a id="a7ee932fa1bdc8820ae0479fa64cf1e01"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a7ee932fa1bdc8820ae0479fa64cf1e01">&#9670;&nbsp;</a></span>buffer_empty()</h2>
 
@@ -479,6 +527,44 @@ Blake Strebel </dd></dl>
 
 </div>
 </div>
+<a id="acec61ed867597bb5d25a00b0e33d4476"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acec61ed867597bb5d25a00b0e33d4476">&#9670;&nbsp;</a></span>maxInt()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int maxInt </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>a</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>b</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>returns the large value of the two </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">int</td><td>a one input value </td></tr>
+    <tr><td class="paramname">int</td><td>b the other input value </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>int the larger value </dd></dl>
+
+</div>
+</div>
 <a id="aa8061654c0af0c3c3fac9e63ed7eaed6"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aa8061654c0af0c3c3fac9e63ed7eaed6">&#9670;&nbsp;</a></span>send_data()</h2>
 
@@ -534,8 +620,8 @@ Blake Strebel </dd></dl>
 
 </div>
 </div>
-<a id="acba07f8eaf5cdce3760657cfd53c35b8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acba07f8eaf5cdce3760657cfd53c35b8">&#9670;&nbsp;</a></span>setN()</h2>
+<a id="a879808dbc63ea605a96bed9d93441d3f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a879808dbc63ea605a96bed9d93441d3f">&#9670;&nbsp;</a></span>setN()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -543,14 +629,41 @@ Blake Strebel </dd></dl>
         <tr>
           <td class="memname">void setN </td>
           <td>(</td>
-          <td class="paramtype">void&#160;</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>timestep</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 <p>Receive number N of samples to save into data buffer. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">Void</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Void </dd></dl>
+
+</div>
+</div>
+<a id="a28222caa228cb42e3dd503f611a431ff"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a28222caa228cb42e3dd503f611a431ff">&#9670;&nbsp;</a></span>setNclient()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void setNclient </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>n</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Recieve number of values to store in position data arrays from client. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">Void</td><td></td></tr>

@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['boundint',['boundInt',['../_utilities_8h.html#a88ade88617e9bae6f82653ec6d6470a1',1,'Utilities.c']]],
   ['buffer_5fempty',['buffer_empty',['../_utilities_8h.html#a7ee932fa1bdc8820ae0479fa64cf1e01',1,'Utilities.c']]],
   ['buffer_5ffull',['buffer_full',['../_utilities_8h.html#ab06f20d652c9a1f51223495940f71ff0',1,'Utilities.c']]],
   ['buffer_5fread_5fincrement',['buffer_read_increment',['../_utilities_8h.html#a20cbe188c42de1a2849be3745a2c9e40',1,'Utilities.c']]],

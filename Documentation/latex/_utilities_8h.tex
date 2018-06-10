@@ -8,19 +8,19 @@ utilities header
 \subsection*{Classes}
 \begin{DoxyCompactItemize}
 \item 
-struct \mbox{\hyperlink{structcontrol__data__t}{control\+\_\+data\+\_\+t}}
+struct \mbox{\hyperlink{structmotor__control__data}{motor\+\_\+control\+\_\+data}}
 \end{DoxyCompactItemize}
 \subsection*{Macros}
 \begin{DoxyCompactItemize}
 \item 
 \mbox{\Hypertarget{_utilities_8h_a8b0b0ebd19cb978bcd825b842558c31a}\label{_utilities_8h_a8b0b0ebd19cb978bcd825b842558c31a}} 
-\#define {\bfseries D\+E\+C\+I\+M\+A\+T\+I\+ON}~1
+\#define {\bfseries D\+E\+C\+I\+M\+A\+T\+I\+ON}~10
 \item 
 \mbox{\Hypertarget{_utilities_8h_afdeaf9c0da96c91dfdf573f977d32e6b}\label{_utilities_8h_afdeaf9c0da96c91dfdf573f977d32e6b}} 
 \#define {\bfseries R\+E\+F\+E\+R\+E\+N\+C\+E\+\_\+\+D\+A\+TA}~10000
 \item 
 \mbox{\Hypertarget{_utilities_8h_ad974fe981249f5e84fbf1683b012c9f8}\label{_utilities_8h_ad974fe981249f5e84fbf1683b012c9f8}} 
-\#define {\bfseries B\+U\+F\+L\+EN}~10000
+\#define {\bfseries B\+U\+F\+L\+EN}~100
 \end{DoxyCompactItemize}
 \subsection*{Enumerations}
 \begin{DoxyCompactItemize}
@@ -29,9 +29,19 @@ enum \mbox{\hyperlink{_utilities_8h_a1a6b6fb557d8d37d59700faf4e4c9167}{mode}} \{
 \mbox{\hyperlink{_utilities_8h_a1a6b6fb557d8d37d59700faf4e4c9167afd6a0e4343048b10646dd2976cc5ad18}{I\+D\+LE}}, 
 \mbox{\hyperlink{_utilities_8h_a1a6b6fb557d8d37d59700faf4e4c9167aef99a276e1f3b62b5df98acc27b38028}{P\+WM}}, 
 {\bfseries I\+T\+E\+ST}, 
-\mbox{\hyperlink{_utilities_8h_a1a6b6fb557d8d37d59700faf4e4c9167a9cfa27b414cab750fb14ec07cdf5cf6a}{H\+O\+LD}}, 
+{\bfseries I\+S\+E\+N\+SE}, 
 \newline
-\mbox{\hyperlink{_utilities_8h_a1a6b6fb557d8d37d59700faf4e4c9167a203efac3b32c320b1246bf5583be1e8c}{T\+R\+A\+CK}}
+{\bfseries I\+C\+A\+L\+IB}, 
+\mbox{\hyperlink{_utilities_8h_a1a6b6fb557d8d37d59700faf4e4c9167a9cfa27b414cab750fb14ec07cdf5cf6a}{H\+O\+LD}}, 
+\mbox{\hyperlink{_utilities_8h_a1a6b6fb557d8d37d59700faf4e4c9167a203efac3b32c320b1246bf5583be1e8c}{T\+R\+A\+CK}}, 
+{\bfseries R\+E\+A\+D1}, 
+\newline
+{\bfseries R\+E\+A\+D2}, 
+{\bfseries R\+E\+A\+Db}, 
+{\bfseries P\+I\+D1}, 
+{\bfseries P\+I\+D2}, 
+\newline
+{\bfseries P\+I\+Db}
  \}
 \end{DoxyCompactItemize}
 \subsection*{Functions}
@@ -41,7 +51,7 @@ enum \mbox{\hyperlink{_utilities_8h_a1a6b6fb557d8d37d59700faf4e4c9167}{mode}} \{
 \begin{DoxyCompactList}\small\item\em Return the Mode of the robot. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{_utilities_8h_af4c5a7352334b805d0c36e3b495d0a16}{set\+M\+O\+DE}} (\mbox{\hyperlink{_utilities_8h_a1a6b6fb557d8d37d59700faf4e4c9167}{mode}} new\+M\+O\+DE)
 \begin{DoxyCompactList}\small\item\em Sets the Mode of the robot. \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{_utilities_8h_acba07f8eaf5cdce3760657cfd53c35b8}{setN}} (void)
+void \mbox{\hyperlink{_utilities_8h_a879808dbc63ea605a96bed9d93441d3f}{setN}} (int timestep)
 \begin{DoxyCompactList}\small\item\em Receive number N of samples to save into data buffer. \end{DoxyCompactList}\item 
 int \mbox{\hyperlink{_utilities_8h_ad100531ac5483b0915dc7ebf2e6f3a3d}{getN}} (void)
 \begin{DoxyCompactList}\small\item\em Returns the number of samples. \end{DoxyCompactList}\item 
@@ -63,15 +73,12 @@ void \mbox{\hyperlink{_utilities_8h_a0391465d79feefe5cce4385fe8385e6a}{buffer\+\
 \begin{DoxyCompactList}\small\item\em Write data to buffer. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{_utilities_8h_aa8061654c0af0c3c3fac9e63ed7eaed6}{send\+\_\+data}} (void)
 \begin{DoxyCompactList}\small\item\em Send data to client when it becomes available. \end{DoxyCompactList}\item 
-\mbox{\Hypertarget{_utilities_8h_a28222caa228cb42e3dd503f611a431ff}\label{_utilities_8h_a28222caa228cb42e3dd503f611a431ff}} 
-void {\bfseries set\+Nclient} (int n)
-\item 
-\mbox{\Hypertarget{_utilities_8h_a88ade88617e9bae6f82653ec6d6470a1}\label{_utilities_8h_a88ade88617e9bae6f82653ec6d6470a1}} 
-int {\bfseries bound\+Int} (int a, int n)
-\item 
-\mbox{\Hypertarget{_utilities_8h_acec61ed867597bb5d25a00b0e33d4476}\label{_utilities_8h_acec61ed867597bb5d25a00b0e33d4476}} 
-int {\bfseries max\+Int} (int a, int b)
-\end{DoxyCompactItemize}
+void \mbox{\hyperlink{_utilities_8h_a28222caa228cb42e3dd503f611a431ff}{set\+Nclient}} (int n)
+\begin{DoxyCompactList}\small\item\em Recieve number of values to store in position data arrays from client. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{_utilities_8h_a88ade88617e9bae6f82653ec6d6470a1}{bound\+Int}} (int a, int n)
+\begin{DoxyCompactList}\small\item\em Bounds a given input to a range of values. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{_utilities_8h_acec61ed867597bb5d25a00b0e33d4476}{max\+Int}} (int a, int b)
+\begin{DoxyCompactList}\small\item\em returns the large value of the two \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \subsection{Detailed Description}
@@ -116,6 +123,26 @@ T\+R\+A\+CK&Sets motor effort to tracking mode \\
 
 
 \subsection{Function Documentation}
+\mbox{\Hypertarget{_utilities_8h_a88ade88617e9bae6f82653ec6d6470a1}\label{_utilities_8h_a88ade88617e9bae6f82653ec6d6470a1}} 
+\index{Utilities.\+h@{Utilities.\+h}!bound\+Int@{bound\+Int}}
+\index{bound\+Int@{bound\+Int}!Utilities.\+h@{Utilities.\+h}}
+\subsubsection{\texorpdfstring{bound\+Int()}{boundInt()}}
+{\footnotesize\ttfamily int bound\+Int (\begin{DoxyParamCaption}\item[{int}]{a,  }\item[{int}]{n }\end{DoxyParamCaption})}
+
+
+
+Bounds a given input to a range of values. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em int} & a the input value \\
+\hline
+{\em int} & n the range of the bounds \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int the bounded output 
+\end{DoxyReturn}
 \mbox{\Hypertarget{_utilities_8h_a7ee932fa1bdc8820ae0479fa64cf1e01}\label{_utilities_8h_a7ee932fa1bdc8820ae0479fa64cf1e01}} 
 \index{Utilities.\+h@{Utilities.\+h}!buffer\+\_\+empty@{buffer\+\_\+empty}}
 \index{buffer\+\_\+empty@{buffer\+\_\+empty}!Utilities.\+h@{Utilities.\+h}}
@@ -294,6 +321,26 @@ Returns the number of samples.
 \begin{DoxyReturn}{Returns}
 int the number of samples 
 \end{DoxyReturn}
+\mbox{\Hypertarget{_utilities_8h_acec61ed867597bb5d25a00b0e33d4476}\label{_utilities_8h_acec61ed867597bb5d25a00b0e33d4476}} 
+\index{Utilities.\+h@{Utilities.\+h}!max\+Int@{max\+Int}}
+\index{max\+Int@{max\+Int}!Utilities.\+h@{Utilities.\+h}}
+\subsubsection{\texorpdfstring{max\+Int()}{maxInt()}}
+{\footnotesize\ttfamily int max\+Int (\begin{DoxyParamCaption}\item[{int}]{a,  }\item[{int}]{b }\end{DoxyParamCaption})}
+
+
+
+returns the large value of the two 
+
+
+\begin{DoxyParams}{Parameters}
+{\em int} & a one input value \\
+\hline
+{\em int} & b the other input value \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int the larger value 
+\end{DoxyReturn}
 \mbox{\Hypertarget{_utilities_8h_aa8061654c0af0c3c3fac9e63ed7eaed6}\label{_utilities_8h_aa8061654c0af0c3c3fac9e63ed7eaed6}} 
 \index{Utilities.\+h@{Utilities.\+h}!send\+\_\+data@{send\+\_\+data}}
 \index{send\+\_\+data@{send\+\_\+data}!Utilities.\+h@{Utilities.\+h}}
@@ -332,15 +379,33 @@ The avaliable modes are I\+D\+LE, H\+O\+LD, T\+R\+A\+CK
 \begin{DoxyReturn}{Returns}
 Void 
 \end{DoxyReturn}
-\mbox{\Hypertarget{_utilities_8h_acba07f8eaf5cdce3760657cfd53c35b8}\label{_utilities_8h_acba07f8eaf5cdce3760657cfd53c35b8}} 
+\mbox{\Hypertarget{_utilities_8h_a879808dbc63ea605a96bed9d93441d3f}\label{_utilities_8h_a879808dbc63ea605a96bed9d93441d3f}} 
 \index{Utilities.\+h@{Utilities.\+h}!setN@{setN}}
 \index{setN@{setN}!Utilities.\+h@{Utilities.\+h}}
 \subsubsection{\texorpdfstring{set\+N()}{setN()}}
-{\footnotesize\ttfamily void setN (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily void setN (\begin{DoxyParamCaption}\item[{int}]{timestep }\end{DoxyParamCaption})}
 
 
 
 Receive number N of samples to save into data buffer. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_utilities_8h_a28222caa228cb42e3dd503f611a431ff}\label{_utilities_8h_a28222caa228cb42e3dd503f611a431ff}} 
+\index{Utilities.\+h@{Utilities.\+h}!set\+Nclient@{set\+Nclient}}
+\index{set\+Nclient@{set\+Nclient}!Utilities.\+h@{Utilities.\+h}}
+\subsubsection{\texorpdfstring{set\+Nclient()}{setNclient()}}
+{\footnotesize\ttfamily void set\+Nclient (\begin{DoxyParamCaption}\item[{int}]{n }\end{DoxyParamCaption})}
+
+
+
+Recieve number of values to store in position data arrays from client. 
 
 
 \begin{DoxyParams}{Parameters}

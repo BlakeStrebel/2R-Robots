@@ -90,6 +90,9 @@ Functions</h2></td></tr>
 <tr class="memitem:af06127bca89306e7f9af0ea36f162ca0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="r2r_8h.html#af06127bca89306e7f9af0ea36f162ca0">r2rDefaultInit</a> (void)</td></tr>
 <tr class="memdesc:af06127bca89306e7f9af0ea36f162ca0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the default connections for the R2R project.  <a href="#af06127bca89306e7f9af0ea36f162ca0">More...</a><br /></td></tr>
 <tr class="separator:af06127bca89306e7f9af0ea36f162ca0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4ecaa31712e652b0a1cc2d8fc212e2f5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="r2r_8h.html#a4ecaa31712e652b0a1cc2d8fc212e2f5">sensorUpdate</a> () extern void customTimersInit(void)</td></tr>
+<tr class="memdesc:a4ecaa31712e652b0a1cc2d8fc212e2f5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates the sensor readings.  <a href="#a4ecaa31712e652b0a1cc2d8fc212e2f5">More...</a><br /></td></tr>
+<tr class="separator:a4ecaa31712e652b0a1cc2d8fc212e2f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a57b21594b75d4b2a140a1f9bbb1465e8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="r2r_8h.html#a57b21594b75d4b2a140a1f9bbb1465e8">TIMER6IntHandler</a> (void)</td></tr>
 <tr class="memdesc:a57b21594b75d4b2a140a1f9bbb1465e8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Custom timer 6.  <a href="#a57b21594b75d4b2a140a1f9bbb1465e8">More...</a><br /></td></tr>
 <tr class="separator:a57b21594b75d4b2a140a1f9bbb1465e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -135,6 +138,44 @@ Huan Weng </dd></dl>
 
 </div>
 </div>
+<a id="a4ecaa31712e652b0a1cc2d8fc212e2f5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4ecaa31712e652b0a1cc2d8fc212e2f5">&#9670;&nbsp;</a></span>sensorUpdate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void sensorUpdate </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Updates the sensor readings. </p>
+<p>When called this function updates the encoder readings. Other sensor reading functions can also be added here.</p>
+<p>Example: </p><pre class="fragment">int main() {
+    sensorUpdate();
+}
+</pre><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">Void</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Void Initializes custom timers</dd></dl>
+<p>This function initializes timers 6 and 7 at preset frequencies as defined in <a class="el" href="r2r_8c.html" title="This file contains the main function that calls all other initialization functions. ">r2r.c</a></p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">Void</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Void </dd></dl>
+
+</div>
+</div>
 <a id="a57b21594b75d4b2a140a1f9bbb1465e8"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a57b21594b75d4b2a140a1f9bbb1465e8">&#9670;&nbsp;</a></span>TIMER6IntHandler()</h2>
 
@@ -152,8 +193,13 @@ Huan Weng </dd></dl>
 </div><div class="memdoc">
 
 <p>Custom timer 6. </p>
-<p>This function executes at the rate set by TIMER_6_FREQ set in <a class="el" href="r2r_8c.html" title="This file contains the main function that calls all other initialization functions. ">r2r.c</a> This function does not have to be called anywhere.</p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>This function executes at the rate set by TIMER_6_FREQ set in <a class="el" href="r2r_8c.html" title="This file contains the main function that calls all other initialization functions. ">r2r.c</a> This function does not have to be called anywhere. This function does not return any values</p>
+<p>Example: </p><pre class="fragment"> void TIMER6IntHandler() {
+
+    // add custom controller code here
+
+     }
+</pre><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">Void</td><td></td></tr>
   </table>

@@ -133,5 +133,14 @@
  * There are two types of nodes: a data node, which accepts input from the user and immediately transitions to its child node, and a navigational node, which accepts input from the user and checks its child nodes for the matching option. The navigational node does simple error checking, but the data node does not because of the wide variety of data types that might be possible. Instead, a statement of the expected data type is presented and the user is expected to conform to this data type when interacting with a data node.
 
  * On the firmware side, additional case statements are added that correspond to the added nodes to process the incoming data.
- *
+
+ * The user has to add in two functions, one which saves the input to the state of the program, and the other which processes the input. The only function that needs to be edited is the `hierarchicalMenu.m`, which is found in: `BackupAndUI > R2R_interfaces > menu_library`
+ * 
+ * \image html images/parent.JPG "Adding a parent node"
+
+ * Once the top level menu option has been created, a menu function to process the data must also be created.
+
+ * \image html images/child.JPG "Adding a child node"
+
+ * 
  */

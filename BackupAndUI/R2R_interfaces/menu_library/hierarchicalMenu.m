@@ -30,7 +30,7 @@ menu(id).symbol = 'a';
 menu(id).title = ['                               R2R Arm Interface\n', ...
                 ones(1, 80) * '-', '\n'];
 menu(id).question = 'Main menu\n';
-menu(id).children = [3, 5, 27, 62, 72, 73, 74, 75];
+menu(id).children = [3, 5, 27, 62, 72, 73, 74, 75,79];
 
 % Main menu -> Calibration
 id = 3;
@@ -777,8 +777,29 @@ menu(id).parent = 76;
 menu(id).process = @(state) decoggingSet(0, serial);
 menu(id).title = 'Decogging is turned off';
 
-
+id = 79;
+menu(id) = menu(1); % add to top level menu
+menu(id).symbol='j'; %option to select
+menu(id).name = 'Test function'; %the function name
+menu(id).data = true; %take user input
+menu(id).children = [80]; % add child to process data
+menu(id).title = ['                                  Do something\n    ', ...  
+                ones(1, 72) * '-', '\n'];
             
+id = 80;
+menu(id) = menu(1); % add to top level menu
+menu(id).name = 'Process function'; %the function name
+menu(id).parent = 79; % add parent 
+menu(id).data = false; %process input
+menu(id).save = @(state,data) save_data_function(state, data); % save data to state
+menu(id).process = @(state) run_data_function(state); % process the state
+menu(id).title = ['                                  Process something\n    ', ...  
+                ones(1, 72) * '-', '\n'];
+            
+
+
+
+                    
 %{
 % Main menu -> Position reading
 id = 100;

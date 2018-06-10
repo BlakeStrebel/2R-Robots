@@ -181,8 +181,34 @@ void buffer_write(int M1_actPos, int M2_actPos, int M1_u, int M2_u);
  */
 void send_data(void);
 
-void setNclient(int n);          // Recieve number of values to store in position data arrays from client
+/**
+ * @brief Recieve number of values to store in position data arrays from client
+ * 
+ *
+ * @param Void 
+ * @return Void
+ */
+void setNclient(int n);
+
+/**
+ * @brief Bounds a given input to a range of values
+ * 
+ *
+ * @param int a the input value
+ * @param int n the range of the bounds
+ * @return int the bounded output
+ */          
 int boundInt(int a, int n);
+
+
+/**
+ * @brief returns the large value of the two
+ * 
+ *
+ * @param int a one input value
+ * @param int b the other input value
+ * @return int the larger value
+ */  
 int maxInt(int a, int b);
 
 

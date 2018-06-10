@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['load_5fposition_5ftrajectory',['load_position_trajectory',['../_position_control_8h.html#a23b819228a3ffc67fc85222e5b7a1053',1,'PositionControl.c']]]
+  ['loadpositiontrajectory',['loadPositionTrajectory',['../_control_8h.html#a40f19cd3ddf10bd8b9d52208fb403b59',1,'loadPositionTrajectory(int motor):&#160;Control.c'],['../_position_control_8h.html#a40f19cd3ddf10bd8b9d52208fb403b59',1,'loadPositionTrajectory(int motor):&#160;Control.c']]]
 ];
