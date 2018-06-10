@@ -138,13 +138,36 @@
 #define M2_HALLSTATE_5 M2H_PIN_B
 */
 
+
+
+/**
+ * @brief Hall sensor interrupt for motor 1
+ *
+ * This function is used to determine the commutation on motor 1
+ *
+ * @param Void
+ * @return Void
+ *
+ */
 extern void M1HIntHandler(void);
+
+/**
+ * @brief Hall sensor interrupt for motor 2
+ *
+ * This function is used to determine the commutation on motor 2
+ *
+ * @param Void
+ * @return Void
+ *
+ */
 extern void M2HIntHandler(void);
 
 /**
  * @brief Sets the PWM value to motor 1
  *
- * @param pwmValue The pwmValue ranges from 0 to the pwm period. 
+ * @param pwm1 the pwm output on phase A
+ * @param pwm2 the pwm output on phase B
+ * @param pwm3 the pwm output on phase C
  * @return Void
  *
  */
@@ -153,7 +176,9 @@ extern void motor1PWM(int pwm1, int pwm2, int pwm3);
 /**
  * @brief Sets the PWM value to motor 2
  *
- * @param pwmValue The pwmValue ranges from 0 to the pwm period. 
+ * @param pwm1 the pwm output on phase A
+ * @param pwm2 the pwm output on phase B
+ * @param pwm3 the pwm output on phase C
  * @return Void
  *
  */
@@ -163,7 +188,14 @@ extern void motor2PWM(int pwm1, int pwm2, int pwm3);
 /**
  * @brief Sets the PWM value and direction to motor 1
  *
- * @param control The pwmValue ranges from -maximum pwm period to the positive period. The default pwm period is 320 SysClk cycles
+ * This function handles all the commutation for motor 1. This is done via hall sensing to determine the position the BLDC motor is in.
+ * 
+ * Example:
+ *		motor2ControlPWM(200); // sets the motor speed to 5% of default, clockwise
+ *		delayMS(100); //delay for 100 ms
+ *		motor2ControlPWM(-200); // sets motor speed to 5% of default, counter clockwise.
+ *
+ * @param control The pwmValue ranges from -maximum pwm period to the positive period. The default pwm period is 4000, 30kHz.
  * @return Void
  *
  */
@@ -172,7 +204,15 @@ extern void motor1ControlPWM(int control);
 /**
  * @brief Sets the PWM value and direction to motor 2
  *
- * @param control The pwmValue ranges from -maximum pwm period to the positive period. The default pwm period is 320 SysClk cycles
+ * This function handles all the commutation for motor 2. This is done via hall sensing to determine the position the BLDC motor is in.
+ *
+ * Example:
+ *		motor2ControlPWM(200); // sets the motor speed to 5% of default, clockwise
+ *		delayMS(100); //delay for 100 ms
+ *		motor2ControlPWM(-200); // sets motor speed to 5% of default, counter clockwise.
+ *		
+ *
+ * @param control The pwmValue ranges from -maximum pwm period to the positive period. The default pwm period is 4000, 30kHz.
  * @return Void
  *
  */
@@ -190,7 +230,31 @@ extern void motor2ControlPWM(int control);
 */
 extern void motorInit(void);
 
+
+/**
+ * @brief Commutation table for motor 1
+ *
+ * This function contains the commutation table for motor 1 and sets the control pins for each phase accordingly.
+ *
+ * @param int a phase A 
+ * @param int b phase B 
+ * @param int c phase C 
+ * @return Void
+ *
+ */
 void M1_INL_WRITE(int a, int b, int c);
+
+/**
+ * @brief Commutation table for motor 2
+ *
+ * This function contains the commutation table for motor 2 and sets the control pins for each phase accordingly.
+ *
+ * @param int a phase A 
+ * @param int b phase B 
+ * @param int c phase C 
+ * @return Void
+ *
+ */
 void M2_INL_WRITE(int a, int b, int c);
 
 
@@ -295,9 +359,9 @@ extern void pwmInit(void);
 extern void motorPWM(int motor_number, int pwmValue);
 
 /**
- * @brief Sets the PWM value and direction to motors
+ * @brief Sets the PWM value and direction to motors. NOTE: 1xPWM only
  *
- * @param The motor number
+ * @param motor_number the motor to control
  * @param control The control ranges from -maximum pwm period to the positive period. The default maximum is 4000
  * @return Void
  *
@@ -307,7 +371,7 @@ extern void motorControlPWM(int motor_number, int control);
 /**
  * @brief Brakes motors
  *
- * @param The motor number
+ * @param motor_number the motor to brake, either 1 or 2
  * @return Void
  */
 extern void motorBrake(int motor_number);
