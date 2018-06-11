@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['refpos',['refPos',['../structcontrol__data__t.html#a6ad7ecc535cbb0cd2070d49b0791f677',1,'control_data_t']]]
+  ['desired',['desired',['../structcontrol__error.html#a50083d46933f91ac7af1ab23eda49ddb',1,'control_error']]]
 ];

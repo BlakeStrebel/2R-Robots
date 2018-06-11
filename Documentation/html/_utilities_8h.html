@@ -106,10 +106,10 @@ Enumerations</h2></td></tr>
 <a class="el" href="_utilities_8h.html#a1a6b6fb557d8d37d59700faf4e4c9167a9cfa27b414cab750fb14ec07cdf5cf6a">HOLD</a>, 
 <a class="el" href="_utilities_8h.html#a1a6b6fb557d8d37d59700faf4e4c9167a203efac3b32c320b1246bf5583be1e8c">TRACK</a>, 
 <br />
-&#160;&#160;<b>ITRACK</b>, 
-<b>ITEST</b>, 
-<b>ISENSE</b>, 
-<b>ICALIB</b>
+&#160;&#160;<a class="el" href="_utilities_8h.html#a1a6b6fb557d8d37d59700faf4e4c9167a27fee0e27984ddb3c58222eb66845638">ITRACK</a>, 
+<a class="el" href="_utilities_8h.html#a1a6b6fb557d8d37d59700faf4e4c9167a18d908a31c7f4dae0cc52cb341397774">ITEST</a>, 
+<a class="el" href="_utilities_8h.html#a1a6b6fb557d8d37d59700faf4e4c9167ade6b03ca96c31fab16e940f4b108019d">ISENSE</a>, 
+<a class="el" href="_utilities_8h.html#a1a6b6fb557d8d37d59700faf4e4c9167a8fa069d3704d0835650e8b3b79994889">ICALIB</a>
 <br />
  }</td></tr>
 <tr class="separator:a1a6b6fb557d8d37d59700faf4e4c9167"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -167,7 +167,7 @@ Functions</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>utilities header </p>
-<p>This file contains the buffer and mode functions</p>
+<p>This file contains the communication buffer and mode functions</p>
 <dl class="section author"><dt>Author</dt><dd>Benjamen Lim </dd>
 <dd>
 Huan Weng </dd>
@@ -194,6 +194,14 @@ Blake Strebel </dd></dl>
 <tr><td class="fieldname"><a id="a1a6b6fb557d8d37d59700faf4e4c9167a9cfa27b414cab750fb14ec07cdf5cf6a"></a>HOLD&#160;</td><td class="fielddoc"><p>Sets motor effort to holding position </p>
 </td></tr>
 <tr><td class="fieldname"><a id="a1a6b6fb557d8d37d59700faf4e4c9167a203efac3b32c320b1246bf5583be1e8c"></a>TRACK&#160;</td><td class="fielddoc"><p>Sets motor effort to tracking mode </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a1a6b6fb557d8d37d59700faf4e4c9167a27fee0e27984ddb3c58222eb66845638"></a>ITRACK&#160;</td><td class="fielddoc"><p>Track reference current </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a1a6b6fb557d8d37d59700faf4e4c9167a18d908a31c7f4dae0cc52cb341397774"></a>ITEST&#160;</td><td class="fielddoc"><p>Test current control </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a1a6b6fb557d8d37d59700faf4e4c9167ade6b03ca96c31fab16e940f4b108019d"></a>ISENSE&#160;</td><td class="fielddoc"><p>Read current for N samples </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a1a6b6fb557d8d37d59700faf4e4c9167a8fa069d3704d0835650e8b3b79994889"></a>ICALIB&#160;</td><td class="fielddoc"><p>Calibrate current sensing offsets </p>
 </td></tr>
 </table>
 
@@ -420,8 +428,8 @@ Blake Strebel </dd></dl>
   <table class="params">
     <tr><td class="paramname">int</td><td>M1_actPos motor 1 position </td></tr>
     <tr><td class="paramname">int</td><td>M2_actPos motor 2 position </td></tr>
-    <tr><td class="paramname">float</td><td>M1_u motor 1 effort </td></tr>
-    <tr><td class="paramname">float</td><td>M1_u motor 2 effort </td></tr>
+    <tr><td class="paramname">int</td><td>M1_u motor 1 effort </td></tr>
+    <tr><td class="paramname">int</td><td>M1_u motor 2 effort </td></tr>
   </table>
   </dd>
 </dl>
@@ -602,7 +610,7 @@ Blake Strebel </dd></dl>
 </div><div class="memdoc">
 
 <p>Sets the Mode of the robot. </p>
-<p>The avaliable modes are IDLE, HOLD, TRACK</p>
+<p>The avaliable modes are IDLE, HOLD, TRACK, PWM, ISENSE, ITEST, ITRACK, ICALIB</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">mode</td><td>operating mode of the robot </td></tr>

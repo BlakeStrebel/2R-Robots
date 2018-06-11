@@ -16,7 +16,7 @@ control source code
 \begin{DoxyCompactItemize}
 \item 
 void \mbox{\hyperlink{_position_control_8c_a31342189d89766d693c5f26b0e8438ca}{Motor\+Timer\+Init}} (void)
-\begin{DoxyCompactList}\small\item\em This function sets up the timer interrupt for poosition control. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em This function sets up the timer interrupt for position control. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{_position_control_8c_a881cd4b090a428bf27f7e3b4a88b6e80}{get\+\_\+position\+\_\+gains}} (void)
 \begin{DoxyCompactList}\small\item\em Gets position gains on the Tiva microcontroller by reading to U\+A\+RT. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{_position_control_8c_aab0c2966059686b7288fceaa8b72d950}{set\+\_\+position\+\_\+gains}} (void)
@@ -36,7 +36,7 @@ void \mbox{\hyperlink{_position_control_8c_adf80f17bfeea7e84613a2fb9142dfbc4}{re
 int \mbox{\hyperlink{_position_control_8c_a6f3ba3d1d90e2f394f9cb63440e6fcee}{decog\+\_\+motor}} (int x, int motor)
 \begin{DoxyCompactList}\small\item\em Motor decogging to smooth output of motor. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{_position_control_8c_aeca5028b3ba9d68e9a9ccccae98396cd}{set\+Decogging}} (void)
-\begin{DoxyCompactList}\small\item\em Receives position gains over U\+A\+RT, intended for use in a menu. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Turn on/off decogging by setting global variable. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \subsection{Detailed Description}
@@ -64,7 +64,7 @@ Blake Strebel
 
 Motor decogging to smooth output of motor. 
 
-Motor decogging function that smooths out the output from the motor by adding a term to the control signal to compensate for the cogging in the B\+L\+DC motor. Values are hardcoded to default r2r motors.
+Motor decogging function that smoothes out the output from the motor by adding a term to the control signal to compensate for the cogging in the B\+L\+DC motor. Equations are fit using Position\+Data\+Analyze.\+m M\+A\+T\+L\+AB script.
 
 Example\+: \begin{DoxyVerb}u = u + decog_motor(current_Angle_Radians, MOTOR_1);
 \end{DoxyVerb}
@@ -72,13 +72,13 @@ Example\+: \begin{DoxyVerb}u = u + decog_motor(current_Angle_Radians, MOTOR_1);
 
 
 \begin{DoxyParams}{Parameters}
-{\em x} & current angle in radians \\
+{\em x} & current angle in counts \\
 \hline
 {\em motor} & the motor to decog \\
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
-the modified control signal 
+control signal modifier based on position 
 \end{DoxyReturn}
 \mbox{\Hypertarget{_position_control_8c_a5b86db5b678ee3f8de68b9d2d85a8e1e}\label{_position_control_8c_a5b86db5b678ee3f8de68b9d2d85a8e1e}} 
 \index{Position\+Control.\+c@{Position\+Control.\+c}!get\+\_\+desired\+\_\+angle@{get\+\_\+desired\+\_\+angle}}
@@ -142,7 +142,7 @@ Void
 
 
 
-This function sets up the timer interrupt for poosition control. 
+This function sets up the timer interrupt for position control. 
 
 
 \begin{DoxyParams}{Parameters}
@@ -236,11 +236,11 @@ Void
 
 
 
-Receives position gains over U\+A\+RT, intended for use in a menu. 
+Turn on/off decogging by setting global variable. 
 
 
 \begin{DoxyParams}{Parameters}
-{\em int} & motor \\
+{\em void} & \\
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}

@@ -31,10 +31,10 @@ enum \mbox{\hyperlink{_utilities_8h_a1a6b6fb557d8d37d59700faf4e4c9167}{mode}} \{
 \mbox{\hyperlink{_utilities_8h_a1a6b6fb557d8d37d59700faf4e4c9167a9cfa27b414cab750fb14ec07cdf5cf6a}{H\+O\+LD}}, 
 \mbox{\hyperlink{_utilities_8h_a1a6b6fb557d8d37d59700faf4e4c9167a203efac3b32c320b1246bf5583be1e8c}{T\+R\+A\+CK}}, 
 \newline
-{\bfseries I\+T\+R\+A\+CK}, 
-{\bfseries I\+T\+E\+ST}, 
-{\bfseries I\+S\+E\+N\+SE}, 
-{\bfseries I\+C\+A\+L\+IB}
+\mbox{\hyperlink{_utilities_8h_a1a6b6fb557d8d37d59700faf4e4c9167a27fee0e27984ddb3c58222eb66845638}{I\+T\+R\+A\+CK}}, 
+\mbox{\hyperlink{_utilities_8h_a1a6b6fb557d8d37d59700faf4e4c9167a18d908a31c7f4dae0cc52cb341397774}{I\+T\+E\+ST}}, 
+\mbox{\hyperlink{_utilities_8h_a1a6b6fb557d8d37d59700faf4e4c9167ade6b03ca96c31fab16e940f4b108019d}{I\+S\+E\+N\+SE}}, 
+\mbox{\hyperlink{_utilities_8h_a1a6b6fb557d8d37d59700faf4e4c9167a8fa069d3704d0835650e8b3b79994889}{I\+C\+A\+L\+IB}}
  \}
 \end{DoxyCompactItemize}
 \subsection*{Functions}
@@ -77,7 +77,7 @@ void \mbox{\hyperlink{_utilities_8h_aa8061654c0af0c3c3fac9e63ed7eaed6}{send\+\_\
 \subsection{Detailed Description}
 utilities header 
 
-This file contains the buffer and mode functions
+This file contains the communication buffer and mode functions
 
 \begin{DoxyAuthor}{Author}
 Benjamen Lim 
@@ -110,6 +110,22 @@ H\+O\+LD&Sets motor effort to holding position \\
 
 \raisebox{\heightof{T}}[0pt][0pt]{\index{T\+R\+A\+CK@{T\+R\+A\+CK}!Utilities.\+h@{Utilities.\+h}}\index{Utilities.\+h@{Utilities.\+h}!T\+R\+A\+CK@{T\+R\+A\+CK}}}\mbox{\Hypertarget{_utilities_8h_a1a6b6fb557d8d37d59700faf4e4c9167a203efac3b32c320b1246bf5583be1e8c}\label{_utilities_8h_a1a6b6fb557d8d37d59700faf4e4c9167a203efac3b32c320b1246bf5583be1e8c}} 
 T\+R\+A\+CK&Sets motor effort to tracking mode \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{I\+T\+R\+A\+CK@{I\+T\+R\+A\+CK}!Utilities.\+h@{Utilities.\+h}}\index{Utilities.\+h@{Utilities.\+h}!I\+T\+R\+A\+CK@{I\+T\+R\+A\+CK}}}\mbox{\Hypertarget{_utilities_8h_a1a6b6fb557d8d37d59700faf4e4c9167a27fee0e27984ddb3c58222eb66845638}\label{_utilities_8h_a1a6b6fb557d8d37d59700faf4e4c9167a27fee0e27984ddb3c58222eb66845638}} 
+I\+T\+R\+A\+CK&Track reference current \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{I\+T\+E\+ST@{I\+T\+E\+ST}!Utilities.\+h@{Utilities.\+h}}\index{Utilities.\+h@{Utilities.\+h}!I\+T\+E\+ST@{I\+T\+E\+ST}}}\mbox{\Hypertarget{_utilities_8h_a1a6b6fb557d8d37d59700faf4e4c9167a18d908a31c7f4dae0cc52cb341397774}\label{_utilities_8h_a1a6b6fb557d8d37d59700faf4e4c9167a18d908a31c7f4dae0cc52cb341397774}} 
+I\+T\+E\+ST&Test current control \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{I\+S\+E\+N\+SE@{I\+S\+E\+N\+SE}!Utilities.\+h@{Utilities.\+h}}\index{Utilities.\+h@{Utilities.\+h}!I\+S\+E\+N\+SE@{I\+S\+E\+N\+SE}}}\mbox{\Hypertarget{_utilities_8h_a1a6b6fb557d8d37d59700faf4e4c9167ade6b03ca96c31fab16e940f4b108019d}\label{_utilities_8h_a1a6b6fb557d8d37d59700faf4e4c9167ade6b03ca96c31fab16e940f4b108019d}} 
+I\+S\+E\+N\+SE&Read current for N samples \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{I\+C\+A\+L\+IB@{I\+C\+A\+L\+IB}!Utilities.\+h@{Utilities.\+h}}\index{Utilities.\+h@{Utilities.\+h}!I\+C\+A\+L\+IB@{I\+C\+A\+L\+IB}}}\mbox{\Hypertarget{_utilities_8h_a1a6b6fb557d8d37d59700faf4e4c9167a8fa069d3704d0835650e8b3b79994889}\label{_utilities_8h_a1a6b6fb557d8d37d59700faf4e4c9167a8fa069d3704d0835650e8b3b79994889}} 
+I\+C\+A\+L\+IB&Calibrate current sensing offsets \\
 \hline
 
 \end{DoxyEnumFields}
@@ -250,9 +266,9 @@ Write data to buffer.
 \hline
 {\em int} & M2\+\_\+act\+Pos motor 2 position \\
 \hline
-{\em float} & M1\+\_\+u motor 1 effort \\
+{\em int} & M1\+\_\+u motor 1 effort \\
 \hline
-{\em float} & M1\+\_\+u motor 2 effort \\
+{\em int} & M1\+\_\+u motor 2 effort \\
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
@@ -362,7 +378,7 @@ Void
 
 Sets the Mode of the robot. 
 
-The avaliable modes are I\+D\+LE, H\+O\+LD, T\+R\+A\+CK
+The avaliable modes are I\+D\+LE, H\+O\+LD, T\+R\+A\+CK, P\+WM, I\+S\+E\+N\+SE, I\+T\+E\+ST, I\+T\+R\+A\+CK, I\+C\+A\+L\+IB
 
 
 \begin{DoxyParams}{Parameters}

@@ -87,7 +87,7 @@ Classes</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:a31342189d89766d693c5f26b0e8438ca"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_position_control_8h.html#a31342189d89766d693c5f26b0e8438ca">MotorTimerInit</a> (void)</td></tr>
-<tr class="memdesc:a31342189d89766d693c5f26b0e8438ca"><td class="mdescLeft">&#160;</td><td class="mdescRight">This function sets up the timer interrupt for poosition control.  <a href="#a31342189d89766d693c5f26b0e8438ca">More...</a><br /></td></tr>
+<tr class="memdesc:a31342189d89766d693c5f26b0e8438ca"><td class="mdescLeft">&#160;</td><td class="mdescRight">This function sets up the timer interrupt for position control.  <a href="#a31342189d89766d693c5f26b0e8438ca">More...</a><br /></td></tr>
 <tr class="separator:a31342189d89766d693c5f26b0e8438ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a65c79b40bb1ef0170ed09c5cd657f0f0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_position_control_8h.html#a65c79b40bb1ef0170ed09c5cd657f0f0">Timer1IntHandler</a> (void)</td></tr>
 <tr class="memdesc:a65c79b40bb1ef0170ed09c5cd657f0f0"><td class="mdescLeft">&#160;</td><td class="mdescRight">The interrupt handler for position control.  <a href="#a65c79b40bb1ef0170ed09c5cd657f0f0">More...</a><br /></td></tr>
@@ -105,7 +105,7 @@ Functions</h2></td></tr>
 <tr class="memdesc:a1849f501c3cb9e99ef17c65881960289"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets desired angle for a given motor.  <a href="#a1849f501c3cb9e99ef17c65881960289">More...</a><br /></td></tr>
 <tr class="separator:a1849f501c3cb9e99ef17c65881960289"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a68b7b6c3193b76e37c547f3448c6fcbb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_position_control_8h.html#a68b7b6c3193b76e37c547f3448c6fcbb">reset_pos</a> (void)</td></tr>
-<tr class="memdesc:a68b7b6c3193b76e37c547f3448c6fcbb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resets desired position to origin.  <a href="#a68b7b6c3193b76e37c547f3448c6fcbb">More...</a><br /></td></tr>
+<tr class="memdesc:a68b7b6c3193b76e37c547f3448c6fcbb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resets desired position to 0 counts.  <a href="#a68b7b6c3193b76e37c547f3448c6fcbb">More...</a><br /></td></tr>
 <tr class="separator:a68b7b6c3193b76e37c547f3448c6fcbb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adf80f17bfeea7e84613a2fb9142dfbc4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_position_control_8h.html#adf80f17bfeea7e84613a2fb9142dfbc4">reset_controller_error</a> (void)</td></tr>
 <tr class="memdesc:adf80f17bfeea7e84613a2fb9142dfbc4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resets controller error on both controllers to be zero.  <a href="#adf80f17bfeea7e84613a2fb9142dfbc4">More...</a><br /></td></tr>
@@ -120,7 +120,7 @@ Functions</h2></td></tr>
 <tr class="memdesc:a6f3ba3d1d90e2f394f9cb63440e6fcee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Motor decogging to smooth output of motor.  <a href="#a6f3ba3d1d90e2f394f9cb63440e6fcee">More...</a><br /></td></tr>
 <tr class="separator:a6f3ba3d1d90e2f394f9cb63440e6fcee"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeca5028b3ba9d68e9a9ccccae98396cd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_position_control_8h.html#aeca5028b3ba9d68e9a9ccccae98396cd">setDecogging</a> (void)</td></tr>
-<tr class="memdesc:aeca5028b3ba9d68e9a9ccccae98396cd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Receives position gains over UART, intended for use in a menu.  <a href="#aeca5028b3ba9d68e9a9ccccae98396cd">More...</a><br /></td></tr>
+<tr class="memdesc:aeca5028b3ba9d68e9a9ccccae98396cd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Turn on/off decogging by setting global variable.  <a href="#aeca5028b3ba9d68e9a9ccccae98396cd">More...</a><br /></td></tr>
 <tr class="separator:aeca5028b3ba9d68e9a9ccccae98396cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -159,16 +159,16 @@ Blake Strebel </dd></dl>
 </div><div class="memdoc">
 
 <p>Motor decogging to smooth output of motor. </p>
-<p>Motor decogging function that smooths out the output from the motor by adding a term to the control signal to compensate for the cogging in the BLDC motor. Values are hardcoded to default r2r motors.</p>
+<p>Motor decogging function that smoothes out the output from the motor by adding a term to the control signal to compensate for the cogging in the BLDC motor. Equations are fit using PositionDataAnalyze.m MATLAB script.</p>
 <p>Example: </p><pre class="fragment">u = u + decog_motor(current_Angle_Radians, MOTOR_1);
 </pre><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">x</td><td>current angle in radians </td></tr>
+    <tr><td class="paramname">x</td><td>current angle in counts </td></tr>
     <tr><td class="paramname">motor</td><td>the motor to decog </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>the modified control signal </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>control signal modifier based on position </dd></dl>
 
 </div>
 </div>
@@ -269,7 +269,7 @@ Blake Strebel </dd></dl>
       </table>
 </div><div class="memdoc">
 
-<p>This function sets up the timer interrupt for poosition control. </p>
+<p>This function sets up the timer interrupt for position control. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">Void</td><td></td></tr>
@@ -368,7 +368,7 @@ Blake Strebel </dd></dl>
       </table>
 </div><div class="memdoc">
 
-<p>Resets desired position to origin. </p>
+<p>Resets desired position to 0 counts. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">Void</td><td></td></tr>
@@ -459,10 +459,10 @@ Blake Strebel </dd></dl>
       </table>
 </div><div class="memdoc">
 
-<p>Receives position gains over UART, intended for use in a menu. </p>
+<p>Turn on/off decogging by setting global variable. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">int</td><td>motor </td></tr>
+    <tr><td class="paramname">void</td><td></td></tr>
   </table>
   </dd>
 </dl>
