@@ -1,3 +1,17 @@
+/**
+ * @file Encoder.c
+ * @brief Encoder source code
+ *
+ * This file contains the encoder functions
+ *
+ * @author Benjamen Lim
+ * @author Huan Weng
+ * @author Blake Strebel
+ *
+ */
+
+
+
 #include "r2r.h"
 #include "Encoder.h"
 

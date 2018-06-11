@@ -1,3 +1,15 @@
+/**
+ * @file Utilities.c
+ * @brief The source code for utilities
+ *
+ * This file contains the buffer and mode functions
+ *
+ * @author Benjamen Lim
+ * @author Huan Weng
+ * @author Blake Strebel
+ *
+ */
+
 #include "r2r.h"
 #include "Utilities.h"
 

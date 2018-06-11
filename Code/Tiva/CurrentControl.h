@@ -1,3 +1,13 @@
+/**
+ * @file CurrentControl.h
+ * @brief The header for the current control file
+ *
+ * @author Benjamen Lim
+ * @author Huan Weng
+ * @author Blake Strebel
+ *
+ */
+
 #ifndef CURRENT_CONTROL_H_
 #define CURRENT_CONTROL_H_
 

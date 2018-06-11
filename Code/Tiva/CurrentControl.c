@@ -1,3 +1,14 @@
+/**
+ * @file CurrentControl.C
+ * @brief The source for the current control file
+ *
+ * @author Benjamen Lim
+ * @author Huan Weng
+ * @author Blake Strebel
+ *
+ */
+
+
 #include "r2r.h"
 #include "CurrentControl.h"
 #include "PositionControl.h"

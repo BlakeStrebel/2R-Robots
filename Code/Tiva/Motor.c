@@ -1,3 +1,16 @@
+/**
+ * @file Motor.c
+ * @brief The motor source code
+ *
+ * This file contains the motor functions
+ *
+ * @author Benjamen Lim
+ * @author Huan Weng
+ * @author Blake Strebel
+ *
+ */
+
+
 #include "r2r.h"
 #include "Motor.h"
 #include "Utilities.h"

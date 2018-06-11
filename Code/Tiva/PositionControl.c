@@ -1,3 +1,16 @@
+/**
+ * @file Control.C
+ * @brief control source code
+ *
+ * This file contains the pwm functions
+ *
+ * @author Benjamen Lim
+ * @author Huan Weng
+ * @author Blake Strebel
+ *
+ */
+
+
 #include "r2r.h"
 #include "PositionControl.h"
 #include "CurrentControl.h"
