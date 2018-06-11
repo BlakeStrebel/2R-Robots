@@ -81,8 +81,6 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_p_i_d__gains.html">PID_gains</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcontrol__error.html">control_error</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -94,57 +92,54 @@ Functions</h2></td></tr>
 <tr class="memitem:a65c79b40bb1ef0170ed09c5cd657f0f0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_position_control_8h.html#a65c79b40bb1ef0170ed09c5cd657f0f0">Timer1IntHandler</a> (void)</td></tr>
 <tr class="memdesc:a65c79b40bb1ef0170ed09c5cd657f0f0"><td class="mdescLeft">&#160;</td><td class="mdescRight">The interrupt handler for position control.  <a href="#a65c79b40bb1ef0170ed09c5cd657f0f0">More...</a><br /></td></tr>
 <tr class="separator:a65c79b40bb1ef0170ed09c5cd657f0f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2f066ae1c628a1a02b3fe5a2f1efb724"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_position_control_8h.html#a2f066ae1c628a1a02b3fe5a2f1efb724">setPositionGains</a> (void)</td></tr>
-<tr class="memdesc:a2f066ae1c628a1a02b3fe5a2f1efb724"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets position gains on the Tiva microcontroller by reading from UART.  <a href="#a2f066ae1c628a1a02b3fe5a2f1efb724">More...</a><br /></td></tr>
-<tr class="separator:a2f066ae1c628a1a02b3fe5a2f1efb724"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a376eb9b05453f76c96690363f3353e6f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_position_control_8h.html#a376eb9b05453f76c96690363f3353e6f">getPositionGains</a> (void)</td></tr>
-<tr class="memdesc:a376eb9b05453f76c96690363f3353e6f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets position gains on the Tiva microcontroller by reading to UART.  <a href="#a376eb9b05453f76c96690363f3353e6f">More...</a><br /></td></tr>
-<tr class="separator:a376eb9b05453f76c96690363f3353e6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7d8f30e709500ee488ebe3ddb18d68b4"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_position_control_8h.html#a7d8f30e709500ee488ebe3ddb18d68b4">getDesiredAngle</a> (int motor)</td></tr>
-<tr class="memdesc:a7d8f30e709500ee488ebe3ddb18d68b4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets desired angle for a given motor.  <a href="#a7d8f30e709500ee488ebe3ddb18d68b4">More...</a><br /></td></tr>
-<tr class="separator:a7d8f30e709500ee488ebe3ddb18d68b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abf3123e6b311e64da34906bf1ac73ed8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_position_control_8h.html#abf3123e6b311e64da34906bf1ac73ed8">setDesiredAngle</a> (int angle, int motor)</td></tr>
-<tr class="memdesc:abf3123e6b311e64da34906bf1ac73ed8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets desired angle for a given motor.  <a href="#abf3123e6b311e64da34906bf1ac73ed8">More...</a><br /></td></tr>
-<tr class="separator:abf3123e6b311e64da34906bf1ac73ed8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a95e5f03d55fba3d858adbcea6afa9315"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_position_control_8h.html#a95e5f03d55fba3d858adbcea6afa9315">resetControllerError</a> (void)</td></tr>
-<tr class="memdesc:a95e5f03d55fba3d858adbcea6afa9315"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resets controller error on both controllers to be zero.  <a href="#a95e5f03d55fba3d858adbcea6afa9315">More...</a><br /></td></tr>
-<tr class="separator:a95e5f03d55fba3d858adbcea6afa9315"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a40f19cd3ddf10bd8b9d52208fb403b59"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_position_control_8h.html#a40f19cd3ddf10bd8b9d52208fb403b59">loadPositionTrajectory</a> (int motor)</td></tr>
-<tr class="memdesc:a40f19cd3ddf10bd8b9d52208fb403b59"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads position trajectory for a given motor over UART.  <a href="#a40f19cd3ddf10bd8b9d52208fb403b59">More...</a><br /></td></tr>
-<tr class="separator:a40f19cd3ddf10bd8b9d52208fb403b59"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab88d13920601fd59de9af910521873aa"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_position_control_8h.html#ab88d13920601fd59de9af910521873aa">getMotorPWM</a> (int motor)</td></tr>
-<tr class="memdesc:ab88d13920601fd59de9af910521873aa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the set pwm on a given motor.  <a href="#ab88d13920601fd59de9af910521873aa">More...</a><br /></td></tr>
-<tr class="separator:ab88d13920601fd59de9af910521873aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae9c5d5742402a141a717b24a8a216287"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_position_control_8h.html#ae9c5d5742402a141a717b24a8a216287">PID_Controller</a> (int reference, int actual, int motor, int default_gains)</td></tr>
-<tr class="memdesc:ae9c5d5742402a141a717b24a8a216287"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates pwm to send to the motor driver.  <a href="#ae9c5d5742402a141a717b24a8a216287">More...</a><br /></td></tr>
-<tr class="separator:ae9c5d5742402a141a717b24a8a216287"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5092e6f5199e2114d5967932d35f9386"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_position_control_8h.html#a5092e6f5199e2114d5967932d35f9386">decogMotor</a> (int x, int motor)</td></tr>
-<tr class="memdesc:a5092e6f5199e2114d5967932d35f9386"><td class="mdescLeft">&#160;</td><td class="mdescRight">Motor decogging to smooth output of motor.  <a href="#a5092e6f5199e2114d5967932d35f9386">More...</a><br /></td></tr>
-<tr class="separator:a5092e6f5199e2114d5967932d35f9386"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a975ab84b3adffb7d1d9f7f3b9c8ae8c2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_position_control_8h.html#a975ab84b3adffb7d1d9f7f3b9c8ae8c2">setDecogging</a> (int decog)</td></tr>
-<tr class="memdesc:a975ab84b3adffb7d1d9f7f3b9c8ae8c2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Turns on motor decogging.  <a href="#a975ab84b3adffb7d1d9f7f3b9c8ae8c2">More...</a><br /></td></tr>
-<tr class="separator:a975ab84b3adffb7d1d9f7f3b9c8ae8c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab8aff07bbb708864a0aa8ccc93dcc3aa"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_position_control_8h.html#ab8aff07bbb708864a0aa8ccc93dcc3aa">setPositionPID</a> (int motor)</td></tr>
-<tr class="memdesc:ab8aff07bbb708864a0aa8ccc93dcc3aa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Receives position gains over UART, intended for use in a menu.  <a href="#ab8aff07bbb708864a0aa8ccc93dcc3aa">More...</a><br /></td></tr>
-<tr class="separator:ab8aff07bbb708864a0aa8ccc93dcc3aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aab0c2966059686b7288fceaa8b72d950"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_position_control_8h.html#aab0c2966059686b7288fceaa8b72d950">set_position_gains</a> (void)</td></tr>
+<tr class="memdesc:aab0c2966059686b7288fceaa8b72d950"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets position gains on the Tiva microcontroller by reading from UART.  <a href="#aab0c2966059686b7288fceaa8b72d950">More...</a><br /></td></tr>
+<tr class="separator:aab0c2966059686b7288fceaa8b72d950"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a881cd4b090a428bf27f7e3b4a88b6e80"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_position_control_8h.html#a881cd4b090a428bf27f7e3b4a88b6e80">get_position_gains</a> (void)</td></tr>
+<tr class="memdesc:a881cd4b090a428bf27f7e3b4a88b6e80"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets position gains on the Tiva microcontroller by reading to UART.  <a href="#a881cd4b090a428bf27f7e3b4a88b6e80">More...</a><br /></td></tr>
+<tr class="separator:a881cd4b090a428bf27f7e3b4a88b6e80"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5b86db5b678ee3f8de68b9d2d85a8e1e"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_position_control_8h.html#a5b86db5b678ee3f8de68b9d2d85a8e1e">get_desired_angle</a> (int motor)</td></tr>
+<tr class="memdesc:a5b86db5b678ee3f8de68b9d2d85a8e1e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets desired angle for a given motor.  <a href="#a5b86db5b678ee3f8de68b9d2d85a8e1e">More...</a><br /></td></tr>
+<tr class="separator:a5b86db5b678ee3f8de68b9d2d85a8e1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1849f501c3cb9e99ef17c65881960289"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_position_control_8h.html#a1849f501c3cb9e99ef17c65881960289">set_desired_angle</a> (int angle, int motor)</td></tr>
+<tr class="memdesc:a1849f501c3cb9e99ef17c65881960289"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets desired angle for a given motor.  <a href="#a1849f501c3cb9e99ef17c65881960289">More...</a><br /></td></tr>
+<tr class="separator:a1849f501c3cb9e99ef17c65881960289"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a68b7b6c3193b76e37c547f3448c6fcbb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_position_control_8h.html#a68b7b6c3193b76e37c547f3448c6fcbb">reset_pos</a> (void)</td></tr>
+<tr class="memdesc:a68b7b6c3193b76e37c547f3448c6fcbb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resets desired position to origin.  <a href="#a68b7b6c3193b76e37c547f3448c6fcbb">More...</a><br /></td></tr>
+<tr class="separator:a68b7b6c3193b76e37c547f3448c6fcbb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adf80f17bfeea7e84613a2fb9142dfbc4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_position_control_8h.html#adf80f17bfeea7e84613a2fb9142dfbc4">reset_controller_error</a> (void)</td></tr>
+<tr class="memdesc:adf80f17bfeea7e84613a2fb9142dfbc4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resets controller error on both controllers to be zero.  <a href="#adf80f17bfeea7e84613a2fb9142dfbc4">More...</a><br /></td></tr>
+<tr class="separator:adf80f17bfeea7e84613a2fb9142dfbc4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a23b819228a3ffc67fc85222e5b7a1053"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_position_control_8h.html#a23b819228a3ffc67fc85222e5b7a1053">load_position_trajectory</a> (int motor)</td></tr>
+<tr class="memdesc:a23b819228a3ffc67fc85222e5b7a1053"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads position trajectory for a given motor over UART.  <a href="#a23b819228a3ffc67fc85222e5b7a1053">More...</a><br /></td></tr>
+<tr class="separator:a23b819228a3ffc67fc85222e5b7a1053"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a41cc73dbc9230f73ed722b4c97fb7366"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_position_control_8h.html#a41cc73dbc9230f73ed722b4c97fb7366">PID_Controller</a> (int reference, int actual, int motor)</td></tr>
+<tr class="memdesc:a41cc73dbc9230f73ed722b4c97fb7366"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates pwm to send to the motor drivr.  <a href="#a41cc73dbc9230f73ed722b4c97fb7366">More...</a><br /></td></tr>
+<tr class="separator:a41cc73dbc9230f73ed722b4c97fb7366"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6f3ba3d1d90e2f394f9cb63440e6fcee"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_position_control_8h.html#a6f3ba3d1d90e2f394f9cb63440e6fcee">decog_motor</a> (int x, int motor)</td></tr>
+<tr class="memdesc:a6f3ba3d1d90e2f394f9cb63440e6fcee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Motor decogging to smooth output of motor.  <a href="#a6f3ba3d1d90e2f394f9cb63440e6fcee">More...</a><br /></td></tr>
+<tr class="separator:a6f3ba3d1d90e2f394f9cb63440e6fcee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeca5028b3ba9d68e9a9ccccae98396cd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_position_control_8h.html#aeca5028b3ba9d68e9a9ccccae98396cd">setDecogging</a> (void)</td></tr>
+<tr class="memdesc:aeca5028b3ba9d68e9a9ccccae98396cd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Receives position gains over UART, intended for use in a menu.  <a href="#aeca5028b3ba9d68e9a9ccccae98396cd">More...</a><br /></td></tr>
+<tr class="separator:aeca5028b3ba9d68e9a9ccccae98396cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>control header </p>
-<p>This file contains position control functions</p>
+<p>This file contains the pwm functions</p>
 <dl class="section author"><dt>Author</dt><dd>Benjamen Lim </dd>
 <dd>
 Huan Weng </dd>
 <dd>
 Blake Strebel </dd></dl>
 </div><h2 class="groupheader">Function Documentation</h2>
-<a id="a5092e6f5199e2114d5967932d35f9386"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5092e6f5199e2114d5967932d35f9386">&#9670;&nbsp;</a></span>decogMotor()</h2>
+<a id="a6f3ba3d1d90e2f394f9cb63440e6fcee"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6f3ba3d1d90e2f394f9cb63440e6fcee">&#9670;&nbsp;</a></span>decog_motor()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">float decogMotor </td>
+          <td class="memname">int decog_motor </td>
           <td>(</td>
           <td class="paramtype">int&#160;</td>
           <td class="paramname"><em>x</em>, </td>
@@ -177,14 +172,14 @@ Blake Strebel </dd></dl>
 
 </div>
 </div>
-<a id="a7d8f30e709500ee488ebe3ddb18d68b4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7d8f30e709500ee488ebe3ddb18d68b4">&#9670;&nbsp;</a></span>getDesiredAngle()</h2>
+<a id="a5b86db5b678ee3f8de68b9d2d85a8e1e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5b86db5b678ee3f8de68b9d2d85a8e1e">&#9670;&nbsp;</a></span>get_desired_angle()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int getDesiredAngle </td>
+          <td class="memname">int get_desired_angle </td>
           <td>(</td>
           <td class="paramtype">int&#160;</td>
           <td class="paramname"><em>motor</em></td><td>)</td>
@@ -204,41 +199,14 @@ Blake Strebel </dd></dl>
 
 </div>
 </div>
-<a id="ab88d13920601fd59de9af910521873aa"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab88d13920601fd59de9af910521873aa">&#9670;&nbsp;</a></span>getMotorPWM()</h2>
+<a id="a881cd4b090a428bf27f7e3b4a88b6e80"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a881cd4b090a428bf27f7e3b4a88b6e80">&#9670;&nbsp;</a></span>get_position_gains()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int getMotorPWM </td>
-          <td>(</td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>motor</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Returns the set pwm on a given motor. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">int</td><td>a given motor </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>int the pwm on the motor </dd></dl>
-
-</div>
-</div>
-<a id="a376eb9b05453f76c96690363f3353e6f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a376eb9b05453f76c96690363f3353e6f">&#9670;&nbsp;</a></span>getPositionGains()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void getPositionGains </td>
+          <td class="memname">void get_position_gains </td>
           <td>(</td>
           <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
@@ -258,14 +226,14 @@ Blake Strebel </dd></dl>
 
 </div>
 </div>
-<a id="a40f19cd3ddf10bd8b9d52208fb403b59"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a40f19cd3ddf10bd8b9d52208fb403b59">&#9670;&nbsp;</a></span>loadPositionTrajectory()</h2>
+<a id="a23b819228a3ffc67fc85222e5b7a1053"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a23b819228a3ffc67fc85222e5b7a1053">&#9670;&nbsp;</a></span>load_position_trajectory()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void loadPositionTrajectory </td>
+          <td class="memname">void load_position_trajectory </td>
           <td>(</td>
           <td class="paramtype">int&#160;</td>
           <td class="paramname"><em>motor</em></td><td>)</td>
@@ -312,8 +280,8 @@ Blake Strebel </dd></dl>
 
 </div>
 </div>
-<a id="ae9c5d5742402a141a717b24a8a216287"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae9c5d5742402a141a717b24a8a216287">&#9670;&nbsp;</a></span>PID_Controller()</h2>
+<a id="a41cc73dbc9230f73ed722b4c97fb7366"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a41cc73dbc9230f73ed722b4c97fb7366">&#9670;&nbsp;</a></span>PID_Controller()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -334,13 +302,7 @@ Blake Strebel </dd></dl>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>motor</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>default_gains</em>&#160;</td>
+          <td class="paramname"><em>motor</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -350,7 +312,7 @@ Blake Strebel </dd></dl>
       </table>
 </div><div class="memdoc">
 
-<p>Calculates pwm to send to the motor driver. </p>
+<p>Calculates pwm to send to the motor drivr. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">reference</td><td>the reference angle </td></tr>
@@ -363,14 +325,14 @@ Blake Strebel </dd></dl>
 
 </div>
 </div>
-<a id="a95e5f03d55fba3d858adbcea6afa9315"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a95e5f03d55fba3d858adbcea6afa9315">&#9670;&nbsp;</a></span>resetControllerError()</h2>
+<a id="adf80f17bfeea7e84613a2fb9142dfbc4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adf80f17bfeea7e84613a2fb9142dfbc4">&#9670;&nbsp;</a></span>reset_controller_error()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void resetControllerError </td>
+          <td class="memname">void reset_controller_error </td>
           <td>(</td>
           <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
@@ -390,26 +352,26 @@ Blake Strebel </dd></dl>
 
 </div>
 </div>
-<a id="a975ab84b3adffb7d1d9f7f3b9c8ae8c2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a975ab84b3adffb7d1d9f7f3b9c8ae8c2">&#9670;&nbsp;</a></span>setDecogging()</h2>
+<a id="a68b7b6c3193b76e37c547f3448c6fcbb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a68b7b6c3193b76e37c547f3448c6fcbb">&#9670;&nbsp;</a></span>reset_pos()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void setDecogging </td>
+          <td class="memname">void reset_pos </td>
           <td>(</td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>decog</em></td><td>)</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Turns on motor decogging. </p>
+<p>Resets desired position to origin. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">int</td><td>1 turns on decogging, 0 turns it off </td></tr>
+    <tr><td class="paramname">Void</td><td></td></tr>
   </table>
   </dd>
 </dl>
@@ -417,14 +379,14 @@ Blake Strebel </dd></dl>
 
 </div>
 </div>
-<a id="abf3123e6b311e64da34906bf1ac73ed8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abf3123e6b311e64da34906bf1ac73ed8">&#9670;&nbsp;</a></span>setDesiredAngle()</h2>
+<a id="a1849f501c3cb9e99ef17c65881960289"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1849f501c3cb9e99ef17c65881960289">&#9670;&nbsp;</a></span>set_desired_angle()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void setDesiredAngle </td>
+          <td class="memname">void set_desired_angle </td>
           <td>(</td>
           <td class="paramtype">int&#160;</td>
           <td class="paramname"><em>angle</em>, </td>
@@ -454,14 +416,14 @@ Blake Strebel </dd></dl>
 
 </div>
 </div>
-<a id="a2f066ae1c628a1a02b3fe5a2f1efb724"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2f066ae1c628a1a02b3fe5a2f1efb724">&#9670;&nbsp;</a></span>setPositionGains()</h2>
+<a id="aab0c2966059686b7288fceaa8b72d950"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aab0c2966059686b7288fceaa8b72d950">&#9670;&nbsp;</a></span>set_position_gains()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void setPositionGains </td>
+          <td class="memname">void set_position_gains </td>
           <td>(</td>
           <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
@@ -481,17 +443,17 @@ Blake Strebel </dd></dl>
 
 </div>
 </div>
-<a id="ab8aff07bbb708864a0aa8ccc93dcc3aa"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab8aff07bbb708864a0aa8ccc93dcc3aa">&#9670;&nbsp;</a></span>setPositionPID()</h2>
+<a id="aeca5028b3ba9d68e9a9ccccae98396cd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeca5028b3ba9d68e9a9ccccae98396cd">&#9670;&nbsp;</a></span>setDecogging()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void setPositionPID </td>
+          <td class="memname">void setDecogging </td>
           <td>(</td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>motor</em></td><td>)</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
       </table>

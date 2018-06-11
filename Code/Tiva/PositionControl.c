@@ -1,5 +1,5 @@
 /**
- * @file Control.C
+ * @file PositionControl.c
  * @brief control source code
  *
  * This file contains the pwm functions

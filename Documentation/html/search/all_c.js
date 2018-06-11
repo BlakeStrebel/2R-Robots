@@ -1,8 +1,14 @@
 var searchData=
 [
-  ['timeinit',['timeInit',['../r2r_8c.html#a71d8cd0543a53d2e61cd31c54f8ca35b',1,'timeInit():&#160;r2r.c'],['../r2r_8h.html#a9539b63f71e1a1c8b7cc5142560b189c',1,'timeInit(void):&#160;r2r.c']]],
-  ['timeint',['timeInt',['../r2r_8c.html#a75d32aeef7c6fd79ccd8eeee9a9c29ca',1,'timeInt():&#160;r2r.c'],['../r2r_8h.html#a3ef2d72f5373681a06978ab3f437bd63',1,'timeInt(void):&#160;r2r.c']]],
-  ['timer6inthandler',['TIMER6IntHandler',['../r2r_8h.html#a57b21594b75d4b2a140a1f9bbb1465e8',1,'r2r.h']]],
-  ['timer7inthandler',['TIMER7IntHandler',['../r2r_8h.html#a39c6b9317ad29deebebf731f721f001b',1,'r2r.h']]],
-  ['track',['TRACK',['../_utilities_8h.html#a1a6b6fb557d8d37d59700faf4e4c9167a203efac3b32c320b1246bf5583be1e8c',1,'Utilities.h']]]
+  ['send_5fdata',['send_data',['../_utilities_8c.html#aa8061654c0af0c3c3fac9e63ed7eaed6',1,'send_data(void):&#160;Utilities.c'],['../_utilities_8h.html#aa8061654c0af0c3c3fac9e63ed7eaed6',1,'send_data(void):&#160;Utilities.c']]],
+  ['set_5fcurrent_5fgains',['set_current_gains',['../_current_control_8c.html#afdcd89e75250a253db7555d550f2b7ad',1,'set_current_gains(void):&#160;CurrentControl.c'],['../_current_control_8h.html#afdcd89e75250a253db7555d550f2b7ad',1,'set_current_gains(void):&#160;CurrentControl.c']]],
+  ['set_5fdesired_5fangle',['set_desired_angle',['../_position_control_8c.html#a1849f501c3cb9e99ef17c65881960289',1,'set_desired_angle(int angle, int motor):&#160;PositionControl.c'],['../_position_control_8h.html#a1849f501c3cb9e99ef17c65881960289',1,'set_desired_angle(int angle, int motor):&#160;PositionControl.c']]],
+  ['set_5fposition_5fgains',['set_position_gains',['../_position_control_8c.html#aab0c2966059686b7288fceaa8b72d950',1,'set_position_gains(void):&#160;PositionControl.c'],['../_position_control_8h.html#aab0c2966059686b7288fceaa8b72d950',1,'set_position_gains(void):&#160;PositionControl.c']]],
+  ['setadcmux',['setADCMux',['../_current_control_8c.html#ab07c8a54a14148ee47eef30ea3baa661',1,'setADCMux(int motor, int number):&#160;CurrentControl.c'],['../_current_control_8h.html#ab07c8a54a14148ee47eef30ea3baa661',1,'setADCMux(int motor, int number):&#160;CurrentControl.c']]],
+  ['setcurrent',['setCurrent',['../_current_control_8c.html#a991b6533f7e203f97b3a2da6cac50476',1,'setCurrent(int motor, int u):&#160;CurrentControl.c'],['../_current_control_8h.html#a991b6533f7e203f97b3a2da6cac50476',1,'setCurrent(int motor, int u):&#160;CurrentControl.c']]],
+  ['setdecogging',['setDecogging',['../_position_control_8c.html#aeca5028b3ba9d68e9a9ccccae98396cd',1,'setDecogging(void):&#160;PositionControl.c'],['../_position_control_8h.html#aeca5028b3ba9d68e9a9ccccae98396cd',1,'setDecogging(void):&#160;PositionControl.c']]],
+  ['setmode',['setMODE',['../_utilities_8c.html#af4c5a7352334b805d0c36e3b495d0a16',1,'setMODE(mode newMODE):&#160;Utilities.c'],['../_utilities_8h.html#af4c5a7352334b805d0c36e3b495d0a16',1,'setMODE(mode newMODE):&#160;Utilities.c']]],
+  ['setn',['setN',['../_utilities_8c.html#acba07f8eaf5cdce3760657cfd53c35b8',1,'setN(void):&#160;Utilities.c'],['../_utilities_8h.html#acba07f8eaf5cdce3760657cfd53c35b8',1,'setN(void):&#160;Utilities.c']]],
+  ['setnclient',['setNclient',['../_utilities_8c.html#a28222caa228cb42e3dd503f611a431ff',1,'setNclient(int n):&#160;Utilities.c'],['../_utilities_8h.html#a28222caa228cb42e3dd503f611a431ff',1,'setNclient(int n):&#160;Utilities.c']]],
+  ['sysinit',['sysInit',['../r2r_8c.html#a9708de954e135b89af84d9d82b552667',1,'sysInit(void):&#160;r2r.c'],['../r2r_8h.html#a9708de954e135b89af84d9d82b552667',1,'sysInit(void):&#160;r2r.c']]]
 ];
