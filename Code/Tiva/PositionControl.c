@@ -10,7 +10,6 @@
  *
  */
 
-
 #include "r2r.h"
 #include "PositionControl.h"
 #include "CurrentControl.h"

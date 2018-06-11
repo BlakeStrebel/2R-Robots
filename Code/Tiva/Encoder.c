@@ -2,7 +2,7 @@
  * @file Encoder.c
  * @brief Encoder source code
  *
- * This file contains the encoder functions
+ * This file contains functions for initializing and reading from encoders.
  *
  * @author Benjamen Lim
  * @author Huan Weng
@@ -100,7 +100,6 @@ void encoderSPIInit(void){
  * Writes to:
  * encoderVal array
  *
- * TODO: check the delay
  */
 void encoderRead(void){
     pui32DataTx2[0] = 0x73; // "t" return readhead temperature
@@ -132,7 +131,6 @@ void encoderRead(void){
     }
 
     // The angle is the first 14 bits of the response.
-    // TODO: check that the data RX2 is overwritten
     int num = pui32DataRx2[0]<<6;
     num = num | (pui32DataRx2[1]>>2);
     encoderVal[0] = num;
@@ -206,7 +204,6 @@ void resetMotor2RawRelative(void){
  * modifier
  * last_motor_2_angle
  *
- * TODO: CHANGE RANDOM 4000 value
  */
 
 int readMotor1RawRelative(void){
@@ -243,8 +240,6 @@ float readMotor1Speed(void){
     return (float)((int16_t)encoderVal[2])/10.0;
 }
 
-
-
 float readMotor1AngleRelative(void){
     return ((float)readMotor1RawRelative()/16383.0)*360.0;
 }
@@ -272,7 +267,7 @@ float readMotor1Angle(void){
 float readMotor2Angle(void){
     return ((float)readMotor2Raw()/16383.0)*360.0;
 }
-// TODO: include M_PI here
+
 float readMotor1Rad(void){
     return readMotor1Raw()/16383*2*3.14;
 }

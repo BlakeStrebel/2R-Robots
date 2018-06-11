@@ -2,7 +2,7 @@
  * @file Utilities.h
  * @brief utilities header
  *
- * This file contains the buffer and mode functions
+ * This file contains the communication buffer and mode functions
  *
  * @author Benjamen Lim
  * @author Huan Weng
@@ -25,10 +25,10 @@ typedef enum {
 	PWM, /**< PWM directly set by user */
     HOLD, /**< Sets motor effort to holding position */
     TRACK, /**< Sets motor effort to tracking mode */
-	ITRACK,
-	ITEST,
-	ISENSE,
-	ICALIB
+	ITRACK, /**< Track reference current */
+	ITEST, /**< Test current control */
+	ISENSE, /**< Read current for N samples */
+	ICALIB /**< Calibrate current sensing offsets */
 	} mode;    // define data structure containing modes
 
 
@@ -48,7 +48,7 @@ typedef struct {
  * @param Void 
  * @return Void
  */
-void setNclient(int n);          // Recieve number of values to store in position data arrays from client
+void setNclient(int n);
 
 /**
  * @brief Bounds a given input to a range of values
@@ -78,17 +78,17 @@ int maxInt(int a, int b);
  * @param mode operating mode of the robot
  * @return Void
  */
-mode getMODE();                      // Return the current operating mode
+mode getMODE();
 
 /**
  * @brief Sets the Mode of the robot
  * 
- * The avaliable modes are IDLE, HOLD, TRACK
+ * The avaliable modes are IDLE, HOLD, TRACK, PWM, ISENSE, ITEST, ITRACK, ICALIB
  *
  * @param mode operating mode of the robot
  * @return Void
  */
-void setMODE(mode newMODE);          // Set operating mode
+void setMODE(mode newMODE);
 
 
 /**
@@ -190,8 +190,8 @@ void buffer_read_increment(void);
  *
  * @param int M1_actPos motor 1 position
  * @param int M2_actPos motor 2 position
- * @param float M1_u motor 1 effort
- * @param float M1_u motor 2 effort
+ * @param int M1_u motor 1 effort
+ * @param int M1_u motor 2 effort
  * @return Void
  */
 void buffer_write(int M1_actPos, int M2_actPos, int M1_u, int M2_u);

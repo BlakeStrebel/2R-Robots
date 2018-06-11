@@ -2,6 +2,8 @@
  * @file CurrentControl.C
  * @brief The source for the current control file
  *
+ * This file contains the functions for current sensing and control.
+ *
  * @author Benjamen Lim
  * @author Huan Weng
  * @author Blake Strebel
@@ -315,21 +317,6 @@ int getCurrent(int motor)
         current = MOTOR2CURRENT;
     }
     return current;
-}
-
-// Return motor PWM
-int getPWM(int motor)
-{
-    int pwm;
-    if (motor == 1)
-    {
-        pwm = PWM1;
-    }
-    else if (motor == 2)
-    {
-        pwm = PWM2;
-    }
-    return pwm;
 }
 
 // Reset error being used for current control

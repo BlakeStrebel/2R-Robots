@@ -2,6 +2,8 @@
  * @file CurrentControl.h
  * @brief The header for the current control file
  *
+ * This file contains the functions for current sensing and control.
+ *
  * @author Benjamen Lim
  * @author Huan Weng
  * @author Blake Strebel
@@ -84,8 +86,17 @@ void get_current_gains(void);
  */
 void set_current_gains(void);
 
+
+/**
+ * @brief Gets the motor current in counts (12 bit signed)
+ *
+ *
+ * @param int motor
+ * @return int motor current in counts (12 bit signed)
+ *
+ */
 int getCurrent(int motor);
-int getPWM(int motor);
+
 /**
  * @brief Sets the current gains by reading the UART buffer
  *

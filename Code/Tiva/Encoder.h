@@ -2,7 +2,7 @@
  * @file Encoder.h
  * @brief Encoder header
  *
- * This file contains the encoder functions
+ * TThis file contains functions for initializing and reading from encoders.
  *
  * @author Benjamen Lim
  * @author Huan Weng

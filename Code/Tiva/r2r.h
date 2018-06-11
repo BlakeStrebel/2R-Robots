@@ -2,7 +2,7 @@
  * @file r2r.h
  * @brief Main R2R library header
  *
- * This file contains all the prototypes for the R2R Project
+ * This file contains system functions for the R2R Project, including functions related to system initializations, UART, and debugging.
  *
  * @author Benjamen Lim
  * @author Huan Weng

@@ -13,20 +13,19 @@
 #ifndef POSITION_CONTROL_H_
 #define POSITION_CONTROL_H_
 
-// TODO in setup set these to zero
-typedef struct {                          // Define data structure containing control data
-    int Enew;
-    int Eold;
-    int Eint;
-    int Edot;
-    int desired;
-    int actual;
-    int raw;
-    int u;
-} control_error;
+typedef struct {
+    int Enew;   /**< Error between desired and actual angle */
+    int Eold;   /**< Error from previous control cycle */
+    int Eint;   /**< Summation of error over all control cycles */
+    int Edot;   /**< Difference between new and old error */
+    int desired;/**< Desired angle in counts */
+    int actual; /**< Actual angle in counts (relative) */
+    int raw;    /**< Absolute angle in counts */
+    int u;      /**< Control effort */
+} control_error; // Define data structure containing control data
 
 /**
-* @brief This function sets up the timer interrupt for poosition control
+* @brief This function sets up the timer interrupt for position control
 *
 * @param Void
 * @return Void
@@ -41,15 +40,13 @@ extern void MotorTimerInit(void);
 */
 extern void Timer1IntHandler(void);
 
-
-//void positioncontrol_setup(void);                   // Setup position control module
 /**
 * @brief Sets position gains on the Tiva microcontroller by reading from UART
 *
 * @param Void
 * @return Void
 */
-void set_position_gains(void);                      // Set position gains
+void set_position_gains(void);
 
 /**
 * @brief Gets position gains on the Tiva microcontroller by reading to UART
@@ -57,8 +54,7 @@ void set_position_gains(void);                      // Set position gains
 * @param Void
 * @return Void
 */
-void get_position_gains(void);                      // Get position gains
-
+void get_position_gains(void);
 
 /**
 * @brief Gets desired angle for a given motor
@@ -77,12 +73,12 @@ int get_desired_angle(int motor);
 void set_desired_angle(int angle, int motor);
 
 /**
-* @brief Resets desired position to origin
+* @brief Resets desired position to 0 counts
 *
 * @param Void
 * @return Void
 */
-void reset_pos(void);                               // Reset desired position to origin (0 um)
+void reset_pos(void);
 
 /**
 * @brief Resets controller error on both controllers to be zero
@@ -90,7 +86,7 @@ void reset_pos(void);                               // Reset desired position to
 * @param Void
 * @return Void
 */
-void reset_controller_error(void);                  // Reset the error on both controllers to be zero
+void reset_controller_error(void);
 
 
 /**
@@ -99,8 +95,7 @@ void reset_controller_error(void);                  // Reset the error on both c
 * @param motor specifies the trajectory that is being assigned from UART
 * @return Void
 */
-void load_position_trajectory(int motor);                // Load desired position trajectory from client
-
+void load_position_trajectory(int motor);
 
 /**
 * @brief Calculates pwm to send to the motor drivr
@@ -115,26 +110,25 @@ void PID_Controller(int reference, int actual, int motor);
 /**
 * @brief Motor decogging to smooth output of motor
 *
-* Motor decogging function that smooths out the output from the motor by adding a 
+* Motor decogging function that smoothes out the output from the motor by adding a
 * term to the control signal to compensate for the cogging in the BLDC motor. 
-* Values are hardcoded to default r2r motors.
+* Equations are fit using PositionDataAnalyze.m MATLAB script.
 *
 * Example:
 *
 *     u = u + decog_motor(current_Angle_Radians, MOTOR_1);
 *
-* @param x current angle in radians
+* @param x current angle in counts
 * @param motor the motor to decog
-* @return the modified control signal
+* @return control signal modifier based on position
 */
 int decog_motor(int x, int motor);
 
-
 /**
-* @brief Receives position gains over UART, intended for use in a menu
+* @brief Turn on/off decogging by setting global variable
 *
 *   
-* @param int motor
+* @param void
 * @return Void
 */
 void setDecogging(void);
