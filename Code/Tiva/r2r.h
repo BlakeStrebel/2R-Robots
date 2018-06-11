@@ -52,7 +52,13 @@
  * @brief Initializes the default connections for the R2R project
  *
  * This function initializes all peripherals and GPIO pins.
- * This function only needs to be called in main.c once
+ * This function only needs to be called in main once.
+ *
+ * Example:
+ *
+ *     int main() {
+ *			r2rDefaultInit();
+ *     }
  *
  * @param Void
  * @return Void
@@ -108,7 +114,49 @@ extern void UART0read(char * message, int maxLength);
  */
 extern void UART0write(const char * string);
 
+/**
+ * @brief Initializes custom timers
+ *
+ * This function initializes timers 6 and 7 at preset frequencies as defined in r2r.c
+ *
+ *
+ * @param Void
+ * @return Void
+ */
+extern void customTimersInit(void);
 
+/**
+ * @brief Custom timer 6
+ *
+ * This function executes at the rate set by TIMER_6_FREQ set in r2r.c
+ * This function does not have to be called anywhere. This function does not return any values
+ *
+ * Example:
+ *
+ *		 void TIMER6IntHandler() {
+ *	
+ *			// add custom controller code here
+ *
+ * 		 }
+ *
+ *
+ *
+ * @param Void
+ * @return Void
+ */
+
+extern void TIMER6IntHandler(void);
+
+/**
+ * @brief Custom timer 7
+ *
+ * This function executes at the rate set by TIMER_6_FREQ set in r2r.c
+ * This function does not have to be called anywhere. 
+ *
+ * @param Void
+ * @return Void
+ */
+extern void TIMER7IntHandler(void);
 
 /**
  * @brief Stops the processor for a given amount of time. This is an approximate time
@@ -118,8 +166,39 @@ extern void UART0write(const char * string);
  */
 extern void delayMS(int ms); // stops processor for a given amount of time in ms, this is approximate.
 
+/**
+ * @brief Initializes the general purpose systick timer
+ *
+ *
+ * @param Void
+ * @return Void
+ */
 extern void timeInit(void);
+
+/**
+ * @brief Returns the time in microseconds
+ *
+ * This function can be used for delays as an alternative to delayMS() because it is interrupt-based.
+ *
+ * Example:
+ *
+ * 		uint32_t curr_time = getTime();
+ *		...
+ *		uint32_t time_taken = getTime()-curr_time;
+ *
+ * @param us microseconds
+ * @return Void
+ */
 extern uint32_t getTime(void);
+
+/**
+ * @brief The general purpose timer interrupt function.
+ *
+ * This function is called every microsecond and updates a counter.
+ *
+ * @param ms milliseconds
+ * @return Void
+ */
 extern void timeInt(void);
 
 #endif /* R2R_H_ */

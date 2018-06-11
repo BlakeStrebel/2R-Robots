@@ -37,9 +37,24 @@ extern void encoderRead(void);
 
 
 
-
+/**
+ * @brief Resets the relative counts on encoder 1
+ *
+ *
+ * @param Void
+ * @return Void
+ *
+ */
 void resetMotor1RawRelative(void);
 
+/**
+ * @brief Resets the relative counts on encoder 2
+ *
+ *
+ * @param Void
+ * @return Void
+ *
+ */
 void resetMotor2RawRelative(void);
 
 /**

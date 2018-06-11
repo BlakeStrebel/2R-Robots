@@ -25,9 +25,20 @@ typedef struct {                          // Define data structure containing co
     int u;
 } control_error;
 
-
+/**
+* @brief This function sets up the timer interrupt for poosition control
+*
+* @param Void
+* @return Void
+*/
 extern void MotorTimerInit(void);
 
+/**
+* @brief The interrupt handler for position control
+*
+* @param Void
+* @return Void
+*/
 extern void Timer1IntHandler(void);
 
 
@@ -101,8 +112,31 @@ void load_position_trajectory(int motor);                // Load desired positio
 */
 void PID_Controller(int reference, int actual, int motor);
 
+/**
+* @brief Motor decogging to smooth output of motor
+*
+* Motor decogging function that smooths out the output from the motor by adding a 
+* term to the control signal to compensate for the cogging in the BLDC motor. 
+* Values are hardcoded to default r2r motors.
+*
+* Example:
+*
+*     u = u + decog_motor(current_Angle_Radians, MOTOR_1);
+*
+* @param x current angle in radians
+* @param motor the motor to decog
+* @return the modified control signal
+*/
 int decog_motor(int x, int motor);
 
+
+/**
+* @brief Receives position gains over UART, intended for use in a menu
+*
+*   
+* @param int motor
+* @return Void
+*/
 void setDecogging(void);
 
 #endif /* POSITION_CONTROL_H_ */

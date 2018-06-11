@@ -41,8 +41,33 @@ typedef struct {
     int u[BUFLEN];  /**< The control effort of the motor */
 } control_data_t;
 
+/**
+ * @brief Recieve number of values to store in position data arrays from client
+ * 
+ *
+ * @param Void 
+ * @return Void
+ */
 void setNclient(int n);          // Recieve number of values to store in position data arrays from client
+
+/**
+ * @brief Bounds a given input to a range of values
+ * 
+ *
+ * @param int a the input value
+ * @param int n the range of the bounds
+ * @return int the bounded output
+ */  
 int boundInt(int a, int n);
+
+/**
+ * @brief returns the large value of the two
+ * 
+ *
+ * @param int a one input value
+ * @param int b the other input value
+ * @return int the larger value
+ */  
 int maxInt(int a, int b);
 
 /**
