@@ -1,6 +1,0 @@
-function userserial = serialConfig(com)
-
-userserial = serial(com, 'BaudRate', 115200, 'DataBits', 8, 'StopBits', ...
-                    1, 'Parity', 'none', 'Terminator', 'CR', 'timeout', ...
-                    1, 'OutputBufferSize', 500, 'InputBufferSize', 40000);
-end
