@@ -1,5 +1,5 @@
-\hypertarget{r2r_8h}{}\section{C\+:/\+Users/\+Ben/\+Documents/\+Git\+Hub/2\+R-\/\+Robots/\+Midterm\+Code/\+Tiva/r2r.h File Reference}
-\label{r2r_8h}\index{C\+:/\+Users/\+Ben/\+Documents/\+Git\+Hub/2\+R-\/\+Robots/\+Midterm\+Code/\+Tiva/r2r.\+h@{C\+:/\+Users/\+Ben/\+Documents/\+Git\+Hub/2\+R-\/\+Robots/\+Midterm\+Code/\+Tiva/r2r.\+h}}
+\hypertarget{r2r_8h}{}\section{C\+:/\+Users/\+Ben/\+Documents/\+Git\+Hub/2\+R-\/\+Robots/\+Code/\+Tiva/r2r.h File Reference}
+\label{r2r_8h}\index{C\+:/\+Users/\+Ben/\+Documents/\+Git\+Hub/2\+R-\/\+Robots/\+Code/\+Tiva/r2r.\+h@{C\+:/\+Users/\+Ben/\+Documents/\+Git\+Hub/2\+R-\/\+Robots/\+Code/\+Tiva/r2r.\+h}}
 
 
 Main R2R library header.  
@@ -30,42 +30,54 @@ Main R2R library header.
 {\ttfamily \#include \char`\"{}driverlib/pwm.\+h\char`\"{}}\newline
 {\ttfamily \#include \char`\"{}driverlib/timer.\+h\char`\"{}}\newline
 {\ttfamily \#include \char`\"{}driverlib/uart.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}driverlib/ssi.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}driverlib/systick.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}driverlib/adc.\+h\char`\"{}}\newline
 {\ttfamily \#include \char`\"{}utils/uartstdio.\+h\char`\"{}}\newline
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{r2r_8h_a98c7a97e19fc2cfa019bbd2d7e818f58}\label{r2r_8h_a98c7a97e19fc2cfa019bbd2d7e818f58}} 
+\#define {\bfseries M\+O\+T\+O\+R1}~1
+\item 
+\mbox{\Hypertarget{r2r_8h_a9dd61fc755020c90dbfb072e2f0492e8}\label{r2r_8h_a9dd61fc755020c90dbfb072e2f0492e8}} 
+\#define {\bfseries M\+O\+T\+O\+R2}~2
+\end{DoxyCompactItemize}
 \subsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
 void \mbox{\hyperlink{r2r_8h_af06127bca89306e7f9af0ea36f162ca0}{r2r\+Default\+Init}} (void)
 \begin{DoxyCompactList}\small\item\em Initializes the default connections for the R2R project. \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{r2r_8h_ace09a3c8965a45676cd69533a94e1e99}{safety\+Check}} (void)
-\begin{DoxyCompactList}\small\item\em Checks for all end conditions and shuts down the motor control if any are detected. \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{r2r_8h_ad22b938bbd9c44b3de841391716d46b9}{sensor\+Update}} (void)
-\begin{DoxyCompactList}\small\item\em Updates all sensor arrays. \end{DoxyCompactList}\item 
-\mbox{\Hypertarget{r2r_8h_afd645b17cf0581bcaa22c56011c775e4}\label{r2r_8h_afd645b17cf0581bcaa22c56011c775e4}} 
-void {\bfseries adc\+Init} (void)
-\item 
-\mbox{\Hypertarget{r2r_8h_abe02cc201baa3f3c88b6cfe688d13cb2}\label{r2r_8h_abe02cc201baa3f3c88b6cfe688d13cb2}} 
-void {\bfseries adc\+Read} (void)
-\item 
-\mbox{\Hypertarget{r2r_8h_a18b7e8958a230c54f3fe5ac8bc24b24c}\label{r2r_8h_a18b7e8958a230c54f3fe5ac8bc24b24c}} 
-uint32\+\_\+t {\bfseries current\+Read1} (void)
-\item 
-\mbox{\Hypertarget{r2r_8h_abdb4ca825a07f76a89212240e43546ca}\label{r2r_8h_abdb4ca825a07f76a89212240e43546ca}} 
-uint32\+\_\+t {\bfseries current\+Read2} (void)
-\item 
-\mbox{\Hypertarget{r2r_8h_a3f64aa234674df8aeb7332aa17941b75}\label{r2r_8h_a3f64aa234674df8aeb7332aa17941b75}} 
-uint32\+\_\+t {\bfseries temp\+Read1} (void)
-\item 
-\mbox{\Hypertarget{r2r_8h_a3cec2a038dd769dc059ca76a26954e4b}\label{r2r_8h_a3cec2a038dd769dc059ca76a26954e4b}} 
-uint32\+\_\+t {\bfseries temp\+Read2} (void)
-\item 
-\mbox{\Hypertarget{r2r_8h_a03e7e3ce51b56b0571a8bd85ec4a5c3e}\label{r2r_8h_a03e7e3ce51b56b0571a8bd85ec4a5c3e}} 
-void {\bfseries i2c\+Init} (t\+I2\+C\+M\+Instance g\+\_\+s\+I2\+C\+M\+Simple\+Inst)
-\end{DoxyCompactItemize}
+void \mbox{\hyperlink{r2r_8h_a9708de954e135b89af84d9d82b552667}{sys\+Init}} (void)
+\begin{DoxyCompactList}\small\item\em Initializes the system clock and the master interrupts for the R2R project. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{r2r_8h_a09a7a9ed4194733a7b753c3b795b1734}{uart\+Init}} (void)
+\begin{DoxyCompactList}\small\item\em Initializes the U\+A\+RT for 115200 Baud Rate and 8-\/\+N-\/1 transfer rate. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{r2r_8h_acd1ca90dcd2d241c90316f670dfcc2eb}{U\+A\+R\+T0read}} (char $\ast$message, int max\+Length)
+\begin{DoxyCompactList}\small\item\em Reads input from U\+A\+RT. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{r2r_8h_aba58039e2e0b55260a188aedbc87d18b}{U\+A\+R\+T0write}} (const char $\ast$string)
+\begin{DoxyCompactList}\small\item\em Writes output from U\+A\+RT. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{r2r_8h_a77af04bd0735a3d7eb04200c61fc7812}{custom\+Timers\+Init}} (void)
+\begin{DoxyCompactList}\small\item\em Initializes custom timers. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{r2r_8h_a57b21594b75d4b2a140a1f9bbb1465e8}{T\+I\+M\+E\+R6\+Int\+Handler}} (void)
+\begin{DoxyCompactList}\small\item\em Custom timer 6. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{r2r_8h_a39c6b9317ad29deebebf731f721f001b}{T\+I\+M\+E\+R7\+Int\+Handler}} (void)
+\begin{DoxyCompactList}\small\item\em Custom timer 7. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{r2r_8h_ab0b86e69a6c13e01349840d66db0f1f3}{delay\+MS}} (int ms)
+\begin{DoxyCompactList}\small\item\em Stops the processor for a given amount of time. This is an approximate time. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{r2r_8h_a9539b63f71e1a1c8b7cc5142560b189c}{time\+Init}} (void)
+\begin{DoxyCompactList}\small\item\em Initializes the general purpose systick timer. \end{DoxyCompactList}\item 
+uint32\+\_\+t \mbox{\hyperlink{r2r_8h_a606dc97cf5056886cfd30122ce54709c}{get\+Time}} (void)
+\begin{DoxyCompactList}\small\item\em Returns the time in microseconds. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{r2r_8h_a3ef2d72f5373681a06978ab3f437bd63}{time\+Int}} (void)
+\begin{DoxyCompactList}\small\item\em The general purpose timer interrupt function. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \subsection*{Variables}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\Hypertarget{r2r_8h_a154fb4804d750b00be804fc5fbbfad48}\label{r2r_8h_a154fb4804d750b00be804fc5fbbfad48}} 
-uint32\+\_\+t {\bfseries adc\+Array} \mbox{[}4\mbox{]}
+\mbox{\Hypertarget{r2r_8h_ad6e919663d1d5cf6bbc82ba890b46204}\label{r2r_8h_ad6e919663d1d5cf6bbc82ba890b46204}} 
+uint32\+\_\+t {\bfseries ui32\+Sys\+Clock}
+\item 
+\mbox{\Hypertarget{r2r_8h_a71e8f3ccee9af507cf000744058a8983}\label{r2r_8h_a71e8f3ccee9af507cf000744058a8983}} 
+uint32\+\_\+t {\bfseries micros}
 \end{DoxyCompactItemize}
 
 
@@ -82,6 +94,70 @@ Huan Weng
 
 
 \subsection{Function Documentation}
+\mbox{\Hypertarget{r2r_8h_a77af04bd0735a3d7eb04200c61fc7812}\label{r2r_8h_a77af04bd0735a3d7eb04200c61fc7812}} 
+\index{r2r.\+h@{r2r.\+h}!custom\+Timers\+Init@{custom\+Timers\+Init}}
+\index{custom\+Timers\+Init@{custom\+Timers\+Init}!r2r.\+h@{r2r.\+h}}
+\subsubsection{\texorpdfstring{custom\+Timers\+Init()}{customTimersInit()}}
+{\footnotesize\ttfamily void custom\+Timers\+Init (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Initializes custom timers. 
+
+This function initializes timers 6 and 7 at preset frequencies as defined in \mbox{\hyperlink{r2r_8c}{r2r.\+c}}
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{r2r_8h_ab0b86e69a6c13e01349840d66db0f1f3}\label{r2r_8h_ab0b86e69a6c13e01349840d66db0f1f3}} 
+\index{r2r.\+h@{r2r.\+h}!delay\+MS@{delay\+MS}}
+\index{delay\+MS@{delay\+MS}!r2r.\+h@{r2r.\+h}}
+\subsubsection{\texorpdfstring{delay\+M\+S()}{delayMS()}}
+{\footnotesize\ttfamily void delay\+MS (\begin{DoxyParamCaption}\item[{int}]{ms }\end{DoxyParamCaption})}
+
+
+
+Stops the processor for a given amount of time. This is an approximate time. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em ms} & milliseconds \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{r2r_8h_a606dc97cf5056886cfd30122ce54709c}\label{r2r_8h_a606dc97cf5056886cfd30122ce54709c}} 
+\index{r2r.\+h@{r2r.\+h}!get\+Time@{get\+Time}}
+\index{get\+Time@{get\+Time}!r2r.\+h@{r2r.\+h}}
+\subsubsection{\texorpdfstring{get\+Time()}{getTime()}}
+{\footnotesize\ttfamily uint32\+\_\+t get\+Time (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Returns the time in microseconds. 
+
+This function can be used for delays as an alternative to \mbox{\hyperlink{r2r_8h_ab0b86e69a6c13e01349840d66db0f1f3}{delay\+M\+S()}} because it is interrupt-\/based.
+
+Example\+: \begin{DoxyVerb}    uint32_t curr_time = getTime();
+...
+uint32_t time_taken = getTime()-curr_time;
+\end{DoxyVerb}
+
+
+
+\begin{DoxyParams}{Parameters}
+{\em us} & microseconds \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
 \mbox{\Hypertarget{r2r_8h_af06127bca89306e7f9af0ea36f162ca0}\label{r2r_8h_af06127bca89306e7f9af0ea36f162ca0}} 
 \index{r2r.\+h@{r2r.\+h}!r2r\+Default\+Init@{r2r\+Default\+Init}}
 \index{r2r\+Default\+Init@{r2r\+Default\+Init}!r2r.\+h@{r2r.\+h}}
@@ -92,7 +168,13 @@ Huan Weng
 
 Initializes the default connections for the R2R project. 
 
-This function initializes all peripherals and G\+P\+IO pins. This function only needs to be called in main.\+c once
+This function initializes all peripherals and G\+P\+IO pins. This function only needs to be called in main once.
+
+Example\+: \begin{DoxyVerb}int main() {
+    r2rDefaultInit();
+}
+\end{DoxyVerb}
+
 
 
 \begin{DoxyParams}{Parameters}
@@ -102,15 +184,15 @@ This function initializes all peripherals and G\+P\+IO pins. This function only 
 \begin{DoxyReturn}{Returns}
 Void 
 \end{DoxyReturn}
-\mbox{\Hypertarget{r2r_8h_ace09a3c8965a45676cd69533a94e1e99}\label{r2r_8h_ace09a3c8965a45676cd69533a94e1e99}} 
-\index{r2r.\+h@{r2r.\+h}!safety\+Check@{safety\+Check}}
-\index{safety\+Check@{safety\+Check}!r2r.\+h@{r2r.\+h}}
-\subsubsection{\texorpdfstring{safety\+Check()}{safetyCheck()}}
-{\footnotesize\ttfamily void safety\+Check (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+\mbox{\Hypertarget{r2r_8h_a9708de954e135b89af84d9d82b552667}\label{r2r_8h_a9708de954e135b89af84d9d82b552667}} 
+\index{r2r.\+h@{r2r.\+h}!sys\+Init@{sys\+Init}}
+\index{sys\+Init@{sys\+Init}!r2r.\+h@{r2r.\+h}}
+\subsubsection{\texorpdfstring{sys\+Init()}{sysInit()}}
+{\footnotesize\ttfamily void sys\+Init (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
 
 
 
-Checks for all end conditions and shuts down the motor control if any are detected. 
+Initializes the system clock and the master interrupts for the R2R project. 
 
 
 \begin{DoxyParams}{Parameters}
@@ -120,17 +202,139 @@ Checks for all end conditions and shuts down the motor control if any are detect
 \begin{DoxyReturn}{Returns}
 Void 
 \end{DoxyReturn}
-\mbox{\Hypertarget{r2r_8h_ad22b938bbd9c44b3de841391716d46b9}\label{r2r_8h_ad22b938bbd9c44b3de841391716d46b9}} 
-\index{r2r.\+h@{r2r.\+h}!sensor\+Update@{sensor\+Update}}
-\index{sensor\+Update@{sensor\+Update}!r2r.\+h@{r2r.\+h}}
-\subsubsection{\texorpdfstring{sensor\+Update()}{sensorUpdate()}}
-{\footnotesize\ttfamily void sensor\+Update (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+\mbox{\Hypertarget{r2r_8h_a9539b63f71e1a1c8b7cc5142560b189c}\label{r2r_8h_a9539b63f71e1a1c8b7cc5142560b189c}} 
+\index{r2r.\+h@{r2r.\+h}!time\+Init@{time\+Init}}
+\index{time\+Init@{time\+Init}!r2r.\+h@{r2r.\+h}}
+\subsubsection{\texorpdfstring{time\+Init()}{timeInit()}}
+{\footnotesize\ttfamily void time\+Init (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
 
 
 
-Updates all sensor arrays. 
+Initializes the general purpose systick timer. 
 
-Sensors are grouped for the ease of use into one function and the array is updated each time this function is called.
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{r2r_8h_a3ef2d72f5373681a06978ab3f437bd63}\label{r2r_8h_a3ef2d72f5373681a06978ab3f437bd63}} 
+\index{r2r.\+h@{r2r.\+h}!time\+Int@{time\+Int}}
+\index{time\+Int@{time\+Int}!r2r.\+h@{r2r.\+h}}
+\subsubsection{\texorpdfstring{time\+Int()}{timeInt()}}
+{\footnotesize\ttfamily void time\+Int (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+The general purpose timer interrupt function. 
+
+This function is called every microsecond and updates a counter.
+
+
+\begin{DoxyParams}{Parameters}
+{\em ms} & milliseconds \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{r2r_8h_a57b21594b75d4b2a140a1f9bbb1465e8}\label{r2r_8h_a57b21594b75d4b2a140a1f9bbb1465e8}} 
+\index{r2r.\+h@{r2r.\+h}!T\+I\+M\+E\+R6\+Int\+Handler@{T\+I\+M\+E\+R6\+Int\+Handler}}
+\index{T\+I\+M\+E\+R6\+Int\+Handler@{T\+I\+M\+E\+R6\+Int\+Handler}!r2r.\+h@{r2r.\+h}}
+\subsubsection{\texorpdfstring{T\+I\+M\+E\+R6\+Int\+Handler()}{TIMER6IntHandler()}}
+{\footnotesize\ttfamily void T\+I\+M\+E\+R6\+Int\+Handler (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Custom timer 6. 
+
+This function executes at the rate set by T\+I\+M\+E\+R\+\_\+6\+\_\+\+F\+R\+EQ set in \mbox{\hyperlink{r2r_8c}{r2r.\+c}} This function does not have to be called anywhere. This function does not return any values
+
+Example\+: \begin{DoxyVerb} void TIMER6IntHandler() {
+
+    // add custom controller code here
+
+     }
+\end{DoxyVerb}
+
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{r2r_8h_a39c6b9317ad29deebebf731f721f001b}\label{r2r_8h_a39c6b9317ad29deebebf731f721f001b}} 
+\index{r2r.\+h@{r2r.\+h}!T\+I\+M\+E\+R7\+Int\+Handler@{T\+I\+M\+E\+R7\+Int\+Handler}}
+\index{T\+I\+M\+E\+R7\+Int\+Handler@{T\+I\+M\+E\+R7\+Int\+Handler}!r2r.\+h@{r2r.\+h}}
+\subsubsection{\texorpdfstring{T\+I\+M\+E\+R7\+Int\+Handler()}{TIMER7IntHandler()}}
+{\footnotesize\ttfamily void T\+I\+M\+E\+R7\+Int\+Handler (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Custom timer 7. 
+
+This function executes at the rate set by T\+I\+M\+E\+R\+\_\+6\+\_\+\+F\+R\+EQ set in \mbox{\hyperlink{r2r_8c}{r2r.\+c}} This function does not have to be called anywhere.
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{r2r_8h_acd1ca90dcd2d241c90316f670dfcc2eb}\label{r2r_8h_acd1ca90dcd2d241c90316f670dfcc2eb}} 
+\index{r2r.\+h@{r2r.\+h}!U\+A\+R\+T0read@{U\+A\+R\+T0read}}
+\index{U\+A\+R\+T0read@{U\+A\+R\+T0read}!r2r.\+h@{r2r.\+h}}
+\subsubsection{\texorpdfstring{U\+A\+R\+T0read()}{UART0read()}}
+{\footnotesize\ttfamily void U\+A\+R\+T0read (\begin{DoxyParamCaption}\item[{char $\ast$}]{message,  }\item[{int}]{max\+Length }\end{DoxyParamCaption})}
+
+
+
+Reads input from U\+A\+RT. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em char$\ast$} & message pointer to a buffer \\
+\hline
+{\em int} & max\+Length the maximum length of the buffer \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{r2r_8h_aba58039e2e0b55260a188aedbc87d18b}\label{r2r_8h_aba58039e2e0b55260a188aedbc87d18b}} 
+\index{r2r.\+h@{r2r.\+h}!U\+A\+R\+T0write@{U\+A\+R\+T0write}}
+\index{U\+A\+R\+T0write@{U\+A\+R\+T0write}!r2r.\+h@{r2r.\+h}}
+\subsubsection{\texorpdfstring{U\+A\+R\+T0write()}{UART0write()}}
+{\footnotesize\ttfamily void U\+A\+R\+T0write (\begin{DoxyParamCaption}\item[{const char $\ast$}]{string }\end{DoxyParamCaption})}
+
+
+
+Writes output from U\+A\+RT. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em const} & char$\ast$ message pointer to a buffer \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{r2r_8h_a09a7a9ed4194733a7b753c3b795b1734}\label{r2r_8h_a09a7a9ed4194733a7b753c3b795b1734}} 
+\index{r2r.\+h@{r2r.\+h}!uart\+Init@{uart\+Init}}
+\index{uart\+Init@{uart\+Init}!r2r.\+h@{r2r.\+h}}
+\subsubsection{\texorpdfstring{uart\+Init()}{uartInit()}}
+{\footnotesize\ttfamily void uart\+Init (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Initializes the U\+A\+RT for 115200 Baud Rate and 8-\/\+N-\/1 transfer rate. 
 
 
 \begin{DoxyParams}{Parameters}

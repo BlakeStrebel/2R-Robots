@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.14"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>R2R Project: Main Page</title>
+<title>R2R: Main Page for R2R software documentation</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -13,6 +13,7 @@
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen_html_style.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -21,7 +22,7 @@
  <tbody>
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">R2R Project
+   <div id="projectname">R2R
    </div>
   </td>
  </tr>
@@ -62,10 +63,138 @@ $(function() {
 
 <div class="header">
   <div class="headertitle">
-<div class="title">R2R Project Documentation</div>  </div>
+<div class="title">Main Page for R2R software documentation </div>  </div>
 </div><!--header-->
 <div class="contents">
-</div><!-- contents -->
+<div class="textblock"><h1><a class="anchor" id="intro_sec"></a>
+Introduction</h1>
+<p>Start at <code>Files &gt; Files List</code> to view functions and their documentaion</p>
+<h1><a class="anchor" id="setup"></a>
+Setting up CCS for R2R</h1>
+<p>In order to start programming the microcontroller, the user has to install Code Composer Studio (CCS) from TI. In CCS, the TIVAware library has to be installed. This can be done through the Resource Explorer avaliable in CCS. The Resource Explorer can be reached from Help &gt; Getting Started &gt; Browse Examples.</p>
+<div class="image">
+<img src="tivaware.JPG" alt="tivaware.JPG"/>
+<div class="caption">
+CCS Resource Explorer (Tirex)</div></div>
+<p> Once the libraries have been installed, create a new project</p>
+<div class="image">
+<img src="newproject.JPG" alt="newproject.JPG"/>
+<div class="caption">
+Creating a new project</div></div>
+<p> Ensure that the Tiva TM4C1294NCPDT chip is selected and give your project a name. When you are done, select Finish.</p>
+<div class="image">
+<img src="newprojectoptions.JPG" alt="newprojectoptions.JPG"/>
+<div class="caption">
+Options for a new project</div></div>
+<p> The code perspective will open up. On the left the active project is bolded. Your new project should be bolded. If it is not, select it. Some libraries have to be manually added to the project before the code can run. Right click the project name in Project Explorer, and select properties.</p>
+<p>Under CCS Build &gt; ARM Compiler &gt; Include options, include the Tivaware library.</p>
+<div class="image">
+<img src="includetivaware.JPG" alt="includetivaware.JPG"/>
+<div class="caption">
+Including libraries</div></div>
+<p> Next, under CCS Build &gt; ARM Linker &gt; File Search Path, include the library files for the driver library, driverlib. The sensorlib files are also included in the same manner.</p>
+<div class="image">
+<img src="driverlib.JPG" alt="driverlib.JPG"/>
+<div class="caption">
+Including Driverlib</div></div>
+<p> Finally the files from the Github project can be added to the project. Because version control is already managed by Github in this case, the files are linked into the the project. However, the user can also add the files directly into the project.</p>
+<div class="image">
+<img src="r2rstep1.JPG" alt="r2rstep1.JPG"/>
+<div class="caption">
+Including R2R files</div></div>
+<div class="image">
+<img src="r2rstep2.JPG" alt="r2rstep2.JPG"/>
+<div class="caption">
+Including R2R files</div></div>
+<div class="image">
+<img src="r2rstep3.JPG" alt="r2rstep3.JPG"/>
+<div class="caption">
+Including R2R files</div></div>
+<div class="image">
+<img src="r2rstep4.JPG" alt="r2rstep4.JPG"/>
+<div class="caption">
+Including R2R files</div></div>
+<p> If the files cannot be added, delete the conflicting file in the project and attempt to add the file again. Once all the files have been added, CCS should look like the following state.</p>
+<div class="image">
+<img src="r2rstep5.JPG" alt="r2rstep5.JPG"/>
+<div class="caption">
+Setup Completed</div></div>
+<p> The code is built by clicking on the hammer icon. In order to program the board, the green debug symbol is clicked. Test by compiling the code. It should compile without any errors.</p>
+<div class="image">
+<img src="programming.JPG" alt="programming.JPG"/>
+<div class="caption">
+Programming</div></div>
+<h1><a class="anchor" id="writingcustomcode"></a>
+Writing Custom Code</h1>
+<p>Two timers (Timer 6 and Timer 7) are set up in the code and can execute at user-set frequencies in <code><a class="el" href="r2r_8c.html" title="Main R2R library. ">r2r.c</a></code>. The intention is that the user will either write code in <a class="el" href="r2r_8c.html" title="Main R2R library. ">r2r.c</a> or create a header and source file. Here, an simple example will be set out to compute simple position control over motor 1 in <a class="el" href="r2r_8c.html" title="Main R2R library. ">r2r.c</a> at 5kHz.</p>
+<h2><a class="anchor" id="writinginterrupts"></a>
+Writing Interrupts</h2>
+<p>In Code Composer Studio, interrupts follow a general format. There is the interrupt initialization, the interrupt function itself, and a declaration of the interrupt function in the interrupt vector table in <code>tm4c1294ncpdt_startup_ccs.c</code>.</p>
+<p>In this example the timer interrupt has already been declared under <code><a class="el" href="r2r_8h.html#a77af04bd0735a3d7eb04200c61fc7812" title="Initializes custom timers. ">customTimersInit()</a></code> and the corresponding timer functions have been declared in <code>tm4c1294ncpdt_startup_ccs.c</code>.</p>
+<p>In <code><a class="el" href="r2r_8c.html" title="Main R2R library. ">r2r.c</a></code>, update frequency: </p><pre class="fragment">    #define TIMER_6_FREQUENCY 5000
+</pre><p>Add global variables for the PID controller in <code><a class="el" href="r2r_8c.html" title="Main R2R library. ">r2r.c</a></code> </p><pre class="fragment">int int_error = 0;
+int prev_error = 0;
+</pre><p>Under <code><a class="el" href="r2r_8h.html#a57b21594b75d4b2a140a1f9bbb1465e8" title="Custom timer 6. ">TIMER6IntHandler()</a></code> in <code><a class="el" href="r2r_8c.html" title="Main R2R library. ">r2r.c</a></code>: </p><pre class="fragment">void TIMER6IntHandler(){
+    float kp = 0.5;
+    float ki = 1;
+    float kd = 0;
+    desired_position = 60; //degrees
+    encoderRead(); // update the encoder
+    int actual = readMotor1RawRelative(); // read counts set to relative
+    int raw = readMotor1Raw(); // read counts absolute
+    int error = angles2Counts(desired_position) - actual;
+    int u = kp*error+kd*prev_error+ki*int_error;
+     int_error = int_error+error;
+     prev_error = error;
+    motor1ControlPWM(u);
+ }  
+</pre><h2><a class="anchor" id="communication"></a>
+UART communication</h2>
+<p>In order to communicate over UART, several functions are provided under <code>systemInit()</code>. In the default case, the UART is already initialised to a baud rate of 115200, 8N1 mode. This example will use a polling method to process input from the user.</p>
+<p>First set up a global variable in <code>main.c</code> that will be used to store the desired angle: </p><pre class="fragment">volatile int setAngle = 0;
+</pre><p>In <code>main.c</code>, under <code>main()</code>: </p><pre class="fragment">    int main(void){
+    char buffer[50]; // set up a char buffer
+
+    while(1){ // set up an infinite loop
+
+        UART0read(buffer); // read the buffer
+        scanf("%d",setAngle); 
+        sprintf(buffer,"Okay! Setting to: %d",setAngle) // acknowledge
+        UART0write(buffer,50); // write to the buffer
+
+    }   
+}
+</pre><p>Add a global variable in <code><a class="el" href="r2r_8c.html" title="Main R2R library. ">r2r.c</a></code> to refer to the setAngle variable we just created in main.c: </p><pre class="fragment">    extern int setAngle;
+</pre><p>Now we have to modify the code in the <code><a class="el" href="r2r_8h.html#a57b21594b75d4b2a140a1f9bbb1465e8" title="Custom timer 6. ">TIMER6IntHandler()</a></code> to refer to this variable: </p><pre class="fragment">void TIMER6IntHandler(){
+    float kp = 0.5;
+    float ki = 1;
+    float kd = 0;
+    desired_position = setAngle; //degrees
+    encoderRead(); // update the encoder
+    int actual = readMotor1RawRelative(); // read counts set to relative
+    int raw = readMotor1Raw(); // read counts absolute
+    int error = angles2Counts(desired_position) - actual;
+    int u = kp*error+kd*prev_error+ki*int_error;
+     int_error = int_error+error;
+     prev_error = error;
+    motor1ControlPWM(u);
+ }  
+</pre><h2><a class="anchor" id="menu"></a>
+Writing Menu Commands</h2>
+<p>The MATLAB menu can also be modified to fit a custom control law. The MATLAB code is set up in a tree format where each entry is a node that includes information about its parent and children. The only point to edit is * where the details of the node has to be specified</p>
+<p>There are two types of nodes: a data node, which accepts input from the user and immediately transitions to its child node, and a navigational node, which accepts input from the user and checks its child nodes for the matching option. The navigational node does simple error checking, but the data node does not because of the wide variety of data types that might be possible. Instead, a statement of the expected data type is presented and the user is expected to conform to this data type when interacting with a data node.</p>
+<p>On the firmware side, additional case statements are added that correspond to the added nodes to process the incoming data.</p>
+<p>The user has to add in two functions, one which saves the input to the state of the program, and the other which processes the input. The only function that needs to be edited is the <code>hierarchicalMenu.m</code>, which is found in: <code>BackupAndUI &gt; R2R_interfaces &gt; menu_library</code></p>
+<div class="image">
+<img src="parent.JPG" alt="parent.JPG"/>
+<div class="caption">
+Adding a parent node</div></div>
+<p> Once the top level menu option has been created, a menu function to process the data must also be created.</p>
+<div class="image">
+<img src="child.JPG" alt="child.JPG"/>
+<div class="caption">
+Adding a child node</div></div>
+</div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by &#160;<a href="http://www.doxygen.org/index.html">

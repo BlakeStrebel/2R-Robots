@@ -1,0 +1,420 @@
+\hypertarget{_motor_8c}{}\section{C\+:/\+Users/\+Ben/\+Documents/\+Git\+Hub/2\+R-\/\+Robots/\+Code/\+Tiva/\+Motor.c File Reference}
+\label{_motor_8c}\index{C\+:/\+Users/\+Ben/\+Documents/\+Git\+Hub/2\+R-\/\+Robots/\+Code/\+Tiva/\+Motor.\+c@{C\+:/\+Users/\+Ben/\+Documents/\+Git\+Hub/2\+R-\/\+Robots/\+Code/\+Tiva/\+Motor.\+c}}
+
+
+The motor source code.  
+
+
+{\ttfamily \#include \char`\"{}r2r.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}Motor.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}Utilities.\+h\char`\"{}}\newline
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{_motor_8c_a978983329d511d8ab27545d8badfbd89}{motor\+Init}} ()
+\begin{DoxyCompactList}\small\item\em Initializes the G\+P\+IO pins for the motor. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_motor_8c_a879b94540bd8b5d2e5217c749029e12b}{M1\+H\+Int\+Handler}} (void)
+\begin{DoxyCompactList}\small\item\em Hall sensor interrupt for motor 1. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_motor_8c_afde750f7e2ef4ebb04f36c81089c832d}{M2\+H\+Int\+Handler}} (void)
+\begin{DoxyCompactList}\small\item\em Hall sensor interrupt for motor 2. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_motor_8c_a8ab898affd7b6bbc1d359284e85c31c3}{motor1\+Control\+P\+WM}} (int control)
+\begin{DoxyCompactList}\small\item\em Sets the P\+WM value and direction to motor 1. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_motor_8c_aa3421fe96b22e90c356e013a0abef7d6}{motor2\+Control\+P\+WM}} (int control)
+\begin{DoxyCompactList}\small\item\em Sets the P\+WM value and direction to motor 2. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_motor_8c_ac0226d260a42465ca310f02894b285b6}{motor1\+Commutate}} (int State, int control)
+\begin{DoxyCompactList}\small\item\em Commutate motor 1 with a given pwm. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_motor_8c_aab30f4695887f88292561bf074407747}{motor2\+Commutate}} (int State, int control)
+\begin{DoxyCompactList}\small\item\em Commutate motor 2 with a given pwm. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_motor_8c_a40e064ce1ed8e8fe099904717d9c7e46}{motor1\+P\+WM}} (int pwm1, int pwm2, int pwm3)
+\begin{DoxyCompactList}\small\item\em Sets the P\+WM value to motor 1. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_motor_8c_a8d3950b6912f5a60d2ceded0e0ed502b}{motor2\+P\+WM}} (int pwm1, int pwm2, int pwm3)
+\begin{DoxyCompactList}\small\item\em Sets the P\+WM value to motor 2. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{_motor_8c_aa2c42019652e402afdfa5330e84a917e}{getmotor1\+P\+WM}} (void)
+\begin{DoxyCompactList}\small\item\em Returns the current P\+WM of motor 1. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{_motor_8c_a25d33861bd682d093b24c60f2cbabf20}{getmotor2\+P\+WM}} (void)
+\begin{DoxyCompactList}\small\item\em Returns the current P\+WM of motor 2. \end{DoxyCompactList}\item 
+int32\+\_\+t \mbox{\hyperlink{_motor_8c_a0b350d90bf46d3ae9e0c2678db6ab0b2}{getmotor1\+H\+A\+L\+LS}} (void)
+\begin{DoxyCompactList}\small\item\em Returns the current state of the halls for motor 1. \end{DoxyCompactList}\item 
+int32\+\_\+t \mbox{\hyperlink{_motor_8c_a53f843252b562efc951e13b6db10ef22}{getmotor2\+H\+A\+L\+LS}} (void)
+\begin{DoxyCompactList}\small\item\em Returns the current state of the halls for motor 2. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_motor_8c_af0b4940941d639d96fbc31924abf1664}{Motor\+S\+P\+Iinit}} (void)
+\begin{DoxyCompactList}\small\item\em Initializes the S\+PI channels for the motor drivers. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_motor_8c_a4e7b27c5715df8d71dfe87a22ae0b004}{motor\+Driver\+Init}} (void)
+\begin{DoxyCompactList}\small\item\em Initializes the S\+PI commands to set the motor\textquotesingle{}s configuration for 1x P\+WM mode. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_motor_8c_a418a9beb64e4f3d3563917d05a5a3544}{M1\+\_\+\+I\+N\+L\+\_\+\+W\+R\+I\+TE}} (int a, int b, int c)
+\begin{DoxyCompactList}\small\item\em Commutation table for motor 1. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_motor_8c_ac9edbc13c57419de1647c90a69bcfae0}{M2\+\_\+\+I\+N\+L\+\_\+\+W\+R\+I\+TE}} (int a, int b, int c)
+\begin{DoxyCompactList}\small\item\em Commutation table for motor 2. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+The motor source code. 
+
+This file contains the motor functions
+
+\begin{DoxyAuthor}{Author}
+Benjamen Lim 
+
+Huan Weng 
+
+Blake Strebel 
+\end{DoxyAuthor}
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{_motor_8c_a0b350d90bf46d3ae9e0c2678db6ab0b2}\label{_motor_8c_a0b350d90bf46d3ae9e0c2678db6ab0b2}} 
+\index{Motor.\+c@{Motor.\+c}!getmotor1\+H\+A\+L\+LS@{getmotor1\+H\+A\+L\+LS}}
+\index{getmotor1\+H\+A\+L\+LS@{getmotor1\+H\+A\+L\+LS}!Motor.\+c@{Motor.\+c}}
+\subsubsection{\texorpdfstring{getmotor1\+H\+A\+L\+L\+S()}{getmotor1HALLS()}}
+{\footnotesize\ttfamily int32\+\_\+t getmotor1\+H\+A\+L\+LS (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Returns the current state of the halls for motor 1. 
+
+It returns 32 bit number representing the state of the motor as a bit array It is compared to the H\+A\+L\+L\+S\+T\+A\+TE definitions to determine the current state.
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int32\+\_\+t the state of the motor in a bit array 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_motor_8c_aa2c42019652e402afdfa5330e84a917e}\label{_motor_8c_aa2c42019652e402afdfa5330e84a917e}} 
+\index{Motor.\+c@{Motor.\+c}!getmotor1\+P\+WM@{getmotor1\+P\+WM}}
+\index{getmotor1\+P\+WM@{getmotor1\+P\+WM}!Motor.\+c@{Motor.\+c}}
+\subsubsection{\texorpdfstring{getmotor1\+P\+W\+M()}{getmotor1PWM()}}
+{\footnotesize\ttfamily int getmotor1\+P\+WM (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Returns the current P\+WM of motor 1. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int pwm of motor 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_motor_8c_a53f843252b562efc951e13b6db10ef22}\label{_motor_8c_a53f843252b562efc951e13b6db10ef22}} 
+\index{Motor.\+c@{Motor.\+c}!getmotor2\+H\+A\+L\+LS@{getmotor2\+H\+A\+L\+LS}}
+\index{getmotor2\+H\+A\+L\+LS@{getmotor2\+H\+A\+L\+LS}!Motor.\+c@{Motor.\+c}}
+\subsubsection{\texorpdfstring{getmotor2\+H\+A\+L\+L\+S()}{getmotor2HALLS()}}
+{\footnotesize\ttfamily int32\+\_\+t getmotor2\+H\+A\+L\+LS (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Returns the current state of the halls for motor 2. 
+
+It returns 32 bit number representing the state of the motor as a bit array It is compared to the H\+A\+L\+L\+S\+T\+A\+TE definitions to determine the current state.
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int32\+\_\+t the state of the motor in a bit array 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_motor_8c_a25d33861bd682d093b24c60f2cbabf20}\label{_motor_8c_a25d33861bd682d093b24c60f2cbabf20}} 
+\index{Motor.\+c@{Motor.\+c}!getmotor2\+P\+WM@{getmotor2\+P\+WM}}
+\index{getmotor2\+P\+WM@{getmotor2\+P\+WM}!Motor.\+c@{Motor.\+c}}
+\subsubsection{\texorpdfstring{getmotor2\+P\+W\+M()}{getmotor2PWM()}}
+{\footnotesize\ttfamily int getmotor2\+P\+WM (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Returns the current P\+WM of motor 2. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int pwm of motor 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_motor_8c_a418a9beb64e4f3d3563917d05a5a3544}\label{_motor_8c_a418a9beb64e4f3d3563917d05a5a3544}} 
+\index{Motor.\+c@{Motor.\+c}!M1\+\_\+\+I\+N\+L\+\_\+\+W\+R\+I\+TE@{M1\+\_\+\+I\+N\+L\+\_\+\+W\+R\+I\+TE}}
+\index{M1\+\_\+\+I\+N\+L\+\_\+\+W\+R\+I\+TE@{M1\+\_\+\+I\+N\+L\+\_\+\+W\+R\+I\+TE}!Motor.\+c@{Motor.\+c}}
+\subsubsection{\texorpdfstring{M1\+\_\+\+I\+N\+L\+\_\+\+W\+R\+I\+T\+E()}{M1\_INL\_WRITE()}}
+{\footnotesize\ttfamily void M1\+\_\+\+I\+N\+L\+\_\+\+W\+R\+I\+TE (\begin{DoxyParamCaption}\item[{int}]{a,  }\item[{int}]{b,  }\item[{int}]{c }\end{DoxyParamCaption})}
+
+
+
+Commutation table for motor 1. 
+
+This function contains the commutation table for motor 1 and sets the control pins for each phase accordingly.
+
+
+\begin{DoxyParams}{Parameters}
+{\em int} & a phase A \\
+\hline
+{\em int} & b phase B \\
+\hline
+{\em int} & c phase C \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_motor_8c_a879b94540bd8b5d2e5217c749029e12b}\label{_motor_8c_a879b94540bd8b5d2e5217c749029e12b}} 
+\index{Motor.\+c@{Motor.\+c}!M1\+H\+Int\+Handler@{M1\+H\+Int\+Handler}}
+\index{M1\+H\+Int\+Handler@{M1\+H\+Int\+Handler}!Motor.\+c@{Motor.\+c}}
+\subsubsection{\texorpdfstring{M1\+H\+Int\+Handler()}{M1HIntHandler()}}
+{\footnotesize\ttfamily void M1\+H\+Int\+Handler (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Hall sensor interrupt for motor 1. 
+
+This function is used to determine the commutation on motor 1
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_motor_8c_ac9edbc13c57419de1647c90a69bcfae0}\label{_motor_8c_ac9edbc13c57419de1647c90a69bcfae0}} 
+\index{Motor.\+c@{Motor.\+c}!M2\+\_\+\+I\+N\+L\+\_\+\+W\+R\+I\+TE@{M2\+\_\+\+I\+N\+L\+\_\+\+W\+R\+I\+TE}}
+\index{M2\+\_\+\+I\+N\+L\+\_\+\+W\+R\+I\+TE@{M2\+\_\+\+I\+N\+L\+\_\+\+W\+R\+I\+TE}!Motor.\+c@{Motor.\+c}}
+\subsubsection{\texorpdfstring{M2\+\_\+\+I\+N\+L\+\_\+\+W\+R\+I\+T\+E()}{M2\_INL\_WRITE()}}
+{\footnotesize\ttfamily void M2\+\_\+\+I\+N\+L\+\_\+\+W\+R\+I\+TE (\begin{DoxyParamCaption}\item[{int}]{a,  }\item[{int}]{b,  }\item[{int}]{c }\end{DoxyParamCaption})}
+
+
+
+Commutation table for motor 2. 
+
+This function contains the commutation table for motor 2 and sets the control pins for each phase accordingly.
+
+
+\begin{DoxyParams}{Parameters}
+{\em int} & a phase A \\
+\hline
+{\em int} & b phase B \\
+\hline
+{\em int} & c phase C \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_motor_8c_afde750f7e2ef4ebb04f36c81089c832d}\label{_motor_8c_afde750f7e2ef4ebb04f36c81089c832d}} 
+\index{Motor.\+c@{Motor.\+c}!M2\+H\+Int\+Handler@{M2\+H\+Int\+Handler}}
+\index{M2\+H\+Int\+Handler@{M2\+H\+Int\+Handler}!Motor.\+c@{Motor.\+c}}
+\subsubsection{\texorpdfstring{M2\+H\+Int\+Handler()}{M2HIntHandler()}}
+{\footnotesize\ttfamily void M2\+H\+Int\+Handler (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Hall sensor interrupt for motor 2. 
+
+This function is used to determine the commutation on motor 2
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_motor_8c_ac0226d260a42465ca310f02894b285b6}\label{_motor_8c_ac0226d260a42465ca310f02894b285b6}} 
+\index{Motor.\+c@{Motor.\+c}!motor1\+Commutate@{motor1\+Commutate}}
+\index{motor1\+Commutate@{motor1\+Commutate}!Motor.\+c@{Motor.\+c}}
+\subsubsection{\texorpdfstring{motor1\+Commutate()}{motor1Commutate()}}
+{\footnotesize\ttfamily void motor1\+Commutate (\begin{DoxyParamCaption}\item[{int}]{State,  }\item[{int}]{control }\end{DoxyParamCaption})}
+
+
+
+Commutate motor 1 with a given pwm. 
+
+The state of the commutation is determined by the hall sensing
+
+
+\begin{DoxyParams}{Parameters}
+{\em State} & of 1 to 6 \\
+\hline
+{\em control} & the pwm for the motor ~\newline
+\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_motor_8c_a8ab898affd7b6bbc1d359284e85c31c3}\label{_motor_8c_a8ab898affd7b6bbc1d359284e85c31c3}} 
+\index{Motor.\+c@{Motor.\+c}!motor1\+Control\+P\+WM@{motor1\+Control\+P\+WM}}
+\index{motor1\+Control\+P\+WM@{motor1\+Control\+P\+WM}!Motor.\+c@{Motor.\+c}}
+\subsubsection{\texorpdfstring{motor1\+Control\+P\+W\+M()}{motor1ControlPWM()}}
+{\footnotesize\ttfamily void motor1\+Control\+P\+WM (\begin{DoxyParamCaption}\item[{int}]{control }\end{DoxyParamCaption})}
+
+
+
+Sets the P\+WM value and direction to motor 1. 
+
+This function handles all the commutation for motor 1. This is done via hall sensing to determine the position the B\+L\+DC motor is in.
+
+Example\+: motor2\+Control\+P\+W\+M(200); // sets the motor speed to 5\% of default, clockwise delay\+M\+S(100); //delay for 100 ms motor2\+Control\+P\+WM(-\/200); // sets motor speed to 5\% of default, counter clockwise.
+
+
+\begin{DoxyParams}{Parameters}
+{\em control} & The pwm\+Value ranges from -\/maximum pwm period to the positive period. The default pwm period is 4000, 30k\+Hz. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_motor_8c_a40e064ce1ed8e8fe099904717d9c7e46}\label{_motor_8c_a40e064ce1ed8e8fe099904717d9c7e46}} 
+\index{Motor.\+c@{Motor.\+c}!motor1\+P\+WM@{motor1\+P\+WM}}
+\index{motor1\+P\+WM@{motor1\+P\+WM}!Motor.\+c@{Motor.\+c}}
+\subsubsection{\texorpdfstring{motor1\+P\+W\+M()}{motor1PWM()}}
+{\footnotesize\ttfamily void motor1\+P\+WM (\begin{DoxyParamCaption}\item[{int}]{pwm1,  }\item[{int}]{pwm2,  }\item[{int}]{pwm3 }\end{DoxyParamCaption})}
+
+
+
+Sets the P\+WM value to motor 1. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em pwm1} & the pwm output on phase A \\
+\hline
+{\em pwm2} & the pwm output on phase B \\
+\hline
+{\em pwm3} & the pwm output on phase C \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_motor_8c_aab30f4695887f88292561bf074407747}\label{_motor_8c_aab30f4695887f88292561bf074407747}} 
+\index{Motor.\+c@{Motor.\+c}!motor2\+Commutate@{motor2\+Commutate}}
+\index{motor2\+Commutate@{motor2\+Commutate}!Motor.\+c@{Motor.\+c}}
+\subsubsection{\texorpdfstring{motor2\+Commutate()}{motor2Commutate()}}
+{\footnotesize\ttfamily void motor2\+Commutate (\begin{DoxyParamCaption}\item[{int}]{State,  }\item[{int}]{control }\end{DoxyParamCaption})}
+
+
+
+Commutate motor 2 with a given pwm. 
+
+The state of the commutation is determined by the hall sensing
+
+
+\begin{DoxyParams}{Parameters}
+{\em State} & of 1 to 6 \\
+\hline
+{\em control} & the pwm for the motor ~\newline
+\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_motor_8c_aa3421fe96b22e90c356e013a0abef7d6}\label{_motor_8c_aa3421fe96b22e90c356e013a0abef7d6}} 
+\index{Motor.\+c@{Motor.\+c}!motor2\+Control\+P\+WM@{motor2\+Control\+P\+WM}}
+\index{motor2\+Control\+P\+WM@{motor2\+Control\+P\+WM}!Motor.\+c@{Motor.\+c}}
+\subsubsection{\texorpdfstring{motor2\+Control\+P\+W\+M()}{motor2ControlPWM()}}
+{\footnotesize\ttfamily void motor2\+Control\+P\+WM (\begin{DoxyParamCaption}\item[{int}]{control }\end{DoxyParamCaption})}
+
+
+
+Sets the P\+WM value and direction to motor 2. 
+
+This function handles all the commutation for motor 2. This is done via hall sensing to determine the position the B\+L\+DC motor is in.
+
+Example\+: motor2\+Control\+P\+W\+M(200); // sets the motor speed to 5\% of default, clockwise delay\+M\+S(100); //delay for 100 ms motor2\+Control\+P\+WM(-\/200); // sets motor speed to 5\% of default, counter clockwise.
+
+
+\begin{DoxyParams}{Parameters}
+{\em control} & The pwm\+Value ranges from -\/maximum pwm period to the positive period. The default pwm period is 4000, 30k\+Hz. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_motor_8c_a8d3950b6912f5a60d2ceded0e0ed502b}\label{_motor_8c_a8d3950b6912f5a60d2ceded0e0ed502b}} 
+\index{Motor.\+c@{Motor.\+c}!motor2\+P\+WM@{motor2\+P\+WM}}
+\index{motor2\+P\+WM@{motor2\+P\+WM}!Motor.\+c@{Motor.\+c}}
+\subsubsection{\texorpdfstring{motor2\+P\+W\+M()}{motor2PWM()}}
+{\footnotesize\ttfamily void motor2\+P\+WM (\begin{DoxyParamCaption}\item[{int}]{pwm1,  }\item[{int}]{pwm2,  }\item[{int}]{pwm3 }\end{DoxyParamCaption})}
+
+
+
+Sets the P\+WM value to motor 2. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em pwm1} & the pwm output on phase A \\
+\hline
+{\em pwm2} & the pwm output on phase B \\
+\hline
+{\em pwm3} & the pwm output on phase C \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_motor_8c_a4e7b27c5715df8d71dfe87a22ae0b004}\label{_motor_8c_a4e7b27c5715df8d71dfe87a22ae0b004}} 
+\index{Motor.\+c@{Motor.\+c}!motor\+Driver\+Init@{motor\+Driver\+Init}}
+\index{motor\+Driver\+Init@{motor\+Driver\+Init}!Motor.\+c@{Motor.\+c}}
+\subsubsection{\texorpdfstring{motor\+Driver\+Init()}{motorDriverInit()}}
+{\footnotesize\ttfamily void motor\+Driver\+Init (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Initializes the S\+PI commands to set the motor\textquotesingle{}s configuration for 1x P\+WM mode. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_motor_8c_a978983329d511d8ab27545d8badfbd89}\label{_motor_8c_a978983329d511d8ab27545d8badfbd89}} 
+\index{Motor.\+c@{Motor.\+c}!motor\+Init@{motor\+Init}}
+\index{motor\+Init@{motor\+Init}!Motor.\+c@{Motor.\+c}}
+\subsubsection{\texorpdfstring{motor\+Init()}{motorInit()}}
+{\footnotesize\ttfamily void motor\+Init (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Initializes the G\+P\+IO pins for the motor. 
+
+Initializes the direction, brake, and halt pins for the motor in 1x P\+WM mode
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_motor_8c_af0b4940941d639d96fbc31924abf1664}\label{_motor_8c_af0b4940941d639d96fbc31924abf1664}} 
+\index{Motor.\+c@{Motor.\+c}!Motor\+S\+P\+Iinit@{Motor\+S\+P\+Iinit}}
+\index{Motor\+S\+P\+Iinit@{Motor\+S\+P\+Iinit}!Motor.\+c@{Motor.\+c}}
+\subsubsection{\texorpdfstring{Motor\+S\+P\+Iinit()}{MotorSPIinit()}}
+{\footnotesize\ttfamily void Motor\+S\+P\+Iinit (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Initializes the S\+PI channels for the motor drivers. 
+
+Initializes S\+S\+I1 $\sim$ 4 and their corresponding G\+P\+IO pins
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}

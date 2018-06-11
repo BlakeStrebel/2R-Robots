@@ -1,0 +1,281 @@
+\hypertarget{_current_control_8h}{}\section{C\+:/\+Users/\+Ben/\+Documents/\+Git\+Hub/2\+R-\/\+Robots/\+Code/\+Tiva/\+Current\+Control.h File Reference}
+\label{_current_control_8h}\index{C\+:/\+Users/\+Ben/\+Documents/\+Git\+Hub/2\+R-\/\+Robots/\+Code/\+Tiva/\+Current\+Control.\+h@{C\+:/\+Users/\+Ben/\+Documents/\+Git\+Hub/2\+R-\/\+Robots/\+Code/\+Tiva/\+Current\+Control.\+h}}
+
+
+The header for the current control file.  
+
+
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{_current_control_8h_a4138bb37174684f4f39588358ea02696}{Current\+Control\+Int\+Handler}} (void)
+\begin{DoxyCompactList}\small\item\em The interrupt handler for the current control loop. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_current_control_8h_af15be4bf8772044edad3aac0661bc2fb}{P\+I\+\_\+controller}} (int motor, int reference, int actual)
+\begin{DoxyCompactList}\small\item\em Simple PI controller that uses motorx\+Control\+P\+WM to control the motor output. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_current_control_8h_a991b6533f7e203f97b3a2da6cac50476}{set\+Current}} (int motor, int u)
+\begin{DoxyCompactList}\small\item\em Sets the reference current for a given motor. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_current_control_8h_a45dbdfe1412c710e7ff452fe7c61f7ed}{get\+\_\+mA}} (void)
+\begin{DoxyCompactList}\small\item\em Print the current in mA to U\+A\+RT. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_current_control_8h_a0da5d7ad7c18cafb47a64f4bd3848736}{get\+\_\+counts}} (void)
+\begin{DoxyCompactList}\small\item\em Print the current counts to U\+A\+RT. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_current_control_8h_a1387f079055f48a6edf850a0f05e5218}{get\+\_\+current\+\_\+gains}} (void)
+\begin{DoxyCompactList}\small\item\em Print the current gains to U\+A\+RT. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_current_control_8h_afdcd89e75250a253db7555d550f2b7ad}{set\+\_\+current\+\_\+gains}} (void)
+\begin{DoxyCompactList}\small\item\em Sets the current gains by reading the U\+A\+RT buffer. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{_current_control_8h_a6a360d0c042d9b10b66f0c5c4a9900aa}\label{_current_control_8h_a6a360d0c042d9b10b66f0c5c4a9900aa}} 
+int {\bfseries get\+Current} (int motor)
+\item 
+\mbox{\Hypertarget{_current_control_8h_a0c79ec7a3759ae00a615f21cfe47b473}\label{_current_control_8h_a0c79ec7a3759ae00a615f21cfe47b473}} 
+int {\bfseries get\+P\+WM} (int motor)
+\item 
+void \mbox{\hyperlink{_current_control_8h_a7158c18c7941b14c7eac79a8c4f6692e}{reset\+\_\+current\+\_\+error}} (void)
+\begin{DoxyCompactList}\small\item\em Sets the current gains by reading the U\+A\+RT buffer. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_current_control_8h_a3fcbe969c8ba545f99c2ad2581783e1b}{counts\+\_\+read}} (void)
+\begin{DoxyCompactList}\small\item\em Reads the counts of the current to U\+A\+RT from an array. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_current_control_8h_a93267f78ddf20170576a97f752c41670}{A\+D0\+\_\+read}} (int mux)
+\begin{DoxyCompactList}\small\item\em Triggers the A\+DC reading and saves it to the T\+E\+MP array. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_current_control_8h_aee24c1cb239954c88299414a76d7ace0}{current\+Control\+Init}} (void)
+\begin{DoxyCompactList}\small\item\em Init A\+DC. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_current_control_8h_ab07c8a54a14148ee47eef30ea3baa661}{set\+A\+D\+C\+Mux}} (int motor, int number)
+\begin{DoxyCompactList}\small\item\em Sets the A\+DC M\+UX to read from either the current sense resistor 1, 2 or 3 from motor 1 or 2. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+The header for the current control file. 
+
+\begin{DoxyAuthor}{Author}
+Benjamen Lim 
+
+Huan Weng 
+
+Blake Strebel 
+\end{DoxyAuthor}
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{_current_control_8h_a93267f78ddf20170576a97f752c41670}\label{_current_control_8h_a93267f78ddf20170576a97f752c41670}} 
+\index{Current\+Control.\+h@{Current\+Control.\+h}!A\+D0\+\_\+read@{A\+D0\+\_\+read}}
+\index{A\+D0\+\_\+read@{A\+D0\+\_\+read}!Current\+Control.\+h@{Current\+Control.\+h}}
+\subsubsection{\texorpdfstring{A\+D0\+\_\+read()}{AD0\_read()}}
+{\footnotesize\ttfamily void A\+D0\+\_\+read (\begin{DoxyParamCaption}\item[{int}]{mux }\end{DoxyParamCaption})}
+
+
+
+Triggers the A\+DC reading and saves it to the T\+E\+MP array. 
+
+On the P\+CB you have to specify either 1 or 2 to read the phase. For the breadboard prototype the number does not matter
+
+
+\begin{DoxyParams}{Parameters}
+{\em int} & the muxed pins, specify 1 for phase A and 2 for phase B \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_current_control_8h_a3fcbe969c8ba545f99c2ad2581783e1b}\label{_current_control_8h_a3fcbe969c8ba545f99c2ad2581783e1b}} 
+\index{Current\+Control.\+h@{Current\+Control.\+h}!counts\+\_\+read@{counts\+\_\+read}}
+\index{counts\+\_\+read@{counts\+\_\+read}!Current\+Control.\+h@{Current\+Control.\+h}}
+\subsubsection{\texorpdfstring{counts\+\_\+read()}{counts\_read()}}
+{\footnotesize\ttfamily void counts\+\_\+read (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Reads the counts of the current to U\+A\+RT from an array. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_current_control_8h_aee24c1cb239954c88299414a76d7ace0}\label{_current_control_8h_aee24c1cb239954c88299414a76d7ace0}} 
+\index{Current\+Control.\+h@{Current\+Control.\+h}!current\+Control\+Init@{current\+Control\+Init}}
+\index{current\+Control\+Init@{current\+Control\+Init}!Current\+Control.\+h@{Current\+Control.\+h}}
+\subsubsection{\texorpdfstring{current\+Control\+Init()}{currentControlInit()}}
+{\footnotesize\ttfamily void current\+Control\+Init (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Init A\+DC. 
+
+Initialises A\+DC with Sequence 0, capturing 8 samples and a F\+I\+FO depth of 8 32-\/bit words, with last 12 bits containing the conversion result
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_current_control_8h_a4138bb37174684f4f39588358ea02696}\label{_current_control_8h_a4138bb37174684f4f39588358ea02696}} 
+\index{Current\+Control.\+h@{Current\+Control.\+h}!Current\+Control\+Int\+Handler@{Current\+Control\+Int\+Handler}}
+\index{Current\+Control\+Int\+Handler@{Current\+Control\+Int\+Handler}!Current\+Control.\+h@{Current\+Control.\+h}}
+\subsubsection{\texorpdfstring{Current\+Control\+Int\+Handler()}{CurrentControlIntHandler()}}
+{\footnotesize\ttfamily void Current\+Control\+Int\+Handler (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+The interrupt handler for the current control loop. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_current_control_8h_a0da5d7ad7c18cafb47a64f4bd3848736}\label{_current_control_8h_a0da5d7ad7c18cafb47a64f4bd3848736}} 
+\index{Current\+Control.\+h@{Current\+Control.\+h}!get\+\_\+counts@{get\+\_\+counts}}
+\index{get\+\_\+counts@{get\+\_\+counts}!Current\+Control.\+h@{Current\+Control.\+h}}
+\subsubsection{\texorpdfstring{get\+\_\+counts()}{get\_counts()}}
+{\footnotesize\ttfamily void get\+\_\+counts (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Print the current counts to U\+A\+RT. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_current_control_8h_a1387f079055f48a6edf850a0f05e5218}\label{_current_control_8h_a1387f079055f48a6edf850a0f05e5218}} 
+\index{Current\+Control.\+h@{Current\+Control.\+h}!get\+\_\+current\+\_\+gains@{get\+\_\+current\+\_\+gains}}
+\index{get\+\_\+current\+\_\+gains@{get\+\_\+current\+\_\+gains}!Current\+Control.\+h@{Current\+Control.\+h}}
+\subsubsection{\texorpdfstring{get\+\_\+current\+\_\+gains()}{get\_current\_gains()}}
+{\footnotesize\ttfamily void get\+\_\+current\+\_\+gains (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Print the current gains to U\+A\+RT. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_current_control_8h_a45dbdfe1412c710e7ff452fe7c61f7ed}\label{_current_control_8h_a45dbdfe1412c710e7ff452fe7c61f7ed}} 
+\index{Current\+Control.\+h@{Current\+Control.\+h}!get\+\_\+mA@{get\+\_\+mA}}
+\index{get\+\_\+mA@{get\+\_\+mA}!Current\+Control.\+h@{Current\+Control.\+h}}
+\subsubsection{\texorpdfstring{get\+\_\+m\+A()}{get\_mA()}}
+{\footnotesize\ttfamily void get\+\_\+mA (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Print the current in mA to U\+A\+RT. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_current_control_8h_af15be4bf8772044edad3aac0661bc2fb}\label{_current_control_8h_af15be4bf8772044edad3aac0661bc2fb}} 
+\index{Current\+Control.\+h@{Current\+Control.\+h}!P\+I\+\_\+controller@{P\+I\+\_\+controller}}
+\index{P\+I\+\_\+controller@{P\+I\+\_\+controller}!Current\+Control.\+h@{Current\+Control.\+h}}
+\subsubsection{\texorpdfstring{P\+I\+\_\+controller()}{PI\_controller()}}
+{\footnotesize\ttfamily void P\+I\+\_\+controller (\begin{DoxyParamCaption}\item[{int}]{motor,  }\item[{int}]{reference,  }\item[{int}]{actual }\end{DoxyParamCaption})}
+
+
+
+Simple PI controller that uses motorx\+Control\+P\+WM to control the motor output. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em int} & motor \\
+\hline
+{\em int} & reference value \\
+\hline
+{\em int} & actual value \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_current_control_8h_a7158c18c7941b14c7eac79a8c4f6692e}\label{_current_control_8h_a7158c18c7941b14c7eac79a8c4f6692e}} 
+\index{Current\+Control.\+h@{Current\+Control.\+h}!reset\+\_\+current\+\_\+error@{reset\+\_\+current\+\_\+error}}
+\index{reset\+\_\+current\+\_\+error@{reset\+\_\+current\+\_\+error}!Current\+Control.\+h@{Current\+Control.\+h}}
+\subsubsection{\texorpdfstring{reset\+\_\+current\+\_\+error()}{reset\_current\_error()}}
+{\footnotesize\ttfamily void reset\+\_\+current\+\_\+error (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Sets the current gains by reading the U\+A\+RT buffer. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_current_control_8h_afdcd89e75250a253db7555d550f2b7ad}\label{_current_control_8h_afdcd89e75250a253db7555d550f2b7ad}} 
+\index{Current\+Control.\+h@{Current\+Control.\+h}!set\+\_\+current\+\_\+gains@{set\+\_\+current\+\_\+gains}}
+\index{set\+\_\+current\+\_\+gains@{set\+\_\+current\+\_\+gains}!Current\+Control.\+h@{Current\+Control.\+h}}
+\subsubsection{\texorpdfstring{set\+\_\+current\+\_\+gains()}{set\_current\_gains()}}
+{\footnotesize\ttfamily void set\+\_\+current\+\_\+gains (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Sets the current gains by reading the U\+A\+RT buffer. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_current_control_8h_ab07c8a54a14148ee47eef30ea3baa661}\label{_current_control_8h_ab07c8a54a14148ee47eef30ea3baa661}} 
+\index{Current\+Control.\+h@{Current\+Control.\+h}!set\+A\+D\+C\+Mux@{set\+A\+D\+C\+Mux}}
+\index{set\+A\+D\+C\+Mux@{set\+A\+D\+C\+Mux}!Current\+Control.\+h@{Current\+Control.\+h}}
+\subsubsection{\texorpdfstring{set\+A\+D\+C\+Mux()}{setADCMux()}}
+{\footnotesize\ttfamily void set\+A\+D\+C\+Mux (\begin{DoxyParamCaption}\item[{int}]{motor,  }\item[{int}]{number }\end{DoxyParamCaption})}
+
+
+
+Sets the A\+DC M\+UX to read from either the current sense resistor 1, 2 or 3 from motor 1 or 2. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_current_control_8h_a991b6533f7e203f97b3a2da6cac50476}\label{_current_control_8h_a991b6533f7e203f97b3a2da6cac50476}} 
+\index{Current\+Control.\+h@{Current\+Control.\+h}!set\+Current@{set\+Current}}
+\index{set\+Current@{set\+Current}!Current\+Control.\+h@{Current\+Control.\+h}}
+\subsubsection{\texorpdfstring{set\+Current()}{setCurrent()}}
+{\footnotesize\ttfamily void set\+Current (\begin{DoxyParamCaption}\item[{int}]{motor,  }\item[{int}]{u }\end{DoxyParamCaption})}
+
+
+
+Sets the reference current for a given motor. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em int} & motor \\
+\hline
+{\em int} & u the reference value \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}

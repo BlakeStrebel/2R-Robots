@@ -1,5 +1,5 @@
-\hypertarget{_encoder_8h}{}\section{C\+:/\+Users/\+Ben/\+Documents/\+Git\+Hub/2\+R-\/\+Robots/\+Midterm\+Code/\+Tiva/\+Encoder.h File Reference}
-\label{_encoder_8h}\index{C\+:/\+Users/\+Ben/\+Documents/\+Git\+Hub/2\+R-\/\+Robots/\+Midterm\+Code/\+Tiva/\+Encoder.\+h@{C\+:/\+Users/\+Ben/\+Documents/\+Git\+Hub/2\+R-\/\+Robots/\+Midterm\+Code/\+Tiva/\+Encoder.\+h}}
+\hypertarget{_encoder_8h}{}\section{C\+:/\+Users/\+Ben/\+Documents/\+Git\+Hub/2\+R-\/\+Robots/\+Code/\+Tiva/\+Encoder.h File Reference}
+\label{_encoder_8h}\index{C\+:/\+Users/\+Ben/\+Documents/\+Git\+Hub/2\+R-\/\+Robots/\+Code/\+Tiva/\+Encoder.\+h@{C\+:/\+Users/\+Ben/\+Documents/\+Git\+Hub/2\+R-\/\+Robots/\+Code/\+Tiva/\+Encoder.\+h}}
 
 
 Encoder header.  
@@ -8,10 +8,14 @@ Encoder header.
 \subsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
-void \mbox{\hyperlink{_encoder_8h_ad2ecc69b99764f250fff9f6cc6cc55fb}{enoder\+S\+P\+Iinit}} (void)
+void \mbox{\hyperlink{_encoder_8h_ac31d94de099e13aa63766f6efe386aba}{encoder\+S\+P\+I\+Init}} (void)
 \begin{DoxyCompactList}\small\item\em Initializes the S\+PI channels for the motor drivers, encoders, and R\+AM. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{_encoder_8h_aa027163ba1e9951d437f3f4e260fd9bb}{encoder\+Read}} (void)
 \begin{DoxyCompactList}\small\item\em Updates value in sensor array. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_encoder_8h_a51fa2168209218edff3cabcb2d2bbb2e}{reset\+Motor1\+Raw\+Relative}} (void)
+\begin{DoxyCompactList}\small\item\em Resets the relative counts on encoder 1. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_encoder_8h_a99c3336d6e0ce560b4f0424dc8a091f9}{reset\+Motor2\+Raw\+Relative}} (void)
+\begin{DoxyCompactList}\small\item\em Resets the relative counts on encoder 2. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{_encoder_8h_a7b6b3e45ebeda6eaf3c33f3f382c75d9}{zero\+Motor1\+Raw\+Relative}} (void)
 \begin{DoxyCompactList}\small\item\em Reads value of motor 1 encoders and sets the relative angle to zero. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{_encoder_8h_a045a541e3983985681e94f5658dff5e4}{zero\+Motor2\+Raw\+Relative}} (void)
@@ -67,13 +71,19 @@ This function sends a \textquotesingle{}t\textquotesingle{} and 40 pulses via S\
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
-Void 
+Void
 \end{DoxyReturn}
-\mbox{\Hypertarget{_encoder_8h_ad2ecc69b99764f250fff9f6cc6cc55fb}\label{_encoder_8h_ad2ecc69b99764f250fff9f6cc6cc55fb}} 
-\index{Encoder.\+h@{Encoder.\+h}!enoder\+S\+P\+Iinit@{enoder\+S\+P\+Iinit}}
-\index{enoder\+S\+P\+Iinit@{enoder\+S\+P\+Iinit}!Encoder.\+h@{Encoder.\+h}}
-\subsubsection{\texorpdfstring{enoder\+S\+P\+Iinit()}{enoderSPIinit()}}
-{\footnotesize\ttfamily void enoder\+S\+P\+Iinit (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+This function reads both encoder counts and stores them in an array
+
+Comes after\+: spi\+Init();
+
+Writes to\+: encoder\+Val array
+
+T\+O\+DO\+: check the delay \mbox{\Hypertarget{_encoder_8h_ac31d94de099e13aa63766f6efe386aba}\label{_encoder_8h_ac31d94de099e13aa63766f6efe386aba}} 
+\index{Encoder.\+h@{Encoder.\+h}!encoder\+S\+P\+I\+Init@{encoder\+S\+P\+I\+Init}}
+\index{encoder\+S\+P\+I\+Init@{encoder\+S\+P\+I\+Init}!Encoder.\+h@{Encoder.\+h}}
+\subsubsection{\texorpdfstring{encoder\+S\+P\+I\+Init()}{encoderSPIInit()}}
+{\footnotesize\ttfamily void encoder\+S\+P\+I\+Init (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
 
 
 
@@ -244,6 +254,42 @@ This function reads out the angle and keeps track of it for multiple turns. The 
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
 The counts as an int 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_encoder_8h_a51fa2168209218edff3cabcb2d2bbb2e}\label{_encoder_8h_a51fa2168209218edff3cabcb2d2bbb2e}} 
+\index{Encoder.\+h@{Encoder.\+h}!reset\+Motor1\+Raw\+Relative@{reset\+Motor1\+Raw\+Relative}}
+\index{reset\+Motor1\+Raw\+Relative@{reset\+Motor1\+Raw\+Relative}!Encoder.\+h@{Encoder.\+h}}
+\subsubsection{\texorpdfstring{reset\+Motor1\+Raw\+Relative()}{resetMotor1RawRelative()}}
+{\footnotesize\ttfamily void reset\+Motor1\+Raw\+Relative (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Resets the relative counts on encoder 1. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_encoder_8h_a99c3336d6e0ce560b4f0424dc8a091f9}\label{_encoder_8h_a99c3336d6e0ce560b4f0424dc8a091f9}} 
+\index{Encoder.\+h@{Encoder.\+h}!reset\+Motor2\+Raw\+Relative@{reset\+Motor2\+Raw\+Relative}}
+\index{reset\+Motor2\+Raw\+Relative@{reset\+Motor2\+Raw\+Relative}!Encoder.\+h@{Encoder.\+h}}
+\subsubsection{\texorpdfstring{reset\+Motor2\+Raw\+Relative()}{resetMotor2RawRelative()}}
+{\footnotesize\ttfamily void reset\+Motor2\+Raw\+Relative (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Resets the relative counts on encoder 2. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
 \end{DoxyReturn}
 \mbox{\Hypertarget{_encoder_8h_a7b6b3e45ebeda6eaf3c33f3f382c75d9}\label{_encoder_8h_a7b6b3e45ebeda6eaf3c33f3f382c75d9}} 
 \index{Encoder.\+h@{Encoder.\+h}!zero\+Motor1\+Raw\+Relative@{zero\+Motor1\+Raw\+Relative}}

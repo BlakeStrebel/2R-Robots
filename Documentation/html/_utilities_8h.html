@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.14"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>R2R Project: C:/Users/Ben/Documents/GitHub/2R-Robots/MidtermCode/Tiva/Utilities.h File Reference</title>
+<title>R2R: C:/Users/Ben/Documents/GitHub/2R-Robots/Code/Tiva/Utilities.h File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -13,6 +13,7 @@
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen_html_style.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -21,7 +22,7 @@
  <tbody>
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">R2R Project
+   <div id="projectname">R2R
    </div>
   </td>
  </tr>
@@ -61,7 +62,7 @@ $(function() {
 
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="dir_4c73384e71d810f6f6f141802d924fce.html">MidtermCode</a></li><li class="navelem"><a class="el" href="dir_aee3de22fa7ca1d68048920d8ed0db79.html">Tiva</a></li>  </ul>
+<li class="navelem"><a class="el" href="dir_23fdee2f6995db16c755697cdf620cf4.html">Code</a></li><li class="navelem"><a class="el" href="dir_2ceb0fec70d4efbcdcc14db9c63f05fa.html">Tiva</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
@@ -94,23 +95,40 @@ Macros</h2></td></tr>
 #define&#160;</td><td class="memItemRight" valign="bottom"><b>REFERENCE_DATA</b>&#160;&#160;&#160;10000</td></tr>
 <tr class="separator:afdeaf9c0da96c91dfdf573f977d32e6b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad974fe981249f5e84fbf1683b012c9f8"><td class="memItemLeft" align="right" valign="top"><a id="ad974fe981249f5e84fbf1683b012c9f8"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>BUFLEN</b>&#160;&#160;&#160;1024</td></tr>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>BUFLEN</b>&#160;&#160;&#160;10000</td></tr>
 <tr class="separator:ad974fe981249f5e84fbf1683b012c9f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
 Enumerations</h2></td></tr>
-<tr class="memitem:ad2e43f874bb463c5312c31e644fd4417"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_utilities_8h.html#ad2e43f874bb463c5312c31e644fd4417">mode</a> { <a class="el" href="_utilities_8h.html#ad2e43f874bb463c5312c31e644fd4417afd6a0e4343048b10646dd2976cc5ad18">IDLE</a>, 
-<a class="el" href="_utilities_8h.html#ad2e43f874bb463c5312c31e644fd4417a9cfa27b414cab750fb14ec07cdf5cf6a">HOLD</a>, 
-<a class="el" href="_utilities_8h.html#ad2e43f874bb463c5312c31e644fd4417a203efac3b32c320b1246bf5583be1e8c">TRACK</a>
+<tr class="memitem:a1a6b6fb557d8d37d59700faf4e4c9167"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_utilities_8h.html#a1a6b6fb557d8d37d59700faf4e4c9167">mode</a> { <br />
+&#160;&#160;<a class="el" href="_utilities_8h.html#a1a6b6fb557d8d37d59700faf4e4c9167afd6a0e4343048b10646dd2976cc5ad18">IDLE</a>, 
+<a class="el" href="_utilities_8h.html#a1a6b6fb557d8d37d59700faf4e4c9167aef99a276e1f3b62b5df98acc27b38028">PWM</a>, 
+<a class="el" href="_utilities_8h.html#a1a6b6fb557d8d37d59700faf4e4c9167a9cfa27b414cab750fb14ec07cdf5cf6a">HOLD</a>, 
+<a class="el" href="_utilities_8h.html#a1a6b6fb557d8d37d59700faf4e4c9167a203efac3b32c320b1246bf5583be1e8c">TRACK</a>, 
+<br />
+&#160;&#160;<b>ITRACK</b>, 
+<b>ITEST</b>, 
+<b>ISENSE</b>, 
+<b>ICALIB</b>
+<br />
  }</td></tr>
-<tr class="separator:ad2e43f874bb463c5312c31e644fd4417"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:a1a6b6fb557d8d37d59700faf4e4c9167"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a19e5b0661a8f7acb8c2a975a4c84c0aa"><td class="memItemLeft" align="right" valign="top"><a class="el" href="_utilities_8h.html#ad2e43f874bb463c5312c31e644fd4417">mode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_utilities_8h.html#a19e5b0661a8f7acb8c2a975a4c84c0aa">getMODE</a> ()</td></tr>
+<tr class="memitem:a28222caa228cb42e3dd503f611a431ff"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_utilities_8h.html#a28222caa228cb42e3dd503f611a431ff">setNclient</a> (int n)</td></tr>
+<tr class="memdesc:a28222caa228cb42e3dd503f611a431ff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Recieve number of values to store in position data arrays from client.  <a href="#a28222caa228cb42e3dd503f611a431ff">More...</a><br /></td></tr>
+<tr class="separator:a28222caa228cb42e3dd503f611a431ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a88ade88617e9bae6f82653ec6d6470a1"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_utilities_8h.html#a88ade88617e9bae6f82653ec6d6470a1">boundInt</a> (int a, int n)</td></tr>
+<tr class="memdesc:a88ade88617e9bae6f82653ec6d6470a1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Bounds a given input to a range of values.  <a href="#a88ade88617e9bae6f82653ec6d6470a1">More...</a><br /></td></tr>
+<tr class="separator:a88ade88617e9bae6f82653ec6d6470a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acec61ed867597bb5d25a00b0e33d4476"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_utilities_8h.html#acec61ed867597bb5d25a00b0e33d4476">maxInt</a> (int a, int b)</td></tr>
+<tr class="memdesc:acec61ed867597bb5d25a00b0e33d4476"><td class="mdescLeft">&#160;</td><td class="mdescRight">returns the large value of the two  <a href="#acec61ed867597bb5d25a00b0e33d4476">More...</a><br /></td></tr>
+<tr class="separator:acec61ed867597bb5d25a00b0e33d4476"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a19e5b0661a8f7acb8c2a975a4c84c0aa"><td class="memItemLeft" align="right" valign="top"><a class="el" href="_utilities_8h.html#a1a6b6fb557d8d37d59700faf4e4c9167">mode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_utilities_8h.html#a19e5b0661a8f7acb8c2a975a4c84c0aa">getMODE</a> ()</td></tr>
 <tr class="memdesc:a19e5b0661a8f7acb8c2a975a4c84c0aa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the Mode of the robot.  <a href="#a19e5b0661a8f7acb8c2a975a4c84c0aa">More...</a><br /></td></tr>
 <tr class="separator:a19e5b0661a8f7acb8c2a975a4c84c0aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af4c5a7352334b805d0c36e3b495d0a16"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_utilities_8h.html#af4c5a7352334b805d0c36e3b495d0a16">setMODE</a> (<a class="el" href="_utilities_8h.html#ad2e43f874bb463c5312c31e644fd4417">mode</a> newMODE)</td></tr>
+<tr class="memitem:af4c5a7352334b805d0c36e3b495d0a16"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_utilities_8h.html#af4c5a7352334b805d0c36e3b495d0a16">setMODE</a> (<a class="el" href="_utilities_8h.html#a1a6b6fb557d8d37d59700faf4e4c9167">mode</a> newMODE)</td></tr>
 <tr class="memdesc:af4c5a7352334b805d0c36e3b495d0a16"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the Mode of the robot.  <a href="#af4c5a7352334b805d0c36e3b495d0a16">More...</a><br /></td></tr>
 <tr class="separator:af4c5a7352334b805d0c36e3b495d0a16"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acba07f8eaf5cdce3760657cfd53c35b8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_utilities_8h.html#acba07f8eaf5cdce3760657cfd53c35b8">setN</a> (void)</td></tr>
@@ -131,18 +149,18 @@ Functions</h2></td></tr>
 <tr class="memitem:ab06f20d652c9a1f51223495940f71ff0"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_utilities_8h.html#ab06f20d652c9a1f51223495940f71ff0">buffer_full</a> (void)</td></tr>
 <tr class="memdesc:ab06f20d652c9a1f51223495940f71ff0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if the buffer is full.  <a href="#ab06f20d652c9a1f51223495940f71ff0">More...</a><br /></td></tr>
 <tr class="separator:ab06f20d652c9a1f51223495940f71ff0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae0cb004e50993ab70380c6217c2da0da"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_utilities_8h.html#ae0cb004e50993ab70380c6217c2da0da">buffer_read_position</a> (void)</td></tr>
-<tr class="memdesc:ae0cb004e50993ab70380c6217c2da0da"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads position from the current buffer location.  <a href="#ae0cb004e50993ab70380c6217c2da0da">More...</a><br /></td></tr>
-<tr class="separator:ae0cb004e50993ab70380c6217c2da0da"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af11324c99da13561c6cab83b50575107"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_utilities_8h.html#af11324c99da13561c6cab83b50575107">buffer_read_u</a> (void)</td></tr>
-<tr class="memdesc:af11324c99da13561c6cab83b50575107"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads current value from current buffer location.  <a href="#af11324c99da13561c6cab83b50575107">More...</a><br /></td></tr>
-<tr class="separator:af11324c99da13561c6cab83b50575107"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8c8c25ea6e552a6e3bd8c550bf8f4732"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_utilities_8h.html#a8c8c25ea6e552a6e3bd8c550bf8f4732">buffer_read_position</a> (int motor)</td></tr>
+<tr class="memdesc:a8c8c25ea6e552a6e3bd8c550bf8f4732"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads position from the current buffer location.  <a href="#a8c8c25ea6e552a6e3bd8c550bf8f4732">More...</a><br /></td></tr>
+<tr class="separator:a8c8c25ea6e552a6e3bd8c550bf8f4732"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a96d145a44e951f2b6213830490bb45c5"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_utilities_8h.html#a96d145a44e951f2b6213830490bb45c5">buffer_read_u</a> (int motor)</td></tr>
+<tr class="memdesc:a96d145a44e951f2b6213830490bb45c5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads current value from current buffer location.  <a href="#a96d145a44e951f2b6213830490bb45c5">More...</a><br /></td></tr>
+<tr class="separator:a96d145a44e951f2b6213830490bb45c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a20cbe188c42de1a2849be3745a2c9e40"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_utilities_8h.html#a20cbe188c42de1a2849be3745a2c9e40">buffer_read_increment</a> (void)</td></tr>
 <tr class="memdesc:a20cbe188c42de1a2849be3745a2c9e40"><td class="mdescLeft">&#160;</td><td class="mdescRight">Increments the buffer read index.  <a href="#a20cbe188c42de1a2849be3745a2c9e40">More...</a><br /></td></tr>
 <tr class="separator:a20cbe188c42de1a2849be3745a2c9e40"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab43eb9473b9b40d1b27d223c5b2f9448"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_utilities_8h.html#ab43eb9473b9b40d1b27d223c5b2f9448">buffer_write</a> (int M1_actPos, int M2_actPos, float M1_u, float M2_u)</td></tr>
-<tr class="memdesc:ab43eb9473b9b40d1b27d223c5b2f9448"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write data to buffer.  <a href="#ab43eb9473b9b40d1b27d223c5b2f9448">More...</a><br /></td></tr>
-<tr class="separator:ab43eb9473b9b40d1b27d223c5b2f9448"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0391465d79feefe5cce4385fe8385e6a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_utilities_8h.html#a0391465d79feefe5cce4385fe8385e6a">buffer_write</a> (int M1_actPos, int M2_actPos, int M1_u, int M2_u)</td></tr>
+<tr class="memdesc:a0391465d79feefe5cce4385fe8385e6a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write data to buffer.  <a href="#a0391465d79feefe5cce4385fe8385e6a">More...</a><br /></td></tr>
+<tr class="separator:a0391465d79feefe5cce4385fe8385e6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa8061654c0af0c3c3fac9e63ed7eaed6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_utilities_8h.html#aa8061654c0af0c3c3fac9e63ed7eaed6">send_data</a> (void)</td></tr>
 <tr class="memdesc:aa8061654c0af0c3c3fac9e63ed7eaed6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send data to client when it becomes available.  <a href="#aa8061654c0af0c3c3fac9e63ed7eaed6">More...</a><br /></td></tr>
 <tr class="separator:aa8061654c0af0c3c3fac9e63ed7eaed6"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -156,30 +174,70 @@ Huan Weng </dd>
 <dd>
 Blake Strebel </dd></dl>
 </div><h2 class="groupheader">Enumeration Type Documentation</h2>
-<a id="ad2e43f874bb463c5312c31e644fd4417"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad2e43f874bb463c5312c31e644fd4417">&#9670;&nbsp;</a></span>mode</h2>
+<a id="a1a6b6fb557d8d37d59700faf4e4c9167"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1a6b6fb557d8d37d59700faf4e4c9167">&#9670;&nbsp;</a></span>mode</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">enum elseif <a class="el" href="_utilities_8h.html#ad2e43f874bb463c5312c31e644fd4417">mode</a></td>
+          <td class="memname">enum <a class="el" href="_utilities_8h.html#a1a6b6fb557d8d37d59700faf4e4c9167">mode</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Initial value:</b><div class="fragment"><div class="line">== 0</div><div class="line">                fprintf(<span class="stringliteral">&#39;The controller is in IDLE.\n&#39;</span>)</div></div><!-- fragment --><p>Data structure containing the modes of the system </p>
+<p>Data structure containing the modes of the system </p>
 <table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="ad2e43f874bb463c5312c31e644fd4417afd6a0e4343048b10646dd2976cc5ad18"></a>IDLE&#160;</td><td class="fielddoc"><p>Sets motor effort to 0 </p>
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a1a6b6fb557d8d37d59700faf4e4c9167afd6a0e4343048b10646dd2976cc5ad18"></a>IDLE&#160;</td><td class="fielddoc"><p>Sets motor effort to 0 </p>
 </td></tr>
-<tr><td class="fieldname"><a id="ad2e43f874bb463c5312c31e644fd4417a9cfa27b414cab750fb14ec07cdf5cf6a"></a>HOLD&#160;</td><td class="fielddoc"><p>Sets motor effort to holding position </p>
+<tr><td class="fieldname"><a id="a1a6b6fb557d8d37d59700faf4e4c9167aef99a276e1f3b62b5df98acc27b38028"></a>PWM&#160;</td><td class="fielddoc"><p>PWM directly set by user </p>
 </td></tr>
-<tr><td class="fieldname"><a id="ad2e43f874bb463c5312c31e644fd4417a203efac3b32c320b1246bf5583be1e8c"></a>TRACK&#160;</td><td class="fielddoc"><p>Sets motor effort to tracking mode </p>
+<tr><td class="fieldname"><a id="a1a6b6fb557d8d37d59700faf4e4c9167a9cfa27b414cab750fb14ec07cdf5cf6a"></a>HOLD&#160;</td><td class="fielddoc"><p>Sets motor effort to holding position </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a1a6b6fb557d8d37d59700faf4e4c9167a203efac3b32c320b1246bf5583be1e8c"></a>TRACK&#160;</td><td class="fielddoc"><p>Sets motor effort to tracking mode </p>
 </td></tr>
 </table>
 
 </div>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
+<a id="a88ade88617e9bae6f82653ec6d6470a1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a88ade88617e9bae6f82653ec6d6470a1">&#9670;&nbsp;</a></span>boundInt()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int boundInt </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>a</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>n</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Bounds a given input to a range of values. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">int</td><td>a the input value </td></tr>
+    <tr><td class="paramname">int</td><td>n the range of the bounds </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>int the bounded output </dd></dl>
+
+</div>
+</div>
 <a id="a7ee932fa1bdc8820ae0479fa64cf1e01"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a7ee932fa1bdc8820ae0479fa64cf1e01">&#9670;&nbsp;</a></span>buffer_empty()</h2>
 
@@ -263,8 +321,8 @@ Blake Strebel </dd></dl>
 
 </div>
 </div>
-<a id="ae0cb004e50993ab70380c6217c2da0da"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae0cb004e50993ab70380c6217c2da0da">&#9670;&nbsp;</a></span>buffer_read_position()</h2>
+<a id="a8c8c25ea6e552a6e3bd8c550bf8f4732"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8c8c25ea6e552a6e3bd8c550bf8f4732">&#9670;&nbsp;</a></span>buffer_read_position()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -272,8 +330,8 @@ Blake Strebel </dd></dl>
         <tr>
           <td class="memname">int buffer_read_position </td>
           <td>(</td>
-          <td class="paramtype">void&#160;</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>motor</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -283,7 +341,7 @@ Blake Strebel </dd></dl>
 <p>This function assumes that buffer is not empty</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">Void</td><td></td></tr>
+    <tr><td class="paramname">int</td><td>motor the motor that is read from </td></tr>
   </table>
   </dd>
 </dl>
@@ -291,17 +349,17 @@ Blake Strebel </dd></dl>
 
 </div>
 </div>
-<a id="af11324c99da13561c6cab83b50575107"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af11324c99da13561c6cab83b50575107">&#9670;&nbsp;</a></span>buffer_read_u()</h2>
+<a id="a96d145a44e951f2b6213830490bb45c5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a96d145a44e951f2b6213830490bb45c5">&#9670;&nbsp;</a></span>buffer_read_u()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">float buffer_read_u </td>
+          <td class="memname">int buffer_read_u </td>
           <td>(</td>
-          <td class="paramtype">void&#160;</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>motor</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -311,16 +369,16 @@ Blake Strebel </dd></dl>
 <p>This function assumes that buffer is not empty</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">Void</td><td></td></tr>
+    <tr><td class="paramname">int</td><td>motor motor that is read from </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>float current value in buffer </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>int current value in buffer </dd></dl>
 
 </div>
 </div>
-<a id="ab43eb9473b9b40d1b27d223c5b2f9448"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab43eb9473b9b40d1b27d223c5b2f9448">&#9670;&nbsp;</a></span>buffer_write()</h2>
+<a id="a0391465d79feefe5cce4385fe8385e6a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0391465d79feefe5cce4385fe8385e6a">&#9670;&nbsp;</a></span>buffer_write()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -340,13 +398,13 @@ Blake Strebel </dd></dl>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">float&#160;</td>
+          <td class="paramtype">int&#160;</td>
           <td class="paramname"><em>M1_u</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">float&#160;</td>
+          <td class="paramtype">int&#160;</td>
           <td class="paramname"><em>M2_u</em>&#160;</td>
         </tr>
         <tr>
@@ -416,7 +474,7 @@ Blake Strebel </dd></dl>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="_utilities_8h.html#ad2e43f874bb463c5312c31e644fd4417">mode</a> getMODE </td>
+          <td class="memname"><a class="el" href="_utilities_8h.html#a1a6b6fb557d8d37d59700faf4e4c9167">mode</a> getMODE </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -462,6 +520,44 @@ Blake Strebel </dd></dl>
 
 </div>
 </div>
+<a id="acec61ed867597bb5d25a00b0e33d4476"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acec61ed867597bb5d25a00b0e33d4476">&#9670;&nbsp;</a></span>maxInt()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int maxInt </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>a</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>b</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>returns the large value of the two </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">int</td><td>a one input value </td></tr>
+    <tr><td class="paramname">int</td><td>b the other input value </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>int the larger value </dd></dl>
+
+</div>
+</div>
 <a id="aa8061654c0af0c3c3fac9e63ed7eaed6"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aa8061654c0af0c3c3fac9e63ed7eaed6">&#9670;&nbsp;</a></span>send_data()</h2>
 
@@ -498,7 +594,7 @@ Blake Strebel </dd></dl>
         <tr>
           <td class="memname">void setMODE </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="_utilities_8h.html#ad2e43f874bb463c5312c31e644fd4417">mode</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="_utilities_8h.html#a1a6b6fb557d8d37d59700faf4e4c9167">mode</a>&#160;</td>
           <td class="paramname"><em>newMODE</em></td><td>)</td>
           <td></td>
         </tr>
@@ -534,6 +630,33 @@ Blake Strebel </dd></dl>
 </div><div class="memdoc">
 
 <p>Receive number N of samples to save into data buffer. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">Void</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Void </dd></dl>
+
+</div>
+</div>
+<a id="a28222caa228cb42e3dd503f611a431ff"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a28222caa228cb42e3dd503f611a431ff">&#9670;&nbsp;</a></span>setNclient()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void setNclient </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>n</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Recieve number of values to store in position data arrays from client. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">Void</td><td></td></tr>

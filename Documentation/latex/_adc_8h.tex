@@ -1,0 +1,218 @@
+\hypertarget{_adc_8h}{}\section{C\+:/\+Users/\+Ben/\+Documents/\+Git\+Hub/2\+R-\/\+Robots/\+Code/\+Tiva/\+Adc.h File Reference}
+\label{_adc_8h}\index{C\+:/\+Users/\+Ben/\+Documents/\+Git\+Hub/2\+R-\/\+Robots/\+Code/\+Tiva/\+Adc.\+h@{C\+:/\+Users/\+Ben/\+Documents/\+Git\+Hub/2\+R-\/\+Robots/\+Code/\+Tiva/\+Adc.\+h}}
+
+
+header for A\+DC  
+
+
+{\ttfamily \#include \char`\"{}includes.\+h\char`\"{}}\newline
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{_adc_8h_afd645b17cf0581bcaa22c56011c775e4}{adc\+Init}} (void)
+\begin{DoxyCompactList}\small\item\em Init A\+DC. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_adc_8h_ab07c8a54a14148ee47eef30ea3baa661}{set\+A\+D\+C\+Mux}} (int motor, int number)
+\begin{DoxyCompactList}\small\item\em Sets the A\+DC M\+UX to read from either the current sense resistor 1, 2 or 3 from motor 1 or 2. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_adc_8h_a69727472048a870efca79e2305a477b5}{filter\+Values}} (void)
+\begin{DoxyCompactList}\small\item\em Filters A\+DC value. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_adc_8h_a10a122657b8f802a6931e2bd8732289e}{adc\+Current\+Read}} (void)
+\begin{DoxyCompactList}\small\item\em Reads A\+DC values for each current sensor, using a complementary filter for A = 0.\+6. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_adc_8h_abe02cc201baa3f3c88b6cfe688d13cb2}{adc\+Read}} (void)
+\begin{DoxyCompactList}\small\item\em Reads A\+DC values and stores them into an array for current and tempertature. \end{DoxyCompactList}\item 
+uint32\+\_\+t \mbox{\hyperlink{_adc_8h_a18b7e8958a230c54f3fe5ac8bc24b24c}{current\+Read1}} (void)
+\begin{DoxyCompactList}\small\item\em Reads current from an array. \end{DoxyCompactList}\item 
+uint32\+\_\+t \mbox{\hyperlink{_adc_8h_abdb4ca825a07f76a89212240e43546ca}{current\+Read2}} (void)
+\begin{DoxyCompactList}\small\item\em Reads current from an array. \end{DoxyCompactList}\item 
+int32\+\_\+t \mbox{\hyperlink{_adc_8h_a95fdbb62322ad9460cc8dd72a50fa3ab}{temp\+Read1}} (void)
+\begin{DoxyCompactList}\small\item\em Reads temperature from an array. \end{DoxyCompactList}\item 
+int32\+\_\+t \mbox{\hyperlink{_adc_8h_a3f4089fb4d4ec13a11fa01fa6b671795}{temp\+Read2}} (void)
+\begin{DoxyCompactList}\small\item\em Reads temperature from an array. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{_adc_8h_a2ada68629a99b0b20c6e9acd1a5ddf0f}\label{_adc_8h_a2ada68629a99b0b20c6e9acd1a5ddf0f}} 
+uint32\+\_\+t {\bfseries adc\+Array} \mbox{[}8\mbox{]}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+header for A\+DC 
+
+This file contains A\+DC functions for 1x P\+WM mode. It also contains utility functions for 3x P\+WM mode.
+
+Because the A\+DC is so closely tied to the motor for the 3x P\+WM Mode, the A\+DC has already been initialised in {\ttfamily \mbox{\hyperlink{_motor_8h_aa29e2982047be0f7afbb10c8d6f3f5c3}{motor\+Init()}}} and configured. The only function that is currently being used is {\ttfamily set\+A\+D\+C\+Mux}. The other functions are maintained in this file in case the user wishes to move back to 1x P\+WM Mode.
+
+\begin{DoxyAuthor}{Author}
+Benjamen Lim 
+
+Huan Weng 
+
+Blake Strebel 
+\end{DoxyAuthor}
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{_adc_8h_a10a122657b8f802a6931e2bd8732289e}\label{_adc_8h_a10a122657b8f802a6931e2bd8732289e}} 
+\index{Adc.\+h@{Adc.\+h}!adc\+Current\+Read@{adc\+Current\+Read}}
+\index{adc\+Current\+Read@{adc\+Current\+Read}!Adc.\+h@{Adc.\+h}}
+\subsubsection{\texorpdfstring{adc\+Current\+Read()}{adcCurrentRead()}}
+{\footnotesize\ttfamily void adc\+Current\+Read (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Reads A\+DC values for each current sensor, using a complementary filter for A = 0.\+6. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_adc_8h_afd645b17cf0581bcaa22c56011c775e4}\label{_adc_8h_afd645b17cf0581bcaa22c56011c775e4}} 
+\index{Adc.\+h@{Adc.\+h}!adc\+Init@{adc\+Init}}
+\index{adc\+Init@{adc\+Init}!Adc.\+h@{Adc.\+h}}
+\subsubsection{\texorpdfstring{adc\+Init()}{adcInit()}}
+{\footnotesize\ttfamily void adc\+Init (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Init A\+DC. 
+
+Initialises A\+DC with Sequence 0, capturing 8 samples and a F\+I\+FO depth of 8 32-\/bit words, with last 12 bits containing the conversion result
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_adc_8h_abe02cc201baa3f3c88b6cfe688d13cb2}\label{_adc_8h_abe02cc201baa3f3c88b6cfe688d13cb2}} 
+\index{Adc.\+h@{Adc.\+h}!adc\+Read@{adc\+Read}}
+\index{adc\+Read@{adc\+Read}!Adc.\+h@{Adc.\+h}}
+\subsubsection{\texorpdfstring{adc\+Read()}{adcRead()}}
+{\footnotesize\ttfamily void adc\+Read (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Reads A\+DC values and stores them into an array for current and tempertature. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_adc_8h_a18b7e8958a230c54f3fe5ac8bc24b24c}\label{_adc_8h_a18b7e8958a230c54f3fe5ac8bc24b24c}} 
+\index{Adc.\+h@{Adc.\+h}!current\+Read1@{current\+Read1}}
+\index{current\+Read1@{current\+Read1}!Adc.\+h@{Adc.\+h}}
+\subsubsection{\texorpdfstring{current\+Read1()}{currentRead1()}}
+{\footnotesize\ttfamily uint32\+\_\+t current\+Read1 (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Reads current from an array. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+uint32\+\_\+t current 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_adc_8h_abdb4ca825a07f76a89212240e43546ca}\label{_adc_8h_abdb4ca825a07f76a89212240e43546ca}} 
+\index{Adc.\+h@{Adc.\+h}!current\+Read2@{current\+Read2}}
+\index{current\+Read2@{current\+Read2}!Adc.\+h@{Adc.\+h}}
+\subsubsection{\texorpdfstring{current\+Read2()}{currentRead2()}}
+{\footnotesize\ttfamily uint32\+\_\+t current\+Read2 (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Reads current from an array. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+uint32\+\_\+t current 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_adc_8h_a69727472048a870efca79e2305a477b5}\label{_adc_8h_a69727472048a870efca79e2305a477b5}} 
+\index{Adc.\+h@{Adc.\+h}!filter\+Values@{filter\+Values}}
+\index{filter\+Values@{filter\+Values}!Adc.\+h@{Adc.\+h}}
+\subsubsection{\texorpdfstring{filter\+Values()}{filterValues()}}
+{\footnotesize\ttfamily void filter\+Values (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Filters A\+DC value. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_adc_8h_ab07c8a54a14148ee47eef30ea3baa661}\label{_adc_8h_ab07c8a54a14148ee47eef30ea3baa661}} 
+\index{Adc.\+h@{Adc.\+h}!set\+A\+D\+C\+Mux@{set\+A\+D\+C\+Mux}}
+\index{set\+A\+D\+C\+Mux@{set\+A\+D\+C\+Mux}!Adc.\+h@{Adc.\+h}}
+\subsubsection{\texorpdfstring{set\+A\+D\+C\+Mux()}{setADCMux()}}
+{\footnotesize\ttfamily void set\+A\+D\+C\+Mux (\begin{DoxyParamCaption}\item[{int}]{motor,  }\item[{int}]{number }\end{DoxyParamCaption})}
+
+
+
+Sets the A\+DC M\+UX to read from either the current sense resistor 1, 2 or 3 from motor 1 or 2. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_adc_8h_a95fdbb62322ad9460cc8dd72a50fa3ab}\label{_adc_8h_a95fdbb62322ad9460cc8dd72a50fa3ab}} 
+\index{Adc.\+h@{Adc.\+h}!temp\+Read1@{temp\+Read1}}
+\index{temp\+Read1@{temp\+Read1}!Adc.\+h@{Adc.\+h}}
+\subsubsection{\texorpdfstring{temp\+Read1()}{tempRead1()}}
+{\footnotesize\ttfamily int32\+\_\+t temp\+Read1 (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Reads temperature from an array. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+uint32\+\_\+t temperature 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_adc_8h_a3f4089fb4d4ec13a11fa01fa6b671795}\label{_adc_8h_a3f4089fb4d4ec13a11fa01fa6b671795}} 
+\index{Adc.\+h@{Adc.\+h}!temp\+Read2@{temp\+Read2}}
+\index{temp\+Read2@{temp\+Read2}!Adc.\+h@{Adc.\+h}}
+\subsubsection{\texorpdfstring{temp\+Read2()}{tempRead2()}}
+{\footnotesize\ttfamily int32\+\_\+t temp\+Read2 (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Reads temperature from an array. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+uint32\+\_\+t temperature 
+\end{DoxyReturn}

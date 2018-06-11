@@ -1,0 +1,306 @@
+\hypertarget{_position_control_8h}{}\section{C\+:/\+Users/\+Ben/\+Documents/\+Git\+Hub/2\+R-\/\+Robots/\+Code/\+Tiva/\+Position\+Control.h File Reference}
+\label{_position_control_8h}\index{C\+:/\+Users/\+Ben/\+Documents/\+Git\+Hub/2\+R-\/\+Robots/\+Code/\+Tiva/\+Position\+Control.\+h@{C\+:/\+Users/\+Ben/\+Documents/\+Git\+Hub/2\+R-\/\+Robots/\+Code/\+Tiva/\+Position\+Control.\+h}}
+
+
+control header  
+
+
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{struct_p_i_d__gains}{P\+I\+D\+\_\+gains}}
+\item 
+struct \mbox{\hyperlink{structcontrol__error}{control\+\_\+error}}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{_position_control_8h_a31342189d89766d693c5f26b0e8438ca}{Motor\+Timer\+Init}} (void)
+\begin{DoxyCompactList}\small\item\em This function sets up the timer interrupt for poosition control. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_position_control_8h_a65c79b40bb1ef0170ed09c5cd657f0f0}{Timer1\+Int\+Handler}} (void)
+\begin{DoxyCompactList}\small\item\em The interrupt handler for position control. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_position_control_8h_a2f066ae1c628a1a02b3fe5a2f1efb724}{set\+Position\+Gains}} (void)
+\begin{DoxyCompactList}\small\item\em Sets position gains on the Tiva microcontroller by reading from U\+A\+RT. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_position_control_8h_a376eb9b05453f76c96690363f3353e6f}{get\+Position\+Gains}} (void)
+\begin{DoxyCompactList}\small\item\em Gets position gains on the Tiva microcontroller by reading to U\+A\+RT. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{_position_control_8h_a7d8f30e709500ee488ebe3ddb18d68b4}{get\+Desired\+Angle}} (int motor)
+\begin{DoxyCompactList}\small\item\em Gets desired angle for a given motor. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_position_control_8h_abf3123e6b311e64da34906bf1ac73ed8}{set\+Desired\+Angle}} (int angle, int motor)
+\begin{DoxyCompactList}\small\item\em Sets desired angle for a given motor. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_position_control_8h_a95e5f03d55fba3d858adbcea6afa9315}{reset\+Controller\+Error}} (void)
+\begin{DoxyCompactList}\small\item\em Resets controller error on both controllers to be zero. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_position_control_8h_a40f19cd3ddf10bd8b9d52208fb403b59}{load\+Position\+Trajectory}} (int motor)
+\begin{DoxyCompactList}\small\item\em Loads position trajectory for a given motor over U\+A\+RT. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{_position_control_8h_ab88d13920601fd59de9af910521873aa}{get\+Motor\+P\+WM}} (int motor)
+\begin{DoxyCompactList}\small\item\em Returns the set pwm on a given motor. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_position_control_8h_ae9c5d5742402a141a717b24a8a216287}{P\+I\+D\+\_\+\+Controller}} (int reference, int actual, int motor, int default\+\_\+gains)
+\begin{DoxyCompactList}\small\item\em Calculates pwm to send to the motor driver. \end{DoxyCompactList}\item 
+float \mbox{\hyperlink{_position_control_8h_a5092e6f5199e2114d5967932d35f9386}{decog\+Motor}} (int x, int motor)
+\begin{DoxyCompactList}\small\item\em Motor decogging to smooth output of motor. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_position_control_8h_a975ab84b3adffb7d1d9f7f3b9c8ae8c2}{set\+Decogging}} (int decog)
+\begin{DoxyCompactList}\small\item\em Turns on motor decogging. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_position_control_8h_ab8aff07bbb708864a0aa8ccc93dcc3aa}{set\+Position\+P\+ID}} (int motor)
+\begin{DoxyCompactList}\small\item\em Receives position gains over U\+A\+RT, intended for use in a menu. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+control header 
+
+This file contains position control functions
+
+\begin{DoxyAuthor}{Author}
+Benjamen Lim 
+
+Huan Weng 
+
+Blake Strebel 
+\end{DoxyAuthor}
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{_position_control_8h_a5092e6f5199e2114d5967932d35f9386}\label{_position_control_8h_a5092e6f5199e2114d5967932d35f9386}} 
+\index{Position\+Control.\+h@{Position\+Control.\+h}!decog\+Motor@{decog\+Motor}}
+\index{decog\+Motor@{decog\+Motor}!Position\+Control.\+h@{Position\+Control.\+h}}
+\subsubsection{\texorpdfstring{decog\+Motor()}{decogMotor()}}
+{\footnotesize\ttfamily float decog\+Motor (\begin{DoxyParamCaption}\item[{int}]{x,  }\item[{int}]{motor }\end{DoxyParamCaption})}
+
+
+
+Motor decogging to smooth output of motor. 
+
+Motor decogging function that smooths out the output from the motor by adding a term to the control signal to compensate for the cogging in the B\+L\+DC motor. Values are hardcoded to default r2r motors.
+
+Example\+: \begin{DoxyVerb}u = u + decog_motor(current_Angle_Radians, MOTOR_1);
+\end{DoxyVerb}
+
+
+
+\begin{DoxyParams}{Parameters}
+{\em x} & current angle in radians \\
+\hline
+{\em motor} & the motor to decog \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the modified control signal 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_position_control_8h_a7d8f30e709500ee488ebe3ddb18d68b4}\label{_position_control_8h_a7d8f30e709500ee488ebe3ddb18d68b4}} 
+\index{Position\+Control.\+h@{Position\+Control.\+h}!get\+Desired\+Angle@{get\+Desired\+Angle}}
+\index{get\+Desired\+Angle@{get\+Desired\+Angle}!Position\+Control.\+h@{Position\+Control.\+h}}
+\subsubsection{\texorpdfstring{get\+Desired\+Angle()}{getDesiredAngle()}}
+{\footnotesize\ttfamily int get\+Desired\+Angle (\begin{DoxyParamCaption}\item[{int}]{motor }\end{DoxyParamCaption})}
+
+
+
+Gets desired angle for a given motor. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em motor} & reads the desired angle for the given motor \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_position_control_8h_ab88d13920601fd59de9af910521873aa}\label{_position_control_8h_ab88d13920601fd59de9af910521873aa}} 
+\index{Position\+Control.\+h@{Position\+Control.\+h}!get\+Motor\+P\+WM@{get\+Motor\+P\+WM}}
+\index{get\+Motor\+P\+WM@{get\+Motor\+P\+WM}!Position\+Control.\+h@{Position\+Control.\+h}}
+\subsubsection{\texorpdfstring{get\+Motor\+P\+W\+M()}{getMotorPWM()}}
+{\footnotesize\ttfamily int get\+Motor\+P\+WM (\begin{DoxyParamCaption}\item[{int}]{motor }\end{DoxyParamCaption})}
+
+
+
+Returns the set pwm on a given motor. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em int} & a given motor \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int the pwm on the motor 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_position_control_8h_a376eb9b05453f76c96690363f3353e6f}\label{_position_control_8h_a376eb9b05453f76c96690363f3353e6f}} 
+\index{Position\+Control.\+h@{Position\+Control.\+h}!get\+Position\+Gains@{get\+Position\+Gains}}
+\index{get\+Position\+Gains@{get\+Position\+Gains}!Position\+Control.\+h@{Position\+Control.\+h}}
+\subsubsection{\texorpdfstring{get\+Position\+Gains()}{getPositionGains()}}
+{\footnotesize\ttfamily void get\+Position\+Gains (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Gets position gains on the Tiva microcontroller by reading to U\+A\+RT. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_position_control_8h_a40f19cd3ddf10bd8b9d52208fb403b59}\label{_position_control_8h_a40f19cd3ddf10bd8b9d52208fb403b59}} 
+\index{Position\+Control.\+h@{Position\+Control.\+h}!load\+Position\+Trajectory@{load\+Position\+Trajectory}}
+\index{load\+Position\+Trajectory@{load\+Position\+Trajectory}!Position\+Control.\+h@{Position\+Control.\+h}}
+\subsubsection{\texorpdfstring{load\+Position\+Trajectory()}{loadPositionTrajectory()}}
+{\footnotesize\ttfamily void load\+Position\+Trajectory (\begin{DoxyParamCaption}\item[{int}]{motor }\end{DoxyParamCaption})}
+
+
+
+Loads position trajectory for a given motor over U\+A\+RT. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em motor} & specifies the trajectory that is being assigned from U\+A\+RT \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_position_control_8h_a31342189d89766d693c5f26b0e8438ca}\label{_position_control_8h_a31342189d89766d693c5f26b0e8438ca}} 
+\index{Position\+Control.\+h@{Position\+Control.\+h}!Motor\+Timer\+Init@{Motor\+Timer\+Init}}
+\index{Motor\+Timer\+Init@{Motor\+Timer\+Init}!Position\+Control.\+h@{Position\+Control.\+h}}
+\subsubsection{\texorpdfstring{Motor\+Timer\+Init()}{MotorTimerInit()}}
+{\footnotesize\ttfamily void Motor\+Timer\+Init (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+This function sets up the timer interrupt for poosition control. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_position_control_8h_ae9c5d5742402a141a717b24a8a216287}\label{_position_control_8h_ae9c5d5742402a141a717b24a8a216287}} 
+\index{Position\+Control.\+h@{Position\+Control.\+h}!P\+I\+D\+\_\+\+Controller@{P\+I\+D\+\_\+\+Controller}}
+\index{P\+I\+D\+\_\+\+Controller@{P\+I\+D\+\_\+\+Controller}!Position\+Control.\+h@{Position\+Control.\+h}}
+\subsubsection{\texorpdfstring{P\+I\+D\+\_\+\+Controller()}{PID\_Controller()}}
+{\footnotesize\ttfamily void P\+I\+D\+\_\+\+Controller (\begin{DoxyParamCaption}\item[{int}]{reference,  }\item[{int}]{actual,  }\item[{int}]{motor,  }\item[{int}]{default\+\_\+gains }\end{DoxyParamCaption})}
+
+
+
+Calculates pwm to send to the motor driver. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em reference} & the reference angle \\
+\hline
+{\em actual} & the commanded angle \\
+\hline
+{\em motor} & the specified motor \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_position_control_8h_a95e5f03d55fba3d858adbcea6afa9315}\label{_position_control_8h_a95e5f03d55fba3d858adbcea6afa9315}} 
+\index{Position\+Control.\+h@{Position\+Control.\+h}!reset\+Controller\+Error@{reset\+Controller\+Error}}
+\index{reset\+Controller\+Error@{reset\+Controller\+Error}!Position\+Control.\+h@{Position\+Control.\+h}}
+\subsubsection{\texorpdfstring{reset\+Controller\+Error()}{resetControllerError()}}
+{\footnotesize\ttfamily void reset\+Controller\+Error (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Resets controller error on both controllers to be zero. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_position_control_8h_a975ab84b3adffb7d1d9f7f3b9c8ae8c2}\label{_position_control_8h_a975ab84b3adffb7d1d9f7f3b9c8ae8c2}} 
+\index{Position\+Control.\+h@{Position\+Control.\+h}!set\+Decogging@{set\+Decogging}}
+\index{set\+Decogging@{set\+Decogging}!Position\+Control.\+h@{Position\+Control.\+h}}
+\subsubsection{\texorpdfstring{set\+Decogging()}{setDecogging()}}
+{\footnotesize\ttfamily void set\+Decogging (\begin{DoxyParamCaption}\item[{int}]{decog }\end{DoxyParamCaption})}
+
+
+
+Turns on motor decogging. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em int} & 1 turns on decogging, 0 turns it off \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_position_control_8h_abf3123e6b311e64da34906bf1ac73ed8}\label{_position_control_8h_abf3123e6b311e64da34906bf1ac73ed8}} 
+\index{Position\+Control.\+h@{Position\+Control.\+h}!set\+Desired\+Angle@{set\+Desired\+Angle}}
+\index{set\+Desired\+Angle@{set\+Desired\+Angle}!Position\+Control.\+h@{Position\+Control.\+h}}
+\subsubsection{\texorpdfstring{set\+Desired\+Angle()}{setDesiredAngle()}}
+{\footnotesize\ttfamily void set\+Desired\+Angle (\begin{DoxyParamCaption}\item[{int}]{angle,  }\item[{int}]{motor }\end{DoxyParamCaption})}
+
+
+
+Sets desired angle for a given motor. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em motor} & specifies the desired angle for the given motor \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_position_control_8h_a2f066ae1c628a1a02b3fe5a2f1efb724}\label{_position_control_8h_a2f066ae1c628a1a02b3fe5a2f1efb724}} 
+\index{Position\+Control.\+h@{Position\+Control.\+h}!set\+Position\+Gains@{set\+Position\+Gains}}
+\index{set\+Position\+Gains@{set\+Position\+Gains}!Position\+Control.\+h@{Position\+Control.\+h}}
+\subsubsection{\texorpdfstring{set\+Position\+Gains()}{setPositionGains()}}
+{\footnotesize\ttfamily void set\+Position\+Gains (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Sets position gains on the Tiva microcontroller by reading from U\+A\+RT. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_position_control_8h_ab8aff07bbb708864a0aa8ccc93dcc3aa}\label{_position_control_8h_ab8aff07bbb708864a0aa8ccc93dcc3aa}} 
+\index{Position\+Control.\+h@{Position\+Control.\+h}!set\+Position\+P\+ID@{set\+Position\+P\+ID}}
+\index{set\+Position\+P\+ID@{set\+Position\+P\+ID}!Position\+Control.\+h@{Position\+Control.\+h}}
+\subsubsection{\texorpdfstring{set\+Position\+P\+I\+D()}{setPositionPID()}}
+{\footnotesize\ttfamily void set\+Position\+P\+ID (\begin{DoxyParamCaption}\item[{int}]{motor }\end{DoxyParamCaption})}
+
+
+
+Receives position gains over U\+A\+RT, intended for use in a menu. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em int} & motor \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_position_control_8h_a65c79b40bb1ef0170ed09c5cd657f0f0}\label{_position_control_8h_a65c79b40bb1ef0170ed09c5cd657f0f0}} 
+\index{Position\+Control.\+h@{Position\+Control.\+h}!Timer1\+Int\+Handler@{Timer1\+Int\+Handler}}
+\index{Timer1\+Int\+Handler@{Timer1\+Int\+Handler}!Position\+Control.\+h@{Position\+Control.\+h}}
+\subsubsection{\texorpdfstring{Timer1\+Int\+Handler()}{Timer1IntHandler()}}
+{\footnotesize\ttfamily void Timer1\+Int\+Handler (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+The interrupt handler for position control. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}

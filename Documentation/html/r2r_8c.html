@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.14"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>R2R Project: C:/Users/Ben/Documents/GitHub/2R-Robots/MidtermCode/Tiva/r2r.c File Reference</title>
+<title>R2R: C:/Users/Ben/Documents/GitHub/2R-Robots/Code/Tiva/r2r.c File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -13,6 +13,7 @@
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen_html_style.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -21,7 +22,7 @@
  <tbody>
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">R2R Project
+   <div id="projectname">R2R
    </div>
   </td>
  </tr>
@@ -61,13 +62,12 @@ $(function() {
 
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="dir_4c73384e71d810f6f6f141802d924fce.html">MidtermCode</a></li><li class="navelem"><a class="el" href="dir_aee3de22fa7ca1d68048920d8ed0db79.html">Tiva</a></li>  </ul>
+<li class="navelem"><a class="el" href="dir_23fdee2f6995db16c755697cdf620cf4.html">Code</a></li><li class="navelem"><a class="el" href="dir_2ceb0fec70d4efbcdcc14db9c63f05fa.html">Tiva</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#func-members">Functions</a> &#124;
-<a href="#var-members">Variables</a>  </div>
+<a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">r2r.c File Reference</div>  </div>
 </div><!--header-->
@@ -88,7 +88,6 @@ $(function() {
 <code>#include &quot;inc/hw_i2c.h&quot;</code><br />
 <code>#include &quot;inc/hw_gpio.h&quot;</code><br />
 <code>#include &quot;driverlib/fpu.h&quot;</code><br />
-<code>#include &quot;driverlib/adc.h&quot;</code><br />
 <code>#include &quot;driverlib/ssi.h&quot;</code><br />
 <code>#include &quot;driverlib/pwm.h&quot;</code><br />
 <code>#include &quot;driverlib/gpio.h&quot;</code><br />
@@ -102,64 +101,41 @@ $(function() {
 <code>#include &quot;driverlib/uart.h&quot;</code><br />
 <code>#include &quot;driverlib/sysctl.h&quot;</code><br />
 <code>#include &quot;<a class="el" href="r2r_8h_source.html">r2r.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="_system_8h_source.html">System.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="_encoder_8h_source.html">Encoder.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="_motor_8h_source.html">Motor.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="_control_8h_source.html">Control.h</a>&quot;</code><br />
+<code>#include &quot;PositionControl.h&quot;</code><br />
+<code>#include &quot;<a class="el" href="_current_control_8h_source.html">CurrentControl.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="_utilities_8h_source.html">Utilities.h</a>&quot;</code><br />
 </div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:af06127bca89306e7f9af0ea36f162ca0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="r2r_8c.html#af06127bca89306e7f9af0ea36f162ca0">r2rDefaultInit</a> (void)</td></tr>
 <tr class="memdesc:af06127bca89306e7f9af0ea36f162ca0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the default connections for the R2R project.  <a href="#af06127bca89306e7f9af0ea36f162ca0">More...</a><br /></td></tr>
 <tr class="separator:af06127bca89306e7f9af0ea36f162ca0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ace09a3c8965a45676cd69533a94e1e99"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="r2r_8c.html#ace09a3c8965a45676cd69533a94e1e99">safetyCheck</a> (void)</td></tr>
-<tr class="memdesc:ace09a3c8965a45676cd69533a94e1e99"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks for all end conditions and shuts down the motor control if any are detected.  <a href="#ace09a3c8965a45676cd69533a94e1e99">More...</a><br /></td></tr>
-<tr class="separator:ace09a3c8965a45676cd69533a94e1e99"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad22b938bbd9c44b3de841391716d46b9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="r2r_8c.html#ad22b938bbd9c44b3de841391716d46b9">sensorUpdate</a> (void)</td></tr>
-<tr class="memdesc:ad22b938bbd9c44b3de841391716d46b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates all sensor arrays.  <a href="#ad22b938bbd9c44b3de841391716d46b9">More...</a><br /></td></tr>
-<tr class="separator:ad22b938bbd9c44b3de841391716d46b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a03e7e3ce51b56b0571a8bd85ec4a5c3e"><td class="memItemLeft" align="right" valign="top"><a id="a03e7e3ce51b56b0571a8bd85ec4a5c3e"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>i2cInit</b> (tI2CMInstance g_sI2CMSimpleInst)</td></tr>
-<tr class="separator:a03e7e3ce51b56b0571a8bd85ec4a5c3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a27c5e947cca4b8e98323253543557b23"><td class="memItemLeft" align="right" valign="top"><a id="a27c5e947cca4b8e98323253543557b23"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>adcInit</b> ()</td></tr>
-<tr class="separator:a27c5e947cca4b8e98323253543557b23"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abe02cc201baa3f3c88b6cfe688d13cb2"><td class="memItemLeft" align="right" valign="top"><a id="abe02cc201baa3f3c88b6cfe688d13cb2"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>adcRead</b> (void)</td></tr>
-<tr class="separator:abe02cc201baa3f3c88b6cfe688d13cb2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a18b7e8958a230c54f3fe5ac8bc24b24c"><td class="memItemLeft" align="right" valign="top"><a id="a18b7e8958a230c54f3fe5ac8bc24b24c"></a>
-uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>currentRead1</b> (void)</td></tr>
-<tr class="separator:a18b7e8958a230c54f3fe5ac8bc24b24c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abdb4ca825a07f76a89212240e43546ca"><td class="memItemLeft" align="right" valign="top"><a id="abdb4ca825a07f76a89212240e43546ca"></a>
-uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>currentRead2</b> (void)</td></tr>
-<tr class="separator:abdb4ca825a07f76a89212240e43546ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3f64aa234674df8aeb7332aa17941b75"><td class="memItemLeft" align="right" valign="top"><a id="a3f64aa234674df8aeb7332aa17941b75"></a>
-uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>tempRead1</b> (void)</td></tr>
-<tr class="separator:a3f64aa234674df8aeb7332aa17941b75"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3cec2a038dd769dc059ca76a26954e4b"><td class="memItemLeft" align="right" valign="top"><a id="a3cec2a038dd769dc059ca76a26954e4b"></a>
-uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>tempRead2</b> (void)</td></tr>
-<tr class="separator:a3cec2a038dd769dc059ca76a26954e4b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4035fbdcdca9f9d6ee7dc2c2b9aebb49"><td class="memItemLeft" align="right" valign="top"><a id="a4035fbdcdca9f9d6ee7dc2c2b9aebb49"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>MCP9600init</b> ()</td></tr>
-<tr class="separator:a4035fbdcdca9f9d6ee7dc2c2b9aebb49"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af70ae8db7eea266470eb9eaf7c3c8fa6"><td class="memItemLeft" align="right" valign="top"><a id="af70ae8db7eea266470eb9eaf7c3c8fa6"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>MCP9600ready</b> ()</td></tr>
-<tr class="separator:af70ae8db7eea266470eb9eaf7c3c8fa6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a065c2035dc10409a61ab864de1072bf4"><td class="memItemLeft" align="right" valign="top"><a id="a065c2035dc10409a61ab864de1072bf4"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>MCP9600read</b> ()</td></tr>
-<tr class="separator:a065c2035dc10409a61ab864de1072bf4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4434793bfdaf3784b02776ff03157f31"><td class="memItemLeft" align="right" valign="top"><a id="a4434793bfdaf3784b02776ff03157f31"></a>
-uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>tempRead</b> (void)</td></tr>
-<tr class="separator:a4434793bfdaf3784b02776ff03157f31"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ace1aa0136db3cc98c3cb984b5240af69"><td class="memItemLeft" align="right" valign="top"><a id="ace1aa0136db3cc98c3cb984b5240af69"></a>
-uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>currRead</b> (void)</td></tr>
-<tr class="separator:ace1aa0136db3cc98c3cb984b5240af69"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
-Variables</h2></td></tr>
-<tr class="memitem:a154fb4804d750b00be804fc5fbbfad48"><td class="memItemLeft" align="right" valign="top"><a id="a154fb4804d750b00be804fc5fbbfad48"></a>
-uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>adcArray</b> [4] ={0}</td></tr>
-<tr class="separator:a154fb4804d750b00be804fc5fbbfad48"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9708de954e135b89af84d9d82b552667"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="r2r_8c.html#a9708de954e135b89af84d9d82b552667">sysInit</a> (void)</td></tr>
+<tr class="memdesc:a9708de954e135b89af84d9d82b552667"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the system clock and the master interrupts for the R2R project.  <a href="#a9708de954e135b89af84d9d82b552667">More...</a><br /></td></tr>
+<tr class="separator:a9708de954e135b89af84d9d82b552667"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a09a7a9ed4194733a7b753c3b795b1734"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="r2r_8c.html#a09a7a9ed4194733a7b753c3b795b1734">uartInit</a> (void)</td></tr>
+<tr class="memdesc:a09a7a9ed4194733a7b753c3b795b1734"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the UART for 115200 Baud Rate and 8-N-1 transfer rate.  <a href="#a09a7a9ed4194733a7b753c3b795b1734">More...</a><br /></td></tr>
+<tr class="separator:a09a7a9ed4194733a7b753c3b795b1734"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acd1ca90dcd2d241c90316f670dfcc2eb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="r2r_8c.html#acd1ca90dcd2d241c90316f670dfcc2eb">UART0read</a> (char *message, int maxLength)</td></tr>
+<tr class="memdesc:acd1ca90dcd2d241c90316f670dfcc2eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads input from UART.  <a href="#acd1ca90dcd2d241c90316f670dfcc2eb">More...</a><br /></td></tr>
+<tr class="separator:acd1ca90dcd2d241c90316f670dfcc2eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aba58039e2e0b55260a188aedbc87d18b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="r2r_8c.html#aba58039e2e0b55260a188aedbc87d18b">UART0write</a> (const char *string)</td></tr>
+<tr class="memdesc:aba58039e2e0b55260a188aedbc87d18b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes output from UART.  <a href="#aba58039e2e0b55260a188aedbc87d18b">More...</a><br /></td></tr>
+<tr class="separator:aba58039e2e0b55260a188aedbc87d18b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab0b86e69a6c13e01349840d66db0f1f3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="r2r_8c.html#ab0b86e69a6c13e01349840d66db0f1f3">delayMS</a> (int ms)</td></tr>
+<tr class="memdesc:ab0b86e69a6c13e01349840d66db0f1f3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stops the processor for a given amount of time. This is an approximate time.  <a href="#ab0b86e69a6c13e01349840d66db0f1f3">More...</a><br /></td></tr>
+<tr class="separator:ab0b86e69a6c13e01349840d66db0f1f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a71d8cd0543a53d2e61cd31c54f8ca35b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="r2r_8c.html#a71d8cd0543a53d2e61cd31c54f8ca35b">timeInit</a> ()</td></tr>
+<tr class="memdesc:a71d8cd0543a53d2e61cd31c54f8ca35b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the general purpose systick timer.  <a href="#a71d8cd0543a53d2e61cd31c54f8ca35b">More...</a><br /></td></tr>
+<tr class="separator:a71d8cd0543a53d2e61cd31c54f8ca35b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a75d32aeef7c6fd79ccd8eeee9a9c29ca"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="r2r_8c.html#a75d32aeef7c6fd79ccd8eeee9a9c29ca">timeInt</a> ()</td></tr>
+<tr class="memdesc:a75d32aeef7c6fd79ccd8eeee9a9c29ca"><td class="mdescLeft">&#160;</td><td class="mdescRight">The general purpose timer interrupt function.  <a href="#a75d32aeef7c6fd79ccd8eeee9a9c29ca">More...</a><br /></td></tr>
+<tr class="separator:a75d32aeef7c6fd79ccd8eeee9a9c29ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a28c11ac72f44462ab5684a9bf4fae0d9"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="r2r_8c.html#a28c11ac72f44462ab5684a9bf4fae0d9">getTime</a> ()</td></tr>
+<tr class="memdesc:a28c11ac72f44462ab5684a9bf4fae0d9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the time in microseconds.  <a href="#a28c11ac72f44462ab5684a9bf4fae0d9">More...</a><br /></td></tr>
+<tr class="separator:a28c11ac72f44462ab5684a9bf4fae0d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Main R2R library. </p>
@@ -168,6 +144,64 @@ uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>adcArray</b> [4] 
 <dd>
 Huan Weng </dd></dl>
 </div><h2 class="groupheader">Function Documentation</h2>
+<a id="ab0b86e69a6c13e01349840d66db0f1f3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab0b86e69a6c13e01349840d66db0f1f3">&#9670;&nbsp;</a></span>delayMS()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void delayMS </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>ms</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Stops the processor for a given amount of time. This is an approximate time. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ms</td><td>milliseconds </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Void </dd></dl>
+
+</div>
+</div>
+<a id="a28c11ac72f44462ab5684a9bf4fae0d9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a28c11ac72f44462ab5684a9bf4fae0d9">&#9670;&nbsp;</a></span>getTime()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t getTime </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the time in microseconds. </p>
+<p>This function can be used for delays as an alternative to <a class="el" href="r2r_8h.html#ab0b86e69a6c13e01349840d66db0f1f3" title="Stops the processor for a given amount of time. This is an approximate time. ">delayMS()</a> because it is interrupt-based.</p>
+<p>Example: </p><pre class="fragment">    uint32_t curr_time = getTime();
+...
+uint32_t time_taken = getTime()-curr_time;
+</pre><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">us</td><td>microseconds </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Void </dd></dl>
+
+</div>
+</div>
 <a id="af06127bca89306e7f9af0ea36f162ca0"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af06127bca89306e7f9af0ea36f162ca0">&#9670;&nbsp;</a></span>r2rDefaultInit()</h2>
 
@@ -185,7 +219,37 @@ Huan Weng </dd></dl>
 </div><div class="memdoc">
 
 <p>Initializes the default connections for the R2R project. </p>
-<p>This function initializes all peripherals and GPIO pins. This function only needs to be called in main.c once</p>
+<p>This function initializes all peripherals and GPIO pins. This function only needs to be called in main once.</p>
+<p>Example: </p><pre class="fragment">int main() {
+    r2rDefaultInit();
+}
+</pre><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">Void</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Void </dd></dl>
+
+</div>
+</div>
+<a id="a9708de954e135b89af84d9d82b552667"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9708de954e135b89af84d9d82b552667">&#9670;&nbsp;</a></span>sysInit()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void sysInit </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Initializes the system clock and the master interrupts for the R2R project. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">Void</td><td></td></tr>
@@ -196,14 +260,14 @@ Huan Weng </dd></dl>
 
 </div>
 </div>
-<a id="ace09a3c8965a45676cd69533a94e1e99"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ace09a3c8965a45676cd69533a94e1e99">&#9670;&nbsp;</a></span>safetyCheck()</h2>
+<a id="a71d8cd0543a53d2e61cd31c54f8ca35b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a71d8cd0543a53d2e61cd31c54f8ca35b">&#9670;&nbsp;</a></span>timeInit()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void safetyCheck </td>
+          <td class="memname">void timeInit </td>
           <td>(</td>
           <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
@@ -212,7 +276,7 @@ Huan Weng </dd></dl>
       </table>
 </div><div class="memdoc">
 
-<p>Checks for all end conditions and shuts down the motor control if any are detected. </p>
+<p>Initializes the general purpose systick timer. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">Void</td><td></td></tr>
@@ -223,14 +287,14 @@ Huan Weng </dd></dl>
 
 </div>
 </div>
-<a id="ad22b938bbd9c44b3de841391716d46b9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad22b938bbd9c44b3de841391716d46b9">&#9670;&nbsp;</a></span>sensorUpdate()</h2>
+<a id="a75d32aeef7c6fd79ccd8eeee9a9c29ca"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a75d32aeef7c6fd79ccd8eeee9a9c29ca">&#9670;&nbsp;</a></span>timeInt()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void sensorUpdate </td>
+          <td class="memname">void timeInt </td>
           <td>(</td>
           <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
@@ -239,8 +303,100 @@ Huan Weng </dd></dl>
       </table>
 </div><div class="memdoc">
 
-<p>Updates all sensor arrays. </p>
-<p>Sensors are grouped for the ease of use into one function and the array is updated each time this function is called.</p>
+<p>The general purpose timer interrupt function. </p>
+<p>This function is called every microsecond and updates a counter.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ms</td><td>milliseconds </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Void </dd></dl>
+
+</div>
+</div>
+<a id="acd1ca90dcd2d241c90316f670dfcc2eb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acd1ca90dcd2d241c90316f670dfcc2eb">&#9670;&nbsp;</a></span>UART0read()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void UART0read </td>
+          <td>(</td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>message</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>maxLength</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Reads input from UART. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">char*</td><td>message pointer to a buffer </td></tr>
+    <tr><td class="paramname">int</td><td>maxLength the maximum length of the buffer </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Void </dd></dl>
+
+</div>
+</div>
+<a id="aba58039e2e0b55260a188aedbc87d18b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aba58039e2e0b55260a188aedbc87d18b">&#9670;&nbsp;</a></span>UART0write()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void UART0write </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>string</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Writes output from UART. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">const</td><td>char* message pointer to a buffer </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Void </dd></dl>
+
+</div>
+</div>
+<a id="a09a7a9ed4194733a7b753c3b795b1734"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a09a7a9ed4194733a7b753c3b795b1734">&#9670;&nbsp;</a></span>uartInit()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void uartInit </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Initializes the UART for 115200 Baud Rate and 8-N-1 transfer rate. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">Void</td><td></td></tr>
